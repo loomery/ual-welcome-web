@@ -2140,13 +2140,13 @@ ul.grid > li {
 [data-theme="dark"] .map-toggle {
   background: rgba(255, 255, 255, 0.92);
   border: 1px solid var(--color-light);
-  color: var(--color-dark);
+  color: #000;
 }
 
 [data-theme="dark"] .map-toggle:hover,
 [data-theme="dark"] .map-toggle:focus-visible {
   background: var(--color-light);
-  color: var(--color-dark);
+  color: #000;
 }
 
 [data-theme="dark"] .map-toggle[aria-pressed="false"] {
