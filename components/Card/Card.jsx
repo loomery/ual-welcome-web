@@ -1,9 +1,14 @@
 import Link from 'next/link';
-import { ArrowRightIcon } from '../Icon/NavIcons';
+import { ArrowRightIcon, ExternalLinkIcon } from '../Icon/NavIcons';
 
 /**
  * UAL DS Card pattern. If `to` or `external` is provided it becomes a link-card
  * (entire surface is the target) matching the DS "card:is(a)" style.
+ *
+ * The trailing icon doubles as a directional cue:
+ *  - internal route (`to`): ArrowRightIcon
+ *  - external (`external`): ExternalLinkIcon + visually-hidden "(opens in
+ *    new tab)" so AT users get the same affordance sighted users get.
  *
  * @param {Object} props
  * @param {string} props.title
@@ -18,7 +23,13 @@ export function Card({ title, body, to, external, eyebrow }) {
       {eyebrow && <p className="step--1 event__meta">{eyebrow}</p>}
       <h3>{title}</h3>
       {body && <div className="flow" data-flow="s">{body}</div>}
-      {(to || external) && <ArrowRightIcon aria-hidden="true" />}
+      {to && <ArrowRightIcon aria-hidden="true" />}
+      {external && (
+        <>
+          <ExternalLinkIcon aria-hidden="true" />
+          <span className="visually-hidden"> (opens in new tab)</span>
+        </>
+      )}
     </>
   );
 

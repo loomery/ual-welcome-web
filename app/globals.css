@@ -796,6 +796,84 @@ main:focus {
   color: var(--color-medium);
 }
 
+/* ---------- Checklist row (composes Checkbox + body + CTA) ---------- */
+/* The list container drops default UA bullet styling and provides the
+   gap rhythm between rows. Each row is a card-ish container with a
+   subtle hairline so it reads as a discrete unit on a phone — but we
+   keep the visual weight light so the screen doesn't feel boxy. */
+.checklist-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.checklist-item {
+  border-block-end: 1px solid var(--color-dark--tint-90);
+  padding-block-end: var(--space-s);
+}
+
+.checklist-item:last-child {
+  border-block-end: 0;
+  padding-block-end: 0;
+}
+
+/* Body + CTA sit indented under the checkbox so they line up with the
+   label text rather than the tickbox itself. The 1.5rem matches the
+   checkbox input width; gap of `--space-s` matches .checkbox grid-gap. */
+.checklist-item__detail {
+  padding-inline-start: calc(1.5rem + var(--space-s));
+  /* Pull tighter to the label since Checkbox already pads block-start */
+  margin-block-start: calc(var(--space-2xs) * -1);
+}
+
+.checklist-item__body {
+  color: var(--color-medium);
+  font-size: var(--step--1);
+  margin: 0;
+}
+
+.checklist-item[data-checked=""] .checklist-item__body {
+  color: var(--color-dark--tint-70, var(--color-medium));
+}
+
+.checklist-item__blocked-hint {
+  background: var(--color-dark--tint-90);
+  border-inline-start: 3px solid var(--color-orange);
+  color: var(--color-dark);
+  font-size: var(--step--1);
+  margin: 0;
+  padding: var(--space-2xs) var(--space-xs);
+}
+
+.checklist-item__cta {
+  align-items: center;
+  align-self: flex-start;
+  color: var(--color-dark);
+  display: inline-flex;
+  font-weight: var(--font-weight-bold);
+  gap: var(--space-3xs);
+  /* WCAG 2.2 — 2.5.8 Target Size: ensure tappable on mobile */
+  min-height: 44px;
+  padding-block: var(--space-3xs);
+  text-decoration: underline;
+  text-underline-offset: 0.25em;
+}
+
+.checklist-item__cta:hover {
+  color: var(--color-orange);
+}
+
+.checklist-item__cta:focus-visible {
+  outline: 2px solid var(--color-orange);
+  outline-offset: 0.3ch;
+}
+
+/* Once the row is checked, dim the CTA so completed work recedes
+   visually but stays reachable. */
+.checklist-item[data-checked=""] .checklist-item__cta {
+  color: var(--color-medium);
+}
+
 /* ---------- Bottom tab bar (mobile primary nav) ---------- */
 .bottom-nav {
   background: var(--color-light);
@@ -1408,6 +1486,15 @@ ul.grid > li {
   /* Sits clearly below the layer-toggle pills (pill ≈ 2.75rem with
      padding + border, plus a comfortable gap so the two don't touch). */
   top: calc(var(--space-s) + 2.75rem + var(--space-2xs));
+}
+
+/* Dark mode: the translucent-black pill becomes unreadable because
+   --color-light flips to a near-black value, leaving dark text on a
+   dark scrim. Invert to a solid-white pill with dark text — same job,
+   readable contrast both ways. */
+[data-theme="dark"] .map-hint {
+  background: var(--color-dark);
+  color: var(--color-light);
 }
 
 /* ---------- Map overlays (compass + labels) ---------- */

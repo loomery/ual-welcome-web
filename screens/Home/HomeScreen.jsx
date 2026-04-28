@@ -2,6 +2,7 @@ import { Card } from '../../components/Card/Card';
 import { Countdown } from '../../components/Countdown/Countdown';
 import { EventCard } from '../../components/EventCard/EventCard';
 import { EVENTS } from '../../data/events';
+import { USEFUL_INFO } from '../../data/usefulInfo';
 
 export function HomeScreen() {
   // Server-side computation — sorts deterministically by ISO timestamp.
@@ -72,6 +73,23 @@ export function HomeScreen() {
             to="/events"
             body={<p>Talks, tours and socials happening during Welcome Week.</p>}
           />
+        </div>
+      </section>
+
+      {/* Useful info — always-on UAL resources from the priority brief.
+          Two cards: term dates + Student Services. These aren't tasks
+          to complete, they're references the student will come back to. */}
+      <section aria-labelledby="useful-info" className="flow" data-flow="s">
+        <h2 id="useful-info">Useful info</h2>
+        <div className="grid">
+          {USEFUL_INFO.map((item) => (
+            <Card
+              key={item.id}
+              title={item.title}
+              external={item.href}
+              body={<p>{item.body}</p>}
+            />
+          ))}
         </div>
       </section>
     </article>

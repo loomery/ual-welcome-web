@@ -2,15 +2,25 @@
 
 import { useMemo } from 'react';
 import { CHECKLIST_ITEMS } from '../../data/checklist';
-import { Checkbox } from '../../components/Checkbox/Checkbox';
+import { ChecklistItem } from '../../components/ChecklistItem/ChecklistItem';
 import { Progress } from '../../components/Progress/Progress';
 import { Button } from '../../components/Button/Button';
 import { usePersistedState } from '../../hooks/usePersistedState';
 
 const STORAGE_KEY = 'ual:checklist:v1';
 
+/**
+ * Build a quick lookup so each row can resolve its dependsOn parent's
+ * title without scanning the array. Tiny list so a Map is overkill but
+ * it keeps the render readable.
+ */
+const ITEMS_BY_ID = new Map(CHECKLIST_ITEMS.map((i) => [i.id, i]));
+
 export function ChecklistScreen() {
-  const [checked, setChecked] = usePersistedState(STORAGE_KEY, /** @type {Record<string, boolean>} */ ({}));
+  const [checked, setChecked] = usePersistedState(
+    STORAGE_KEY,
+    /** @type {Record<string, boolean>} */ ({}),
+  );
 
   const grouped = useMemo(() => {
     /** @type {Map<string, import('../../data/checklist').ChecklistItem[]>} */
@@ -38,8 +48,8 @@ export function ChecklistScreen() {
       <div className="flow" data-flow="s">
         <h1>Induction checklist</h1>
         <p className="standfirst">
-          A short list to help you hit the ground running. Your progress is saved
-          on this device — no account needed.
+          The essentials for your first week at UAL. Tick things off as you
+          go — your progress is saved on this device, no account needed.
         </p>
       </div>
 
@@ -74,17 +84,22 @@ export function ChecklistScreen() {
       {grouped.map(([category, items]) => (
         <section key={category} aria-labelledby={`cat-${category}`} className="flow" data-flow="s">
           <h2 id={`cat-${category}`}>{category}</h2>
-          <ul className="flow" data-flow="2xs" role="list">
-            {items.map((item) => (
-              <li key={item.id}>
-                <Checkbox
-                  checked={!!checked[item.id]}
-                  onChange={() => toggle(item.id)}
-                  label={item.title}
-                  hint={item.hint}
-                />
-              </li>
-            ))}
+          <ul className="checklist-list flow" data-flow="s" role="list">
+            {items.map((item) => {
+              const parent = item.dependsOn ? ITEMS_BY_ID.get(item.dependsOn) : null;
+              const blocked = !!(parent && !checked[parent.id]);
+              return (
+                <li key={item.id}>
+                  <ChecklistItem
+                    item={item}
+                    checked={!!checked[item.id]}
+                    onToggle={() => toggle(item.id)}
+                    blocked={blocked}
+                    dependsOnLabel={parent?.title}
+                  />
+                </li>
+              );
+            })}
           </ul>
         </section>
       ))}

@@ -101,3 +101,34 @@ export function ArrowRightIcon(props) {
     </svg>
   );
 }
+
+/**
+ * "Opens in a new tab" affordance. Stroke-based to match the rest of
+ * the icon family. Combine with visually-hidden text for AT users.
+ */
+export function ExternalLinkIcon(props) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
+      <path
+        d="M14 4h6v6"
+        stroke="currentColor"
+        strokeWidth={1.6}
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M20 4l-9 9"
+        stroke="currentColor"
+        strokeWidth={1.6}
+        strokeLinecap="round"
+      />
+      <path
+        d="M19 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1h5"
+        stroke="currentColor"
+        strokeWidth={1.6}
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
