@@ -1,0 +1,38 @@
+/* Stile per il componente Footer */
+
+.customFooter {
+  background-color: #f8f9fa;
+  color: #6c757d;
+  padding: 20px;
+  text-align: center;
+  border-top: 1px solid #dee2e6;
+  font-size: 14px;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 10px;
+}
+
+.navList {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+}
+
+.navList li {
+  display: inline;
+}
+
+.navList a {
+  text-decoration: none;
+  color: #007bff;
+  transition: color 0.3s;
+}
+
+.navList a:hover {
+  color: #0056b3;
+}
