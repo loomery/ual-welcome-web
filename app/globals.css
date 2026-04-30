@@ -1,12 +1,17 @@
 /* ==========================================================================
-   UAL Welcome Week — Global stylesheet (Next.js + Tailwind hybrid)
+   UAL Welcome Week — Global stylesheet (Next.js + Tailwind v4 hybrid)
    --------------------------------------------------------------------------
    Layering strategy:
-     1. Tailwind base / components / utilities (so utility classes win
-        over component classes when applied directly in JSX).
+     1. `@import "tailwindcss"` pulls Tailwind 4's preflight + utilities.
+        v4 collapses the old `@tailwind base/components/utilities` triplet
+        into a single import.
      2. UAL design tokens — the source of truth for colours, type scale,
-        spacing scale. Tailwind utilities reference these via var(--…),
-        wired up in tailwind.config.js.
+        spacing scale, exposed as CSS custom properties on :root. The
+        `@theme inline` block below mirrors the subset that becomes
+        Tailwind utilities (bg-ual-orange, p-s, text-step-1, etc.). With
+        `inline`, utilities compile to `background-color: var(--color-orange)`
+        rather than copying the literal hex, so dark-mode overrides on
+        :root continue to flip the rendered value automatically.
      3. UAL reset + base typography (mirrored from main.css).
      4. UAL CUBE CSS layout primitives (.flow, .cluster, .grid, .box…).
      5. UAL component classes (event-card, map-station, map-label,
@@ -16,9 +21,81 @@
         much more clearly here.
    ========================================================================== */
 
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
+
+/* ==========================================================================
+   Tailwind v4 — theme bridge
+   --------------------------------------------------------------------------
+   Each entry below registers a theme key that Tailwind compiles into a
+   utility (e.g. `--color-ual-orange` → `bg-ual-orange`, `--spacing-s` →
+   `p-s`/`m-s`/`gap-s`, `--text-step-0` → `text-step-0`). The `inline`
+   modifier tells Tailwind not to emit a redundant declaration on :root
+   and to reference our existing UAL tokens via `var()` at use-sites,
+   so the dark-mode swaps on the `:root` block below keep working.
+   ========================================================================== */
+
+@theme inline {
+  /* Brand colours */
+  --color-ual-light: var(--color-light);
+  --color-ual-medium: var(--color-medium);
+  --color-ual-shade: var(--color-shade);
+  --color-ual-dark: var(--color-dark);
+  --color-ual-dark-50: var(--color-dark--tint-50);
+  --color-ual-dark-90: var(--color-dark--tint-90);
+  --color-ual-dark-95: var(--color-dark--tint-95);
+  --color-ual-orange: var(--color-orange);
+  --color-ual-util-blue: var(--color-utility-blue);
+  --color-ual-util-green: var(--color-utility-green);
+  --color-ual-util-orange: var(--color-utility-orange);
+  --color-ual-util-red: var(--color-utility-red);
+
+  /* Type families: font-main, font-heading */
+  --font-main: var(--font-main);
+  --font-heading: var(--font-heading);
+
+  /* Font weights: font-normal-ual, font-bold-ual (avoid clobbering
+     Tailwind's stock font-weight palette). */
+  --font-weight-ual-normal: var(--font-weight-normal);
+  --font-weight-ual-bold: var(--font-weight-bold);
+
+  /* Fluid type scale: text-step-d1 … text-step-4 */
+  --text-step-d1: var(--step--1);
+  --text-step-0: var(--step-0);
+  --text-step-1: var(--step-1);
+  --text-step-2: var(--step-2);
+  --text-step-3: var(--step-3);
+  --text-step-4: var(--step-4);
+
+  /* Line heights: leading-ual-default, leading-ual-condensed,
+     leading-ual-single (namespaced so they don't shadow Tailwind's
+     stock leading-snug, leading-relaxed, etc.). */
+  --leading-ual-default: var(--line-height-default);
+  --leading-ual-condensed: var(--line-height-condensed);
+  --leading-ual-single: var(--line-height-single);
+
+  /* Letter spacing: tracking-ual-tight (separate from Tailwind's
+     stock tracking-tight to avoid name collision). */
+  --tracking-ual-tight: var(--letter-spacing-tight);
+
+  /* Fluid spacing scale: p-3xs / m-3xs / gap-3xs … p-3xl etc. */
+  --spacing-3xs: var(--space-3xs);
+  --spacing-2xs: var(--space-2xs);
+  --spacing-xs: var(--space-xs);
+  --spacing-s: var(--space-s);
+  --spacing-m: var(--space-m);
+  --spacing-l: var(--space-l);
+  --spacing-xl: var(--space-xl);
+  --spacing-2xl: var(--space-2xl);
+  --spacing-3xl: var(--space-x3xl);
+  --spacing-bottom-nav: var(--bottom-nav-height);
+
+  /* Containers: max-w-grid, max-w-prose-ual */
+  --container-grid: var(--grid-max-width);
+  --container-prose-ual: 57.5rem;
+
+  /* Easing: ease-ual */
+  --ease-ual: cubic-bezier(0.4, 0, 0.2, 1);
+}
 
 /* ==========================================================================
    UAL Design System — Design Tokens

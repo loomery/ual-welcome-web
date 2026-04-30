@@ -14,8 +14,13 @@ import { WELCOME_WEEK } from '../../data/welcomeWeek';
  */
 export function Countdown() {
   // Avoid SSR hydration mismatch — render nothing until mounted, then compute.
+  // The setState-in-effect is intentional: `new Date()` would diverge between
+  // server and client without a post-mount hand-off, so we hydrate to a
+  // stable null and only compute on the client. React 19's
+  // `react-hooks/set-state-in-effect` flags the pattern; suppressed here.
   const [now, setNow] = useState(null);
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setNow(new Date());
   }, []);
 

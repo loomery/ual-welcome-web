@@ -153,7 +153,11 @@ export function MapCanvas({
   return (
     <Canvas
       camera={{ position: [14, 13, 18], fov: 42 }}
-      shadows
+      // three@0.184 deprecated PCFSoftShadowMap (the default that
+      // r3f's `shadows` boolean enables). We pin the renderer to VSM
+      // (Variance Shadow Maps) which is the modern soft-shadow path
+      // — same blurred look as PCFSoft, no console warning.
+      shadows="variance"
       dpr={[1, 2]}
       aria-hidden="true"
       gl={{ antialias: true }}

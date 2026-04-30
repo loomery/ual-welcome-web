@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import { Card } from '../../components/Card/Card';
 import { Countdown } from '../../components/Countdown/Countdown';
 import { EventCard } from '../../components/EventCard/EventCard';
@@ -41,9 +42,9 @@ export function HomeScreen() {
       <section className="flow" data-flow="s" aria-labelledby="happening-heading">
         <div className="cluster" data-justify="space-between">
           <h2 id="happening-heading">Happening next</h2>
-          <a className="home-section__cta" href="/events">
+          <Link className="home-section__cta" href="/events">
             See all events →
-          </a>
+          </Link>
         </div>
         <div className="reel home-reel" role="list">
           {upcoming.map((event) => (

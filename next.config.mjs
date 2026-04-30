@@ -7,15 +7,20 @@
  *     `headers()` async function so they wrap every route, including any
  *     PWA-generated ones below.
  *
- *  2. PWA wrapping (opt-in). Set `ENABLE_PWA=1` (production builds only)
- *     to wire next-pwa around the config; otherwise we ship a plain Next
- *     config so the app builds even if the next-pwa toolchain isn't
- *     installed.
+ *  2. PWA wrapping via Serwist (opt-in). Set `ENABLE_PWA=1` (production
+ *     builds only) to wire @serwist/next around the config; otherwise we
+ *     ship a plain Next config so the app builds even if Serwist's
+ *     dependencies aren't fully installed.
  *
- * Why dynamic import for next-pwa? It pulls a fragile workbox dep tree
- * at require time; if anything in it fails resolution we'd otherwise
- * crash before next boots. The conditional + dynamic import is the
- * smallest viable shim.
+ *     We use Serwist instead of next-pwa because next-pwa is unmaintained
+ *     and incompatible with the Next 15+ App Router. Serwist is the
+ *     spiritual successor — same workbox-based primitives, but with
+ *     first-class App Router + Turbopack support.
+ *
+ * Why dynamic import for @serwist/next? It pulls a hefty workbox-style
+ * dep tree at require time; if anything in it fails resolution we'd
+ * otherwise crash before next boots. The conditional + dynamic import is
+ * the smallest viable shim.
  */
 
 /**
@@ -104,20 +109,29 @@ let exported = nextConfig;
 
 if (process.env.ENABLE_PWA === '1' && process.env.NODE_ENV === 'production') {
   try {
-    const { default: nextPwa } = await import('next-pwa');
-    const withPWA = nextPwa({
-      dest: 'public',
-      disable: false,
+    const { default: withSerwistInit } = await import('@serwist/next');
+    const withSerwist = withSerwistInit({
+      // Source service worker — written by us at app/sw.js. Serwist compiles
+      // it (and our route precaches) into /sw.js at build time.
+      swSrc: 'app/sw.js',
+      swDest: 'public/sw.js',
+      // App Router-friendly defaults: register the SW from the client
+      // bundle, take control of any open clients on activation.
       register: true,
-      skipWaiting: true,
+      reloadOnOnline: true,
+      cacheOnNavigation: true,
+      disable: false,
     });
-    // withPWA wraps but preserves user-defined keys like `headers`, so
+    // withSerwist wraps but preserves user-defined keys like `headers`, so
     // the security headers above continue to apply to PWA builds.
-    exported = withPWA(nextConfig);
+    exported = withSerwist(nextConfig);
   } catch (err) {
     // Surface the failure but don't block the build — PWA is non-essential
     // for a beta and the rest of the app still ships.
-    console.warn('[next.config] next-pwa unavailable, building without PWA:', err?.message);
+    console.warn(
+      '[next.config] @serwist/next unavailable, building without PWA:',
+      err?.message,
+    );
   }
 }
 
