@@ -5,7 +5,7 @@ for their first weeks. Lightweight, mobile-first, no login, no backend.
 
 ## Stack
 
-- **Next.js 14** (App Router) + **React 18**
+- **Next.js 16** (App Router) + **React 19**
 - **JSX** (no TypeScript) with JSDoc types where useful
 - **Tailwind CSS** + CSS custom properties (`app/globals.css`)
 - **@react-three/fiber** for the 3D campus map (lazy-loaded, client-only)
@@ -13,6 +13,10 @@ for their first weeks. Lightweight, mobile-first, no login, no backend.
 
 State that survives a page reload lives in `localStorage` under the `ual:`
 prefix. There is no server.
+
+> **Note on `params`:** Next.js 15+ exposes route params as a `Promise`.
+> All dynamic pages (`app/**/[id]/page.jsx`) must `await params` before
+> reading route segments.
 
 ## Prerequisites
 
@@ -24,6 +28,9 @@ prefix. There is no server.
 ```bash
 npm install
 ```
+
+> If you see a `type-fest` lock-file conflict in the dev sandbox, run:
+> `rm -rf node_modules package-lock.json && npm install`
 
 ## Run in development
 
@@ -51,12 +58,22 @@ npm start
 
 ## Other useful scripts
 
-| Script              | What it does                                          |
-| ------------------- | ----------------------------------------------------- |
-| `npm run lint`      | ESLint over the whole tree.                           |
-| `npm run audit`     | `npm audit` at high severity, prod deps only.         |
-| `npm run audit:full`| `npm audit` at moderate severity, all deps.           |
-| `npm run verify`    | Lint → audit → production build. Run before pushing.  |
+| Script               | What it does                                          |
+| -------------------- | ----------------------------------------------------- |
+| `npm run lint`       | ESLint over the whole tree.                           |
+| `npm run audit`      | `npm audit` at high severity, prod deps only.         |
+| `npm run audit:full` | `npm audit` at moderate severity, all deps.           |
+| `npm run verify`     | Lint → audit → production build. Run before pushing.  |
+
+## Routes
+
+| Path              | Description                              |
+| ----------------- | ---------------------------------------- |
+| `/`               | Home — countdown + useful-info cards     |
+| `/checklist`      | Induction checklist with localStorage    |
+| `/events`         | Welcome Week event list (filterable)     |
+| `/events/[id]`    | Individual event detail page             |
+| `/map`            | 3D explorable campus map                 |
 
 ## Project orientation
 

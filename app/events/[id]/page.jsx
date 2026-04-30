@@ -12,10 +12,11 @@ export function generateStaticParams() {
 
 /**
  * @param {Object} props
- * @param {{ id: string }} props.params
+ * @param {Promise<{ id: string }>} props.params
  */
-export function generateMetadata({ params }) {
-  const event = EVENTS.find((e) => e.id === params.id);
+export async function generateMetadata({ params }) {
+  const { id } = await params;
+  const event = EVENTS.find((e) => e.id === id);
   if (!event) return { title: 'Event not found | UAL Welcome Week' };
   return {
     title: `${event.title} | UAL Welcome Week`,
@@ -25,10 +26,11 @@ export function generateMetadata({ params }) {
 
 /**
  * @param {Object} props
- * @param {{ id: string }} props.params
+ * @param {Promise<{ id: string }>} props.params
  */
-export default function EventDetailPage({ params }) {
-  const event = EVENTS.find((e) => e.id === params.id);
+export default async function EventDetailPage({ params }) {
+  const { id } = await params;
+  const event = EVENTS.find((e) => e.id === id);
   if (!event) notFound();
-  return <EventDetailScreen id={params.id} />;
+  return <EventDetailScreen id={id} />;
 }
