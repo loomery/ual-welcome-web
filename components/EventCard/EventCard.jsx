@@ -68,7 +68,7 @@ export function EventCard({ event, compact }) {
           <div className="event-card__heading flow" data-flow="2xs">
             <p className="event-card__meta">
               <span
-                className="event-card__tag"
+                className="event-tag"
                 data-category={categorySlug}
               >
                 {event.category}

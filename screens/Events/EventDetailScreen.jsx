@@ -36,7 +36,11 @@ export function EventDetailScreen({ id }) {
 
       <div className="flow" data-flow="s">
         <p className="event__meta">
-          <span className="tag" data-tag-type="standard">{event.category}</span>
+          {/* Same chip as the card on the events list — shares .event-tag
+              so a "Talk" event reads identically here and on the listing. */}
+          <span className="event-tag" data-category={event.category.toLowerCase()}>
+            {event.category}
+          </span>
         </p>
         <h1>{event.title}</h1>
         <p className="standfirst">

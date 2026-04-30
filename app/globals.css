@@ -1204,7 +1204,10 @@ main:focus {
      .event-card__link        whole surface link, flex column
      .event-card__head        grid: [datestamp] [heading column]
      .event-card__datestamp   stacked DD / MON chip (black → orange on hover)
-     .event-card__tag         category chip with per-category tint
+     .event-tag               (shared, lives outside this block) category
+                              chip with per-category tint — also used on
+                              the event detail page so the label is
+                              consistent across surfaces
      .event-card__foot        footer with pin icon, pinned to the card's base
    ========================================================================== */
 .event-card {
@@ -1299,7 +1302,11 @@ main:focus {
   margin: 0;
 }
 
-.event-card__tag {
+/* Shared event-category tag. Used by EventCard AND EventDetailScreen so
+   the same event reads identically wherever it appears. Lives outside
+   the .event-card BEM block on purpose — it's a cross-component label,
+   not a card-internal element. */
+.event-tag {
   background: var(--event-tag-bg, var(--color-dark--tint-90));
   color: var(--color-dark);
   font-size: var(--step--1);
@@ -1314,10 +1321,10 @@ main:focus {
 /* Per-category tints — soft, editorial palette. Each is distinct enough
    to scan quickly while keeping the text in a single dark ink for WCAG
    contrast. */
-.event-card__tag[data-category="talk"]     { --event-tag-bg: #d6e7d0; }
-.event-card__tag[data-category="tour"]     { --event-tag-bg: #cfe0ec; }
-.event-card__tag[data-category="social"]   { --event-tag-bg: #f5d6c3; }
-.event-card__tag[data-category="workshop"] { --event-tag-bg: #f0e2b6; }
+.event-tag[data-category="talk"]     { --event-tag-bg: #d6e7d0; }
+.event-tag[data-category="tour"]     { --event-tag-bg: #cfe0ec; }
+.event-tag[data-category="social"]   { --event-tag-bg: #f5d6c3; }
+.event-tag[data-category="workshop"] { --event-tag-bg: #f0e2b6; }
 
 .event-card__when {
   color: var(--color-dark);
@@ -1841,6 +1848,11 @@ ul.grid > li {
 }
 
 /* ---------- Dialog ---------- */
+/* Tailwind 4's preflight resets the user-agent margin on <dialog>, which
+   removes the default `margin: auto` that the browser uses to centre
+   showModal() dialogs. We restore centring explicitly with the
+   `inset: 0; margin: auto` idiom so the modal stays in the middle of
+   the viewport regardless of preflight changes. */
 .feedback-dialog {
   background: transparent;
   border: 0;
@@ -1848,6 +1860,8 @@ ul.grid > li {
   inline-size: min(30rem, calc(100vw - var(--space-m)));
   max-block-size: calc(100dvh - var(--space-l));
   padding: 0;
+  inset: 0;
+  margin: auto;
 }
 
 .feedback-dialog::backdrop {
@@ -2263,15 +2277,15 @@ ul.grid > li {
 }
 
 /* Event card tags — ensure readable text in dark mode */
-[data-theme="dark"] .event-card__tag {
+[data-theme="dark"] .event-tag {
   color: var(--color-dark);
 }
 
 /* Event card tag categories — darker, more saturated backgrounds */
-[data-theme="dark"] .event-card__tag[data-category="talk"]     { --event-tag-bg: #9ac29a; }
-[data-theme="dark"] .event-card__tag[data-category="tour"]     { --event-tag-bg: #8ab8e6; }
-[data-theme="dark"] .event-card__tag[data-category="social"]   { --event-tag-bg: #f0a975; }
-[data-theme="dark"] .event-card__tag[data-category="workshop"] { --event-tag-bg: #e6d966; }
+[data-theme="dark"] .event-tag[data-category="talk"]     { --event-tag-bg: #9ac29a; }
+[data-theme="dark"] .event-tag[data-category="tour"]     { --event-tag-bg: #8ab8e6; }
+[data-theme="dark"] .event-tag[data-category="social"]   { --event-tag-bg: #f0a975; }
+[data-theme="dark"] .event-tag[data-category="workshop"] { --event-tag-bg: #e6d966; }
 
 /* Generic tag — ensure contrast */
 [data-theme="dark"] .tag {
