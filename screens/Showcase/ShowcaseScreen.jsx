@@ -588,33 +588,36 @@ export function ShowcaseScreen() {
         </p>
       </header>
 
-      {/* 1. Button */}
+      {/* 1. Button — uses flex-wrap instead of VariantGrid because the
+          buttons themselves are small (w-[96px]) and a 5-col grid leaves
+          huge horizontal gaps. flex-wrap packs each variant tightly, with
+          consistent gap-x/gap-y, and wraps as the viewport narrows. */}
       <Section
         title="Button"
         description="UAL Button. Style: Primary (filled inverse) / Secondary (outline). State: Default / Hover / Pressed / Focused / Disabled."
       >
-        <div className="flex flex-col gap-[32px]">
+        <div className="flex flex-col gap-8">
           <div>
             <h3 className="text-[13px] font-medium uppercase tracking-[0.5px] text-[#525252] mb-[16px]">Primary</h3>
-            <VariantGrid cols={5}>
+            <div className="flex flex-wrap gap-x-10 gap-y-6">
               {['Default', 'Hover', 'Pressed', 'Focused', 'Disabled'].map((s) => (
-                <div key={s}>
+                <div key={s} className="flex flex-col">
                   <FigmaButton style="Primary" state={s} />
                   <VariantLabel>{s}</VariantLabel>
                 </div>
               ))}
-            </VariantGrid>
+            </div>
           </div>
           <div>
             <h3 className="text-[13px] font-medium uppercase tracking-[0.5px] text-[#525252] mb-[16px]">Secondary</h3>
-            <VariantGrid cols={5}>
+            <div className="flex flex-wrap gap-x-[40px] gap-y-[24px]">
               {['Default', 'Hover', 'Pressed', 'Focused', 'Disabled'].map((s) => (
-                <div key={s}>
+                <div key={s} className="flex flex-col">
                   <FigmaButton style="Secondary" state={s} />
                   <VariantLabel>{s}</VariantLabel>
                 </div>
               ))}
-            </VariantGrid>
+            </div>
           </div>
         </div>
       </Section>
