@@ -9,9 +9,7 @@ export default function NotFound() {
     <article className="prose has-lead flow" data-flow="l">
       <div className="flow" data-flow="s">
         <h1>Page not found</h1>
-        <p className="standfirst">
-          We couldn’t find what you were looking for.
-        </p>
+        <p className="standfirst">We couldn’t find what you were looking for.</p>
       </div>
       <p>
         <Link href="/" className="button" data-ghost-button="">

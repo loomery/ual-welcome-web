@@ -60,12 +60,7 @@ export function ChecklistItem({ item, checked, onToggle, blocked, dependsOnLabel
           </p>
         )}
 
-        <a
-          href={item.cta.href}
-          className="checklist-item__cta"
-          target="_blank"
-          rel="noreferrer"
-        >
+        <a href={item.cta.href} className="checklist-item__cta" target="_blank" rel="noreferrer">
           {item.cta.label}
           <ExternalLinkIcon aria-hidden="true" width={16} height={16} />
           <span className="visually-hidden"> (opens in new tab)</span>

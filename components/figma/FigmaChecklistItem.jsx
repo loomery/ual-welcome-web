@@ -43,9 +43,7 @@ export function FigmaChecklistItem({ checked = false, disabled = false, onClick,
               : 'border-[1.5px] border-black bg-transparent',
         )}
       >
-        {checked && (
-          <span className="text-[13px] leading-none font-bold text-white">✓</span>
-        )}
+        {checked && <span className="text-[13px] leading-none font-bold text-white">✓</span>}
       </span>
 
       <span

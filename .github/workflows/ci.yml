@@ -1,0 +1,51 @@
+# CI — runs on every push and PR. Mirrors the local `npm run verify`
+# script (lint + audit + build) plus a Prettier formatting check, so a
+# pushed branch fails fast if a developer skipped lint:fix or forgot to
+# format.
+#
+# Concurrency group cancels older runs of the same branch when a new
+# commit lands, so a fast-typing developer doesn't queue a stack of
+# stale CI jobs.
+
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  verify:
+    name: Lint, format, audit, build
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Lint (ESLint + better-tailwindcss)
+        run: npm run lint
+
+      - name: Format check (Prettier)
+        run: npx prettier --check "**/*.{js,jsx,ts,tsx,md,json,css}"
+
+      - name: Audit production deps (high severity)
+        run: npm run audit
+
+      - name: Build
+        run: npm run build

@@ -162,8 +162,7 @@ export function FeedbackDialog({ open, onClose, currentPath }) {
             Send feedback
           </h2>
           <p id={descId} className="feedback-dialog__lead">
-            Tell us what worked and what didn’t. This beta exists to be shaped
-            by you.
+            Tell us what worked and what didn’t. This beta exists to be shaped by you.
           </p>
         </div>
 
@@ -173,9 +172,8 @@ export function FeedbackDialog({ open, onClose, currentPath }) {
               <strong>Thanks — your feedback is on its way.</strong>
             </p>
             <p>
-              Your email app should have opened with a pre-filled message. If
-              nothing happened, email us at{' '}
-              <a href={`mailto:${FEEDBACK_EMAIL}`}>{FEEDBACK_EMAIL}</a>.
+              Your email app should have opened with a pre-filled message. If nothing happened,
+              email us at <a href={`mailto:${FEEDBACK_EMAIL}`}>{FEEDBACK_EMAIL}</a>.
             </p>
             <div className="cluster" data-justify="end">
               <Button onClick={closeDialog}>Close</Button>
@@ -188,7 +186,11 @@ export function FeedbackDialog({ open, onClose, currentPath }) {
                 How would you rate your experience?{' '}
                 <span className="feedback-rating__hint">Optional</span>
               </legend>
-              <div className="feedback-rating__options" role="radiogroup" aria-labelledby={ratingGroupId}>
+              <div
+                className="feedback-rating__options"
+                role="radiogroup"
+                aria-labelledby={ratingGroupId}
+              >
                 {[1, 2, 3, 4, 5].map((n) => {
                   const checked = rating === n;
                   return (
@@ -246,7 +248,8 @@ export function FeedbackDialog({ open, onClose, currentPath }) {
 
             <div className="flow" data-flow="3xs">
               <label htmlFor={emailId} className="label">
-                Your email <span className="feedback-rating__hint">Optional — if you’d like a reply</span>
+                Your email{' '}
+                <span className="feedback-rating__hint">Optional — if you’d like a reply</span>
               </label>
               <input
                 id={emailId}

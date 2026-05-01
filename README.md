@@ -58,22 +58,22 @@ npm start
 
 ## Other useful scripts
 
-| Script               | What it does                                          |
-| -------------------- | ----------------------------------------------------- |
-| `npm run lint`       | ESLint over the whole tree.                           |
-| `npm run audit`      | `npm audit` at high severity, prod deps only.         |
-| `npm run audit:full` | `npm audit` at moderate severity, all deps.           |
-| `npm run verify`     | Lint → audit → production build. Run before pushing.  |
+| Script               | What it does                                         |
+| -------------------- | ---------------------------------------------------- |
+| `npm run lint`       | ESLint over the whole tree.                          |
+| `npm run audit`      | `npm audit` at high severity, prod deps only.        |
+| `npm run audit:full` | `npm audit` at moderate severity, all deps.          |
+| `npm run verify`     | Lint → audit → production build. Run before pushing. |
 
 ## Routes
 
-| Path              | Description                              |
-| ----------------- | ---------------------------------------- |
-| `/`               | Home — countdown + useful-info cards     |
-| `/checklist`      | Induction checklist with localStorage    |
-| `/events`         | Welcome Week event list (filterable)     |
-| `/events/[id]`    | Individual event detail page             |
-| `/map`            | 3D explorable campus map                 |
+| Path           | Description                           |
+| -------------- | ------------------------------------- |
+| `/`            | Home — countdown + useful-info cards  |
+| `/checklist`   | Induction checklist with localStorage |
+| `/events`      | Welcome Week event list (filterable)  |
+| `/events/[id]` | Individual event detail page          |
+| `/map`         | 3D explorable campus map              |
 
 ## Project orientation
 

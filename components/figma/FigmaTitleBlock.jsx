@@ -17,9 +17,7 @@ export function FigmaTitleBlock({ eyebrow, headline }) {
           {eyebrow}
         </p>
       )}
-      <p className="w-full text-[32px] leading-[1.1] font-bold text-black">
-        {headline}
-      </p>
+      <p className="w-full text-[32px] leading-[1.1] font-bold text-black">{headline}</p>
     </div>
   );
 }

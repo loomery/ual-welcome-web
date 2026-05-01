@@ -139,9 +139,7 @@ export function MapCanvas({
   // One-off expensive texture — cached for the component's lifetime.
   const londonTexture = useMemo(() => createLondonMapTexture(1024), []);
 
-  const selected = selectedId
-    ? BUILDINGS.find((b) => b.id === selectedId)
-    : undefined;
+  const selected = selectedId ? BUILDINGS.find((b) => b.id === selectedId) : undefined;
 
   const target = selected
     ? (() => {
@@ -190,21 +188,10 @@ export function MapCanvas({
       {/* Stylised London map — textured plane fades at its edges. */}
       <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, 0.003, 0]} receiveShadow>
         <planeGeometry args={[MAP_SIZE, MAP_SIZE]} />
-        <meshStandardMaterial
-          map={londonTexture}
-          roughness={1}
-          metalness={0}
-          transparent
-        />
+        <meshStandardMaterial map={londonTexture} roughness={1} metalness={0} transparent />
       </mesh>
 
-      <ContactShadows
-        position={[0, 0.02, 0]}
-        opacity={0.3}
-        scale={50}
-        blur={2.5}
-        far={10}
-      />
+      <ContactShadows position={[0, 0.02, 0]} opacity={0.3} scale={50} blur={2.5} far={10} />
 
       {/* Neighbourhood labels — anchored to real geo positions */}
       {NEIGHBOURHOODS.map((n) => {

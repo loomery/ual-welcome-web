@@ -25,12 +25,7 @@ import { FigmaDateBadge } from './FigmaDateBadge';
  * @param {() => void} [props.onSeeAll]
  * @param {FigmaEventEntry[]} props.events
  */
-export function FigmaEventCard({
-  title = 'Events this week',
-  seeAllHref = '#',
-  onSeeAll,
-  events,
-}) {
+export function FigmaEventCard({ title = 'Events this week', seeAllHref = '#', onSeeAll, events }) {
   return (
     <article className="flex w-81.75 max-w-full flex-col gap-4 rounded-lg bg-[#f2f2f2] p-4">
       <header className="flex items-center justify-between">
@@ -59,9 +54,7 @@ export function FigmaEventCard({
           <div className="flex min-w-0 flex-1 flex-col gap-0.5">
             <p className="text-[16px] leading-[1.4] font-medium text-black">{event.title}</p>
             <p className="text-[13px] leading-[1.4] text-[#525252]">{event.time}</p>
-            {event.meta && (
-              <p className="text-[13px] leading-[1.4] text-[#858585]">{event.meta}</p>
-            )}
+            {event.meta && <p className="text-[13px] leading-[1.4] text-[#858585]">{event.meta}</p>}
           </div>
         </a>
       ))}

@@ -34,8 +34,7 @@ export const CHECKLIST_ITEMS = [
   {
     id: 'enrol',
     title: 'Are you enrolled?',
-    body:
-      'You must enrol each year to join or continue your course. Complete your online registration to get started.',
+    body: 'You must enrol each year to join or continue your course. Complete your online registration to get started.',
     cta: {
       label: 'Complete your online registration',
       href: 'https://www.arts.ac.uk/study-at-ual/how-to-enrol',
@@ -45,8 +44,7 @@ export const CHECKLIST_ITEMS = [
   {
     id: 'id-card',
     title: 'Get your ID card',
-    body:
-      "Once you're enrolled, collect your student ID. Use it to access all UAL buildings and facilities.",
+    body: "Once you're enrolled, collect your student ID. Use it to access all UAL buildings and facilities.",
     cta: {
       label: 'Collect your student ID',
       href: 'https://www.arts.ac.uk/study-at-ual/how-to-enrol/student-id-card-collection',
@@ -57,8 +55,7 @@ export const CHECKLIST_ITEMS = [
   {
     id: 'it-account',
     title: 'Set up your IT account and email',
-    body:
-      'Activate your UAL email and university IT account. Need help? IT support is on the same page.',
+    body: 'Activate your UAL email and university IT account. Need help? IT support is on the same page.',
     cta: {
       label: 'IT set up and support',
       href: 'https://www.arts.ac.uk/students/welcome/your-journey-to-UAL/get-connected',
@@ -68,8 +65,7 @@ export const CHECKLIST_ITEMS = [
   {
     id: 'timetable',
     title: 'Get your timetable',
-    body:
-      'Find out when and where your classes happen so you can plan your first week.',
+    body: 'Find out when and where your classes happen so you can plan your first week.',
     cta: {
       label: 'Get ready for your timetable',
       href: 'https://www.arts.ac.uk/students/student-timetables',
@@ -79,8 +75,7 @@ export const CHECKLIST_ITEMS = [
   {
     id: 'libraries',
     title: 'Explore the Libraries',
-    body:
-      'Six specialist libraries across UAL. Borrow books, book study spaces, and access digital collections.',
+    body: 'Six specialist libraries across UAL. Borrow books, book study spaces, and access digital collections.',
     cta: {
       label: 'Library Services',
       href: 'https://www.arts.ac.uk/students/welcome/your-journey-to-UAL/get-support/skills',
@@ -90,8 +85,7 @@ export const CHECKLIST_ITEMS = [
   {
     id: 'moodle',
     title: 'How do I access Moodle?',
-    body:
-      'Moodle is where your course materials, lecture recordings and assignments live.',
+    body: 'Moodle is where your course materials, lecture recordings and assignments live.',
     cta: {
       label: 'Get started on Moodle',
       href: 'https://www.arts.ac.uk/students/get-started-on-moodle',

@@ -18,7 +18,13 @@ export function ChecklistIcon(props) {
   return (
     <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
       <rect x="4" y="4" width="16" height="16" stroke="currentColor" strokeWidth={1.6} />
-      <path d="m8 12 3 3 5-6" stroke="currentColor" strokeWidth={1.6} strokeLinecap="round" strokeLinejoin="round" />
+      <path
+        d="m8 12 3 3 5-6"
+        stroke="currentColor"
+        strokeWidth={1.6}
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
     </svg>
   );
 }
@@ -40,7 +46,12 @@ export function CalendarIcon(props) {
   return (
     <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
       <rect x="3" y="5" width="18" height="16" stroke="currentColor" strokeWidth={1.6} />
-      <path d="M3 10h18M8 3v4M16 3v4" stroke="currentColor" strokeWidth={1.6} strokeLinecap="round" />
+      <path
+        d="M3 10h18M8 3v4M16 3v4"
+        stroke="currentColor"
+        strokeWidth={1.6}
+        strokeLinecap="round"
+      />
     </svg>
   );
 }
@@ -54,12 +65,7 @@ export function FeedbackIcon(props) {
         strokeWidth={1.6}
         strokeLinejoin="round"
       />
-      <path
-        d="M8 10h8M8 13h5"
-        stroke="currentColor"
-        strokeWidth={1.6}
-        strokeLinecap="round"
-      />
+      <path d="M8 10h8M8 13h5" stroke="currentColor" strokeWidth={1.6} strokeLinecap="round" />
     </svg>
   );
 }
@@ -116,12 +122,7 @@ export function ExternalLinkIcon(props) {
         strokeLinecap="round"
         strokeLinejoin="round"
       />
-      <path
-        d="M20 4l-9 9"
-        stroke="currentColor"
-        strokeWidth={1.6}
-        strokeLinecap="round"
-      />
+      <path d="M20 4l-9 9" stroke="currentColor" strokeWidth={1.6} strokeLinecap="round" />
       <path
         d="M19 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1h5"
         stroke="currentColor"

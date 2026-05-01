@@ -14,12 +14,7 @@
  * @param {string} [props.sublabel]
  * @param {() => void} [props.onClick]
  */
-export function FigmaQuickActionTile({
-  accent = 'inverse',
-  title,
-  sublabel,
-  onClick,
-}) {
+export function FigmaQuickActionTile({ accent = 'inverse', title, sublabel, onClick }) {
   // Static class lookup so Tailwind's JIT can see all three at build.
   const accentClass = {
     inverse: 'bg-black',

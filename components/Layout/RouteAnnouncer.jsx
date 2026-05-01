@@ -42,12 +42,7 @@ export function RouteAnnouncer() {
   }, [pathname]);
 
   return (
-    <div
-      role="status"
-      aria-live="polite"
-      aria-atomic="true"
-      className="visually-hidden"
-    >
+    <div role="status" aria-live="polite" aria-atomic="true" className="visually-hidden">
       {message}
     </div>
   );

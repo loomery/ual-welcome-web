@@ -58,9 +58,7 @@ function Section({ title, description, children }) {
           <h2 className="text-[24px] leading-[1.2] font-bold text-black">{title}</h2>
           <FidelityBadge />
         </div>
-        {description && (
-          <p className="max-w-160 text-sm/normal text-[#525252]">{description}</p>
-        )}
+        {description && <p className="max-w-160 text-sm/normal text-[#525252]">{description}</p>}
       </div>
       <div className="overflow-x-auto rounded-lg border border-[#e5e5e5] bg-[#fafafa] p-6 sm:p-8">
         {children}
@@ -86,9 +84,7 @@ function VariantLabel({ children }) {
  * @param {import('react').ReactNode} props.children
  */
 function VariantGrid({ children }) {
-  return (
-    <div className="grid gap-6 sm:grid-cols-2 md:grid-cols-3">{children}</div>
-  );
+  return <div className="grid gap-6 sm:grid-cols-2 md:grid-cols-3">{children}</div>;
 }
 
 /**
@@ -126,10 +122,14 @@ export function ShowcaseScreen() {
         </p>
         <h1 className="text-[32px] leading-[1.1] font-bold text-black">Component showcase</h1>
         <p className="max-w-160 text-[17px] leading-normal text-[#525252]">
-          A live gallery of the standalone Figma components in <code className="rounded bg-[#f2f2f2] px-1 py-px text-[14px] text-black">components/figma/</code>.
-          Each is a real, interactive React component — hover and focus
-          states come from the live DOM, not from synthetic <code className="rounded bg-[#f2f2f2] px-1 py-px text-[14px] text-black">state</code> props.
-          Hex colours and pixel sizes match Figma 1:1.
+          A live gallery of the standalone Figma components in{' '}
+          <code className="rounded bg-[#f2f2f2] px-1 py-px text-[14px] text-black">
+            components/figma/
+          </code>
+          . Each is a real, interactive React component — hover and focus states come from the live
+          DOM, not from synthetic{' '}
+          <code className="rounded bg-[#f2f2f2] px-1 py-px text-[14px] text-black">state</code>{' '}
+          props. Hex colours and pixel sizes match Figma 1:1.
         </p>
       </header>
 
@@ -142,7 +142,9 @@ export function ShowcaseScreen() {
         <InteractiveHint />
         <div className="flex flex-col gap-8">
           <div>
-            <h3 className="mb-4 text-[13px] font-medium tracking-[0.5px] text-[#525252] uppercase">Primary</h3>
+            <h3 className="mb-4 text-[13px] font-medium tracking-[0.5px] text-[#525252] uppercase">
+              Primary
+            </h3>
             <div className="flex flex-wrap gap-x-10 gap-y-6">
               <div className="flex flex-col">
                 <FigmaButton variant="primary">Button</FigmaButton>
@@ -157,7 +159,9 @@ export function ShowcaseScreen() {
             </div>
           </div>
           <div>
-            <h3 className="mb-4 text-[13px] font-medium tracking-[0.5px] text-[#525252] uppercase">Secondary</h3>
+            <h3 className="mb-4 text-[13px] font-medium tracking-[0.5px] text-[#525252] uppercase">
+              Secondary
+            </h3>
             <div className="flex flex-wrap gap-x-10 gap-y-6">
               <div className="flex flex-col">
                 <FigmaButton variant="secondary">Button</FigmaButton>
@@ -194,9 +198,7 @@ export function ShowcaseScreen() {
               >
                 {o.label}
               </FigmaOptionRow>
-              <VariantLabel>
-                {selectedOption === o.value ? 'Selected' : 'Default'}
-              </VariantLabel>
+              <VariantLabel>{selectedOption === o.value ? 'Selected' : 'Default'}</VariantLabel>
             </div>
           ))}
           <div>
@@ -216,9 +218,7 @@ export function ShowcaseScreen() {
           <div>
             <FigmaChecklistItem
               checked={checked['item-1']}
-              onClick={() =>
-                setChecked((c) => ({ ...c, 'item-1': !c['item-1'] }))
-              }
+              onClick={() => setChecked((c) => ({ ...c, 'item-1': !c['item-1'] }))}
             >
               Complete online enrolment
             </FigmaChecklistItem>
@@ -227,9 +227,7 @@ export function ShowcaseScreen() {
           <div>
             <FigmaChecklistItem
               checked={checked['item-2']}
-              onClick={() =>
-                setChecked((c) => ({ ...c, 'item-2': !c['item-2'] }))
-              }
+              onClick={() => setChecked((c) => ({ ...c, 'item-2': !c['item-2'] }))}
             >
               Collect your student ID
             </FigmaChecklistItem>

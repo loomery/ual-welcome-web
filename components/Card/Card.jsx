@@ -22,7 +22,11 @@ export function Card({ title, body, to, external, eyebrow }) {
     <>
       {eyebrow && <p className="step--1 event__meta">{eyebrow}</p>}
       <h3>{title}</h3>
-      {body && <div className="flow" data-flow="s">{body}</div>}
+      {body && (
+        <div className="flow" data-flow="s">
+          {body}
+        </div>
+      )}
       {to && <ArrowRightIcon aria-hidden="true" />}
       {external && (
         <>
@@ -43,13 +47,7 @@ export function Card({ title, body, to, external, eyebrow }) {
 
   if (external) {
     return (
-      <a
-        href={external}
-        className="flow card"
-        data-flow="s"
-        target="_blank"
-        rel="noreferrer"
-      >
+      <a href={external} className="flow card" data-flow="s" target="_blank" rel="noreferrer">
         {inner}
       </a>
     );

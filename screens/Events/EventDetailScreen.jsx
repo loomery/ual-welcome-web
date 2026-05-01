@@ -44,14 +44,14 @@ export function EventDetailScreen({ id }) {
         </p>
         <h1>{event.title}</h1>
         <p className="standfirst">
-          <time dateTime={event.startsAt}>
-            {formatRange(event.startsAt, event.endsAt, true)}
-          </time>
+          <time dateTime={event.startsAt}>{formatRange(event.startsAt, event.endsAt, true)}</time>
         </p>
       </div>
 
       <section className="box flow" data-padding="l" data-flow="s" aria-labelledby="event-where">
-        <h2 id="event-where" style={{ fontSize: 'var(--step-1)' }}>Where</h2>
+        <h2 id="event-where" style={{ fontSize: 'var(--step-1)' }}>
+          Where
+        </h2>
         <p>
           {event.location}
           <br />
