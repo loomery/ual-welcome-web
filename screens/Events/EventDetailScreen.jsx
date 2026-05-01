@@ -36,18 +36,22 @@ export function EventDetailScreen({ id }) {
 
       <div className="flow" data-flow="s">
         <p className="event__meta">
-          <span className="tag" data-tag-type="standard">{event.category}</span>
+          {/* Same chip as the card on the events list — shares .event-tag
+              so a "Talk" event reads identically here and on the listing. */}
+          <span className="event-tag" data-category={event.category.toLowerCase()}>
+            {event.category}
+          </span>
         </p>
         <h1>{event.title}</h1>
         <p className="standfirst">
-          <time dateTime={event.startsAt}>
-            {formatRange(event.startsAt, event.endsAt, true)}
-          </time>
+          <time dateTime={event.startsAt}>{formatRange(event.startsAt, event.endsAt, true)}</time>
         </p>
       </div>
 
       <section className="box flow" data-padding="l" data-flow="s" aria-labelledby="event-where">
-        <h2 id="event-where" style={{ fontSize: 'var(--step-1)' }}>Where</h2>
+        <h2 id="event-where" style={{ fontSize: 'var(--step-1)' }}>
+          Where
+        </h2>
         <p>
           {event.location}
           <br />

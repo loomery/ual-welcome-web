@@ -1,12 +1,17 @@
 /* ==========================================================================
-   UAL Welcome Week — Global stylesheet (Next.js + Tailwind hybrid)
+   UAL Welcome Week — Global stylesheet (Next.js + Tailwind v4 hybrid)
    --------------------------------------------------------------------------
    Layering strategy:
-     1. Tailwind base / components / utilities (so utility classes win
-        over component classes when applied directly in JSX).
+     1. `@import "tailwindcss"` pulls Tailwind 4's preflight + utilities.
+        v4 collapses the old `@tailwind base/components/utilities` triplet
+        into a single import.
      2. UAL design tokens — the source of truth for colours, type scale,
-        spacing scale. Tailwind utilities reference these via var(--…),
-        wired up in tailwind.config.js.
+        spacing scale, exposed as CSS custom properties on :root. The
+        `@theme inline` block below mirrors the subset that becomes
+        Tailwind utilities (bg-ual-orange, p-s, text-step-1, etc.). With
+        `inline`, utilities compile to `background-color: var(--color-orange)`
+        rather than copying the literal hex, so dark-mode overrides on
+        :root continue to flip the rendered value automatically.
      3. UAL reset + base typography (mirrored from main.css).
      4. UAL CUBE CSS layout primitives (.flow, .cluster, .grid, .box…).
      5. UAL component classes (event-card, map-station, map-label,
@@ -16,9 +21,94 @@
         much more clearly here.
    ========================================================================== */
 
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import 'tailwindcss';
+
+/* ==========================================================================
+   Tailwind v4 — dark mode variant
+   --------------------------------------------------------------------------
+   The codebase still toggles dark mode via `data-theme="dark"` on
+   <html> (see ThemeProvider/useTheme). Tailwind 4's default `dark:`
+   variant looks for the `.dark` class instead, so we redefine it
+   here to read our existing attribute. Result: `dark:bg-x` /
+   `dark:focus:text-orange-700` patterns work alongside the existing
+   toggle without rewiring the theme provider.
+   ========================================================================== */
+
+@custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
+
+/* ==========================================================================
+   Tailwind v4 — theme bridge
+   --------------------------------------------------------------------------
+   Each entry below registers a theme key that Tailwind compiles into a
+   utility (e.g. `--color-ual-orange` → `bg-ual-orange`, `--spacing-s` →
+   `p-s`/`m-s`/`gap-s`, `--text-step-0` → `text-step-0`). The `inline`
+   modifier tells Tailwind not to emit a redundant declaration on :root
+   and to reference our existing UAL tokens via `var()` at use-sites,
+   so the dark-mode swaps on the `:root` block below keep working.
+   ========================================================================== */
+
+@theme inline {
+  /* Brand colours */
+  --color-ual-light: var(--color-light);
+  --color-ual-medium: var(--color-medium);
+  --color-ual-shade: var(--color-shade);
+  --color-ual-dark: var(--color-dark);
+  --color-ual-dark-50: var(--color-dark--tint-50);
+  --color-ual-dark-90: var(--color-dark--tint-90);
+  --color-ual-dark-95: var(--color-dark--tint-95);
+  --color-ual-orange: var(--color-orange);
+  --color-ual-util-blue: var(--color-utility-blue);
+  --color-ual-util-green: var(--color-utility-green);
+  --color-ual-util-orange: var(--color-utility-orange);
+  --color-ual-util-red: var(--color-utility-red);
+
+  /* Type families: font-main, font-heading */
+  --font-main: var(--font-main);
+  --font-heading: var(--font-heading);
+
+  /* Font weights: font-normal-ual, font-bold-ual (avoid clobbering
+     Tailwind's stock font-weight palette). */
+  --font-weight-ual-normal: var(--font-weight-normal);
+  --font-weight-ual-bold: var(--font-weight-bold);
+
+  /* Fluid type scale: text-step-d1 … text-step-4 */
+  --text-step-d1: var(--step--1);
+  --text-step-0: var(--step-0);
+  --text-step-1: var(--step-1);
+  --text-step-2: var(--step-2);
+  --text-step-3: var(--step-3);
+  --text-step-4: var(--step-4);
+
+  /* Line heights: leading-ual-default, leading-ual-condensed,
+     leading-ual-single (namespaced so they don't shadow Tailwind's
+     stock leading-snug, leading-relaxed, etc.). */
+  --leading-ual-default: var(--line-height-default);
+  --leading-ual-condensed: var(--line-height-condensed);
+  --leading-ual-single: var(--line-height-single);
+
+  /* Letter spacing: tracking-ual-tight (separate from Tailwind's
+     stock tracking-tight to avoid name collision). */
+  --tracking-ual-tight: var(--letter-spacing-tight);
+
+  /* Fluid spacing scale: p-3xs / m-3xs / gap-3xs … p-3xl etc. */
+  --spacing-3xs: var(--space-3xs);
+  --spacing-2xs: var(--space-2xs);
+  --spacing-xs: var(--space-xs);
+  --spacing-s: var(--space-s);
+  --spacing-m: var(--space-m);
+  --spacing-l: var(--space-l);
+  --spacing-xl: var(--space-xl);
+  --spacing-2xl: var(--space-2xl);
+  --spacing-3xl: var(--space-x3xl);
+  --spacing-bottom-nav: var(--bottom-nav-height);
+
+  /* Containers: max-w-grid, max-w-prose-ual */
+  --container-grid: var(--grid-max-width);
+  --container-prose-ual: 57.5rem;
+
+  /* Easing: ease-ual */
+  --ease-ual: cubic-bezier(0.4, 0, 0.2, 1);
+}
 
 /* ==========================================================================
    UAL Design System — Design Tokens
@@ -43,8 +133,8 @@
   --color-utility-red: #f04150;
 
   /* ---- Typography ---- */
-  --font-main: "Helvetica Neue", "Arial", sans-serif;
-  --font-heading: "Helvetica Neue", "Arial", sans-serif;
+  --font-main: 'Helvetica Neue', 'Arial', sans-serif;
+  --font-heading: 'Helvetica Neue', 'Arial', sans-serif;
   --font-weight-normal: 400;
   --font-weight-bold: 700;
   --line-height-default: 1.4;
@@ -97,7 +187,7 @@
 }
 
 /* ---- Dark mode overrides ---- */
-[data-theme="dark"] {
+[data-theme='dark'] {
   --color-light: #1a1a1a;
   --color-medium: #e0e0e0;
   --color-shade: #2d2d2d;
@@ -106,7 +196,7 @@
   --color-dark--tint-90: #333;
   --color-dark--tint-95: #1f1f1f;
   --color-orange: #ff7030;
-  
+
   /* Utility colours stay visible in dark mode */
   --color-utility-blue: #4fa3ff;
   --color-utility-green: #2ddb52;
@@ -146,8 +236,8 @@ ul {
   margin: 0;
 }
 
-ol[role="list"],
-ul[role="list"] {
+ol[role='list'],
+ul[role='list'] {
   list-style: none;
   padding: 0;
 }
@@ -281,11 +371,11 @@ iframe {
   border: 0;
 }
 
-[role="list"] {
+[role='list'] {
   padding: 0;
 }
 
-[role="list"] li {
+[role='list'] li {
   list-style: none !important;
 }
 
@@ -437,11 +527,11 @@ main:focus {
   color: inherit;
 }
 
-.box[data-padding="m"] {
+.box[data-padding='m'] {
   --box-padding: var(--space-m);
 }
 
-.box[data-padding="l"] {
+.box[data-padding='l'] {
   --box-padding: var(--space-l);
 }
 
@@ -461,7 +551,7 @@ main:focus {
   justify-content: flex-start;
 }
 
-.cluster[data-justify="space-between"] {
+.cluster[data-justify='space-between'] {
   justify-content: space-between;
 }
 
@@ -470,14 +560,30 @@ main:focus {
   margin-top: var(--flow-space, 1em);
 }
 
-.flow[data-flow="3xs"] > * + * { --flow-space: var(--space-3xs); }
-.flow[data-flow="2xs"] > * + * { --flow-space: var(--space-2xs); }
-.flow[data-flow="xs"]  > * + * { --flow-space: var(--space-xs);  }
-.flow[data-flow="s"]   > * + * { --flow-space: var(--space-s);   }
-.flow[data-flow="m"]   > * + * { --flow-space: var(--space-m);   }
-.flow[data-flow="l"]   > * + * { --flow-space: var(--space-l);   }
-.flow[data-flow="xl"]  > * + * { --flow-space: var(--space-xl);  }
-.flow[data-flow="2xl"] > * + * { --flow-space: var(--space-2xl); }
+.flow[data-flow='3xs'] > * + * {
+  --flow-space: var(--space-3xs);
+}
+.flow[data-flow='2xs'] > * + * {
+  --flow-space: var(--space-2xs);
+}
+.flow[data-flow='xs'] > * + * {
+  --flow-space: var(--space-xs);
+}
+.flow[data-flow='s'] > * + * {
+  --flow-space: var(--space-s);
+}
+.flow[data-flow='m'] > * + * {
+  --flow-space: var(--space-m);
+}
+.flow[data-flow='l'] > * + * {
+  --flow-space: var(--space-l);
+}
+.flow[data-flow='xl'] > * + * {
+  --flow-space: var(--space-xl);
+}
+.flow[data-flow='2xl'] > * + * {
+  --flow-space: var(--space-2xl);
+}
 
 /* ---- Grid ---- */
 .grid {
@@ -517,7 +623,7 @@ main:focus {
   padding-inline: var(--grid-gutter);
 }
 
-.wrapper[data-type="full-bleed"] {
+.wrapper[data-type='full-bleed'] {
   padding-inline: 0;
 }
 
@@ -527,7 +633,7 @@ main:focus {
   padding-block-start: var(--space-xs);
 }
 
-.bordered[data-space="l"] {
+.bordered[data-space='l'] {
   padding-block-start: var(--space-l);
 }
 
@@ -612,7 +718,7 @@ main:focus {
 
 .header__link p::before {
   background-color: var(--color-dark);
-  content: "";
+  content: '';
   height: var(--space-m);
   left: -29px;
   position: absolute;
@@ -659,7 +765,10 @@ main:focus {
   line-height: var(--line-height-condensed);
   padding: var(--button-padding);
   text-decoration: none;
-  transition: background-color 0.2s, border-color 0.2s, color 0.2s;
+  transition:
+    background-color 0.2s,
+    border-color 0.2s,
+    color 0.2s;
   /* WCAG 2.2 — 2.5.8 Target Size (min 24x24) */
   min-height: 44px;
 }
@@ -689,13 +798,13 @@ main:focus {
   transform: scale(99%);
 }
 
-.button[data-ghost-button=""] {
+.button[data-ghost-button=''] {
   --button-bg: transparent;
   --button-color: var(--button-border-color);
 }
 
 .button[disabled],
-.button[aria-disabled="true"] {
+.button[aria-disabled='true'] {
   cursor: not-allowed;
   opacity: 0.5;
 }
@@ -724,9 +833,15 @@ main:focus {
   line-height: var(--line-height-condensed);
 }
 
-.tag[data-tag-type="standard"] { --tag-bg-color: #c9e1c9; }
-.tag[data-tag-type="notice"]   { --tag-bg-color: #f7e9c9; }
-.tag[data-tag-type="warning"]  { --tag-bg-color: #e7c9c9; }
+.tag[data-tag-type='standard'] {
+  --tag-bg-color: #c9e1c9;
+}
+.tag[data-tag-type='notice'] {
+  --tag-bg-color: #f7e9c9;
+}
+.tag[data-tag-type='warning'] {
+  --tag-bg-color: #e7c9c9;
+}
 
 /* ---------- Label / form ---------- */
 .label {
@@ -765,7 +880,7 @@ main:focus {
 
 .checkbox__input::before {
   background-color: var(--color-light);
-  content: "";
+  content: '';
   height: 1rem;
   transform: scale(0);
   transition: transform 0.1s ease-in-out;
@@ -832,7 +947,7 @@ main:focus {
   margin: 0;
 }
 
-.checklist-item[data-checked=""] .checklist-item__body {
+.checklist-item[data-checked=''] .checklist-item__body {
   color: var(--color-dark--tint-70, var(--color-medium));
 }
 
@@ -870,7 +985,7 @@ main:focus {
 
 /* Once the row is checked, dim the CTA so completed work recedes
    visually but stays reachable. */
-.checklist-item[data-checked=""] .checklist-item__cta {
+.checklist-item[data-checked=''] .checklist-item__cta {
   color: var(--color-medium);
 }
 
@@ -910,7 +1025,7 @@ main:focus {
   text-decoration: none;
 }
 
-.bottom-nav__link[aria-current="page"] {
+.bottom-nav__link[aria-current='page'] {
   color: var(--color-dark);
   font-weight: var(--font-weight-bold);
 }
@@ -950,7 +1065,7 @@ main:focus {
   text-decoration: none;
 }
 
-.top-nav__link[aria-current="page"] {
+.top-nav__link[aria-current='page'] {
   border-block-end: 2px solid var(--color-dark);
 }
 
@@ -998,7 +1113,9 @@ main:focus {
   border-block-start: 1px solid var(--color-dark--tint-90);
   margin-block-start: var(--space-l);
   padding-block: var(--space-m);
-  padding-block-end: calc(var(--bottom-nav-height) + var(--space-m) + env(safe-area-inset-bottom, 0px));
+  padding-block-end: calc(
+    var(--bottom-nav-height) + var(--space-m) + env(safe-area-inset-bottom, 0px)
+  );
 }
 
 .app-footer__inner {
@@ -1025,7 +1142,9 @@ main:focus {
   /* WCAG 2.2 — 2.5.8 Target Size */
   min-height: 44px;
   padding: var(--space-2xs) var(--space-xs);
-  transition: background 0.12s, color 0.12s;
+  transition:
+    background 0.12s,
+    color 0.12s;
 }
 
 .app-footer__reset:hover {
@@ -1081,10 +1200,12 @@ main:focus {
   background: var(--color-light);
   border-inline-start: 4px solid transparent;
   padding: var(--space-s);
-  transition: border-color 0.15s, background 0.15s;
+  transition:
+    border-color 0.15s,
+    background 0.15s;
 }
 
-.building-item[data-selected=""] {
+.building-item[data-selected=''] {
   border-inline-start-color: var(--color-orange);
 }
 
@@ -1127,7 +1248,10 @@ main:focus {
      .event-card__link        whole surface link, flex column
      .event-card__head        grid: [datestamp] [heading column]
      .event-card__datestamp   stacked DD / MON chip (black → orange on hover)
-     .event-card__tag         category chip with per-category tint
+     .event-tag               (shared, lives outside this block) category
+                              chip with per-category tint — also used on
+                              the event detail page so the label is
+                              consistent across surfaces
      .event-card__foot        footer with pin icon, pinned to the card's base
    ========================================================================== */
 .event-card {
@@ -1140,7 +1264,9 @@ main:focus {
      layout geometry and avoids double-borders against the surrounding grid. */
   outline: 1px solid var(--color-dark);
   outline-offset: -1px;
-  transition: background 0.15s ease, transform 0.15s ease;
+  transition:
+    background 0.15s ease,
+    transform 0.15s ease;
 }
 
 .event-card__link {
@@ -1188,7 +1314,9 @@ main:focus {
   line-height: 1;
   min-inline-size: 3.5rem;
   padding: var(--space-2xs) var(--space-xs);
-  transition: background 0.15s ease, color 0.15s ease;
+  transition:
+    background 0.15s ease,
+    color 0.15s ease;
 }
 
 .event-card:hover .event-card__datestamp,
@@ -1222,7 +1350,11 @@ main:focus {
   margin: 0;
 }
 
-.event-card__tag {
+/* Shared event-category tag. Used by EventCard AND EventDetailScreen so
+   the same event reads identically wherever it appears. Lives outside
+   the .event-card BEM block on purpose — it's a cross-component label,
+   not a card-internal element. */
+.event-tag {
   background: var(--event-tag-bg, var(--color-dark--tint-90));
   color: var(--color-dark);
   font-size: var(--step--1);
@@ -1237,10 +1369,18 @@ main:focus {
 /* Per-category tints — soft, editorial palette. Each is distinct enough
    to scan quickly while keeping the text in a single dark ink for WCAG
    contrast. */
-.event-card__tag[data-category="talk"]     { --event-tag-bg: #d6e7d0; }
-.event-card__tag[data-category="tour"]     { --event-tag-bg: #cfe0ec; }
-.event-card__tag[data-category="social"]   { --event-tag-bg: #f5d6c3; }
-.event-card__tag[data-category="workshop"] { --event-tag-bg: #f0e2b6; }
+.event-tag[data-category='talk'] {
+  --event-tag-bg: #d6e7d0;
+}
+.event-tag[data-category='tour'] {
+  --event-tag-bg: #cfe0ec;
+}
+.event-tag[data-category='social'] {
+  --event-tag-bg: #f5d6c3;
+}
+.event-tag[data-category='workshop'] {
+  --event-tag-bg: #f0e2b6;
+}
 
 .event-card__when {
   color: var(--color-dark);
@@ -1345,7 +1485,7 @@ ul.grid > li {
 .home-hero__title::after {
   background: var(--color-orange);
   block-size: 0.5em;
-  content: "";
+  content: '';
   display: inline-block;
   inline-size: 0.5em;
   margin-inline-start: 0.2em;
@@ -1414,7 +1554,7 @@ ul.grid > li {
 }
 
 /* Reel items must be flex containers so their card child stretches */
-.home-reel > [role="listitem"] {
+.home-reel > [role='listitem'] {
   display: flex;
 }
 
@@ -1446,8 +1586,14 @@ ul.grid > li {
 }
 
 @keyframes completion-appear {
-  from { opacity: 0; transform: translateY(6px); }
-  to   { opacity: 1; transform: translateY(0);   }
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -1492,7 +1638,7 @@ ul.grid > li {
    --color-light flips to a near-black value, leaving dark text on a
    dark scrim. Invert to a solid-white pill with dark text — same job,
    readable contrast both ways. */
-[data-theme="dark"] .map-hint {
+[data-theme='dark'] .map-hint {
   background: var(--color-dark);
   color: var(--color-light);
 }
@@ -1520,7 +1666,9 @@ ul.grid > li {
   position: absolute;
   right: var(--space-s);
   top: var(--space-s);
-  transition: background 0.15s ease, color 0.15s ease;
+  transition:
+    background 0.15s ease,
+    color 0.15s ease;
   width: 2.5rem;
   z-index: 3;
 }
@@ -1534,13 +1682,13 @@ ul.grid > li {
   outline-offset: 2px;
 }
 
-.map-compass[aria-pressed="true"] {
+.map-compass[aria-pressed='true'] {
   background: var(--color-dark);
   color: var(--color-light);
 }
 
 .map-compass::before {
-  content: "";
+  content: '';
   border-block-end: 8px solid var(--color-orange);
   border-inline: 4px solid transparent;
   inset-block-start: -10px;
@@ -1631,7 +1779,10 @@ ul.grid > li {
   min-height: 36px;
   padding: 0.45rem 0.65rem;
   text-transform: uppercase;
-  transition: background 0.15s ease, color 0.15s ease, opacity 0.15s ease;
+  transition:
+    background 0.15s ease,
+    color 0.15s ease,
+    opacity 0.15s ease;
 }
 
 .map-toggle:hover,
@@ -1646,14 +1797,14 @@ ul.grid > li {
 
 /* Pressed = layer hidden. Invert the pill so "off" reads clearly as a
    distinct state, and dim the swatch slightly. */
-.map-toggle[aria-pressed="false"] {
+.map-toggle[aria-pressed='false'] {
   background: var(--color-dark);
   color: var(--color-light);
   opacity: 0.85;
 }
 
-.map-toggle[aria-pressed="false"]:hover,
-.map-toggle[aria-pressed="false"]:focus-visible {
+.map-toggle[aria-pressed='false']:hover,
+.map-toggle[aria-pressed='false']:focus-visible {
   opacity: 1;
 }
 
@@ -1682,14 +1833,14 @@ ul.grid > li {
 .map-toggle__swatch--tube::before {
   background: #ffffff;
   border-radius: 999px;
-  content: "";
+  content: '';
   inset: 0.18rem;
   position: absolute;
 }
 
 .map-toggle__swatch--tube::after {
   background: #1c3f94;
-  content: "";
+  content: '';
   height: 0.18rem;
   inset: 50% 0;
   position: absolute;
@@ -1726,7 +1877,9 @@ ul.grid > li {
   min-height: 44px;
   padding: 0.75rem 1rem;
   position: fixed;
-  transition: background 0.15s, transform 0.15s;
+  transition:
+    background 0.15s,
+    transform 0.15s;
   z-index: 11;
 }
 
@@ -1764,6 +1917,11 @@ ul.grid > li {
 }
 
 /* ---------- Dialog ---------- */
+/* Tailwind 4's preflight resets the user-agent margin on <dialog>, which
+   removes the default `margin: auto` that the browser uses to centre
+   showModal() dialogs. We restore centring explicitly with the
+   `inset: 0; margin: auto` idiom so the modal stays in the middle of
+   the viewport regardless of preflight changes. */
 .feedback-dialog {
   background: transparent;
   border: 0;
@@ -1771,6 +1929,8 @@ ul.grid > li {
   inline-size: min(30rem, calc(100vw - var(--space-m)));
   max-block-size: calc(100dvh - var(--space-l));
   padding: 0;
+  inset: 0;
+  margin: auto;
 }
 
 .feedback-dialog::backdrop {
@@ -1855,7 +2015,7 @@ ul.grid > li {
   text-align: end;
 }
 
-.feedback-dialog__counter[data-near-limit=""] {
+.feedback-dialog__counter[data-near-limit=''] {
   color: var(--color-orange);
   font-weight: var(--font-weight-bold);
 }
@@ -1897,14 +2057,16 @@ ul.grid > li {
   min-height: 44px;
   min-width: 44px;
   padding: var(--space-2xs);
-  transition: background 0.12s, color 0.12s;
+  transition:
+    background 0.12s,
+    color 0.12s;
 }
 
 .feedback-rating__option:hover {
   background: var(--color-dark--tint-90);
 }
 
-.feedback-rating__option[data-checked=""] {
+.feedback-rating__option[data-checked=''] {
   background: var(--color-dark);
   color: var(--color-light);
 }
@@ -2133,20 +2295,20 @@ ul.grid > li {
   stroke: currentColor;
 }
 
-[data-theme="dark"] .theme-toggle {
+[data-theme='dark'] .theme-toggle {
   color: var(--color-medium);
 }
 
-[data-theme="dark"] .theme-toggle:hover {
+[data-theme='dark'] .theme-toggle:hover {
   background-color: var(--color-shade);
 }
 
-[data-theme="dark"] .theme-toggle:focus-visible {
+[data-theme='dark'] .theme-toggle:focus-visible {
   outline: 2px solid var(--color-orange);
   outline-offset: 2px;
 }
 
-[data-theme="dark"] .theme-toggle svg {
+[data-theme='dark'] .theme-toggle svg {
   width: 1.5rem;
   height: 1.5rem;
   stroke: currentColor;
@@ -2157,97 +2319,111 @@ ul.grid > li {
 /* ========================================================================== */
 
 /* Home hero banner — invert for dark mode */
-[data-theme="dark"] .home-hero {
+[data-theme='dark'] .home-hero {
   background: var(--color-light);
   color: var(--color-dark);
 }
 
-[data-theme="dark"] .home-hero__title {
+[data-theme='dark'] .home-hero__title {
   color: var(--color-dark);
 }
 
-[data-theme="dark"] .home-hero__lede {
+[data-theme='dark'] .home-hero__lede {
   color: var(--color-medium);
 }
 
 /* Event card — higher contrast background in dark mode */
-[data-theme="dark"] .event-card {
+[data-theme='dark'] .event-card {
   --event-card-bg: var(--color-shade);
 }
 
-[data-theme="dark"] .event-card:hover {
+[data-theme='dark'] .event-card:hover {
   --event-card-bg: var(--color-light);
 }
 
-[data-theme="dark"] .event-card__title,
-[data-theme="dark"] .event-card__body,
-[data-theme="dark"] .event-card__when {
+[data-theme='dark'] .event-card__title,
+[data-theme='dark'] .event-card__body,
+[data-theme='dark'] .event-card__when {
   color: var(--color-dark);
 }
 
 /* Event card tags — ensure readable text in dark mode */
-[data-theme="dark"] .event-card__tag {
+[data-theme='dark'] .event-tag {
   color: var(--color-dark);
 }
 
 /* Event card tag categories — darker, more saturated backgrounds */
-[data-theme="dark"] .event-card__tag[data-category="talk"]     { --event-tag-bg: #9ac29a; }
-[data-theme="dark"] .event-card__tag[data-category="tour"]     { --event-tag-bg: #8ab8e6; }
-[data-theme="dark"] .event-card__tag[data-category="social"]   { --event-tag-bg: #f0a975; }
-[data-theme="dark"] .event-card__tag[data-category="workshop"] { --event-tag-bg: #e6d966; }
+[data-theme='dark'] .event-tag[data-category='talk'] {
+  --event-tag-bg: #9ac29a;
+}
+[data-theme='dark'] .event-tag[data-category='tour'] {
+  --event-tag-bg: #8ab8e6;
+}
+[data-theme='dark'] .event-tag[data-category='social'] {
+  --event-tag-bg: #f0a975;
+}
+[data-theme='dark'] .event-tag[data-category='workshop'] {
+  --event-tag-bg: #e6d966;
+}
 
 /* Generic tag — ensure contrast */
-[data-theme="dark"] .tag {
+[data-theme='dark'] .tag {
   background-color: var(--tag-bg-color, var(--color-shade));
   color: var(--color-dark);
 }
 
-[data-theme="dark"] .tag[data-tag-type="standard"] { --tag-bg-color: #7ac97a; }
-[data-theme="dark"] .tag[data-tag-type="notice"]   { --tag-bg-color: #f4d96b; }
-[data-theme="dark"] .tag[data-tag-type="warning"]  { --tag-bg-color: #f07070; }
+[data-theme='dark'] .tag[data-tag-type='standard'] {
+  --tag-bg-color: #7ac97a;
+}
+[data-theme='dark'] .tag[data-tag-type='notice'] {
+  --tag-bg-color: #f4d96b;
+}
+[data-theme='dark'] .tag[data-tag-type='warning'] {
+  --tag-bg-color: #f07070;
+}
 
 /* Completion banner — keep text dark in dark mode */
-[data-theme="dark"] .completion-banner {
+[data-theme='dark'] .completion-banner {
   background: var(--color-orange);
   border: 2px solid var(--color-dark);
   color: var(--color-dark);
 }
 
-[data-theme="dark"] .completion-banner .tag {
+[data-theme='dark'] .completion-banner .tag {
   background: var(--color-dark);
   color: var(--color-light);
 }
 
-[data-theme="dark"] .completion-banner__title,
-[data-theme="dark"] .completion-banner__body {
+[data-theme='dark'] .completion-banner__title,
+[data-theme='dark'] .completion-banner__body {
   color: var(--color-dark);
 }
 
 /* Map toggles — light background, dark text in dark mode */
-[data-theme="dark"] .map-toggle {
+[data-theme='dark'] .map-toggle {
   background: rgba(255, 255, 255, 0.92);
   border: 1px solid var(--color-light);
   color: #000;
 }
 
-[data-theme="dark"] .map-toggle:hover,
-[data-theme="dark"] .map-toggle:focus-visible {
+[data-theme='dark'] .map-toggle:hover,
+[data-theme='dark'] .map-toggle:focus-visible {
   background: var(--color-light);
   color: #000;
 }
 
-[data-theme="dark"] .map-toggle[aria-pressed="false"] {
+[data-theme='dark'] .map-toggle[aria-pressed='false'] {
   background: rgba(26, 26, 26, 0.92);
   color: var(--color-light);
   opacity: 0.85;
 }
 
-[data-theme="dark"] .map-toggle[aria-pressed="false"]:hover,
-[data-theme="dark"] .map-toggle[aria-pressed="false"]:focus-visible {
+[data-theme='dark'] .map-toggle[aria-pressed='false']:hover,
+[data-theme='dark'] .map-toggle[aria-pressed='false']:focus-visible {
   background: rgba(26, 26, 26, 1);
   opacity: 1;
 }
 
-[data-theme="dark"] .map-toggle__swatch {
+[data-theme='dark'] .map-toggle__swatch {
   border: 1px solid var(--color-dark);
 }

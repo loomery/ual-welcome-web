@@ -22,11 +22,7 @@ export function AppShell({ children }) {
     <div className="app-shell">
       <SkipLinks />
       <Header />
-      <main
-        id="main-content"
-        className="app-shell__main wrapper"
-        tabIndex={-1}
-      >
+      <main id="main-content" className="app-shell__main wrapper" tabIndex={-1}>
         {children}
       </main>
       <Footer />

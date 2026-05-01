@@ -10,10 +10,10 @@ import { ArrowRightIcon, CloseIcon } from '../../components/Icon/NavIcons';
 // next/dynamic with ssr: false ensures three.js + canvas-only code
 // never runs on the server. Same effect as React.lazy in the Vite app
 // but Next-aware, so the server bundle stays clean.
-const MapCanvas = dynamic(
-  () => import('./MapCanvas').then((m) => m.MapCanvas),
-  { ssr: false, loading: () => <p className="map-hint">Loading 3D view…</p> }
-);
+const MapCanvas = dynamic(() => import('./MapCanvas').then((m) => m.MapCanvas), {
+  ssr: false,
+  loading: () => <p className="map-hint">Loading 3D view…</p>,
+});
 
 export function MapScreen() {
   const [selectedId, setSelectedId] = useState(null);
@@ -54,8 +54,8 @@ export function MapScreen() {
       <div className="flow" data-flow="s">
         <h1>Campus map</h1>
         <p className="standfirst">
-          UAL is made up of six colleges spread across London. Tap any building
-          below or in the 3D view — you can grab directions to each college.
+          UAL is made up of six colleges spread across London. Tap any building below or in the 3D
+          view — you can grab directions to each college.
         </p>
       </div>
 
@@ -99,18 +99,17 @@ export function MapScreen() {
 
           {/* Layer toggles — keep the mobile view readable by letting users
               hide either the building labels or the tube-station roundels. */}
-          <div
-            className="map-toggles"
-            role="group"
-            aria-label="Toggle map layers"
-          >
+          <div className="map-toggles" role="group" aria-label="Toggle map layers">
             <button
               type="button"
               className="map-toggle"
               aria-pressed={showBuildingLabels}
               onClick={() => setShowBuildingLabels((v) => !v)}
             >
-              <span className="map-toggle__swatch map-toggle__swatch--building" aria-hidden="true" />
+              <span
+                className="map-toggle__swatch map-toggle__swatch--building"
+                aria-hidden="true"
+              />
               Buildings
             </button>
             <button
@@ -143,12 +142,7 @@ export function MapScreen() {
               <p className="map-banner__title">{selected.name}</p>
               <p className="map-banner__meta">{selected.address}</p>
               <p className="map-banner__body">{selected.description}</p>
-              <a
-                className="button"
-                href={directionsUrl(selected)}
-                target="_blank"
-                rel="noreferrer"
-              >
+              <a className="button" href={directionsUrl(selected)} target="_blank" rel="noreferrer">
                 Directions
                 <ArrowRightIcon aria-hidden="true" />
               </a>
@@ -164,10 +158,7 @@ export function MapScreen() {
             const isSelected = b.id === selectedId;
             return (
               <li key={b.id}>
-                <div
-                  className="building-item"
-                  data-selected={isSelected ? '' : undefined}
-                >
+                <div className="building-item" data-selected={isSelected ? '' : undefined}>
                   <button
                     type="button"
                     ref={(el) => {
@@ -210,12 +201,7 @@ export function MapScreen() {
         </ul>
       </section>
 
-      <div
-        className="visually-hidden"
-        role="status"
-        aria-live="polite"
-        aria-atomic="true"
-      >
+      <div className="visually-hidden" role="status" aria-live="polite" aria-atomic="true">
         {selected ? `Selected ${selected.name}` : ''}
       </div>
     </article>

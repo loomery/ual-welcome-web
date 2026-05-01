@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import { Card } from '../../components/Card/Card';
 import { Countdown } from '../../components/Countdown/Countdown';
 import { EventCard } from '../../components/EventCard/EventCard';
@@ -6,9 +7,7 @@ import { USEFUL_INFO } from '../../data/usefulInfo';
 
 export function HomeScreen() {
   // Server-side computation — sorts deterministically by ISO timestamp.
-  const upcoming = [...EVENTS]
-    .sort((a, b) => a.startsAt.localeCompare(b.startsAt))
-    .slice(0, 3);
+  const upcoming = [...EVENTS].sort((a, b) => a.startsAt.localeCompare(b.startsAt)).slice(0, 3);
 
   return (
     <article className="flow" data-flow="l">
@@ -19,8 +18,8 @@ export function HomeScreen() {
           Welcome to UAL.
         </h1>
         <p className="standfirst home-hero__lede">
-          Your first week at the University of the Arts London — induction checklist,
-          explorable campus map, and everything happening during Welcome Week.
+          Your first week at the University of the Arts London — induction checklist, explorable
+          campus map, and everything happening during Welcome Week.
         </p>
         <svg
           className="home-hero__pattern"
@@ -41,9 +40,9 @@ export function HomeScreen() {
       <section className="flow" data-flow="s" aria-labelledby="happening-heading">
         <div className="cluster" data-justify="space-between">
           <h2 id="happening-heading">Happening next</h2>
-          <a className="home-section__cta" href="/events">
+          <Link className="home-section__cta" href="/events">
             See all events →
-          </a>
+          </Link>
         </div>
         <div className="reel home-reel" role="list">
           {upcoming.map((event) => (
@@ -63,11 +62,7 @@ export function HomeScreen() {
             to="/checklist"
             body={<p>Tick off the essentials before and during your first week.</p>}
           />
-          <Card
-            title="Campus map"
-            to="/map"
-            body={<p>Explore UAL’s six colleges in 3D.</p>}
-          />
+          <Card title="Campus map" to="/map" body={<p>Explore UAL’s six colleges in 3D.</p>} />
           <Card
             title="Events"
             to="/events"
@@ -83,12 +78,7 @@ export function HomeScreen() {
         <h2 id="useful-info">Useful info</h2>
         <div className="grid">
           {USEFUL_INFO.map((item) => (
-            <Card
-              key={item.id}
-              title={item.title}
-              external={item.href}
-              body={<p>{item.body}</p>}
-            />
+            <Card key={item.id} title={item.title} external={item.href} body={<p>{item.body}</p>} />
           ))}
         </div>
       </section>

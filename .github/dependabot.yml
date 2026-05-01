@@ -1,0 +1,45 @@
+# Dependabot config — opens PRs for outdated/insecure dependencies.
+#
+# Two ecosystems are watched:
+#   1. npm (the app's dependencies) — checked weekly. Production deps
+#      are grouped into a single PR per week to reduce noise; dev deps
+#      grouped separately. Major bumps are isolated (one PR each) so
+#      you can review breaking changes individually instead of buried
+#      in a 30-line group bump.
+#   2. github-actions (the workflows below) — checked monthly. These
+#      rarely change and a monthly cadence keeps churn low.
+#
+# Security alerts are always opened immediately regardless of schedule.
+
+version: 2
+updates:
+  # App dependencies
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: weekly
+      day: monday
+      time: "09:00"
+      timezone: Europe/London
+    open-pull-requests-limit: 5
+    versioning-strategy: increase
+    labels: [dependencies]
+    groups:
+      production-dependencies:
+        dependency-type: production
+        update-types: [minor, patch]
+      development-dependencies:
+        dependency-type: development
+        update-types: [minor, patch]
+    # Majors are never grouped — each gets its own PR with a clear changelog.
+
+  # Workflow files (CI itself + CodeQL)
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: monthly
+    open-pull-requests-limit: 3
+    labels: [dependencies, ci]
+    groups:
+      actions:
+        patterns: ["*"]

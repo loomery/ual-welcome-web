@@ -39,32 +39,32 @@ export function geoToScene(lng, lat) {
  * @type {Array<[number, number]>}
  */
 const THAMES = [
-  [-0.285, 51.47],   // Richmond
+  [-0.285, 51.47], // Richmond
   [-0.255, 51.476],
-  [-0.23, 51.485],   // Hammersmith
+  [-0.23, 51.485], // Hammersmith
   [-0.215, 51.475],
-  [-0.205, 51.465],  // Putney bend
+  [-0.205, 51.465], // Putney bend
   [-0.185, 51.47],
   [-0.165, 51.478],
-  [-0.148, 51.484],  // Battersea / Chelsea
+  [-0.148, 51.484], // Battersea / Chelsea
   [-0.128, 51.486],
-  [-0.118, 51.487],  // Vauxhall
+  [-0.118, 51.487], // Vauxhall
   [-0.118, 51.498],
-  [-0.12, 51.501],   // Westminster
-  [-0.115, 51.507],  // Waterloo
-  [-0.104, 51.509],  // Blackfriars
+  [-0.12, 51.501], // Westminster
+  [-0.115, 51.507], // Waterloo
+  [-0.104, 51.509], // Blackfriars
   [-0.091, 51.508],
-  [-0.078, 51.506],  // Tower Bridge
+  [-0.078, 51.506], // Tower Bridge
   [-0.06, 51.505],
   [-0.04, 51.506],
-  [-0.025, 51.505],  // Canary Wharf north
+  [-0.025, 51.505], // Canary Wharf north
   [-0.017, 51.496],
-  [-0.011, 51.488],  // Island Gardens (south tip of Isle of Dogs loop)
+  [-0.011, 51.488], // Island Gardens (south tip of Isle of Dogs loop)
   [-0.007, 51.49],
-  [0.0, 51.5],       // around the O2
+  [0.0, 51.5], // around the O2
   [0.012, 51.503],
   [0.03, 51.5],
-  [0.045, 51.502],   // Thames Barrier
+  [0.045, 51.502], // Thames Barrier
 ];
 
 /**
@@ -72,12 +72,12 @@ const THAMES = [
  * @type {Array<{ lng: number, lat: number, w: number, h: number, name: string }>}
  */
 const PARKS = [
-  { name: 'Hyde Park',       lng: -0.165, lat: 51.507, w: 1.3, h: 0.7 },
-  { name: "Regent's Park",   lng: -0.152, lat: 51.531, w: 1.0, h: 0.6 },
-  { name: 'Olympic Park',    lng: -0.017, lat: 51.545, w: 1.4, h: 1.1 },
-  { name: 'Greenwich Park',  lng:  0.003, lat: 51.477, w: 0.6, h: 0.6 },
-  { name: 'Clapham Common',  lng: -0.147, lat: 51.458, w: 0.7, h: 0.5 },
-  { name: 'Richmond Park',   lng: -0.27,  lat: 51.44,  w: 2.0, h: 1.8 },
+  { name: 'Hyde Park', lng: -0.165, lat: 51.507, w: 1.3, h: 0.7 },
+  { name: "Regent's Park", lng: -0.152, lat: 51.531, w: 1.0, h: 0.6 },
+  { name: 'Olympic Park', lng: -0.017, lat: 51.545, w: 1.4, h: 1.1 },
+  { name: 'Greenwich Park', lng: 0.003, lat: 51.477, w: 0.6, h: 0.6 },
+  { name: 'Clapham Common', lng: -0.147, lat: 51.458, w: 0.7, h: 0.5 },
+  { name: 'Richmond Park', lng: -0.27, lat: 51.44, w: 2.0, h: 1.8 },
 ];
 
 /**
@@ -85,10 +85,10 @@ const PARKS = [
  * @type {Array<{ name: string, lng: number, lat: number }>}
  */
 export const NEIGHBOURHOODS = [
-  { name: 'West End',           lng: -0.135, lat: 51.514 },
-  { name: 'The City',           lng: -0.090, lat: 51.515 },
-  { name: 'Canary Wharf',       lng: -0.018, lat: 51.504 },
-  { name: 'Greenwich',          lng:  0.001, lat: 51.478 },
+  { name: 'West End', lng: -0.135, lat: 51.514 },
+  { name: 'The City', lng: -0.09, lat: 51.515 },
+  { name: 'Canary Wharf', lng: -0.018, lat: 51.504 },
+  { name: 'Greenwich', lng: 0.001, lat: 51.478 },
 ];
 
 /**
@@ -107,14 +107,14 @@ export const TUBE_LINES = [
       [-0.1145, 51.4627], // Brixton
       [-0.1226, 51.4726], // Stockwell
       [-0.1232, 51.4861], // Vauxhall
-      [-0.1340, 51.4892], // Pimlico
+      [-0.134, 51.4892], // Pimlico
       [-0.1438, 51.4965], // Victoria
       [-0.1428, 51.5067], // Green Park
       [-0.1418, 51.5152], // Oxford Circus
       [-0.1384, 51.5243], // Warren Street
       [-0.1337, 51.5282], // Euston
       [-0.1238, 51.5308], // King's Cross
-      [-0.1030, 51.5461], // Highbury & Islington
+      [-0.103, 51.5461], // Highbury & Islington
     ],
   },
   {
@@ -126,14 +126,14 @@ export const TUBE_LINES = [
     path: [
       [-0.1238, 51.5308], // King's Cross
       [-0.1058, 51.5322], // Angel
-      [-0.0876, 51.5260], // Old Street
+      [-0.0876, 51.526], // Old Street
       [-0.0887, 51.5185], // Moorgate
       [-0.0888, 51.5133], // Bank
       [-0.0863, 51.5049], // London Bridge
       [-0.0943, 51.5011], // Borough
       [-0.1001, 51.4943], // Elephant & Castle
       [-0.1063, 51.4884], // Kennington
-      [-0.1120, 51.4813], // Oval
+      [-0.112, 51.4813], // Oval
       [-0.1142, 51.4719], // Stockwell
     ],
   },
@@ -145,11 +145,11 @@ export const TUBE_LINES = [
       [-0.1494, 51.5142], // Bond Street
       [-0.1418, 51.5152], // Oxford Circus
       [-0.1308, 51.5164], // Tottenham Ct Rd
-      [-0.1200, 51.5174], // Holborn
+      [-0.12, 51.5174], // Holborn
       [-0.0974, 51.5146], // St Paul's
       [-0.0888, 51.5133], // Bank
       [-0.0823, 51.5178], // Liverpool St
-      [-0.0550, 51.5269], // Bethnal Green
+      [-0.055, 51.5269], // Bethnal Green
       [-0.0332, 51.5252], // Mile End
       [-0.0034, 51.5416], // Stratford
     ],
@@ -184,8 +184,8 @@ export const TUBE_LINES = [
       [-0.0637, 51.4979], // Bermondsey
       [-0.0502, 51.4982], // Canada Water
       [-0.0209, 51.5051], // Canary Wharf
-      [ 0.0040, 51.5005], // North Greenwich
-      [ 0.0082, 51.5144], // Canning Town
+      [0.004, 51.5005], // North Greenwich
+      [0.0082, 51.5144], // Canning Town
       [-0.0034, 51.5416], // Stratford
     ],
   },
@@ -197,7 +197,7 @@ export const TUBE_LINES = [
     path: [
       [-0.1702, 51.4644], // Clapham Junction
       [-0.1337, 51.4702], // Wandsworth Road
-      [-0.1320, 51.4654], // Clapham High Street
+      [-0.132, 51.4654], // Clapham High Street
       [-0.0894, 51.4682], // Denmark Hill
       [-0.0694, 51.4699], // Peckham Rye
       [-0.0548, 51.4731], // Queens Road Peckham
@@ -206,7 +206,7 @@ export const TUBE_LINES = [
       [-0.0595, 51.5194], // Whitechapel
       [-0.0749, 51.5233], // Shoreditch High Street
       [-0.0753, 51.5459], // Dalston Junction
-      [-0.1030, 51.5461], // Highbury & Islington
+      [-0.103, 51.5461], // Highbury & Islington
     ],
   },
 ];
@@ -219,11 +219,11 @@ export const TUBE_LINES = [
  */
 export const STATIONS = [
   { name: "King's Cross St Pancras", lng: -0.1238, lat: 51.5308, campus: 'csm' },
-  { name: 'Stratford',               lng: -0.0034, lat: 51.5416, campus: 'lcf' },
-  { name: 'Elephant & Castle',       lng: -0.1001, lat: 51.4943, campus: 'lcc' },
-  { name: 'Denmark Hill',            lng: -0.0894, lat: 51.4682, campus: 'camberwell' },
-  { name: 'Pimlico',                 lng: -0.1340, lat: 51.4892, campus: 'chelsea' },
-  { name: 'Wimbledon',               lng: -0.2063, lat: 51.4214, campus: 'wimbledon' },
+  { name: 'Stratford', lng: -0.0034, lat: 51.5416, campus: 'lcf' },
+  { name: 'Elephant & Castle', lng: -0.1001, lat: 51.4943, campus: 'lcc' },
+  { name: 'Denmark Hill', lng: -0.0894, lat: 51.4682, campus: 'camberwell' },
+  { name: 'Pimlico', lng: -0.134, lat: 51.4892, campus: 'chelsea' },
+  { name: 'Wimbledon', lng: -0.2063, lat: 51.4214, campus: 'wimbledon' },
 ];
 
 /**

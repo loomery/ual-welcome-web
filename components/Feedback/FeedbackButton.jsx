@@ -33,19 +33,10 @@ export function FeedbackButton() {
         aria-haspopup="dialog"
         aria-expanded={open}
       >
-        <FeedbackIcon
-          className="feedback-fab__icon"
-          aria-hidden="true"
-          width={20}
-          height={20}
-        />
+        <FeedbackIcon className="feedback-fab__icon" aria-hidden="true" width={20} height={20} />
         <span className="feedback-fab__label">Feedback</span>
       </button>
-      <FeedbackDialog
-        open={open}
-        onClose={() => setOpen(false)}
-        currentPath={pathname}
-      />
+      <FeedbackDialog open={open} onClose={() => setOpen(false)} currentPath={pathname} />
     </>
   );
 }

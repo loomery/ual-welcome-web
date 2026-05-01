@@ -56,14 +56,9 @@ export function Footer() {
     <footer className="app-footer" role="contentinfo">
       <div className="wrapper app-footer__inner">
         <p className="app-footer__note">
-          This app stores your progress on this device only — nothing is
-          sent to a server.
+          This app stores your progress on this device only — nothing is sent to a server.
         </p>
-        <button
-          type="button"
-          className="app-footer__reset"
-          onClick={handleReset}
-        >
+        <button type="button" className="app-footer__reset" onClick={handleReset}>
           Reset progress on this device
         </button>
       </div>

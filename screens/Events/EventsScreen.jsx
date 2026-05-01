@@ -8,11 +8,13 @@ import { EventCard } from '../../components/EventCard/EventCard';
 const CATEGORIES = ['All', 'Talk', 'Tour', 'Social', 'Workshop'];
 
 export function EventsScreen() {
-  const [filter, setFilter] = useState(/** @type {import('../../data/events').EventCategory | 'All'} */ ('All'));
+  const [filter, setFilter] = useState(
+    /** @type {import('../../data/events').EventCategory | 'All'} */ ('All'),
+  );
 
   const sorted = useMemo(
     () => [...EVENTS].sort((a, b) => a.startsAt.localeCompare(b.startsAt)),
-    []
+    [],
   );
 
   const filtered = filter === 'All' ? sorted : sorted.filter((e) => e.category === filter);
@@ -22,16 +24,12 @@ export function EventsScreen() {
       <div className="flow" data-flow="s">
         <h1>Welcome Week events</h1>
         <p className="standfirst">
-          A running list of what’s on for new students — tours, talks, workshops and socials
-          across the six UAL colleges.
+          A running list of what’s on for new students — tours, talks, workshops and socials across
+          the six UAL colleges.
         </p>
       </div>
 
-      <div
-        className="cluster"
-        role="group"
-        aria-label="Filter events by category"
-      >
+      <div className="cluster" role="group" aria-label="Filter events by category">
         {CATEGORIES.map((cat) => {
           const active = filter === cat;
           return (

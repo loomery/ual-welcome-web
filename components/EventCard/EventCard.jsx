@@ -1,11 +1,5 @@
 import Link from 'next/link';
-import {
-  DAY_FMT,
-  LONG_DATE_FMT,
-  MONTH_FMT,
-  TIME_FMT,
-  WEEKDAY_FMT,
-} from '../../utils/dates';
+import { DAY_FMT, LONG_DATE_FMT, MONTH_FMT, TIME_FMT, WEEKDAY_FMT } from '../../utils/dates';
 import { PinIcon } from '../Icon/NavIcons';
 
 /**
@@ -39,9 +33,7 @@ export function EventCard({ event, compact }) {
   // tech reads "Monday 21 September 2026" rather than "21 Sep".
   const accessibleDate = LONG_DATE_FMT.format(start);
 
-  const className = compact
-    ? 'event-card event-card--compact'
-    : 'event-card';
+  const className = compact ? 'event-card event-card--compact' : 'event-card';
 
   // data-category drives per-category tint on the tag chip — it mirrors
   // UAL's editorial palette (sage / peach / sand / sky) while keeping text
@@ -50,27 +42,24 @@ export function EventCard({ event, compact }) {
 
   return (
     <article className={className}>
-      <Link
-        href={`/events/${event.id}`}
-        className="event-card__link flow"
-        data-flow="s"
-      >
+      <Link href={`/events/${event.id}`} className="event-card__link flow" data-flow="s">
         <header className="event-card__head">
           <time
             className="event-card__datestamp"
             dateTime={event.startsAt}
             aria-label={accessibleDate}
           >
-            <span className="event-card__day" aria-hidden="true">{day}</span>
-            <span className="event-card__month" aria-hidden="true">{month}</span>
+            <span className="event-card__day" aria-hidden="true">
+              {day}
+            </span>
+            <span className="event-card__month" aria-hidden="true">
+              {month}
+            </span>
           </time>
 
           <div className="event-card__heading flow" data-flow="2xs">
             <p className="event-card__meta">
-              <span
-                className="event-card__tag"
-                data-category={categorySlug}
-              >
+              <span className="event-tag" data-category={categorySlug}>
                 {event.category}
               </span>
               <span className="event-card__when">
@@ -81,17 +70,10 @@ export function EventCard({ event, compact }) {
           </div>
         </header>
 
-        {!compact && (
-          <p className="event-card__body">{event.description}</p>
-        )}
+        {!compact && <p className="event-card__body">{event.description}</p>}
 
         <p className="event-card__foot">
-          <PinIcon
-            aria-hidden="true"
-            width={16}
-            height={16}
-            className="event-card__foot-icon"
-          />
+          <PinIcon aria-hidden="true" width={16} height={16} className="event-card__foot-icon" />
           <span>
             {event.location} · {event.college}
           </span>

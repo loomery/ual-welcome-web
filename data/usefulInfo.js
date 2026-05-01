@@ -16,16 +16,14 @@ export const USEFUL_INFO = [
   {
     id: 'term-dates',
     title: 'UAL term dates',
-    body:
-      "Standard term dates for the academic year. Always check with your course team — some courses run on different dates.",
+    body: 'Standard term dates for the academic year. Always check with your course team — some courses run on different dates.',
     ctaLabel: 'View term dates',
     href: 'https://www.arts.ac.uk/students/term-dates',
   },
   {
     id: 'student-services',
     title: 'Student Services',
-    body:
-      'Confidential, free support — funding and immigration, health and mental health, disability and dyslexia, counsellors and chaplains. Appointments by video, phone, email or in person.',
+    body: 'Confidential, free support — funding and immigration, health and mental health, disability and dyslexia, counsellors and chaplains. Appointments by video, phone, email or in person.',
     ctaLabel: 'Visit Student Services',
     href: 'https://www.arts.ac.uk/students/student-services',
   },

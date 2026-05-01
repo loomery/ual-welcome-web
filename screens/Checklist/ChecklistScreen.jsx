@@ -38,8 +38,7 @@ export function ChecklistScreen() {
   const complete = done === total && total > 0;
 
   /** @param {string} id */
-  const toggle = (id) =>
-    setChecked((prev) => ({ ...prev, [id]: !prev[id] }));
+  const toggle = (id) => setChecked((prev) => ({ ...prev, [id]: !prev[id] }));
 
   const resetAll = () => setChecked({});
 
@@ -48,18 +47,19 @@ export function ChecklistScreen() {
       <div className="flow" data-flow="s">
         <h1>Induction checklist</h1>
         <p className="standfirst">
-          The essentials for your first week at UAL. Tick things off as you
-          go — your progress is saved on this device, no account needed.
+          The essentials for your first week at UAL. Tick things off as you go — your progress is
+          saved on this device, no account needed.
         </p>
       </div>
 
       {complete && (
         <div className="completion-banner flow" data-flow="2xs" role="status" aria-live="polite">
-          <span className="tag" data-tag-type="standard">All done</span>
+          <span className="tag" data-tag-type="standard">
+            All done
+          </span>
           <p className="completion-banner__title">Welcome to UAL.</p>
           <p className="completion-banner__body">
-            You’ve ticked everything off. Next stop — your course induction.
-            See you there.
+            You’ve ticked everything off. Next stop — your course induction. See you there.
           </p>
         </div>
       )}

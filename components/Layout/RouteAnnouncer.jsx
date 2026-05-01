@@ -33,16 +33,16 @@ export function RouteAnnouncer() {
   useEffect(() => {
     const title = titleForPath(pathname);
     document.title = `${title} | UAL Welcome Week`;
+    // setState-in-effect is intentional: the announcement is *driven by*
+    // navigation (an external system) and must be queued for the next paint
+    // so screen readers pick up the change. React 19's
+    // `react-hooks/set-state-in-effect` flags the pattern; suppressed here.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setMessage(`Navigated to ${title}`);
   }, [pathname]);
 
   return (
-    <div
-      role="status"
-      aria-live="polite"
-      aria-atomic="true"
-      className="visually-hidden"
-    >
+    <div role="status" aria-live="polite" aria-atomic="true" className="visually-hidden">
       {message}
     </div>
   );
