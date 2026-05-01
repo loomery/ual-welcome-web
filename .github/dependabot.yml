@@ -32,7 +32,6 @@ updates:
         dependency-type: development
         update-types: [minor, patch]
     # Majors are never grouped — each gets its own PR with a clear changelog.
-    ignore: []
 
   # Workflow files (CI itself + CodeQL)
   - package-ecosystem: github-actions
