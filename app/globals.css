@@ -24,6 +24,19 @@
 @import "tailwindcss";
 
 /* ==========================================================================
+   Tailwind v4 — dark mode variant
+   --------------------------------------------------------------------------
+   The codebase still toggles dark mode via `data-theme="dark"` on
+   <html> (see ThemeProvider/useTheme). Tailwind 4's default `dark:`
+   variant looks for the `.dark` class instead, so we redefine it
+   here to read our existing attribute. Result: `dark:bg-x` /
+   `dark:focus:text-orange-700` patterns work alongside the existing
+   toggle without rewiring the theme provider.
+   ========================================================================== */
+
+@custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
+
+/* ==========================================================================
    Tailwind v4 — theme bridge
    --------------------------------------------------------------------------
    Each entry below registers a theme key that Tailwind compiles into a
