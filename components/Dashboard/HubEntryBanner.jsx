@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import { useSyncExternalStore } from 'react';
 import { ArrowRightIcon } from '../Icon/NavIcons';
 import { useOnboardingProfile } from '../../hooks/useOnboardingProfile';
 import { COLLEGE_OPTIONS } from '../../data/onboardingOptions';
@@ -14,12 +15,22 @@ import { COLLEGE_OPTIONS } from '../../data/onboardingOptions';
  * Sits on a subtle `--color-shade` fill so it reads as a single
  * "highlighted" surface among the home's content sections, without
  * inventing new shadows, borders, or scales.
+ *
+ * Hydration-safe: localStorage is empty server-side, so we render the
+ * "New" invitation on the server and on the client's first paint, then
+ * swap to the personalised version once hydrated. Same pattern as the
+ * /dashboard route's hydration gate.
  */
 export function HubEntryBanner() {
   const { profile, isComplete } = useOnboardingProfile();
+  const hydrated = useSyncExternalStore(
+    () => () => {},
+    () => true,
+    () => false,
+  );
 
   const college = COLLEGE_OPTIONS.find((c) => c.id === profile?.collegeId);
-  const showPersonal = isComplete;
+  const showPersonal = hydrated && isComplete;
   const firstName = (profile?.name ?? '').split(' ')[0];
 
   const eyebrow = showPersonal ? 'Your hub' : 'New';
