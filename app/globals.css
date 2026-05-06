@@ -1,24 +1,43 @@
 /* ==========================================================================
    UAL Welcome Week — Global stylesheet (Next.js + Tailwind v4 hybrid)
    --------------------------------------------------------------------------
-   Layering strategy:
-     1. `@import "tailwindcss"` pulls Tailwind 4's preflight + utilities.
-        v4 collapses the old `@tailwind base/components/utilities` triplet
-        into a single import.
-     2. UAL design tokens — the source of truth for colours, type scale,
-        spacing scale, exposed as CSS custom properties on :root. The
-        `@theme inline` block below mirrors the subset that becomes
-        Tailwind utilities (bg-ual-orange, p-s, text-step-1, etc.). With
-        `inline`, utilities compile to `background-color: var(--color-orange)`
-        rather than copying the literal hex, so dark-mode overrides on
-        :root continue to flip the rendered value automatically.
-     3. UAL reset + base typography (mirrored from main.css).
-     4. UAL CUBE CSS layout primitives (.flow, .cluster, .grid, .box…).
-     5. UAL component classes (event-card, map-station, map-label,
-        building-item, etc.) — kept as CSS rather than rewritten to
-        long Tailwind class strings because they involve pseudo-elements,
-        nested states, animations, and aria-pressed selectors that read
-        much more clearly here.
+   ⚠️ MIGRATION STATUS — early stage, design system in flux.
+   --------------------------------------------------------------------------
+   The end state is "CSS holds tokens only, components style with Tailwind
+   utilities". We are not there yet.
+
+   What is FROZEN until the design-system token names are agreed with the
+   client:
+     • The @theme inline block (tokens — names will change, swap is a
+       global find-replace).
+     • All legacy CUBE primitives (.flow, .cluster, .wrapper, .box, .grid,
+       .standfirst, .prose) and component classes (.event-card,
+       .feedback-dialog, .checklist-item, .bottom-nav, .map-*, etc.).
+       These still drive the live screens; rewriting now would mean
+       re-doing the work after the token names land.
+
+   What is ALREADY 100% Tailwind:
+     • components/figma/* (the Shenese handoff library).
+     • screens/Showcase/*  (consumes the figma library).
+     • Layout leaves: SkipLinks, RouteAnnouncer, ThemeProvider, icons.
+     • r3f canvas wrappers: BuildingMesh + the static portions of
+       MapCanvas (Html anchor wrappers).
+
+   When the token names are agreed, plan is:
+     1. Rename tokens in @theme (find-replace).
+     2. Migrate components/screens one at a time, leaf-first.
+     3. Re-enable `better-tailwindcss/no-unknown-classes: error` —
+       becomes the gate that proves zero CSS classes survive in JSX.
+
+   Layering strategy below (do not reorder):
+     1. `@import "tailwindcss"` — preflight + utilities.
+     2. `@custom-variant dark` — wires Tailwind's dark: prefix to our
+        existing [data-theme="dark"] selector.
+     3. `@theme inline { … }` — token bridge (CSS vars → Tailwind utils).
+     4. `:root` and `[data-theme="dark"]` — token values (light + dark).
+     5. UAL reset + base typography (mirrored from upstream main.css).
+     6. UAL CUBE CSS layout primitives (.flow, .cluster, .grid, .box…).
+     7. UAL component classes (event-card, map-station, building-item…).
    ========================================================================== */
 
 @import 'tailwindcss';

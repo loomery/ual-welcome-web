@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { Card } from '../../components/Card/Card';
 import { Countdown } from '../../components/Countdown/Countdown';
 import { EventCard } from '../../components/EventCard/EventCard';
+import { HubEntryBanner } from '../../components/Dashboard/HubEntryBanner';
 import { EVENTS } from '../../data/events';
 import { USEFUL_INFO } from '../../data/usefulInfo';
 
@@ -11,6 +12,9 @@ export function HomeScreen() {
 
   return (
     <article className="flow" data-flow="l">
+      {/* Personalised hub entry — demo CTA. Tailwind-only client island. */}
+      <HubEntryBanner />
+
       {/* Hero */}
       <section className="home-hero flow" data-flow="m" aria-labelledby="home-hero-heading">
         <Countdown />

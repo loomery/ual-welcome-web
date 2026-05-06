@@ -71,7 +71,7 @@ export function ChecklistScreen() {
         aria-labelledby="progress-heading"
       >
         <div className="cluster" data-justify="space-between">
-          <h2 id="progress-heading" style={{ fontSize: 'var(--step-1)' }}>
+          <h2 id="progress-heading" className="text-step-1">
             {done} of {total} complete
           </h2>
           <Button ghost onClick={resetAll} disabled={done === 0}>

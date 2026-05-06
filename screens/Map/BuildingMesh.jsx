@@ -89,7 +89,7 @@ export function BuildingMesh({ building, selected, onSelect, showLabel }) {
           position={[0, h + 0.9, 0]}
           center
           distanceFactor={9}
-          style={{ pointerEvents: 'none' }}
+          className="pointer-events-none"
           zIndexRange={[5, 0]}
         >
           <span
