@@ -62,20 +62,11 @@ export function DashboardScreen() {
     return matched ?? undone[0];
   }, [checked, interests]);
 
-  const priorityChecklist = useMemo(() => {
-    const interestIds = new Set(interests.flatMap((i) => INTEREST_TO_CHECKLIST[i] ?? []));
-    return [...CHECKLIST_ITEMS]
-      .sort((a, b) => {
-        if (a.id === 'enrol') return -1;
-        if (b.id === 'enrol') return 1;
-        const aMatch = interestIds.has(a.id);
-        const bMatch = interestIds.has(b.id);
-        if (aMatch && !bMatch) return -1;
-        if (!aMatch && bMatch) return 1;
-        return 0;
-      })
-      .slice(0, 5);
-  }, [interests]);
+  // Show the full checklist in its natural order — must mirror /checklist
+  // exactly so students see the same list in both places. The priority
+  // logic still drives `nextTask` above, but the visible list is the
+  // canonical one.
+  const priorityChecklist = CHECKLIST_ITEMS;
 
   const totalTasks = CHECKLIST_ITEMS.length;
   const doneTasks = CHECKLIST_ITEMS.filter((i) => checked[i.id]).length;
@@ -138,14 +129,14 @@ export function DashboardScreen() {
           <article className="flow card" data-flow="s">
             <h3>{nextTask.title}</h3>
             <p>{nextTask.body}</p>
-            <p className="cluster" data-justify="flex-start">
+            <div className="cluster" data-justify="flex-start">
               <a href={nextTask.cta.href} target="_blank" rel="noreferrer" className="button">
                 {nextTask.cta.label}
               </a>
               <Button ghost onClick={() => toggle(nextTask.id)}>
                 Mark done
               </Button>
-            </p>
+            </div>
           </article>
         </section>
       )}
