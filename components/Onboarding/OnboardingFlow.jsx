@@ -506,7 +506,7 @@ function stepSlice(stepId, draft) {
 
 function StepHeader({ headingRef, eyebrow, title, body }) {
   return (
-    <div className="flow" data-flow="2xs">
+    <div className="flow py-4" data-flow="2xs">
       {eyebrow && <p className="onboarding-eyebrow">{eyebrow}</p>}
       <h1 ref={headingRef} tabIndex={-1} style={{ outline: 'none' }}>
         {title}
