@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useSyncExternalStore } from 'react';
 import { useRouter } from 'next/navigation';
 import { DashboardScreen } from '../../components/Dashboard/DashboardScreen';
 import { useOnboardingProfile } from '../../hooks/useOnboardingProfile';
@@ -16,11 +16,11 @@ import { useOnboardingProfile } from '../../hooks/useOnboardingProfile';
 export default function DashboardPage() {
   const router = useRouter();
   const { isComplete } = useOnboardingProfile();
-  const [hydrated, setHydrated] = useState(false);
-
-  useEffect(() => {
-    setHydrated(true);
-  }, []);
+  const hydrated = useSyncExternalStore(
+    () => () => {},
+    () => true,
+    () => false,
+  );
 
   useEffect(() => {
     if (hydrated && !isComplete) {
