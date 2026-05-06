@@ -1,7 +1,6 @@
 'use client';
 
 import Link from 'next/link';
-import { useEffect, useState } from 'react';
 import { ArrowRightIcon } from '../Icon/NavIcons';
 import { useOnboardingProfile } from '../../hooks/useOnboardingProfile';
 import { COLLEGE_OPTIONS } from '../../data/onboardingOptions';
@@ -18,14 +17,9 @@ import { COLLEGE_OPTIONS } from '../../data/onboardingOptions';
  */
 export function HubEntryBanner() {
   const { profile, isComplete } = useOnboardingProfile();
-  const [hydrated, setHydrated] = useState(false);
-
-  useEffect(() => {
-    setHydrated(true);
-  }, []);
 
   const college = COLLEGE_OPTIONS.find((c) => c.id === profile?.collegeId);
-  const showPersonal = hydrated && isComplete;
+  const showPersonal = isComplete;
   const firstName = (profile?.name ?? '').split(' ')[0];
 
   const eyebrow = showPersonal ? 'Your hub' : 'New';
