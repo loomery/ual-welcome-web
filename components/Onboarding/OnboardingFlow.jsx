@@ -724,9 +724,7 @@ function InterestsStep({ headingRef, value, onChange }) {
         })}
       </ul>
       <p style={{ color: 'var(--color-dark--tint-50)', fontSize: 'var(--step--1)' }}>
-        {value.length === 0
-          ? "You can change these any time."
-          : `${value.length} selected`}
+        {value.length === 0 ? 'You can change these any time.' : `${value.length} selected`}
       </p>
     </div>
   );
@@ -766,7 +764,11 @@ function Tile({ selected, onClick, role, title, hint, ...rest }) {
     >
       <span className="onboarding-tile__main">
         <span className="onboarding-tile__title">{title}</span>
-        {hint && <span className="onboarding-tile__hint" style={{ display: 'block' }}>{hint}</span>}
+        {hint && (
+          <span className="onboarding-tile__hint" style={{ display: 'block' }}>
+            {hint}
+          </span>
+        )}
       </span>
       <span className="onboarding-tile__indicator" aria-hidden="true">
         {selected && (

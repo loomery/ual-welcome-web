@@ -81,9 +81,7 @@ export function DashboardScreen() {
   const doneTasks = CHECKLIST_ITEMS.filter((i) => checked[i.id]).length;
 
   const personalisedEvents = useMemo(() => {
-    const interestCats = new Set(
-      interests.flatMap((i) => INTEREST_TO_EVENT_CATEGORIES[i] ?? []),
-    );
+    const interestCats = new Set(interests.flatMap((i) => INTEREST_TO_EVENT_CATEGORIES[i] ?? []));
     const score = (event) => {
       let s = 0;
       if (event.college === college?.name || event.college === 'All colleges') s += 10;
@@ -141,12 +139,7 @@ export function DashboardScreen() {
             <h3>{nextTask.title}</h3>
             <p>{nextTask.body}</p>
             <p className="cluster" data-justify="flex-start">
-              <a
-                href={nextTask.cta.href}
-                target="_blank"
-                rel="noreferrer"
-                className="button"
-              >
+              <a href={nextTask.cta.href} target="_blank" rel="noreferrer" className="button">
                 {nextTask.cta.label}
               </a>
               <Button ghost onClick={() => toggle(nextTask.id)}>
