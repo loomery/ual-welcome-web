@@ -12,7 +12,17 @@
     "format": "prettier --write \"**/*.{js,jsx,ts,tsx,md,json,css}\"",
     "audit": "npm audit --audit-level=high --omit=dev",
     "audit:full": "npm audit --audit-level=moderate",
-    "verify": "npm run lint && npm run audit && npm run build"
+    "verify": "npm run lint && npm run audit && npm run build",
+    "prepare": "husky"
+  },
+  "lint-staged": {
+    "*.{js,jsx,ts,tsx}": [
+      "eslint --fix",
+      "prettier --write"
+    ],
+    "*.{md,json,css,yml,yaml}": [
+      "prettier --write"
+    ]
   },
   "dependencies": {
     "@react-three/drei": "^10.7.7",
@@ -30,6 +40,8 @@
     "eslint": "^9.0.0",
     "eslint-config-next": "^16.2.4",
     "eslint-plugin-better-tailwindcss": "^4.5.0",
+    "husky": "^9.1.7",
+    "lint-staged": "^16.4.0",
     "postcss": "^8.4.49",
     "prettier": "^3.8.3",
     "prettier-plugin-tailwindcss": "^0.8.0",

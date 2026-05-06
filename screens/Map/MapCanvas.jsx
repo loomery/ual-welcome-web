@@ -203,7 +203,7 @@ export function MapCanvas({
             distanceFactor={14}
             center
             zIndexRange={[3, 0]}
-            style={{ pointerEvents: 'none' }}
+            className="pointer-events-none"
           >
             <span className="map-place-label" aria-hidden="true">
               {n.name}
@@ -226,7 +226,7 @@ export function MapCanvas({
               position={[x, 0.01, z]}
               distanceFactor={10}
               zIndexRange={[4, 0]}
-              style={{ pointerEvents: 'none' }}
+              className="pointer-events-none"
             >
               <div className="map-station" aria-hidden="true">
                 <span className="map-station__roundel" />

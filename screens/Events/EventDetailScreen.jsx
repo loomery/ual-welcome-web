@@ -49,7 +49,7 @@ export function EventDetailScreen({ id }) {
       </div>
 
       <section className="box flow" data-padding="l" data-flow="s" aria-labelledby="event-where">
-        <h2 id="event-where" style={{ fontSize: 'var(--step-1)' }}>
+        <h2 id="event-where" className="text-step-1">
           Where
         </h2>
         <p>
