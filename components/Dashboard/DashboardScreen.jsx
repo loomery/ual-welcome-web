@@ -86,6 +86,12 @@ export function DashboardScreen() {
 
   const firstName = (profile?.name ?? '').split(' ')[0] || 'there';
 
+  function handleToggle(e) {
+    const id = e.currentTarget.dataset.id;
+    if (!id) return;
+    setChecked((prev) => ({ ...prev, [id]: !prev[id] }));
+  }
+
   function toggle(id) {
     setChecked((prev) => ({ ...prev, [id]: !prev[id] }));
   }
@@ -164,7 +170,8 @@ export function DashboardScreen() {
               <li key={item.id}>
                 <button
                   type="button"
-                  onClick={() => toggle(item.id)}
+                  data-id={item.id}
+                  onClick={handleToggle}
                   aria-pressed={isDone}
                   className="dash-checklist-row"
                 >
