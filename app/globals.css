@@ -1115,6 +1115,26 @@ main:focus {
   padding-block-end: var(--space-l);
 }
 
+/* ---------- Onboarding full-viewport mode ----------
+   The /onboarding route tags <body data-onboarding> on mount. We hide
+   the chrome (header / footer / feedback FAB / mobile bottom nav) so
+   the multi-step flow takes the whole viewport — no awkward scroll
+   between header and footer on a borderline-tall card.
+   The flag clears on unmount so other routes are unaffected. */
+body[data-onboarding] .header,
+body[data-onboarding] .app-footer,
+body[data-onboarding] .feedback-fab,
+body[data-onboarding] .bottom-nav {
+  display: none;
+}
+body[data-onboarding] .app-shell__main {
+  align-items: center;
+  display: flex;
+  justify-content: center;
+  min-block-size: 100svh;
+  padding-block: var(--space-m);
+}
+
 @media (min-width: 49.5rem) {
   .app-shell__main {
     padding-block-start: var(--space-xl);

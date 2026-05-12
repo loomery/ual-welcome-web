@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Button } from '../Button/Button';
+import { INTEREST_ICONS } from '../Icon/InterestIcons';
 import {
   COLLEGE_OPTIONS,
   STUDENT_TYPE_OPTIONS,
@@ -240,9 +241,11 @@ export function OnboardingFlow() {
         .onboarding-flow {
           padding: var(--space-s) 0;
         }
+        /* No vertical padding on desktop — the parent main is flex-centered
+           with its own padding when /onboarding hides the AppShell chrome. */
         @media (min-width: 49.5rem) {
           .onboarding-flow {
-            padding: var(--space-l) 0;
+            padding: 0;
           }
         }
 
@@ -456,8 +459,17 @@ export function OnboardingFlow() {
           border-color: var(--color-dark);
           color: var(--color-light);
         }
-        .onboarding-interest__emoji {
-          font-size: 1.25rem;
+        .onboarding-interest__icon {
+          align-items: center;
+          color: var(--color-dark);
+          display: inline-flex;
+          margin-block-end: var(--space-3xs);
+        }
+        .onboarding-interest[data-selected] .onboarding-interest__icon {
+          color: var(--color-light);
+        }
+        .onboarding-interest__icon svg {
+          display: block;
         }
         .onboarding-interest__label {
           font-size: var(--step-0);
@@ -703,6 +715,7 @@ function InterestsStep({ headingRef, value, onChange }) {
       >
         {INTEREST_OPTIONS.map((opt) => {
           const selected = value.includes(opt.id);
+          const Icon = INTEREST_ICONS[opt.id];
           return (
             <li key={opt.id}>
               <button
@@ -713,9 +726,11 @@ function InterestsStep({ headingRef, value, onChange }) {
                 data-selected={selected || undefined}
                 className="onboarding-interest"
               >
-                <span className="onboarding-interest__emoji" aria-hidden="true">
-                  {opt.emoji}
-                </span>
+                {Icon && (
+                  <span className="onboarding-interest__icon" aria-hidden="true">
+                    <Icon width={24} height={24} />
+                  </span>
+                )}
                 <span className="onboarding-interest__label">{opt.label}</span>
                 <span className="onboarding-interest__body">{opt.body}</span>
               </button>

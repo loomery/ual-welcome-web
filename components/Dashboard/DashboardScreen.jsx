@@ -262,7 +262,7 @@ export function DashboardScreen() {
               if (!opt) return null;
               return (
                 <span key={id} className="tag" data-tag-type="standard">
-                  {opt.emoji} {opt.label}
+                  {opt.label}
                 </span>
               );
             })}
