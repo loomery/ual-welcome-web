@@ -248,12 +248,19 @@ export function OnboardingFlow() {
             padding: 0;
           }
         }
+        /* Scale the heading down inside the flow so the centered content
+           block doesn't fill the viewport on desktop — that was crowding
+           the Continue CTA flush with the bottom edge. step-3 keeps the
+           editorial weight without dominating the column. */
+        .onboarding-flow h1 {
+          font-size: var(--step-3);
+        }
 
         .onboarding-flow__topbar {
           align-items: center;
           display: flex;
           gap: var(--space-s);
-          margin-block-end: var(--space-l);
+          margin-block-end: var(--space-m);
         }
         .onboarding-flow__back {
           align-items: center;
@@ -311,7 +318,7 @@ export function OnboardingFlow() {
         }
 
         .onboarding-flow__content {
-          margin-block-end: var(--space-xl);
+          margin-block-end: var(--space-l);
         }
 
         .onboarding-flow__actions {
@@ -342,7 +349,10 @@ export function OnboardingFlow() {
           align-items: center;
           gap: var(--space-s);
           font: inherit;
-          padding: var(--space-s);
+          /* Tighter vertical padding so the option grid doesn't dominate
+             the viewport — keeps comfortable touch height (~56px) but
+             gives breathing room above and below the Continue CTA. */
+          padding: var(--space-xs) var(--space-s);
           inline-size: 100%;
           block-size: 100%;
           text-align: start;
@@ -416,7 +426,7 @@ export function OnboardingFlow() {
 
         .onboarding-grid {
           display: grid;
-          gap: var(--space-s);
+          gap: var(--space-xs);
           grid-template-columns: 1fr;
         }
         .onboarding-grid > li {
@@ -441,7 +451,9 @@ export function OnboardingFlow() {
           align-items: flex-start;
           gap: var(--space-3xs);
           font: inherit;
-          padding: var(--space-s);
+          /* Same proportional tightening as .onboarding-tile so the 3x2
+             interests grid leaves room for the Continue CTA at the foot. */
+          padding: var(--space-xs) var(--space-s);
           inline-size: 100%;
           block-size: 100%;
           text-align: start;

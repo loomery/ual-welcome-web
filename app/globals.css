@@ -1127,11 +1127,22 @@ body[data-onboarding] .feedback-fab,
 body[data-onboarding] .bottom-nav {
   display: none;
 }
+/* Reset the global `main { margin-block-end }` in onboarding mode —
+   without this, main fills 100dvh AND adds ~1–5rem of margin below,
+   pushing body past the viewport and creating a stray 1–2rem scroll
+   on steps whose content otherwise fits (e.g. the intro). */
+body[data-onboarding] main {
+  margin-block-end: 0;
+}
 body[data-onboarding] .app-shell__main {
   align-items: center;
   display: flex;
   justify-content: center;
-  min-block-size: 100svh;
+  /* Match body's min-height (100dvh) exactly so the two never disagree
+     by the px/rem that produces the phantom scroll. 100vh fallback for
+     browsers without dynamic viewport units. */
+  min-block-size: 100vh;
+  min-block-size: 100dvh;
   padding-block: var(--space-m);
 }
 
