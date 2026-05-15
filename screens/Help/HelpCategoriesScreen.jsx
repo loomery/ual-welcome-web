@@ -7,11 +7,9 @@ import { HELP_CATEGORIES } from '../../data/help';
  */
 export function HelpCategoriesScreen() {
   return (
-    <article className="flow" data-flow="m">
-      <div className="flow" data-flow="2xs">
-        <h1>Get help and support</h1>
-        <p className="p1">Not sure who to contact? Find the right team or service below.</p>
-      </div>
+    <article className="prose has-lead flow help-categories" data-flow="l">
+      <h1>Get help and support</h1>
+      <p>Not sure who to contact? Find the right team or service below.</p>
 
       <ul className="help-cat-list" role="list">
         {HELP_CATEGORIES.map((cat) => (
@@ -43,6 +41,11 @@ export function HelpCategoriesScreen() {
       </ul>
 
       <style>{`
+        .help-categories.prose.has-lead > h1 + p {
+          margin-block-start: var(--space-s);
+          margin-block-end: var(--space-xl);
+        }
+
         .help-cat-list {
           list-style: none;
           margin: 0;

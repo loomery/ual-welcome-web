@@ -7,7 +7,7 @@ import Link from 'next/link';
  */
 export function HelpDetailScreen({ category }) {
   return (
-    <article className="flow" data-flow="l">
+    <article className="prose flow help-detail" data-flow="l">
       <Link href="/help" className="help-detail__back">
         ← Back to help
       </Link>
@@ -17,15 +17,12 @@ export function HelpDetailScreen({ category }) {
         <p>{category.description}</p>
       </div>
 
-      <section className="flow" data-flow="s" aria-labelledby="contact-heading">
-        <h2 id="contact-heading">How to contact</h2>
+      <section className="help-detail__contact" aria-labelledby="contact-heading">
+        <h2 id="contact-heading" className="help-detail__contact-heading">
+          How to contact
+        </h2>
 
-        <ul
-          className="flow"
-          data-flow="2xs"
-          role="list"
-          style={{ listStyle: 'none', margin: 0, padding: 0 }}
-        >
+        <ul className="help-contact-list" role="list">
           {category.contacts.map((contact, i) => (
             <li key={i} className="help-contact-card">
               <span className="help-contact-card__label">{contact.label}</span>
@@ -75,6 +72,21 @@ export function HelpDetailScreen({ category }) {
         .help-detail__back:focus-visible {
           outline: 2px solid var(--color-orange);
           outline-offset: 2px;
+        }
+
+        .help-detail__contact {
+          margin-block-start: var(--space-xl);
+        }
+        .help-detail__contact-heading {
+          margin-block-end: var(--space-l);
+        }
+        .help-contact-list {
+          list-style: none;
+          margin: 0;
+          padding: 0;
+          display: flex;
+          flex-direction: column;
+          gap: var(--space-s);
         }
 
         .help-contact-card {
