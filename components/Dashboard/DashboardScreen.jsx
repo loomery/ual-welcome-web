@@ -6,37 +6,51 @@ import { Card } from '../Card/Card';
 import { Countdown } from '../Countdown/Countdown';
 import { EventCard } from '../EventCard/EventCard';
 import { Progress } from '../Progress/Progress';
-import { Button } from '../Button/Button';
-import { CHECKLIST_ITEMS } from '../../data/checklist';
+import { TASKS } from '../../data/checklist';
 import { EVENTS } from '../../data/events';
 import {
   COLLEGE_OPTIONS,
-  INTEREST_OPTIONS,
-  INTEREST_TO_CHECKLIST,
   INTEREST_TO_EVENT_CATEGORIES,
   STUDY_LEVEL_OPTIONS,
+  YEAR_OPTIONS,
 } from '../../data/onboardingOptions';
 import { useOnboardingProfile } from '../../hooks/useOnboardingProfile';
 import { usePersistedState } from '../../hooks/usePersistedState';
 
-const CHECKLIST_STORAGE_KEY = 'ual:checklist:v1';
+/**
+ * Definitions for interest-driven optional sections.
+ * Each entry maps an interest id to a section label and a render function.
+ * Order here determines render order on the dashboard.
+ */
+const OPTIONAL_SECTIONS = [
+  { id: 'social', label: 'Social' },
+  { id: 'creative', label: 'Workshops & studios' },
+  { id: 'study', label: 'Study skills' },
+  { id: 'wellbeing', label: 'Wellbeing' },
+  { id: 'career', label: 'Jobs & opportunities' },
+  { id: 'area', label: 'Area guide' },
+  { id: 'tech', label: 'Tech setup' },
+];
 
 /**
  * Personalised dashboard.
  *
- * Visual language matches the rest of the app: typographic hero with
- * Countdown + h1 + standfirst (like Home), section pattern with
- * `<h2>` headings + cluster/grid/reel layouts, and shared components
- * (Card, EventCard, Progress, Button). Personalisation lives in the
- * data shown — events are filtered by college + interests, the
- * checklist is prioritised by interests, and the "next step" is the
- * first uncompleted task in that priority order.
+ * Mandatory sections (always visible in both "My focus" and "Everything"):
+ *   Hero, Your next step, Checklist.
+ *
+ * Optional sections are interest-driven:
+ *   - "My focus": shows only sections matching the student's selected interests.
+ *     If no interests were chosen, only mandatory sections are shown.
+ *   - "Everything": shows all optional sections regardless of interests.
+ *
+ * The toggle state is persisted so a page refresh keeps the last choice.
  */
 export function DashboardScreen() {
   const { profile, reset } = useOnboardingProfile();
-  const [checked, setChecked] = usePersistedState(
-    CHECKLIST_STORAGE_KEY,
-    /** @type {Record<string, boolean>} */ ({}),
+  const [taskStatuses] = usePersistedState('ual:task:status:v1', {});
+  const [view, setView] = usePersistedState(
+    'ual:dash:view:v1',
+    /** @type {'focus'|'all'} */ ('focus'),
   );
 
   const college = useMemo(
@@ -49,52 +63,50 @@ export function DashboardScreen() {
     [profile?.studyLevel],
   );
 
-  const interests = profile?.interests ?? [];
+  const year = useMemo(() => YEAR_OPTIONS.find((y) => y.id === profile?.year), [profile?.year]);
+
+  const interests = useMemo(() => profile?.interests ?? [], [profile?.interests]);
+
+  // Which optional sections to show depends on view mode and selected interests.
+  const visibleSections = useMemo(() => {
+    if (view === 'all') return OPTIONAL_SECTIONS;
+    if (interests.length === 0) return []; // My focus, no interests → only mandatory
+    return OPTIONAL_SECTIONS.filter((s) => interests.includes(s.id));
+  }, [view, interests]);
+
+  // Events filtered per section interest
+  const eventsByInterest = useMemo(() => {
+    const map = {};
+    for (const section of OPTIONAL_SECTIONS) {
+      const cats = new Set(INTEREST_TO_EVENT_CATEGORIES[section.id] ?? []);
+      map[section.id] = EVENTS.filter(
+        (e) =>
+          cats.has(e.category) && (e.college === college?.name || e.college === 'All colleges'),
+      ).slice(0, 3);
+    }
+    return map;
+  }, [college?.name]);
 
   const nextTask = useMemo(() => {
-    const undone = CHECKLIST_ITEMS.filter((item) => !checked[item.id]);
-    if (undone.length === 0) return null;
-    if (undone.find((i) => i.id === 'enrol')) {
-      return undone.find((i) => i.id === 'enrol');
-    }
-    const interestIds = interests.flatMap((i) => INTEREST_TO_CHECKLIST[i] ?? []).filter(Boolean);
-    const matched = undone.find((i) => interestIds.includes(i.id));
-    return matched ?? undone[0];
-  }, [checked, interests]);
+    // Find first task that isn't complete yet
+    const incomplete = TASKS.find((t) => taskStatuses[t.id] !== 'complete');
+    return incomplete ?? null;
+  }, [taskStatuses]);
 
-  // Show the full checklist in its natural order — must mirror /checklist
-  // exactly so students see the same list in both places. The priority
-  // logic still drives `nextTask` above, but the visible list is the
-  // canonical one.
-  const priorityChecklist = CHECKLIST_ITEMS;
-
-  const totalTasks = CHECKLIST_ITEMS.length;
-  const doneTasks = CHECKLIST_ITEMS.filter((i) => checked[i.id]).length;
-
-  const personalisedEvents = useMemo(() => {
-    const interestCats = new Set(interests.flatMap((i) => INTEREST_TO_EVENT_CATEGORIES[i] ?? []));
-    const score = (event) => {
-      let s = 0;
-      if (event.college === college?.name || event.college === 'All colleges') s += 10;
-      if (interestCats.has(event.category)) s += 5;
-      // Prefer earlier events.
-      s -= new Date(event.startsAt).getTime() / 1e13;
-      return s;
-    };
-    return [...EVENTS].sort((a, b) => score(b) - score(a)).slice(0, 4);
-  }, [college?.name, interests]);
+  const totalTasks = TASKS.length;
+  const doneTasks = TASKS.filter((t) => taskStatuses[t.id] === 'complete').length;
 
   const firstName = (profile?.name ?? '').split(' ')[0] || 'there';
 
-  function handleToggle(e) {
-    const id = e.currentTarget.dataset.id;
-    if (!id) return;
-    setChecked((prev) => ({ ...prev, [id]: !prev[id] }));
-  }
-
-  function toggle(id) {
-    setChecked((prev) => ({ ...prev, [id]: !prev[id] }));
-  }
+  const standfirst = useMemo(() => {
+    const parts = [];
+    if (college) parts.push(college.name);
+    if (studyLevel) parts.push(studyLevel.label.toLowerCase());
+    if (year) parts.push(year.label.toLowerCase());
+    return parts.length
+      ? `${parts.join(' · ')}. Here's what's next for you this week.`
+      : "Here's what's next for you this week.";
+  }, [college, studyLevel, year]);
 
   function handleReset() {
     if (typeof window === 'undefined') return;
@@ -104,22 +116,9 @@ export function DashboardScreen() {
     }
   }
 
-  // Standfirst line: "{College} · {Level}" — concise context restated as
-  // a sentence so the page reads as a personalised continuation of the
-  // same content brief, not a separate "app shell".
-  const standfirst = useMemo(() => {
-    const parts = [];
-    if (college) parts.push(college.name);
-    if (studyLevel) parts.push(studyLevel.label.toLowerCase());
-    if (profile?.studentType === 'returning') parts.push('returning student');
-    return parts.length
-      ? `${parts.join(' · ')}. Here's what's next for you this week.`
-      : "Here's what's next for you this week.";
-  }, [college, studyLevel, profile?.studentType]);
-
   return (
     <article className="flow" data-flow="l">
-      {/* Hero — typographic, mirrors Home */}
+      {/* ── HERO ─────────────────────────────────────────────────── */}
       <section className="home-hero flow" data-flow="m" aria-labelledby="dash-greeting">
         <Countdown />
         <h1 id="dash-greeting" className="home-hero__title">
@@ -128,26 +127,60 @@ export function DashboardScreen() {
         <p className="standfirst home-hero__lede">{standfirst}</p>
       </section>
 
-      {/* Your next step — single highlighted task */}
+      {/* ── VIEW TOGGLE ──────────────────────────────────────────── */}
+      <div className="dash-toggle" role="group" aria-label="Dashboard view">
+        <button
+          type="button"
+          className="dash-toggle__btn"
+          data-active={view === 'focus' || undefined}
+          onClick={() => setView('focus')}
+          aria-pressed={view === 'focus'}
+        >
+          My focus
+        </button>
+        <button
+          type="button"
+          className="dash-toggle__btn"
+          data-active={view === 'all' || undefined}
+          onClick={() => setView('all')}
+          aria-pressed={view === 'all'}
+        >
+          Everything
+        </button>
+      </div>
+
+      {/* ── MANDATORY: YOUR NEXT STEP ────────────────────────────── */}
       {nextTask && (
-        <section className="flow" data-flow="s" aria-labelledby="dash-focus">
-          <h2 id="dash-focus">Your next step</h2>
+        <section className="flow" data-flow="s" aria-labelledby="dash-next">
+          <h2 id="dash-next">Your next step</h2>
           <article className="flow card" data-flow="s">
+            <span
+              className="tag tag--essential"
+              style={{
+                display: 'inline-block',
+                fontSize: 'var(--step--1)',
+                fontWeight: 'var(--font-weight-bold)',
+                padding: 'var(--space-3xs) var(--space-xs)',
+                background: 'var(--color-dark)',
+                color: 'var(--color-light)',
+                textTransform: 'uppercase',
+                letterSpacing: '0.05em',
+              }}
+            >
+              Essential
+            </span>
             <h3>{nextTask.title}</h3>
-            <p>{nextTask.body}</p>
+            <p>{nextTask.shortDescription}</p>
             <div className="cluster" data-justify="flex-start">
-              <a href={nextTask.cta.href} target="_blank" rel="noreferrer" className="button">
-                {nextTask.cta.label}
-              </a>
-              <Button ghost onClick={() => toggle(nextTask.id)}>
-                Mark done
-              </Button>
+              <Link href={`/checklist/${nextTask.id}`} className="button">
+                View task
+              </Link>
             </div>
           </article>
         </section>
       )}
 
-      {/* Checklist progress */}
+      {/* ── MANDATORY: CHECKLIST ─────────────────────────────────── */}
       <section className="flow" data-flow="s" aria-labelledby="dash-checklist">
         <div className="cluster" data-justify="space-between">
           <h2 id="dash-checklist">Your checklist</h2>
@@ -164,23 +197,18 @@ export function DashboardScreen() {
           label={`Checklist progress: ${doneTasks} of ${totalTasks} complete`}
         />
         <ul className="flow" data-flow="2xs" role="list">
-          {priorityChecklist.map((item) => {
-            const isDone = Boolean(checked[item.id]);
+          {TASKS.map((task) => {
+            const status = taskStatuses[task.id] ?? 'not-started';
+            const isComplete = status === 'complete';
             return (
-              <li key={item.id}>
-                <button
-                  type="button"
-                  data-id={item.id}
-                  onClick={handleToggle}
-                  aria-pressed={isDone}
-                  className="dash-checklist-row"
-                >
+              <li key={task.id}>
+                <Link href={`/checklist/${task.id}`} className="dash-checklist-row">
                   <span
                     className="dash-checklist-row__check"
-                    data-checked={isDone || undefined}
+                    data-checked={isComplete || undefined}
                     aria-hidden="true"
                   >
-                    {isDone && (
+                    {isComplete && (
                       <svg
                         viewBox="0 0 12 12"
                         fill="none"
@@ -196,81 +224,64 @@ export function DashboardScreen() {
                       </svg>
                     )}
                   </span>
-                  <span data-checked={isDone || undefined} className="dash-checklist-row__label">
-                    {item.title}
+                  <span
+                    data-checked={isComplete || undefined}
+                    className="dash-checklist-row__label"
+                  >
+                    {task.title}
                   </span>
-                </button>
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    aria-hidden="true"
+                    width="14"
+                    height="14"
+                    style={{
+                      marginInlineStart: 'auto',
+                      flexShrink: 0,
+                      color: 'var(--color-medium)',
+                    }}
+                  >
+                    <path
+                      d="M9 6l6 6-6 6"
+                      stroke="currentColor"
+                      strokeWidth="1.6"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                  </svg>
+                </Link>
               </li>
             );
           })}
         </ul>
       </section>
 
-      {/* For you this week — events as a horizontal reel, mirrors Home */}
-      {personalisedEvents.length > 0 && (
-        <section className="flow" data-flow="s" aria-labelledby="dash-events">
-          <div className="cluster" data-justify="space-between">
-            <h2 id="dash-events">For you this week</h2>
-            <Link className="home-section__cta" href="/events">
-              See all events →
-            </Link>
-          </div>
-          <div className="reel home-reel" role="list">
-            {personalisedEvents.map((event) => (
-              <div role="listitem" key={event.id}>
-                <EventCard event={event} compact />
-              </div>
-            ))}
-          </div>
-        </section>
-      )}
+      {/* ── OPTIONAL SECTIONS (interest-driven) ──────────────────── */}
+      {visibleSections.map((section) => (
+        <OptionalSection
+          key={section.id}
+          section={section}
+          events={eventsByInterest[section.id] ?? []}
+          college={college}
+        />
+      ))}
 
-      {/* Jump in — quick actions as a card grid, mirrors Home "Start here" */}
-      <section className="flow" data-flow="s" aria-labelledby="dash-quick">
-        <h2 id="dash-quick">Jump in</h2>
-        <div className="grid">
-          <Card
-            title="Find your campus"
-            to="/map"
-            body={<p>{college ? `Open ${college.short} on the 3D map.` : 'Explore UAL in 3D.'}</p>}
-          />
-          <Card
-            title="Your timetable"
-            external="https://www.arts.ac.uk/students/student-timetables"
-            body={<p>Check when and where your classes start.</p>}
-          />
-          <Card
-            title="Student Services"
-            external="https://www.arts.ac.uk/students/student-services"
-            body={<p>Wellbeing, funding, and academic support.</p>}
-          />
-          <Card
-            title="Full checklist"
-            to="/checklist"
-            body={<p>Every induction task, with progress saved on this device.</p>}
-          />
-        </div>
-      </section>
-
-      {/* Interests recap — only if any chosen */}
-      {interests.length > 0 && (
-        <section className="flow" data-flow="s" aria-labelledby="dash-interests">
-          <h2 id="dash-interests">Your interests</h2>
-          <p className="cluster" data-justify="flex-start">
-            {interests.map((id) => {
-              const opt = INTEREST_OPTIONS.find((o) => o.id === id);
-              if (!opt) return null;
-              return (
-                <span key={id} className="tag" data-tag-type="standard">
-                  {opt.label}
-                </span>
-              );
-            })}
+      {/* ── NO-INTERESTS PROMPT (My focus, nothing selected) ─────── */}
+      {view === 'focus' && interests.length === 0 && (
+        <section className="flow" data-flow="s" aria-labelledby="dash-empty">
+          <h2 id="dash-empty">Nothing selected yet</h2>
+          <p>
+            Switch to <strong>Everything</strong> to browse all sections, or{' '}
+            <button type="button" onClick={handleReset} className="link-button">
+              update your interests
+            </button>{' '}
+            to personalise this view.
           </p>
         </section>
       )}
 
-      {/* Profile footer — discreet, matches Footer voice */}
+      {/* ── PROFILE FOOTER ───────────────────────────────────────── */}
       <section className="flow" data-flow="2xs" aria-label="Profile">
         <p>
           <span className="step--1">Saved on this device. </span>
@@ -280,9 +291,40 @@ export function DashboardScreen() {
         </p>
       </section>
 
-      {/* Local styles — small additions only. Migrate to globals.css when
-          the design system tokens are agreed. */}
       <style>{`
+        /* ── View toggle ─────────────────────────────────────── */
+        .dash-toggle {
+          display: inline-flex;
+          border: 2px solid var(--color-dark);
+          overflow: hidden;
+        }
+        .dash-toggle__btn {
+          background: var(--color-light);
+          border: 0;
+          color: var(--color-dark);
+          cursor: pointer;
+          font: inherit;
+          font-size: var(--step--1);
+          font-weight: var(--font-weight-bold);
+          padding: var(--space-2xs) var(--space-s);
+          transition: background 0.12s, color 0.12s;
+        }
+        .dash-toggle__btn + .dash-toggle__btn {
+          border-inline-start: 2px solid var(--color-dark);
+        }
+        .dash-toggle__btn[data-active] {
+          background: var(--color-dark);
+          color: var(--color-light);
+        }
+        .dash-toggle__btn:hover:not([data-active]) {
+          background: var(--color-shade);
+        }
+        .dash-toggle__btn:focus-visible {
+          outline: 2px solid var(--color-orange);
+          outline-offset: -2px;
+        }
+
+        /* ── Checklist rows ──────────────────────────────────── */
         .dash-checklist-row {
           display: flex;
           align-items: center;
@@ -291,10 +333,10 @@ export function DashboardScreen() {
           padding: var(--space-2xs) var(--space-xs);
           background: transparent;
           border: 0;
-          border-radius: var(--space-2xs);
           color: inherit;
           font: inherit;
           text-align: start;
+          text-decoration: none;
           cursor: pointer;
         }
         .dash-checklist-row:hover,
@@ -318,8 +360,6 @@ export function DashboardScreen() {
         .dash-checklist-row__check[data-checked] {
           background: var(--color-orange);
           border-color: var(--color-orange);
-          /* Always white on orange — orange is brand-fixed across themes,
-             so we can't rely on var(--color-light) which flips in dark. */
           color: #fff;
         }
         .dash-checklist-row__label {
@@ -330,6 +370,8 @@ export function DashboardScreen() {
           color: var(--color-dark--tint-50);
           font-weight: var(--font-weight-normal);
         }
+
+        /* ── Link button ─────────────────────────────────────── */
         .link-button {
           background: transparent;
           border: 0;
@@ -346,5 +388,150 @@ export function DashboardScreen() {
         }
       `}</style>
     </article>
+  );
+}
+
+/* ─────────────────────────────────────────────────────────────────────────
+ * OptionalSection
+ * Renders one interest-driven section. Each section always shows its
+ * heading + relevant cards/links. If there are matching events they
+ * appear in a reel; otherwise only the link cards are shown.
+ * ───────────────────────────────────────────────────────────────────────── */
+
+const SECTION_CONTENT = {
+  social: {
+    cards: [
+      {
+        title: 'Welcome events',
+        body: "Meet new people and see what's going on at the various campuses.",
+        to: '/events',
+      },
+      {
+        title: 'Student Union',
+        body: 'Clubs, societies and student-led activity across UAL.',
+        href: 'https://www.arts.ac.uk/students/student-union',
+      },
+    ],
+  },
+  creative: {
+    cards: [
+      {
+        title: 'Workshops & studios',
+        body: 'Book hands-on sessions and access specialist studio spaces.',
+        href: 'https://www.arts.ac.uk/students/welcome/your-journey-to-UAL/get-connected',
+      },
+      {
+        title: 'Facilities',
+        body: 'Technical workshops and shared spaces at your college.',
+        href: 'https://www.arts.ac.uk/students/student-services',
+      },
+    ],
+  },
+  study: {
+    cards: [
+      {
+        title: 'Library Services',
+        body: 'Borrow books, book study spaces, and access digital collections.',
+        href: 'https://www.arts.ac.uk/students/welcome/your-journey-to-UAL/get-support/skills',
+      },
+      {
+        title: 'Get started on Moodle',
+        body: 'Your course materials, lecture recordings and assignments.',
+        href: 'https://www.arts.ac.uk/students/get-started-on-moodle',
+      },
+      {
+        title: 'Your timetable',
+        body: 'Find out when and where your classes happen.',
+        href: 'https://www.arts.ac.uk/students/student-timetables',
+      },
+    ],
+  },
+  wellbeing: {
+    cards: [
+      {
+        title: 'Wellbeing Hub',
+        body: 'Advice and support for your health and wellbeing while studying.',
+        href: 'https://www.arts.ac.uk/students/student-services/health-wellbeing-and-support-for-students',
+      },
+      {
+        title: 'Student Services',
+        body: 'Counselling, mental health, and specialist support.',
+        href: 'https://www.arts.ac.uk/students/student-services',
+      },
+    ],
+  },
+  career: {
+    cards: [
+      {
+        title: 'Student Careers',
+        body: 'Careers and Employability at UAL — jobs, mentoring, industry links.',
+        href: 'https://www.arts.ac.uk/students/careers-and-employability',
+      },
+    ],
+  },
+  area: {
+    cards: [
+      {
+        title: 'Area guide',
+        body: 'Travel information, campus map and discounts near your college.',
+        to: '/map',
+      },
+    ],
+  },
+  tech: {
+    cards: [
+      {
+        title: 'IT Services',
+        body: 'Set up your IT account, UAL email, and get tech support.',
+        href: 'https://www.arts.ac.uk/students/welcome/your-journey-to-UAL/get-connected',
+      },
+    ],
+  },
+};
+
+/**
+ * @param {{ section: { id: string, label: string }, events: any[], college: any }} props
+ */
+function OptionalSection({ section, events, college: _college }) {
+  const content = SECTION_CONTENT[section.id];
+  const sectionId = `dash-section-${section.id}`;
+
+  return (
+    <section className="flow" data-flow="s" aria-labelledby={sectionId}>
+      <div className="cluster" data-justify="space-between">
+        <h2 id={sectionId}>{section.label}</h2>
+        {events.length > 0 && (
+          <Link className="home-section__cta" href="/events">
+            See all →
+          </Link>
+        )}
+      </div>
+
+      {/* Events reel — only if there are matching events */}
+      {events.length > 0 && (
+        <div className="reel home-reel" role="list">
+          {events.map((event) => (
+            <div role="listitem" key={event.id}>
+              <EventCard event={event} compact />
+            </div>
+          ))}
+        </div>
+      )}
+
+      {/* Static link cards */}
+      {content?.cards?.length > 0 && (
+        <div className="grid">
+          {content.cards.map((card) => (
+            <Card
+              key={card.title}
+              title={card.title}
+              to={card.to}
+              external={card.href}
+              body={<p>{card.body}</p>}
+            />
+          ))}
+        </div>
+      )}
+    </section>
   );
 }
