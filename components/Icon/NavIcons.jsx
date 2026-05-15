@@ -133,3 +133,18 @@ export function ExternalLinkIcon(props) {
     </svg>
   );
 }
+
+export function SupportIcon(props) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
+      <circle cx="12" cy="12" r="9" stroke="currentColor" strokeWidth={1.6} />
+      <path
+        d="M12 8a2.5 2.5 0 0 1 1 4.8c-.6.3-1 .9-1 1.5V15"
+        stroke="currentColor"
+        strokeWidth={1.6}
+        strokeLinecap="round"
+      />
+      <circle cx="12" cy="18" r="0.75" fill="currentColor" />
+    </svg>
+  );
+}

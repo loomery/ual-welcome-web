@@ -35,17 +35,30 @@ export function Header() {
             <nav id="primary-nav" className="top-nav" aria-label="Primary">
               <ul className="top-nav__list" role="list">
                 {NAV_ITEMS.map((item) => {
+                  const isExternal = Boolean(item.href);
                   const active = isActive(item.to);
+                  const key = item.href ?? item.to;
                   return (
-                    <li key={item.to}>
-                      <Link
-                        href={item.to}
-                        className="top-nav__link"
-                        aria-current={active ? 'page' : undefined}
-                        data-active={active ? '' : undefined}
-                      >
-                        {item.label}
-                      </Link>
+                    <li key={key}>
+                      {isExternal ? (
+                        <a
+                          href={item.href}
+                          className="top-nav__link"
+                          target="_blank"
+                          rel="noreferrer"
+                        >
+                          {item.label}
+                        </a>
+                      ) : (
+                        <Link
+                          href={item.to}
+                          className="top-nav__link"
+                          aria-current={active ? 'page' : undefined}
+                          data-active={active ? '' : undefined}
+                        >
+                          {item.label}
+                        </Link>
+                      )}
                     </li>
                   );
                 })}

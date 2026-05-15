@@ -7,8 +7,8 @@ import { usePersistedState } from './usePersistedState';
  * @typedef {Object} OnboardingProfile
  * @property {string} name
  * @property {string} collegeId           one of COLLEGE_OPTIONS[].id
- * @property {'new' | 'returning'} studentType
  * @property {string} studyLevel          one of STUDY_LEVEL_OPTIONS[].id
+ * @property {string} year                one of YEAR_OPTIONS[].id
  * @property {string[]} interests         array of INTEREST_OPTIONS[].id
  * @property {string} completedAt         ISO timestamp of completion
  */
@@ -28,13 +28,14 @@ const EMPTY_PROFILE = {};
  * @returns {{
  *   profile: Partial<OnboardingProfile>,
  *   isComplete: boolean,
+ *   hydrated: boolean,
  *   patch: (next: Partial<OnboardingProfile>) => void,
  *   commit: () => void,
  *   reset: () => void,
  * }}
  */
 export function useOnboardingProfile() {
-  const [profile, setProfile] = usePersistedState(STORAGE_KEY, EMPTY_PROFILE);
+  const [profile, setProfile, hydrated] = usePersistedState(STORAGE_KEY, EMPTY_PROFILE);
 
   const patch = useCallback(
     (next) => {
@@ -54,6 +55,7 @@ export function useOnboardingProfile() {
   return {
     profile,
     isComplete: Boolean(profile?.completedAt),
+    hydrated,
     patch,
     commit,
     reset,

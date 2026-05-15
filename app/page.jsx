@@ -1,9 +1,9 @@
-import { HomeScreen } from '../screens/Home/HomeScreen';
+import { SmartHome } from '../components/SmartHome';
 
 export const metadata = {
   title: 'Home | UAL Welcome Week',
 };
 
 export default function HomePage() {
-  return <HomeScreen />;
+  return <SmartHome />;
 }

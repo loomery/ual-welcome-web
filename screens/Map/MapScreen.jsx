@@ -7,6 +7,20 @@ import { Button } from '../../components/Button/Button';
 import { directionsUrl } from '../../utils/directions';
 import { ArrowRightIcon, CloseIcon } from '../../components/Icon/NavIcons';
 
+/** @param {import('../../data/buildings').Building} b */
+function citymapperUrl(b) {
+  return b.geo
+    ? `https://citymapper.com/directions?endcoord=${b.geo.lat}%2C${b.geo.lng}&endname=${encodeURIComponent(b.name)}`
+    : `https://citymapper.com/directions?endaddress=${encodeURIComponent(b.address)}`;
+}
+
+/** @param {import('../../data/buildings').Building} b */
+function appleMapsUrl(b) {
+  return b.geo
+    ? `https://maps.apple.com/?ll=${b.geo.lat},${b.geo.lng}&q=${encodeURIComponent(b.name)}`
+    : `https://maps.apple.com/?q=${encodeURIComponent(b.address)}`;
+}
+
 // next/dynamic with ssr: false ensures three.js + canvas-only code
 // never runs on the server. Same effect as React.lazy in the Vite app
 // but Next-aware, so the server bundle stays clean.
@@ -52,11 +66,8 @@ export function MapScreen() {
   return (
     <article className="prose has-lead flow" data-flow="l">
       <div className="flow" data-flow="s">
-        <h1>Campus map</h1>
-        <p className="standfirst">
-          UAL is made up of six colleges spread across London. Tap any building below or in the 3D
-          view — you can grab directions to each college.
-        </p>
+        <h1>Find your campus</h1>
+        <p className="standfirst">Key services, buildings, and where to go on your first day.</p>
       </div>
 
       <div className="cluster">
@@ -180,16 +191,113 @@ export function MapScreen() {
                     <div
                       id={`building-detail-${b.id}`}
                       className="building-item__detail flow"
-                      data-flow="s"
+                      data-flow="m"
                     >
-                      <p>{b.description}</p>
+                      {/* Location */}
+                      <section className="flow" data-flow="2xs" aria-label="Location">
+                        <h3 className="map-info__heading">Location</h3>
+                        <p style={{ fontWeight: 'var(--font-weight-bold)' }}>{b.name}</p>
+                        <p style={{ color: 'var(--color-medium)', fontSize: 'var(--step--1)' }}>
+                          {b.address}
+                        </p>
+                        <div className="cluster" data-justify="flex-start">
+                          <a
+                            href={citymapperUrl(b)}
+                            target="_blank"
+                            rel="noreferrer"
+                            className="map-dir-btn"
+                          >
+                            Citymapper
+                          </a>
+                          <a
+                            href={directionsUrl(b)}
+                            target="_blank"
+                            rel="noreferrer"
+                            className="map-dir-btn"
+                          >
+                            Google Maps
+                          </a>
+                          <a
+                            href={appleMapsUrl(b)}
+                            target="_blank"
+                            rel="noreferrer"
+                            className="map-dir-btn"
+                          >
+                            Apple Maps
+                          </a>
+                        </div>
+                      </section>
+
+                      {/* Transport */}
+                      {b.transport && (
+                        <section className="flow" data-flow="s" aria-label="Transport">
+                          <h3 className="map-info__heading">Transport</h3>
+                          <div className="map-transport-grid">
+                            <div>
+                              <p className="map-transport__label">Closest stations</p>
+                              <table className="map-transport__table">
+                                <tbody>
+                                  {b.transport.stations.map((s) => (
+                                    <tr key={s.name}>
+                                      <td>{s.name}</td>
+                                      <td
+                                        style={{ color: 'var(--color-medium)', textAlign: 'right' }}
+                                      >
+                                        {s.walk}
+                                      </td>
+                                    </tr>
+                                  ))}
+                                </tbody>
+                              </table>
+                            </div>
+                            <div>
+                              <p className="map-transport__label">Closest buses</p>
+                              <table className="map-transport__table">
+                                <tbody>
+                                  {b.transport.buses.slice(0, 4).map((bus) => (
+                                    <tr key={bus.name}>
+                                      <td>{bus.name}</td>
+                                      <td
+                                        style={{ color: 'var(--color-medium)', textAlign: 'right' }}
+                                      >
+                                        {bus.walk}
+                                      </td>
+                                    </tr>
+                                  ))}
+                                </tbody>
+                              </table>
+                            </div>
+                          </div>
+                        </section>
+                      )}
+
+                      {/* Accessibility */}
+                      {b.transport?.accessibilityNote && (
+                        <section className="flow" data-flow="2xs" aria-label="Accessibility">
+                          <h3 className="map-info__heading">Accessibility</h3>
+                          <p style={{ fontSize: 'var(--step--1)' }}>
+                            {b.transport.accessibilityNote.replace('on AccessAble', '')}{' '}
+                            <a
+                              href={b.transport.accessibilityUrl}
+                              target="_blank"
+                              rel="noreferrer"
+                              style={{ color: 'var(--color-orange)' }}
+                            >
+                              AccessAble
+                            </a>
+                            .
+                          </p>
+                        </section>
+                      )}
+
+                      {/* CTA */}
                       <a
                         className="button"
-                        href={directionsUrl(b)}
+                        href={`https://www.arts.ac.uk/colleges/${b.name.toLowerCase().replace(/\s+/g, '-')}`}
                         target="_blank"
                         rel="noreferrer"
                       >
-                        Directions
+                        View more on accessing campus
                         <ArrowRightIcon aria-hidden="true" />
                       </a>
                     </div>
@@ -204,6 +312,59 @@ export function MapScreen() {
       <div className="visually-hidden" role="status" aria-live="polite" aria-atomic="true">
         {selected ? `Selected ${selected.name}` : ''}
       </div>
+
+      <style>{`
+        .map-info__heading {
+          font-size: var(--step-0);
+          font-weight: var(--font-weight-bold);
+          margin-block-end: var(--space-2xs);
+        }
+        .map-dir-btn {
+          display: inline-flex;
+          align-items: center;
+          padding: var(--space-2xs) var(--space-s);
+          border: 2px solid var(--color-dark);
+          color: var(--color-dark);
+          font: inherit;
+          font-size: var(--step--1);
+          font-weight: var(--font-weight-bold);
+          text-decoration: none;
+          background: var(--color-light);
+          transition: background 0.12s, color 0.12s;
+        }
+        .map-dir-btn:hover {
+          background: var(--color-dark);
+          color: var(--color-light);
+        }
+        .map-dir-btn:focus-visible {
+          outline: 2px solid var(--color-orange);
+          outline-offset: 2px;
+        }
+        .map-transport-grid {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: var(--space-m);
+        }
+        .map-transport__label {
+          font-size: var(--step--1);
+          font-weight: var(--font-weight-bold);
+          color: var(--color-medium);
+          margin-block-end: var(--space-2xs);
+        }
+        .map-transport__table {
+          width: 100%;
+          border-collapse: collapse;
+          font-size: var(--step--1);
+        }
+        .map-transport__table td {
+          padding: var(--space-3xs) 0;
+          border-block-end: 1px solid var(--color-dark--tint-90);
+        }
+        .map-transport__table td:last-child {
+          text-align: right;
+          color: var(--color-medium);
+        }
+      `}</style>
     </article>
   );
 }
