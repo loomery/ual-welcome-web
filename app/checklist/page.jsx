@@ -1,9 +1,9 @@
-import { ChecklistScreen } from '../../screens/Checklist/ChecklistScreen';
+import { TaskListScreen } from '../../screens/Checklist/TaskListScreen';
 
 export const metadata = {
-  title: 'Induction checklist | UAL Welcome Week',
+  title: 'Get setup list | UAL Welcome Week',
 };
 
 export default function ChecklistPage() {
-  return <ChecklistScreen />;
+  return <TaskListScreen />;
 }

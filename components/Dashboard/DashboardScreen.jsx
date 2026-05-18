@@ -1,42 +1,63 @@
 'use client';
 
-import Link from 'next/link';
 import { useMemo } from 'react';
 import { Card } from '../Card/Card';
 import { Countdown } from '../Countdown/Countdown';
-import { EventCard } from '../EventCard/EventCard';
-import { Progress } from '../Progress/Progress';
-import { Button } from '../Button/Button';
-import { CHECKLIST_ITEMS } from '../../data/checklist';
-import { EVENTS } from '../../data/events';
-import {
-  COLLEGE_OPTIONS,
-  INTEREST_OPTIONS,
-  INTEREST_TO_CHECKLIST,
-  INTEREST_TO_EVENT_CATEGORIES,
-  STUDY_LEVEL_OPTIONS,
-} from '../../data/onboardingOptions';
+import { KeyInfoCard } from './KeyInfoCard';
+import { NextStepCard } from './NextStepCard';
+import { ViewToggle } from './ViewToggle';
+import { TASKS } from '../../data/checklist';
+import { USEFUL_INFO } from '../../data/usefulInfo';
+import { COLLEGE_OPTIONS, STUDY_LEVEL_OPTIONS, YEAR_OPTIONS } from '../../data/onboardingOptions';
 import { useOnboardingProfile } from '../../hooks/useOnboardingProfile';
 import { usePersistedState } from '../../hooks/usePersistedState';
 
-const CHECKLIST_STORAGE_KEY = 'ual:checklist:v1';
+/**
+ * Interest-driven optional sections. The order here determines render
+ * order on the dashboard and is intentionally aligned with the Figma
+ * "08 Personalised Home V1" frame.
+ */
+const OPTIONAL_SECTIONS = [
+  { id: 'social', label: 'Social' },
+  { id: 'career', label: 'Jobs and opportunities' },
+  { id: 'wellbeing', label: 'Wellbeing' },
+  { id: 'creative', label: 'Workshops and studios' },
+  { id: 'study', label: 'Study skills' },
+  { id: 'tech', label: 'Tech setup' },
+  { id: 'area', label: 'Area guide' },
+];
+
+const VIEW_OPTIONS = /** @type {const} */ ([
+  { value: 'focus', label: 'My focus' },
+  { value: 'all', label: 'Everything' },
+]);
 
 /**
  * Personalised dashboard.
  *
- * Visual language matches the rest of the app: typographic hero with
- * Countdown + h1 + standfirst (like Home), section pattern with
- * `<h2>` headings + cluster/grid/reel layouts, and shared components
- * (Card, EventCard, Progress, Button). Personalisation lives in the
- * data shown — events are filtered by college + interests, the
- * checklist is prioritised by interests, and the "next step" is the
- * first uncompleted task in that priority order.
+ * Layout (matches Figma "08 Personalised Home V1"):
+ *   1. Hero            — countdown + greeting + course meta (always)
+ *   2. Key information — always-on UAL resources from data/usefulInfo
+ *   3. Get setup       — NextStepCard pointing to the next incomplete task
+ *   4. View toggle     — My focus / Everything
+ *   5. Optional sections — interest-driven simple link cards
+ *
+ * The checklist itself does not appear on this page — "View all tasks"
+ * inside Get setup is the only entry point to /checklist.
+ *
+ * Optional sections behaviour:
+ *   - "My focus":   shows only sections matching the student's interests.
+ *                   With no interests selected, none are shown.
+ *   - "Everything": shows every optional section regardless of interests.
+ *
+ * Toggle state is persisted so a refresh keeps the last choice.
  */
 export function DashboardScreen() {
   const { profile, reset } = useOnboardingProfile();
-  const [checked, setChecked] = usePersistedState(
-    CHECKLIST_STORAGE_KEY,
-    /** @type {Record<string, boolean>} */ ({}),
+  const [taskStatuses] = usePersistedState('ual:task:status:v1', {});
+  const [view, setView] = usePersistedState(
+    'ual:dash:view:v1',
+    /** @type {'focus'|'all'} */ ('focus'),
   );
 
   const college = useMemo(
@@ -49,52 +70,32 @@ export function DashboardScreen() {
     [profile?.studyLevel],
   );
 
-  const interests = profile?.interests ?? [];
+  const year = useMemo(() => YEAR_OPTIONS.find((y) => y.id === profile?.year), [profile?.year]);
 
-  const nextTask = useMemo(() => {
-    const undone = CHECKLIST_ITEMS.filter((item) => !checked[item.id]);
-    if (undone.length === 0) return null;
-    if (undone.find((i) => i.id === 'enrol')) {
-      return undone.find((i) => i.id === 'enrol');
-    }
-    const interestIds = interests.flatMap((i) => INTEREST_TO_CHECKLIST[i] ?? []).filter(Boolean);
-    const matched = undone.find((i) => interestIds.includes(i.id));
-    return matched ?? undone[0];
-  }, [checked, interests]);
+  const interests = useMemo(() => profile?.interests ?? [], [profile?.interests]);
 
-  // Show the full checklist in its natural order — must mirror /checklist
-  // exactly so students see the same list in both places. The priority
-  // logic still drives `nextTask` above, but the visible list is the
-  // canonical one.
-  const priorityChecklist = CHECKLIST_ITEMS;
+  const visibleSections = useMemo(() => {
+    if (view === 'all') return OPTIONAL_SECTIONS;
+    if (interests.length === 0) return [];
+    return OPTIONAL_SECTIONS.filter((s) => interests.includes(s.id));
+  }, [view, interests]);
 
-  const totalTasks = CHECKLIST_ITEMS.length;
-  const doneTasks = CHECKLIST_ITEMS.filter((i) => checked[i.id]).length;
-
-  const personalisedEvents = useMemo(() => {
-    const interestCats = new Set(interests.flatMap((i) => INTEREST_TO_EVENT_CATEGORIES[i] ?? []));
-    const score = (event) => {
-      let s = 0;
-      if (event.college === college?.name || event.college === 'All colleges') s += 10;
-      if (interestCats.has(event.category)) s += 5;
-      // Prefer earlier events.
-      s -= new Date(event.startsAt).getTime() / 1e13;
-      return s;
-    };
-    return [...EVENTS].sort((a, b) => score(b) - score(a)).slice(0, 4);
-  }, [college?.name, interests]);
+  const nextTask = useMemo(
+    () => TASKS.find((t) => taskStatuses[t.id] !== 'complete') ?? null,
+    [taskStatuses],
+  );
 
   const firstName = (profile?.name ?? '').split(' ')[0] || 'there';
 
-  function handleToggle(e) {
-    const id = e.currentTarget.dataset.id;
-    if (!id) return;
-    setChecked((prev) => ({ ...prev, [id]: !prev[id] }));
-  }
-
-  function toggle(id) {
-    setChecked((prev) => ({ ...prev, [id]: !prev[id] }));
-  }
+  // Compact meta line shown under the greeting
+  // (e.g. "Central Saint Martins · 1st year · Undergrad")
+  const heroMeta = useMemo(() => {
+    const parts = [];
+    if (college) parts.push(college.name);
+    if (year) parts.push(year.label);
+    if (studyLevel) parts.push(studyLevel.label);
+    return parts.join(' · ');
+  }, [college, studyLevel, year]);
 
   function handleReset() {
     if (typeof window === 'undefined') return;
@@ -104,173 +105,66 @@ export function DashboardScreen() {
     }
   }
 
-  // Standfirst line: "{College} · {Level}" — concise context restated as
-  // a sentence so the page reads as a personalised continuation of the
-  // same content brief, not a separate "app shell".
-  const standfirst = useMemo(() => {
-    const parts = [];
-    if (college) parts.push(college.name);
-    if (studyLevel) parts.push(studyLevel.label.toLowerCase());
-    if (profile?.studentType === 'returning') parts.push('returning student');
-    return parts.length
-      ? `${parts.join(' · ')}. Here's what's next for you this week.`
-      : "Here's what's next for you this week.";
-  }, [college, studyLevel, profile?.studentType]);
-
   return (
     <article className="flow" data-flow="l">
-      {/* Hero — typographic, mirrors Home */}
+      {/* ── HERO ─────────────────────────────────────────────────── */}
       <section className="home-hero flow" data-flow="m" aria-labelledby="dash-greeting">
         <Countdown />
         <h1 id="dash-greeting" className="home-hero__title">
-          Hi {firstName}.
+          Hi, {firstName}
         </h1>
-        <p className="standfirst home-hero__lede">{standfirst}</p>
+        {heroMeta && <p className="home-hero__lede">{heroMeta}</p>}
       </section>
 
-      {/* Your next step — single highlighted task */}
-      {nextTask && (
-        <section className="flow" data-flow="s" aria-labelledby="dash-focus">
-          <h2 id="dash-focus">Your next step</h2>
-          <article className="flow card" data-flow="s">
-            <h3>{nextTask.title}</h3>
-            <p>{nextTask.body}</p>
-            <div className="cluster" data-justify="flex-start">
-              <a href={nextTask.cta.href} target="_blank" rel="noreferrer" className="button">
-                {nextTask.cta.label}
-              </a>
-              <Button ghost onClick={() => toggle(nextTask.id)}>
-                Mark done
-              </Button>
-            </div>
-          </article>
-        </section>
-      )}
-
-      {/* Checklist progress */}
-      <section className="flow" data-flow="s" aria-labelledby="dash-checklist">
-        <div className="cluster" data-justify="space-between">
-          <h2 id="dash-checklist">Your checklist</h2>
-          <Link className="home-section__cta" href="/checklist">
-            See all →
-          </Link>
-        </div>
-        <p>
-          {doneTasks} of {totalTasks} done.
-        </p>
-        <Progress
-          value={doneTasks}
-          max={totalTasks}
-          label={`Checklist progress: ${doneTasks} of ${totalTasks} complete`}
-        />
-        <ul className="flow" data-flow="2xs" role="list">
-          {priorityChecklist.map((item) => {
-            const isDone = Boolean(checked[item.id]);
-            return (
-              <li key={item.id}>
-                <button
-                  type="button"
-                  data-id={item.id}
-                  onClick={handleToggle}
-                  aria-pressed={isDone}
-                  className="dash-checklist-row"
-                >
-                  <span
-                    className="dash-checklist-row__check"
-                    data-checked={isDone || undefined}
-                    aria-hidden="true"
-                  >
-                    {isDone && (
-                      <svg
-                        viewBox="0 0 12 12"
-                        fill="none"
-                        style={{ display: 'block', width: '0.625rem', height: '0.625rem' }}
-                      >
-                        <path
-                          d="M2.5 6L5 8.5L9.5 4"
-                          stroke="currentColor"
-                          strokeWidth="1.8"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                        />
-                      </svg>
-                    )}
-                  </span>
-                  <span data-checked={isDone || undefined} className="dash-checklist-row__label">
-                    {item.title}
-                  </span>
-                </button>
-              </li>
-            );
-          })}
-        </ul>
-      </section>
-
-      {/* For you this week — events as a horizontal reel, mirrors Home */}
-      {personalisedEvents.length > 0 && (
-        <section className="flow" data-flow="s" aria-labelledby="dash-events">
-          <div className="cluster" data-justify="space-between">
-            <h2 id="dash-events">For you this week</h2>
-            <Link className="home-section__cta" href="/events">
-              See all events →
-            </Link>
-          </div>
-          <div className="reel home-reel" role="list">
-            {personalisedEvents.map((event) => (
-              <div role="listitem" key={event.id}>
-                <EventCard event={event} compact />
-              </div>
-            ))}
-          </div>
-        </section>
-      )}
-
-      {/* Jump in — quick actions as a card grid, mirrors Home "Start here" */}
-      <section className="flow" data-flow="s" aria-labelledby="dash-quick">
-        <h2 id="dash-quick">Jump in</h2>
+      {/* ── KEY INFORMATION ──────────────────────────────────────── */}
+      <section className="flow" data-flow="s" aria-labelledby="dash-key-info">
+        <h2 id="dash-key-info">Key information</h2>
         <div className="grid">
-          <Card
-            title="Find your campus"
-            to="/map"
-            body={<p>{college ? `Open ${college.short} on the 3D map.` : 'Explore UAL in 3D.'}</p>}
-          />
-          <Card
-            title="Your timetable"
-            external="https://www.arts.ac.uk/students/student-timetables"
-            body={<p>Check when and where your classes start.</p>}
-          />
-          <Card
-            title="Student Services"
-            external="https://www.arts.ac.uk/students/student-services"
-            body={<p>Wellbeing, funding, and academic support.</p>}
-          />
-          <Card
-            title="Full checklist"
-            to="/checklist"
-            body={<p>Every induction task, with progress saved on this device.</p>}
-          />
+          {USEFUL_INFO.map((item) => (
+            <KeyInfoCard key={item.id} item={item} />
+          ))}
         </div>
       </section>
 
-      {/* Interests recap — only if any chosen */}
-      {interests.length > 0 && (
-        <section className="flow" data-flow="s" aria-labelledby="dash-interests">
-          <h2 id="dash-interests">Your interests</h2>
-          <p className="cluster" data-justify="flex-start">
-            {interests.map((id) => {
-              const opt = INTEREST_OPTIONS.find((o) => o.id === id);
-              if (!opt) return null;
-              return (
-                <span key={id} className="tag" data-tag-type="standard">
-                  {opt.label}
-                </span>
-              );
-            })}
+      {/* ── GET SETUP — black "Your next step" card ──────────────── */}
+      {nextTask && (
+        <section className="flow" data-flow="s" aria-labelledby="dash-get-setup">
+          <h2 id="dash-get-setup">Get setup</h2>
+          <NextStepCard
+            title={nextTask.title}
+            body={nextTask.shortDescription}
+            primary={{
+              label: nextTask.cta?.label ?? 'View task',
+              href: `/checklist/${nextTask.id}`,
+            }}
+            secondary={{ label: 'View all tasks', href: '/checklist' }}
+          />
+        </section>
+      )}
+
+      {/* ── VIEW TOGGLE ──────────────────────────────────────────── */}
+      <ViewToggle value={view} onChange={setView} options={VIEW_OPTIONS} />
+
+      {/* ── OPTIONAL SECTIONS (interest-driven simple cards) ─────── */}
+      {visibleSections.map((section) => (
+        <OptionalSection key={section.id} section={section} />
+      ))}
+
+      {/* ── NO-INTERESTS PROMPT (My focus, nothing selected) ─────── */}
+      {view === 'focus' && interests.length === 0 && (
+        <section className="flow" data-flow="s" aria-labelledby="dash-empty">
+          <h2 id="dash-empty">Nothing selected yet</h2>
+          <p>
+            Switch to <strong>Everything</strong> to browse all sections, or{' '}
+            <button type="button" onClick={handleReset} className="link-button">
+              update your interests
+            </button>{' '}
+            to personalise this view.
           </p>
         </section>
       )}
 
-      {/* Profile footer — discreet, matches Footer voice */}
+      {/* ── PROFILE FOOTER ───────────────────────────────────────── */}
       <section className="flow" data-flow="2xs" aria-label="Profile">
         <p>
           <span className="step--1">Saved on this device. </span>
@@ -279,72 +173,106 @@ export function DashboardScreen() {
           </button>
         </p>
       </section>
-
-      {/* Local styles — small additions only. Migrate to globals.css when
-          the design system tokens are agreed. */}
-      <style>{`
-        .dash-checklist-row {
-          display: flex;
-          align-items: center;
-          gap: var(--space-xs);
-          inline-size: 100%;
-          padding: var(--space-2xs) var(--space-xs);
-          background: transparent;
-          border: 0;
-          border-radius: var(--space-2xs);
-          color: inherit;
-          font: inherit;
-          text-align: start;
-          cursor: pointer;
-        }
-        .dash-checklist-row:hover,
-        .dash-checklist-row:focus-visible {
-          background: var(--color-shade);
-        }
-        .dash-checklist-row:focus-visible {
-          outline: 2px solid var(--color-orange);
-          outline-offset: 2px;
-        }
-        .dash-checklist-row__check {
-          display: inline-flex;
-          align-items: center;
-          justify-content: center;
-          inline-size: 1.125rem;
-          block-size: 1.125rem;
-          border-radius: 999px;
-          border: 2px solid var(--color-dark--tint-50);
-          flex-shrink: 0;
-        }
-        .dash-checklist-row__check[data-checked] {
-          background: var(--color-orange);
-          border-color: var(--color-orange);
-          /* Always white on orange — orange is brand-fixed across themes,
-             so we can't rely on var(--color-light) which flips in dark. */
-          color: #fff;
-        }
-        .dash-checklist-row__label {
-          font-weight: var(--font-weight-bold);
-        }
-        .dash-checklist-row__label[data-checked] {
-          text-decoration: line-through;
-          color: var(--color-dark--tint-50);
-          font-weight: var(--font-weight-normal);
-        }
-        .link-button {
-          background: transparent;
-          border: 0;
-          padding: 0;
-          color: var(--color-dark);
-          font: inherit;
-          text-decoration: underline;
-          text-underline-offset: 4px;
-          cursor: pointer;
-        }
-        .link-button:hover,
-        .link-button:focus-visible {
-          color: var(--color-orange);
-        }
-      `}</style>
     </article>
+  );
+}
+
+/* ─────────────────────────────────────────────────────────────────────────
+ * OptionalSection
+ * Renders one interest-driven section. Each section displays a heading
+ * and one or more simple link cards. Event date-cards have been removed
+ * from this page — students go to /events for those.
+ * ───────────────────────────────────────────────────────────────────────── */
+
+/** @type {Record<string, { cards: Array<{ title: string, body: string, to?: string, href?: string }> }>} */
+const SECTION_CONTENT = {
+  social: {
+    cards: [
+      {
+        title: 'Welcome events',
+        body: 'Meet new people and see what is going on at the various campuses.',
+        to: '/events',
+      },
+    ],
+  },
+  career: {
+    cards: [
+      {
+        title: 'Student Careers',
+        body: 'Find out how Careers and Employability at UAL can support you with your career and job search.',
+        href: 'https://www.arts.ac.uk/students/careers-and-employability',
+      },
+    ],
+  },
+  wellbeing: {
+    cards: [
+      {
+        title: 'Wellbeing Hub',
+        body: 'Find the advice and support you need to look after your health and wellbeing while studying.',
+        href: 'https://www.arts.ac.uk/students/student-services/health-wellbeing-and-support-for-students',
+      },
+    ],
+  },
+  creative: {
+    cards: [
+      {
+        title: 'Facilities',
+        body: "Technical facilities, workshops and shared spaces at our King's Cross and Archway campuses.",
+        href: 'https://www.arts.ac.uk/students/welcome/your-journey-to-UAL/get-connected',
+      },
+    ],
+  },
+  study: {
+    cards: [
+      {
+        title: 'Academic support',
+        body: 'Academic Support at UAL for all students.',
+        href: 'https://www.arts.ac.uk/students/welcome/your-journey-to-UAL/get-support/skills',
+      },
+    ],
+  },
+  tech: {
+    cards: [
+      {
+        title: 'IT Services',
+        body: 'IT systems and support.',
+        href: 'https://www.arts.ac.uk/students/welcome/your-journey-to-UAL/get-connected',
+      },
+    ],
+  },
+  area: {
+    cards: [
+      {
+        title: "King's Cross guide",
+        body: 'Find listings of local shops, restaurants, parks, galleries and theatres, all within walking distance of Central Saint Martins.',
+        to: '/map',
+      },
+    ],
+  },
+};
+
+/**
+ * @param {{ section: { id: string, label: string } }} props
+ */
+function OptionalSection({ section }) {
+  const content = SECTION_CONTENT[section.id];
+  const sectionId = `dash-section-${section.id}`;
+  if (!content?.cards?.length) return null;
+
+  return (
+    <section className="flow" data-flow="s" aria-labelledby={sectionId}>
+      <h2 id={sectionId}>{section.label}</h2>
+      <div className="grid">
+        {content.cards.map((card) => (
+          <Card
+            key={card.title}
+            title={card.title}
+            to={card.to}
+            external={card.href}
+            body={<p>{card.body}</p>}
+          />
+        ))}
+      </div>
+    </section>
   );
 }

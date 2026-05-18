@@ -1,39 +1,63 @@
 'use client';
 
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 
 /**
- * Persist state in localStorage. SSR-safe and StrictMode-safe.
- * Silently falls back to in-memory if storage is unavailable (private mode, etc.).
+ * Persist state in localStorage. SSR-safe: always starts with `initial`
+ * so server and client first render match (no hydration mismatch).
+ * After mount, loads the real value from localStorage and sets hydrated=true.
+ * Updates write directly to localStorage via the setter.
+ *
+ * Returns [value, update, hydrated] — callers that gate on persisted data
+ * (e.g. redirect guards) should wait for hydrated=true before acting.
  *
  * @template T
  * @param {string} key
  * @param {T} initial
- * @returns {[T, (next: T | ((prev: T) => T)) => void]}
+ * @returns {[T, (next: T | ((prev: T) => T)) => void, boolean]}
  */
 export function usePersistedState(key, initial) {
-  const [value, setValue] = useState(() => {
-    if (typeof window === 'undefined') return initial;
-    try {
-      const raw = window.localStorage.getItem(key);
-      return raw === null ? initial : JSON.parse(raw);
-    } catch {
-      return initial;
-    }
-  });
+  const [value, setValue] = useState(initial);
+  const [hydrated, setHydrated] = useState(false);
+  // Track whether the post-mount read has completed so we never write
+  // the initial value back to storage before we've loaded the real one.
+  const hydratedRef = useRef(false);
 
   useEffect(() => {
-    if (typeof window === 'undefined') return;
+    let parsed = null;
     try {
-      window.localStorage.setItem(key, JSON.stringify(value));
+      const raw = window.localStorage.getItem(key);
+      if (raw !== null) parsed = JSON.parse(raw);
     } catch {
-      /* swallow: storage may be full or disabled */
+      /* storage unavailable or corrupt — keep initial */
     }
-  }, [key, value]);
 
-  const update = useCallback((next) => {
-    setValue((prev) => (typeof next === 'function' ? next(prev) : next));
-  }, []);
+    // Defer setState so it runs outside the effect body (avoids cascading renders).
+    queueMicrotask(() => {
+      if (parsed !== null) setValue(parsed);
+      hydratedRef.current = true;
+      setHydrated(true);
+    });
+  }, [key]);
 
-  return [value, update];
+  const update = useCallback(
+    (next) => {
+      setValue((prev) => {
+        const newVal = typeof next === 'function' ? next(prev) : next;
+        // Only write to storage after hydration to avoid overwriting
+        // existing data with the initial value on first render.
+        if (hydratedRef.current) {
+          try {
+            window.localStorage.setItem(key, JSON.stringify(newVal));
+          } catch {
+            /* swallow: storage may be full or disabled */
+          }
+        }
+        return newVal;
+      });
+    },
+    [key],
+  );
+
+  return [value, update, hydrated];
 }

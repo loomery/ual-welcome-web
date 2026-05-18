@@ -95,6 +95,9 @@ const securityHeaders = [
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
+  // Allow HMR WebSocket connections from local network devices (phones,
+  // tablets, other machines on the same LAN) during development.
+  allowedDevOrigins: ['192.168.0.167'],
   async headers() {
     return [
       {

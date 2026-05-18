@@ -7,6 +7,23 @@ import { Button } from '../../components/Button/Button';
 import { directionsUrl } from '../../utils/directions';
 import { ArrowRightIcon, CloseIcon } from '../../components/Icon/NavIcons';
 
+/** @param {import('../../data/buildings').Building} b */
+function citymapperUrl(b) {
+  // Citymapper web URL — endcoord must use a literal comma (not %2C).
+  // Build manually to avoid URLSearchParams encoding the comma.
+  if (b.geo) {
+    return `https://citymapper.com/directions?endcoord=${b.geo.lat},${b.geo.lng}&endname=${encodeURIComponent(b.name)}`;
+  }
+  return `https://citymapper.com/directions?endaddress=${encodeURIComponent(b.address)}`;
+}
+
+/** @param {import('../../data/buildings').Building} b */
+function appleMapsUrl(b) {
+  return b.geo
+    ? `https://maps.apple.com/?ll=${b.geo.lat},${b.geo.lng}&q=${encodeURIComponent(b.name)}`
+    : `https://maps.apple.com/?q=${encodeURIComponent(b.address)}`;
+}
+
 // next/dynamic with ssr: false ensures three.js + canvas-only code
 // never runs on the server. Same effect as React.lazy in the Vite app
 // but Next-aware, so the server bundle stays clean.
@@ -52,11 +69,8 @@ export function MapScreen() {
   return (
     <article className="prose has-lead flow" data-flow="l">
       <div className="flow" data-flow="s">
-        <h1>Campus map</h1>
-        <p className="standfirst">
-          UAL is made up of six colleges spread across London. Tap any building below or in the 3D
-          view — you can grab directions to each college.
-        </p>
+        <h1>Find your campus</h1>
+        <p className="standfirst">Key services, buildings, and where to go on your first day.</p>
       </div>
 
       <div className="cluster">
@@ -180,16 +194,107 @@ export function MapScreen() {
                     <div
                       id={`building-detail-${b.id}`}
                       className="building-item__detail flow"
-                      data-flow="s"
+                      data-flow="m"
                     >
-                      <p>{b.description}</p>
+                      {/* Location */}
+                      <section className="flow" data-flow="2xs" aria-label="Location">
+                        <h3 className="mb-2xs text-step-0 font-ual-bold">Location</h3>
+                        <p className="font-ual-bold">{b.name}</p>
+                        <p className="text-step-d1 text-ual-medium">{b.address}</p>
+                        <div className="cluster" data-justify="flex-start">
+                          <a
+                            href={citymapperUrl(b)}
+                            target="_blank"
+                            rel="noreferrer"
+                            className="inline-flex items-center border-2 border-ual-dark bg-ual-light px-s py-2xs text-step-d1 font-ual-bold text-ual-dark no-underline transition-colors hover:bg-ual-dark hover:text-ual-light focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ual-orange"
+                          >
+                            Citymapper
+                          </a>
+                          <a
+                            href={directionsUrl(b)}
+                            target="_blank"
+                            rel="noreferrer"
+                            className="inline-flex items-center border-2 border-ual-dark bg-ual-light px-s py-2xs text-step-d1 font-ual-bold text-ual-dark no-underline transition-colors hover:bg-ual-dark hover:text-ual-light focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ual-orange"
+                          >
+                            Google Maps
+                          </a>
+                          <a
+                            href={appleMapsUrl(b)}
+                            target="_blank"
+                            rel="noreferrer"
+                            className="inline-flex items-center border-2 border-ual-dark bg-ual-light px-s py-2xs text-step-d1 font-ual-bold text-ual-dark no-underline transition-colors hover:bg-ual-dark hover:text-ual-light focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ual-orange"
+                          >
+                            Apple Maps
+                          </a>
+                        </div>
+                      </section>
+
+                      {/* Transport */}
+                      {b.transport && (
+                        <section className="flow" data-flow="s" aria-label="Transport">
+                          <h3 className="mb-2xs text-step-0 font-ual-bold">Transport</h3>
+                          <div className="grid grid-cols-2 gap-m">
+                            <div>
+                              <p className="mb-2xs text-step-d1 font-ual-bold text-ual-medium">
+                                Closest stations
+                              </p>
+                              <table className="map-transport-table w-full border-collapse">
+                                <tbody>
+                                  {b.transport.stations.map((s) => (
+                                    <tr key={s.name}>
+                                      <td>{s.name}</td>
+                                      <td className="text-right text-ual-medium">{s.walk}</td>
+                                    </tr>
+                                  ))}
+                                </tbody>
+                              </table>
+                            </div>
+                            <div>
+                              <p className="mb-2xs text-step-d1 font-ual-bold text-ual-medium">
+                                Closest buses
+                              </p>
+                              <table className="map-transport-table w-full border-collapse">
+                                <tbody>
+                                  {b.transport.buses.slice(0, 4).map((bus) => (
+                                    <tr key={bus.name}>
+                                      <td>{bus.name}</td>
+                                      <td className="text-right text-ual-medium">{bus.walk}</td>
+                                    </tr>
+                                  ))}
+                                </tbody>
+                              </table>
+                            </div>
+                          </div>
+                        </section>
+                      )}
+
+                      {/* Accessibility */}
+                      {b.transport?.accessibilityNote && (
+                        <section className="flow" data-flow="2xs" aria-label="Accessibility">
+                          <h3 className="mb-2xs text-step-0 font-ual-bold">Accessibility</h3>
+                          <p className="text-step-d1">
+                            {b.transport.accessibilityNote.replace('on AccessAble', '')}{' '}
+                            <a
+                              href={b.transport.accessibilityUrl}
+                              target="_blank"
+                              rel="noreferrer"
+                              className="text-ual-orange"
+                            >
+                              AccessAble
+                            </a>
+                            .
+                          </p>
+                        </section>
+                      )}
+
+                      {/* CTA */}
                       <a
                         className="button"
-                        href={directionsUrl(b)}
+                        href={`https://www.arts.ac.uk/colleges/${b.name.toLowerCase().replace(/\s+/g, '-')}`}
                         target="_blank"
                         rel="noreferrer"
                       >
-                        Directions
+                        View more on accessing campus
                         <ArrowRightIcon aria-hidden="true" />
                       </a>
                     </div>
@@ -204,6 +309,12 @@ export function MapScreen() {
       <div className="visually-hidden" role="status" aria-live="polite" aria-atomic="true">
         {selected ? `Selected ${selected.name}` : ''}
       </div>
+
+      {/* Only irreducible CSS: table cell selectors */}
+      <style>{`
+        .map-transport-table td { padding: var(--space-3xs) 0; border-block-end: 1px solid var(--color-dark--tint-90); font-size: var(--step--1); }
+        .map-transport-table td:last-child { text-align: right; color: var(--color-medium); }
+      `}</style>
     </article>
   );
 }

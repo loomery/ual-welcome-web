@@ -1,95 +1,161 @@
 /**
- * Priority checklist content. Six actionable items derived from the UAL
- * content brief — each maps 1:1 to a sticky note from the priority board.
+ * Essential tasks for new UAL students.
  *
- * Content notes:
- *  - Copy is paraphrased from arts.ac.uk for brevity. The CTA is the
- *    canonical, link-rotted-proof entry point on arts.ac.uk so when UAL
- *    moves their CMS, only `cta.href` needs touching.
- *  - `dependsOn` answers Dan Sweeting's question on the brief: the arrows
- *    are sequential dependencies, NOT nesting. Both items remain
- *    standalone and individually checkable, but the dependent one shows
- *    a "Complete X first" hint when its parent is unchecked. Power users
- *    can still tick out of order if they know what they're doing.
- *  - Categories mirror the natural flow: get yourself set up, then get
- *    learning. Two buckets keep the UI scannable on a phone.
+ * Data model:
  *
- * @typedef {'Set up' | 'Get learning'} ChecklistCategory
+ * Task
+ *  ├─ id              string — used as URL slug (/checklist/[id])
+ *  ├─ title           string
+ *  ├─ tag             'essential'
+ *  ├─ shortDescription  shown in the task list card
+ *  ├─ sections[]      rich content blocks on the detail page
+ *  ├─ steps[]         optional sub-tasks with individual completion tracking
+ *  └─ cta             { label, href } — primary action button on detail page
  *
- * @typedef {Object} ChecklistCta
- * @property {string} label   Visible link text.
- * @property {string} href    Absolute external URL (https only).
+ * Progress is tracked separately in localStorage:
+ *   'ual:task:status:v1'  →  Record<taskId, 'not-started'|'in-progress'|'complete'>
+ *   'ual:task:steps:v1'   →  Record<taskId, Record<stepId, boolean>>
  *
- * @typedef {Object} ChecklistItem
+ * @typedef {'essential'} TaskTag
+ * @typedef {'not-started'|'in-progress'|'complete'} TaskStatus
+ *
+ * @typedef {Object} ContentSection
+ * @property {string} title
+ * @property {string} [body]
+ * @property {'text'|'accordion'} [type]
+ * @property {string[]} [items]
+ *
+ * @typedef {Object} Step
  * @property {string} id
  * @property {string} title
- * @property {string} body            One-or-two-sentence explanation.
- * @property {ChecklistCta} cta       External link to the canonical UAL page.
- * @property {ChecklistCategory} category
- * @property {string} [dependsOn]     Optional id of an item that should be done first.
+ * @property {string} [href]
+ * @property {string[]} [details]
+ *
+ * @typedef {Object} Cta
+ * @property {string} label
+ * @property {string} href
+ *
+ * @typedef {Object} Task
+ * @property {string} id
+ * @property {string} title
+ * @property {TaskTag} tag
+ * @property {string} shortDescription
+ * @property {ContentSection[]} [sections]
+ * @property {Step[]} [steps]
+ * @property {Cta} cta
  */
 
-/** @type {ChecklistItem[]} */
-export const CHECKLIST_ITEMS = [
+/** @type {Task[]} */
+export const TASKS = [
   {
-    id: 'enrol',
-    title: 'Are you enrolled?',
-    body: 'You must enrol each year to join or continue your course. Complete your online registration to get started.',
+    id: 'ual-email',
+    title: 'Access your UAL email',
+    tag: 'essential',
+    shortDescription: 'This email is needed to enrol and get setup on all available UAL services.',
+    sections: [
+      {
+        title: 'What your UAL email is for',
+        body: 'This email is needed to enrol and get setup on all available UAL services. You will use it to receive important communications from UAL throughout your studies.',
+        type: 'text',
+      },
+      {
+        title: 'How to access your UAL email',
+        body: 'You\'ll be sent an email labelled "[email]" containing your network username and a link asking you to set a password 72 hours after official acceptance and within 10 weeks of your course start date.',
+        type: 'text',
+      },
+      {
+        title: 'Contact IT services for help',
+        type: 'accordion',
+        items: ['Email: servicedesk@arts.ac.uk', 'Phone number: +44 (0)20 7514 9898'],
+      },
+    ],
     cta: {
-      label: 'Complete your online registration',
-      href: 'https://www.arts.ac.uk/study-at-ual/how-to-enrol',
-    },
-    category: 'Set up',
-  },
-  {
-    id: 'id-card',
-    title: 'Get your ID card',
-    body: "Once you're enrolled, collect your student ID. Use it to access all UAL buildings and facilities.",
-    cta: {
-      label: 'Collect your student ID',
-      href: 'https://www.arts.ac.uk/study-at-ual/how-to-enrol/student-id-card-collection',
-    },
-    category: 'Set up',
-    dependsOn: 'enrol',
-  },
-  {
-    id: 'it-account',
-    title: 'Set up your IT account and email',
-    body: 'Activate your UAL email and university IT account. Need help? IT support is on the same page.',
-    cta: {
-      label: 'IT set up and support',
+      label: 'Go to enrolment email',
       href: 'https://www.arts.ac.uk/students/welcome/your-journey-to-UAL/get-connected',
     },
-    category: 'Set up',
   },
   {
-    id: 'timetable',
-    title: 'Get your timetable',
-    body: 'Find out when and where your classes happen so you can plan your first week.',
+    id: 'enrol',
+    title: 'Enrol at UAL',
+    tag: 'essential',
+    shortDescription: 'Register as an official UAL student.',
+    steps: [
+      {
+        id: 'portal-login',
+        title: 'Log in to your UAL Portal',
+        href: 'https://www.arts.ac.uk/study-at-ual/how-to-enrol',
+      },
+      {
+        id: 'enrolment-form',
+        title: 'Complete the online enrolment form',
+        details: [
+          'Add your student number. Find in the portal.',
+          "Upload copies of: Passport (Birth certificate if you don't have a passport) and Academic qualifications.",
+          'Confirm tuition payment/funding.',
+          'Upload a passport-sized photo for your student ID card.',
+        ],
+      },
+      {
+        id: 'confirmation',
+        title: 'Await your confirmation email',
+      },
+    ],
     cta: {
-      label: 'Get ready for your timetable',
-      href: 'https://www.arts.ac.uk/students/student-timetables',
+      label: 'Go to enrolment portal',
+      href: 'https://www.arts.ac.uk/study-at-ual/how-to-enrol',
     },
-    category: 'Get learning',
   },
   {
-    id: 'libraries',
-    title: 'Explore the Libraries',
-    body: 'Six specialist libraries across UAL. Borrow books, book study spaces, and access digital collections.',
+    id: 'student-id',
+    title: 'Collect your student ID',
+    tag: 'essential',
+    shortDescription:
+      'Get your ID card to access our college and institute buildings and facilities.',
+    sections: [
+      {
+        title: 'What your student ID is for',
+        body: "Your student ID card gives you access to all UAL buildings, libraries, and facilities. You'll also need it to prove your student status for discounts and services.",
+        type: 'text',
+      },
+      {
+        title: 'How to collect your card',
+        body: "Your card will be ready to collect from your college's main reception once you have completed enrolment. Bring a form of photo ID when you collect it.",
+        type: 'text',
+      },
+    ],
     cta: {
-      label: 'Library Services',
-      href: 'https://www.arts.ac.uk/students/welcome/your-journey-to-UAL/get-support/skills',
+      label: 'Student ID card info',
+      href: 'https://www.arts.ac.uk/study-at-ual/how-to-enrol/student-id-card-collection',
     },
-    category: 'Get learning',
   },
   {
-    id: 'moodle',
-    title: 'How do I access Moodle?',
-    body: 'Moodle is where your course materials, lecture recordings and assignments live.',
+    id: 'activate-accounts',
+    title: 'Activate your UAL accounts',
+    tag: 'essential',
+    shortDescription: 'The accounts you need to do setup for term.',
+    sections: [
+      {
+        title: 'What you need to activate',
+        body: 'Once you have your UAL email, you can activate your full suite of UAL digital accounts — including Moodle (your virtual learning environment), Microsoft 365, and library access.',
+        type: 'text',
+      },
+      {
+        title: 'How to activate',
+        body: 'Log in to the UAL IT portal using your UAL email and the password you set up. From there you can activate all connected services. Allow up to 24 hours for all services to become available.',
+        type: 'text',
+      },
+      {
+        title: 'Need help?',
+        type: 'accordion',
+        items: ['Email: servicedesk@arts.ac.uk', 'Phone number: +44 (0)20 7514 9898'],
+      },
+    ],
     cta: {
-      label: 'Get started on Moodle',
-      href: 'https://www.arts.ac.uk/students/get-started-on-moodle',
+      label: 'Go to IT setup',
+      href: 'https://www.arts.ac.uk/students/welcome/your-journey-to-UAL/get-connected',
     },
-    category: 'Get learning',
   },
 ];
+
+/** Convenience lookup by id */
+export const TASKS_BY_ID = Object.fromEntries(TASKS.map((t) => [t.id, t]));

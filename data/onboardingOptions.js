@@ -3,8 +3,8 @@
  * dataset for college choice, but keeps the option-set decoupled from
  * the 3D scene config (different concerns).
  *
- * @typedef {'undergraduate' | 'postgraduate-taught' | 'postgraduate-research' | 'short-course'} StudyLevel
- * @typedef {'new' | 'returning'} StudentType
+ * @typedef {'undergraduate' | 'postgraduate' | 'pre-degree' | 'short-course'} StudyLevel
+ * @typedef {'1st' | '2nd' | 'placement' | '3rd'} Year
  *
  * @typedef {Object} CollegeOption
  * @property {string} id        Matches data/buildings.js → Building.id
@@ -16,6 +16,11 @@
  * @property {StudyLevel} id
  * @property {string} label
  * @property {string} hint      Single-line clarifier shown under the label
+ *
+ * @typedef {Object} YearOption
+ * @property {Year} id
+ * @property {string} label
+ * @property {string} hint
  *
  * @typedef {Object} InterestOption
  * @property {string} id
@@ -37,35 +42,47 @@ export const COLLEGE_OPTIONS = [
   { id: 'camberwell', name: 'Camberwell College of Arts', short: 'Camberwell', area: 'Peckham' },
   { id: 'chelsea', name: 'Chelsea College of Arts', short: 'Chelsea', area: 'Pimlico' },
   { id: 'wimbledon', name: 'Wimbledon College of Arts', short: 'Wimbledon', area: 'Wimbledon' },
-];
-
-/** @type {{ id: StudentType, label: string, hint: string }[]} */
-export const STUDENT_TYPE_OPTIONS = [
   {
-    id: 'new',
-    label: 'New to UAL',
-    hint: 'First time joining — full induction tailored for you.',
+    id: 'cci',
+    name: 'Creative Computing Institute',
+    short: 'CCI',
+    area: 'Barbican',
   },
   {
-    id: 'returning',
-    label: 'Returning student',
-    hint: 'Year 2+ — quick refresh of what changed this year.',
+    id: 'dai',
+    name: 'Decolonising Arts Institute',
+    short: 'DAI',
+    area: 'London',
+  },
+  {
+    id: 'ftti',
+    name: 'Fashion Textiles and Technology Institute',
+    short: 'FTTI',
+    area: 'East Bank, Stratford',
   },
 ];
 
 /** @type {StudyLevelOption[]} */
 export const STUDY_LEVEL_OPTIONS = [
   { id: 'undergraduate', label: 'Undergraduate', hint: 'BA, BSc, foundation' },
-  { id: 'postgraduate-taught', label: 'Postgraduate taught', hint: 'MA, MSc, MArch' },
-  { id: 'postgraduate-research', label: 'Postgraduate research', hint: 'MPhil, PhD' },
+  { id: 'postgraduate', label: 'Postgraduate', hint: 'MA, MSc, MArch, MPhil, PhD' },
+  { id: 'pre-degree', label: 'Pre-degree', hint: 'Foundation, access or diploma' },
   { id: 'short-course', label: 'Short course', hint: 'A few weeks to a term' },
+];
+
+/** @type {YearOption[]} */
+export const YEAR_OPTIONS = [
+  { id: '1st', label: '1st year', hint: 'Just starting your course' },
+  { id: '2nd', label: '2nd year', hint: 'Continuing your studies' },
+  { id: 'placement', label: 'Placement year', hint: 'Industry placement' },
+  { id: '3rd', label: '3rd year', hint: 'Final year or beyond' },
 ];
 
 /** @type {InterestOption[]} */
 export const INTEREST_OPTIONS = [
   {
     id: 'social',
-    label: 'Meeting people',
+    label: 'Social',
     body: 'Socials, clubs, the SU.',
     emoji: '🎉',
   },
@@ -89,9 +106,15 @@ export const INTEREST_OPTIONS = [
   },
   {
     id: 'career',
-    label: 'Career & opportunities',
+    label: 'Jobs & opportunities',
     body: 'Talks, mentoring, industry links.',
     emoji: '💼',
+  },
+  {
+    id: 'area',
+    label: 'Area guide',
+    body: 'Travel information, campus map and discounts.',
+    emoji: '🗺️',
   },
   {
     id: 'tech',
@@ -113,6 +136,7 @@ export const INTEREST_TO_EVENT_CATEGORIES = {
   study: ['Talk', 'Tour'],
   wellbeing: ['Talk'],
   career: ['Talk'],
+  area: ['Tour'],
   tech: ['Talk', 'Workshop'],
 };
 

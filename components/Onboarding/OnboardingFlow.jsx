@@ -6,13 +6,13 @@ import { Button } from '../Button/Button';
 import { INTEREST_ICONS } from '../Icon/InterestIcons';
 import {
   COLLEGE_OPTIONS,
-  STUDENT_TYPE_OPTIONS,
   STUDY_LEVEL_OPTIONS,
+  YEAR_OPTIONS,
   INTEREST_OPTIONS,
 } from '../../data/onboardingOptions';
 import { useOnboardingProfile } from '../../hooks/useOnboardingProfile';
 
-const STEPS = ['intro', 'name', 'college', 'studentType', 'studyLevel', 'interests', 'finish'];
+const STEPS = ['intro', 'name', 'college', 'studyLevel', 'year', 'interests', 'finish'];
 
 /**
  * Multi-step onboarding flow.
@@ -39,8 +39,8 @@ export function OnboardingFlow() {
   const [draft, setDraft] = useState(() => ({
     name: profile?.name ?? '',
     collegeId: profile?.collegeId ?? '',
-    studentType: profile?.studentType ?? '',
     studyLevel: profile?.studyLevel ?? '',
+    year: profile?.year ?? '',
     interests: profile?.interests ?? [],
   }));
 
@@ -59,10 +59,10 @@ export function OnboardingFlow() {
         return draft.name.trim().length >= 1;
       case 'college':
         return Boolean(draft.collegeId);
-      case 'studentType':
-        return Boolean(draft.studentType);
       case 'studyLevel':
         return Boolean(draft.studyLevel);
+      case 'year':
+        return Boolean(draft.year);
       case 'interests':
         return true;
       case 'finish':
@@ -77,7 +77,7 @@ export function OnboardingFlow() {
     patch(stepSlice(stepId, draft));
     if (isLast) {
       commit();
-      router.push('/dashboard');
+      router.push('/');
       return;
     }
     setDirection('forward');
@@ -93,7 +93,7 @@ export function OnboardingFlow() {
   function handleSkip() {
     patch(stepSlice(stepId, draft));
     commit();
-    router.push('/dashboard');
+    router.push('/');
   }
 
   function handleStartOver() {
@@ -101,8 +101,8 @@ export function OnboardingFlow() {
     setDraft({
       name: '',
       collegeId: '',
-      studentType: '',
       studyLevel: '',
+      year: '',
       interests: [],
     });
     setStepIndex(0);
@@ -180,7 +180,7 @@ export function OnboardingFlow() {
               <IntroStep
                 headingRef={headingRef}
                 hasExistingProfile={Boolean(profile?.completedAt)}
-                onResume={() => router.push('/dashboard')}
+                onResume={() => router.push('/')}
                 onStartOver={handleStartOver}
               />
             )}
@@ -199,18 +199,18 @@ export function OnboardingFlow() {
                 onChange={(v) => setDraft((d) => ({ ...d, collegeId: v }))}
               />
             )}
-            {stepId === 'studentType' && (
-              <StudentTypeStep
-                headingRef={headingRef}
-                value={draft.studentType}
-                onChange={(v) => setDraft((d) => ({ ...d, studentType: v }))}
-              />
-            )}
             {stepId === 'studyLevel' && (
               <StudyLevelStep
                 headingRef={headingRef}
                 value={draft.studyLevel}
                 onChange={(v) => setDraft((d) => ({ ...d, studyLevel: v }))}
+              />
+            )}
+            {stepId === 'year' && (
+              <YearStep
+                headingRef={headingRef}
+                value={draft.year}
+                onChange={(v) => setDraft((d) => ({ ...d, year: v }))}
               />
             )}
             {stepId === 'interests' && (
@@ -227,7 +227,13 @@ export function OnboardingFlow() {
         {/* Action bar — DS .button */}
         <div className="onboarding-flow__actions">
           <Button onClick={goNext} disabled={!canAdvance}>
-            {stepId === 'intro' ? 'Get started' : isLast ? 'Open my hub' : 'Continue'}
+            {stepId === 'intro'
+              ? 'Get started'
+              : isLast
+                ? 'Open my hub'
+                : stepId === 'interests'
+                  ? "Let's go"
+                  : 'Continue'}
           </Button>
           {stepId === 'intro' && (
             <Button ghost onClick={handleSkip}>
@@ -515,10 +521,10 @@ function stepSlice(stepId, draft) {
       return { name: draft.name.trim() };
     case 'college':
       return { collegeId: draft.collegeId };
-    case 'studentType':
-      return { studentType: draft.studentType };
     case 'studyLevel':
       return { studyLevel: draft.studyLevel };
+    case 'year':
+      return { year: draft.year };
     case 'interests':
       return { interests: draft.interests };
     default:
@@ -543,14 +549,57 @@ function StepHeader({ headingRef, eyebrow, title, body }) {
 function IntroStep({ headingRef, hasExistingProfile, onResume, onStartOver }) {
   return (
     <div className="flow" data-flow="m">
-      <p className="onboarding-eyebrow">Personalised hub</p>
+      <p style={{ fontSize: 'var(--step--1)', color: 'var(--color-medium)' }}>Takes 2 minutes</p>
       <h1 ref={headingRef} tabIndex={-1} style={{ outline: 'none' }}>
-        Let&apos;s set up your hub.
+        Let&apos;s get you ready for term
       </h1>
-      <p className="standfirst">
-        Four quick questions and we&apos;ll personalise your Welcome Week — your college, your
-        events, your checklist.
-      </p>
+      <p className="standfirst">Everything you need to access before term in one place</p>
+
+      <ul
+        style={{
+          listStyle: 'none',
+          margin: 0,
+          padding: 0,
+          display: 'flex',
+          flexDirection: 'column',
+          gap: 'var(--space-s)',
+          paddingBlockStart: 'var(--space-xs)',
+        }}
+        aria-label="What you'll get"
+      >
+        {[
+          'View what you need to do to prep for your first week',
+          'See upcoming social and creative events happening at the campuses',
+          'Find key info, support and services for your college',
+        ].map((item) => (
+          <li
+            key={item}
+            style={{ display: 'flex', gap: 'var(--space-s)', alignItems: 'flex-start' }}
+          >
+            <svg
+              viewBox="0 0 20 20"
+              fill="none"
+              aria-hidden="true"
+              style={{
+                flexShrink: 0,
+                marginBlockStart: '2px',
+                width: '1.25rem',
+                height: '1.25rem',
+              }}
+            >
+              <circle cx="10" cy="10" r="9" fill="var(--color-orange)" />
+              <path
+                d="M6 10l3 3 5-5"
+                stroke="#fff"
+                strokeWidth="1.6"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
+            <span style={{ fontSize: 'var(--step-0)' }}>{item}</span>
+          </li>
+        ))}
+      </ul>
 
       {hasExistingProfile && (
         <div
@@ -582,9 +631,8 @@ function NameStep({ headingRef, value, onChange, onSubmit }) {
     <div className="flow" data-flow="m">
       <StepHeader
         headingRef={headingRef}
-        eyebrow="About you"
         title="What should we call you?"
-        body="We'll use it to greet you on your hub. First name is fine."
+        body="We'll use it to greet you"
       />
 
       <form
@@ -615,12 +663,7 @@ function NameStep({ headingRef, value, onChange, onSubmit }) {
 function CollegeStep({ headingRef, value, onChange }) {
   return (
     <div className="flow" data-flow="m">
-      <StepHeader
-        headingRef={headingRef}
-        eyebrow="Question 1 of 4"
-        title="Which college are you joining?"
-        body="We'll show events and study spaces for your campus first."
-      />
+      <StepHeader headingRef={headingRef} title="Which college/institute are you joining?" />
       <ul
         className="onboarding-grid onboarding-grid--two"
         role="radiogroup"
@@ -643,22 +686,20 @@ function CollegeStep({ headingRef, value, onChange }) {
   );
 }
 
-function StudentTypeStep({ headingRef, value, onChange }) {
+function StudyLevelStep({ headingRef, value, onChange }) {
   return (
     <div className="flow" data-flow="m">
       <StepHeader
         headingRef={headingRef}
-        eyebrow="Question 2 of 4"
-        title="Are you new to UAL or returning?"
-        body="If you're returning, we'll skip the basics and focus on what's new."
+        title="What level of higher education are you entering?"
       />
       <ul
         className="onboarding-grid onboarding-grid--two"
         role="radiogroup"
-        aria-label="Choose new or returning"
+        aria-label="Choose your study level"
         style={{ listStyle: 'none', margin: 0, padding: 0 }}
       >
-        {STUDENT_TYPE_OPTIONS.map((opt) => (
+        {STUDY_LEVEL_OPTIONS.map((opt) => (
           <li key={opt.id}>
             <Tile
               role="radio"
@@ -674,22 +715,17 @@ function StudentTypeStep({ headingRef, value, onChange }) {
   );
 }
 
-function StudyLevelStep({ headingRef, value, onChange }) {
+function YearStep({ headingRef, value, onChange }) {
   return (
     <div className="flow" data-flow="m">
-      <StepHeader
-        headingRef={headingRef}
-        eyebrow="Question 3 of 4"
-        title="What are you studying?"
-        body="We'll match the checklist to your level — different essentials apply."
-      />
+      <StepHeader headingRef={headingRef} title="What year are you in?" />
       <ul
         className="onboarding-grid onboarding-grid--two"
         role="radiogroup"
-        aria-label="Choose your study level"
+        aria-label="Choose your year"
         style={{ listStyle: 'none', margin: 0, padding: 0 }}
       >
-        {STUDY_LEVEL_OPTIONS.map((opt) => (
+        {YEAR_OPTIONS.map((opt) => (
           <li key={opt.id}>
             <Tile
               role="radio"
@@ -715,9 +751,8 @@ function InterestsStep({ headingRef, value, onChange }) {
     <div className="flow" data-flow="m">
       <StepHeader
         headingRef={headingRef}
-        eyebrow="Question 4 of 4"
-        title="What are you most into?"
-        body="Pick as many as you like — or none. We'll surface things that match."
+        title="Choose your focus"
+        body="Pick as many as you like, or none. We'll surface things that match."
       />
       <ul
         className="onboarding-grid onboarding-grid--three"

@@ -3,10 +3,21 @@
  * the priority-content brief. Distinct from CHECKLIST_ITEMS because
  * these aren't tasks to complete, they're references to revisit.
  *
+ * Items can optionally carry an `eyebrow` (small label rendered above the
+ * title — e.g. "Autumn term" for the dated term card) and a `dates` block.
+ * When `dates` is present the dashboard renders the formatted date range
+ * as the card body instead of (or alongside) `body`.
+ *
+ * @typedef {Object} UsefulInfoDates
+ * @property {string} startsAt  ISO 8601 timestamp
+ * @property {string} endsAt    ISO 8601 timestamp
+ *
  * @typedef {Object} UsefulInfoItem
  * @property {string} id
  * @property {string} title
- * @property {string} body
+ * @property {string} [eyebrow]
+ * @property {string} [body]
+ * @property {UsefulInfoDates} [dates]
  * @property {string} ctaLabel
  * @property {string} href
  */
@@ -15,9 +26,13 @@
 export const USEFUL_INFO = [
   {
     id: 'term-dates',
+    eyebrow: 'Autumn term',
     title: 'UAL term dates',
-    body: 'Standard term dates for the academic year. Always check with your course team — some courses run on different dates.',
-    ctaLabel: 'View term dates',
+    dates: {
+      startsAt: '2025-09-29',
+      endsAt: '2025-12-12',
+    },
+    ctaLabel: 'View all term dates',
     href: 'https://www.arts.ac.uk/students/term-dates',
   },
   {

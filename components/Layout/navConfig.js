@@ -1,8 +1,9 @@
-import { HomeIcon, ChecklistIcon, MapIcon, CalendarIcon } from '../Icon/NavIcons';
+import { HomeIcon, ChecklistIcon, MapIcon, CalendarIcon, SupportIcon } from '../Icon/NavIcons';
 
 /**
  * @typedef {Object} NavItem
- * @property {string} to
+ * @property {string} to          Internal route (use this OR href, not both)
+ * @property {string} [href]      External URL — renders as <a> with target=_blank
  * @property {string} label
  * @property {import('react').ComponentType<import('react').SVGProps<SVGSVGElement>>} Icon
  */
@@ -10,7 +11,8 @@ import { HomeIcon, ChecklistIcon, MapIcon, CalendarIcon } from '../Icon/NavIcons
 /** @type {NavItem[]} */
 export const NAV_ITEMS = [
   { to: '/', label: 'Home', Icon: HomeIcon },
-  { to: '/checklist', label: 'Checklist', Icon: ChecklistIcon },
-  { to: '/map', label: 'Map', Icon: MapIcon },
+  { to: '/checklist', label: 'Get Setup', Icon: ChecklistIcon },
   { to: '/events', label: 'Events', Icon: CalendarIcon },
+  { to: '/map', label: 'Map', Icon: MapIcon },
+  { to: '/help', label: 'Support', Icon: SupportIcon },
 ];
