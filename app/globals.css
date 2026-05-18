@@ -464,7 +464,15 @@ main:focus {
   outline-offset: 2px;
   position: fixed;
   top: var(--space-s);
-  z-index: 100;
+  /* Must be above the sidebar (z-index: 200) */
+  z-index: 300;
+}
+
+/* On desktop, offset the skip link so it appears after the sidebar */
+@media (min-width: 49.5rem) {
+  .skip-to-content:focus {
+    left: calc(var(--sidenav-width) + var(--space-s));
+  }
 }
 
 /* Standfirst / lede */
@@ -1138,14 +1146,22 @@ main:focus {
     display: none;
   }
 
-  /* Push main content right to clear the sidebar */
+  /* On desktop the sidebar is fixed; the main content fills the remaining
+     viewport width. Override .wrapper's margin-inline: auto and max-width —
+     those centre in the full viewport, leaving a large gap on the right.
+     padding-inline from .wrapper still provides gutters at both edges. */
   .app-shell__main {
     margin-inline-start: var(--sidenav-width);
+    margin-inline-end: 0;
+    max-width: calc(100vw - var(--sidenav-width));
+    width: calc(100vw - var(--sidenav-width));
   }
 
-  /* Footer also shifts right */
+  /* Footer follows the same rule */
   .app-footer {
     margin-inline-start: var(--sidenav-width);
+    margin-inline-end: 0;
+    max-width: calc(100vw - var(--sidenav-width));
   }
 }
 
@@ -1227,11 +1243,34 @@ main:focus {
 .side-nav__footer {
   padding: var(--space-s);
   border-block-start: 1px solid var(--color-dark--tint-90);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
 }
 
-.side-nav__college {
+/* College chip — short name + area on two lines */
+.side-nav__college-chip {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.side-nav__college-short {
+  font-size: var(--step--1);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-dark);
+}
+
+.side-nav__college-area {
   font-size: var(--step--1);
   color: var(--color-medium);
+}
+
+/* Footer actions row (theme toggle + any future icons) */
+.side-nav__footer-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
 }
 
 /* Leave space for the mobile bottom nav */
@@ -1252,7 +1291,8 @@ main:focus {
 body[data-onboarding] .header,
 body[data-onboarding] .app-footer,
 body[data-onboarding] .feedback-fab,
-body[data-onboarding] .bottom-nav {
+body[data-onboarding] .bottom-nav,
+body[data-onboarding] .side-nav {
   display: none;
 }
 /* Reset the global `main { margin-block-end }` in onboarding mode —
@@ -1263,7 +1303,10 @@ body[data-onboarding] main {
   margin-block-end: 0;
 }
 body[data-onboarding] .app-shell__main {
-  align-items: center;
+  /* Mobile: anchor the flow at the top so the heading isn't pushed down
+     into the middle of the viewport on tall phones — feels more like a
+     proper onboarding screen. Desktop overrides below restore centering. */
+  align-items: flex-start;
   display: flex;
   justify-content: center;
   /* Match body's min-height (100dvh) exactly so the two never disagree
@@ -1272,6 +1315,15 @@ body[data-onboarding] .app-shell__main {
   min-block-size: 100vh;
   min-block-size: 100dvh;
   padding-block: var(--space-m);
+}
+@media (min-width: 49.5rem) {
+  body[data-onboarding] .app-shell__main {
+    align-items: center;
+    margin-inline-start: 0;
+    margin-inline-end: 0;
+    max-width: 100vw;
+    width: auto;
+  }
 }
 
 @media (min-width: 49.5rem) {
@@ -1738,6 +1790,269 @@ ul.grid > li {
 /* Reel items must be flex containers so their card child stretches */
 .home-reel > [role='listitem'] {
   display: flex;
+}
+
+/* ---------- Personalised home — Key info card ----------
+   Used by components/Dashboard/KeyInfoCard.jsx for items rendered
+   in the "Key information" section (e.g. "Autumn term" dates). */
+.key-info-card__eyebrow {
+  color: var(--color-medium);
+  font-size: var(--step--1);
+  font-weight: var(--font-weight-bold);
+}
+
+.key-info-card__cta {
+  font-size: var(--step--1);
+  font-weight: var(--font-weight-bold);
+  text-decoration: underline;
+}
+
+/* ---------- Personalised home — "Your next step" black card ----------
+   Used by components/Dashboard/NextStepCard.jsx inside the Get setup
+   section. Inverts to light-on-dark in light mode and dark-on-light
+   in dark mode so it always reads as the strongest CTA on the page. */
+.next-step-card {
+  background: var(--color-dark);
+  border: 2px solid var(--color-dark);
+  color: var(--color-light);
+  padding: var(--space-m);
+}
+
+.next-step-card__eyebrow {
+  color: var(--color-light);
+  font-size: var(--step--1);
+  font-weight: var(--font-weight-bold);
+}
+
+.next-step-card__title {
+  color: var(--color-light);
+  font-size: var(--step-1);
+  letter-spacing: var(--letter-spacing-tight);
+  line-height: var(--line-height-condensed);
+}
+
+.next-step-card__body {
+  color: var(--color-dark--tint-90);
+}
+
+.next-step-card__ctas {
+  gap: var(--space-s);
+  margin-block-start: var(--space-xs);
+}
+
+.next-step-card__primary {
+  background: var(--color-light);
+  border-color: var(--color-light);
+  color: var(--color-dark);
+}
+
+.next-step-card__primary:hover,
+.next-step-card__primary:focus-visible {
+  background: var(--color-orange);
+  border-color: var(--color-orange);
+  color: var(--color-dark);
+}
+
+.next-step-card__secondary {
+  color: var(--color-light);
+  font-size: var(--step-0);
+  text-decoration: underline;
+}
+
+.next-step-card__secondary:hover,
+.next-step-card__secondary:focus-visible {
+  color: var(--color-orange);
+}
+
+/* ---------- Personalised home — view toggle pill ----------
+   Used by components/Dashboard/ViewToggle.jsx ("My focus" / "Everything"). */
+.dash-toggle {
+  border: 2px solid var(--color-dark);
+  display: inline-flex;
+  overflow: hidden;
+}
+
+.dash-toggle__btn {
+  background: var(--color-light);
+  border: 0;
+  color: var(--color-dark);
+  cursor: pointer;
+  font: inherit;
+  font-size: var(--step--1);
+  font-weight: var(--font-weight-bold);
+  padding: var(--space-2xs) var(--space-s);
+  transition:
+    background 0.12s,
+    color 0.12s;
+}
+
+.dash-toggle__btn + .dash-toggle__btn {
+  border-inline-start: 2px solid var(--color-dark);
+}
+
+.dash-toggle__btn[data-active] {
+  background: var(--color-dark);
+  color: var(--color-light);
+}
+
+.dash-toggle__btn:hover:not([data-active]) {
+  background: var(--color-shade);
+}
+
+.dash-toggle__btn:focus-visible {
+  outline: 2px solid var(--color-orange);
+  outline-offset: -2px;
+}
+
+/* ---------- Inline link-style button ----------
+   For inline reset / edit triggers that need to look like a link but
+   carry a click handler. Used by the dashboard's "Edit your answers"
+   and "update your interests" buttons. */
+.link-button {
+  background: transparent;
+  border: 0;
+  color: var(--color-dark);
+  cursor: pointer;
+  font: inherit;
+  padding: 0;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+.link-button:hover,
+.link-button:focus-visible {
+  color: var(--color-orange);
+}
+
+.link-button:focus-visible {
+  outline: 2px solid var(--color-orange);
+  outline-offset: 2px;
+}
+
+/* ---------- Login (prototype gate) ----------
+   Rendered by app/login/page.jsx. Standalone screen (no AppShell chrome),
+   centered, with the UAL wordmark stacked above a "Student Centre" label
+   per the brand brief.
+
+   Every layout class here uses explicit `display: flex; flex-direction:
+   column; gap:` — no reliance on the `.flow` utility — so spacing
+   renders consistently even though <label> is `display: inline` by
+   default and would otherwise let its children flow horizontally. */
+.login-page {
+  align-items: center;
+  background: var(--color-light);
+  color: var(--color-dark);
+  display: flex;
+  justify-content: center;
+  min-height: 100dvh;
+  padding: var(--space-l) var(--space-m);
+}
+
+.login-page__container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-l);
+  inline-size: 100%;
+  max-inline-size: 26rem;
+}
+
+.login-page__brand {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3xs);
+}
+
+.login-page__wordmark {
+  color: var(--color-medium);
+  font-family: var(--font-heading);
+  font-size: var(--step-0);
+  font-weight: var(--font-weight-bold);
+  letter-spacing: 0.04em;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.login-page__title {
+  font-size: var(--step-3);
+  font-weight: var(--font-weight-bold);
+  letter-spacing: var(--letter-spacing-tight);
+  line-height: var(--line-height-condensed);
+  margin: 0;
+}
+
+.login-page__lede {
+  color: var(--color-medium);
+  font-size: var(--step-0);
+  margin: 0;
+  max-inline-size: 36ch;
+}
+
+.login-page__form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-m);
+}
+
+.login-page__field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2xs);
+}
+
+.login-page__label {
+  font-size: var(--step--1);
+  font-weight: var(--font-weight-bold);
+}
+
+.login-page__input {
+  background: var(--color-light);
+  border: 2px solid var(--color-dark);
+  box-sizing: border-box;
+  color: var(--color-dark);
+  font: inherit;
+  font-size: var(--step-0);
+  inline-size: 100%;
+  min-height: 44px;
+  padding: var(--space-xs) var(--space-s);
+}
+
+.login-page__input:focus-visible {
+  outline: 2px solid var(--color-orange);
+  outline-offset: 2px;
+}
+
+.login-page__input[aria-invalid='true'] {
+  border-color: var(--color-utility-red);
+}
+
+.login-page__error {
+  color: var(--color-utility-red);
+  font-size: var(--step--1);
+  font-weight: var(--font-weight-bold);
+  margin: 0;
+}
+
+.login-page__submit {
+  align-self: flex-start;
+}
+
+[data-theme='dark'] .login-page {
+  background: var(--color-dark);
+  color: var(--color-light);
+}
+
+[data-theme='dark'] .login-page__wordmark {
+  color: var(--color-dark--tint-90);
+}
+
+[data-theme='dark'] .login-page__lede {
+  color: var(--color-dark--tint-90);
+}
+
+[data-theme='dark'] .login-page__input {
+  background: var(--color-dark--tint-95);
+  border-color: var(--color-light);
+  color: var(--color-light);
 }
 
 /* ---------- Checklist completion banner ---------- */
@@ -2512,6 +2827,37 @@ ul.grid > li {
 
 [data-theme='dark'] .home-hero__lede {
   color: var(--color-medium);
+}
+
+/* "Your next step" card — invert for dark mode so it stays high-contrast */
+[data-theme='dark'] .next-step-card {
+  background: var(--color-light);
+  border-color: var(--color-light);
+  color: var(--color-dark);
+}
+
+[data-theme='dark'] .next-step-card__eyebrow,
+[data-theme='dark'] .next-step-card__title {
+  color: var(--color-dark);
+}
+
+[data-theme='dark'] .next-step-card__body {
+  color: var(--color-medium);
+}
+
+[data-theme='dark'] .next-step-card__primary {
+  background: var(--color-dark);
+  border-color: var(--color-dark);
+  color: var(--color-light);
+}
+
+[data-theme='dark'] .next-step-card__secondary {
+  color: var(--color-dark);
+}
+
+/* Inline link-button — flip ink in dark mode */
+[data-theme='dark'] .link-button {
+  color: var(--color-light);
 }
 
 /* Event card — higher contrast background in dark mode */

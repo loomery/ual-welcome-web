@@ -1,29 +1,37 @@
 import Link from 'next/link';
 import { HELP_CATEGORIES } from '../../data/help';
 
-/**
- * Help & support categories list — "Get help and support".
- * Static — no client state needed.
- */
 export function HelpCategoriesScreen() {
   return (
-    <article className="prose has-lead flow help-categories" data-flow="l">
-      <h1>Get help and support</h1>
-      <p>Not sure who to contact? Find the right team or service below.</p>
+    <article className="flow" data-flow="l">
+      <div className="flow" data-flow="s">
+        <h1>Get help and support</h1>
+        <p>Not sure who to contact? Find the right team or service below.</p>
+      </div>
 
-      <ul className="help-cat-list" role="list">
-        {HELP_CATEGORIES.map((cat) => (
-          <li key={cat.id}>
-            <Link href={`/help/${cat.id}`} className="help-cat-row">
-              <span className="help-cat-row__body">
-                <span className="help-cat-row__title">{cat.title}</span>
-                <span className="help-cat-row__desc">{cat.shortDescription}</span>
+      <ul
+        role="list"
+        className="border-2 border-ual-dark-90"
+        style={{ listStyle: 'none', margin: 0, padding: 0 }}
+      >
+        {HELP_CATEGORIES.map((cat, i) => (
+          <li key={cat.id} className={i > 0 ? 'border-t border-ual-dark-90' : ''}>
+            <Link
+              href={`/help/${cat.id}`}
+              className="flex min-h-14 items-center gap-s bg-ual-light px-s py-xs text-ual-dark no-underline transition-colors hover:bg-ual-shade focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-ual-orange"
+            >
+              <span className="flex min-w-0 grow flex-col" style={{ gap: '2px' }}>
+                <span className="text-step-0 font-ual-bold">{cat.title}</span>
+                <span className="text-step-d1/ual-condensed text-ual-medium">
+                  {cat.shortDescription}
+                </span>
               </span>
+
               <svg
-                className="help-cat-row__chevron"
                 viewBox="0 0 24 24"
                 fill="none"
                 aria-hidden="true"
+                className="shrink-0 text-ual-medium"
                 width="16"
                 height="16"
               >
@@ -39,63 +47,6 @@ export function HelpCategoriesScreen() {
           </li>
         ))}
       </ul>
-
-      <style>{`
-        .help-categories.prose.has-lead > h1 + p {
-          margin-block-start: var(--space-s);
-          margin-block-end: var(--space-xl);
-        }
-
-        .help-cat-list {
-          list-style: none;
-          margin: 0;
-          padding: 0;
-          border: 2px solid var(--color-dark--tint-90);
-        }
-        .help-cat-list li + li {
-          border-block-start: 1px solid var(--color-dark--tint-90);
-        }
-
-        .help-cat-row {
-          display: flex;
-          align-items: center;
-          gap: var(--space-s);
-          padding: var(--space-xs) var(--space-s);
-          background: var(--color-light);
-          color: var(--color-dark);
-          text-decoration: none;
-          transition: background 0.1s;
-          min-block-size: 3.5rem;
-        }
-        .help-cat-row:hover {
-          background: var(--color-shade);
-        }
-        .help-cat-row:focus-visible {
-          outline: 2px solid var(--color-orange);
-          outline-offset: -2px;
-        }
-
-        .help-cat-row__body {
-          flex-grow: 1;
-          min-inline-size: 0;
-          display: flex;
-          flex-direction: column;
-          gap: 2px;
-        }
-        .help-cat-row__title {
-          font-weight: var(--font-weight-bold);
-          font-size: var(--step-0);
-        }
-        .help-cat-row__desc {
-          font-size: var(--step--1);
-          color: var(--color-medium);
-          line-height: var(--line-height-condensed);
-        }
-        .help-cat-row__chevron {
-          flex-shrink: 0;
-          color: var(--color-medium);
-        }
-      `}</style>
     </article>
   );
 }

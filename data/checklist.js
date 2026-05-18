@@ -159,16 +159,3 @@ export const TASKS = [
 
 /** Convenience lookup by id */
 export const TASKS_BY_ID = Object.fromEntries(TASKS.map((t) => [t.id, t]));
-
-/**
- * Legacy export kept for backward compat with DashboardScreen.
- * Maps the new Task shape to the old ChecklistItem shape.
- * @type {import('./checklist_legacy').ChecklistItem[]}
- */
-export const CHECKLIST_ITEMS = TASKS.map((t) => ({
-  id: t.id,
-  title: t.title,
-  body: t.shortDescription,
-  cta: t.cta,
-  category: 'Set up',
-}));

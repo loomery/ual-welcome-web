@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { UalLogo } from '../Icon/UalLogo';
+import { ThemeToggle } from '../Theme/ThemeToggle';
 import { NAV_ITEMS } from './navConfig';
 import { COLLEGE_OPTIONS } from '../../data/onboardingOptions';
 import { useOnboardingProfile } from '../../hooks/useOnboardingProfile';
@@ -79,12 +80,18 @@ export function SideNav() {
         })}
       </ul>
 
-      {/* College name — shown once onboarding is complete */}
-      {college && (
-        <div className="side-nav__footer">
-          <span className="side-nav__college">{college.name}</span>
+      {/* Footer: college chip + theme toggle, stacked */}
+      <div className="side-nav__footer">
+        {college && (
+          <div className="side-nav__college-chip">
+            <span className="side-nav__college-short">{college.short}</span>
+            <span className="side-nav__college-area">{college.area}</span>
+          </div>
+        )}
+        <div className="side-nav__footer-actions">
+          <ThemeToggle />
         </div>
-      )}
+      </div>
     </nav>
   );
 }

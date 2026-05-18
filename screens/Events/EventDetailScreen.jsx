@@ -61,8 +61,9 @@ export function EventDetailScreen({ id }) {
   const geo = building?.geo;
   const encodedLocation = encodeURIComponent(event.location);
   const encodedGeo = geo ? `${geo.lat},${geo.lng}` : encodedLocation;
+  // Citymapper web URL — endcoord must use a literal comma (not %2C).
   const citymapperUrl = geo
-    ? `https://citymapper.com/directions?endcoord=${geo.lat}%2C${geo.lng}&endname=${encodedLocation}`
+    ? `https://citymapper.com/directions?endcoord=${geo.lat},${geo.lng}&endname=${encodedLocation}`
     : `https://citymapper.com/directions?endaddress=${encodedLocation}`;
   const googleUrl = `https://www.google.com/maps/search/?api=1&query=${encodedGeo}`;
   const appleUrl = geo

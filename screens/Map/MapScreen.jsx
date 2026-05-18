@@ -9,9 +9,12 @@ import { ArrowRightIcon, CloseIcon } from '../../components/Icon/NavIcons';
 
 /** @param {import('../../data/buildings').Building} b */
 function citymapperUrl(b) {
-  return b.geo
-    ? `https://citymapper.com/directions?endcoord=${b.geo.lat}%2C${b.geo.lng}&endname=${encodeURIComponent(b.name)}`
-    : `https://citymapper.com/directions?endaddress=${encodeURIComponent(b.address)}`;
+  // Citymapper web URL — endcoord must use a literal comma (not %2C).
+  // Build manually to avoid URLSearchParams encoding the comma.
+  if (b.geo) {
+    return `https://citymapper.com/directions?endcoord=${b.geo.lat},${b.geo.lng}&endname=${encodeURIComponent(b.name)}`;
+  }
+  return `https://citymapper.com/directions?endaddress=${encodeURIComponent(b.address)}`;
 }
 
 /** @param {import('../../data/buildings').Building} b */
@@ -195,17 +198,15 @@ export function MapScreen() {
                     >
                       {/* Location */}
                       <section className="flow" data-flow="2xs" aria-label="Location">
-                        <h3 className="map-info__heading">Location</h3>
-                        <p style={{ fontWeight: 'var(--font-weight-bold)' }}>{b.name}</p>
-                        <p style={{ color: 'var(--color-medium)', fontSize: 'var(--step--1)' }}>
-                          {b.address}
-                        </p>
+                        <h3 className="mb-2xs text-step-0 font-ual-bold">Location</h3>
+                        <p className="font-ual-bold">{b.name}</p>
+                        <p className="text-step-d1 text-ual-medium">{b.address}</p>
                         <div className="cluster" data-justify="flex-start">
                           <a
                             href={citymapperUrl(b)}
                             target="_blank"
                             rel="noreferrer"
-                            className="map-dir-btn"
+                            className="inline-flex items-center border-2 border-ual-dark bg-ual-light px-s py-2xs text-step-d1 font-ual-bold text-ual-dark no-underline transition-colors hover:bg-ual-dark hover:text-ual-light focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ual-orange"
                           >
                             Citymapper
                           </a>
@@ -213,7 +214,7 @@ export function MapScreen() {
                             href={directionsUrl(b)}
                             target="_blank"
                             rel="noreferrer"
-                            className="map-dir-btn"
+                            className="inline-flex items-center border-2 border-ual-dark bg-ual-light px-s py-2xs text-step-d1 font-ual-bold text-ual-dark no-underline transition-colors hover:bg-ual-dark hover:text-ual-light focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ual-orange"
                           >
                             Google Maps
                           </a>
@@ -221,7 +222,7 @@ export function MapScreen() {
                             href={appleMapsUrl(b)}
                             target="_blank"
                             rel="noreferrer"
-                            className="map-dir-btn"
+                            className="inline-flex items-center border-2 border-ual-dark bg-ual-light px-s py-2xs text-step-d1 font-ual-bold text-ual-dark no-underline transition-colors hover:bg-ual-dark hover:text-ual-light focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ual-orange"
                           >
                             Apple Maps
                           </a>
@@ -231,37 +232,33 @@ export function MapScreen() {
                       {/* Transport */}
                       {b.transport && (
                         <section className="flow" data-flow="s" aria-label="Transport">
-                          <h3 className="map-info__heading">Transport</h3>
-                          <div className="map-transport-grid">
+                          <h3 className="mb-2xs text-step-0 font-ual-bold">Transport</h3>
+                          <div className="grid grid-cols-2 gap-m">
                             <div>
-                              <p className="map-transport__label">Closest stations</p>
-                              <table className="map-transport__table">
+                              <p className="mb-2xs text-step-d1 font-ual-bold text-ual-medium">
+                                Closest stations
+                              </p>
+                              <table className="map-transport-table w-full border-collapse">
                                 <tbody>
                                   {b.transport.stations.map((s) => (
                                     <tr key={s.name}>
                                       <td>{s.name}</td>
-                                      <td
-                                        style={{ color: 'var(--color-medium)', textAlign: 'right' }}
-                                      >
-                                        {s.walk}
-                                      </td>
+                                      <td className="text-right text-ual-medium">{s.walk}</td>
                                     </tr>
                                   ))}
                                 </tbody>
                               </table>
                             </div>
                             <div>
-                              <p className="map-transport__label">Closest buses</p>
-                              <table className="map-transport__table">
+                              <p className="mb-2xs text-step-d1 font-ual-bold text-ual-medium">
+                                Closest buses
+                              </p>
+                              <table className="map-transport-table w-full border-collapse">
                                 <tbody>
                                   {b.transport.buses.slice(0, 4).map((bus) => (
                                     <tr key={bus.name}>
                                       <td>{bus.name}</td>
-                                      <td
-                                        style={{ color: 'var(--color-medium)', textAlign: 'right' }}
-                                      >
-                                        {bus.walk}
-                                      </td>
+                                      <td className="text-right text-ual-medium">{bus.walk}</td>
                                     </tr>
                                   ))}
                                 </tbody>
@@ -274,14 +271,14 @@ export function MapScreen() {
                       {/* Accessibility */}
                       {b.transport?.accessibilityNote && (
                         <section className="flow" data-flow="2xs" aria-label="Accessibility">
-                          <h3 className="map-info__heading">Accessibility</h3>
-                          <p style={{ fontSize: 'var(--step--1)' }}>
+                          <h3 className="mb-2xs text-step-0 font-ual-bold">Accessibility</h3>
+                          <p className="text-step-d1">
                             {b.transport.accessibilityNote.replace('on AccessAble', '')}{' '}
                             <a
                               href={b.transport.accessibilityUrl}
                               target="_blank"
                               rel="noreferrer"
-                              style={{ color: 'var(--color-orange)' }}
+                              className="text-ual-orange"
                             >
                               AccessAble
                             </a>
@@ -313,57 +310,10 @@ export function MapScreen() {
         {selected ? `Selected ${selected.name}` : ''}
       </div>
 
+      {/* Only irreducible CSS: table cell selectors */}
       <style>{`
-        .map-info__heading {
-          font-size: var(--step-0);
-          font-weight: var(--font-weight-bold);
-          margin-block-end: var(--space-2xs);
-        }
-        .map-dir-btn {
-          display: inline-flex;
-          align-items: center;
-          padding: var(--space-2xs) var(--space-s);
-          border: 2px solid var(--color-dark);
-          color: var(--color-dark);
-          font: inherit;
-          font-size: var(--step--1);
-          font-weight: var(--font-weight-bold);
-          text-decoration: none;
-          background: var(--color-light);
-          transition: background 0.12s, color 0.12s;
-        }
-        .map-dir-btn:hover {
-          background: var(--color-dark);
-          color: var(--color-light);
-        }
-        .map-dir-btn:focus-visible {
-          outline: 2px solid var(--color-orange);
-          outline-offset: 2px;
-        }
-        .map-transport-grid {
-          display: grid;
-          grid-template-columns: 1fr 1fr;
-          gap: var(--space-m);
-        }
-        .map-transport__label {
-          font-size: var(--step--1);
-          font-weight: var(--font-weight-bold);
-          color: var(--color-medium);
-          margin-block-end: var(--space-2xs);
-        }
-        .map-transport__table {
-          width: 100%;
-          border-collapse: collapse;
-          font-size: var(--step--1);
-        }
-        .map-transport__table td {
-          padding: var(--space-3xs) 0;
-          border-block-end: 1px solid var(--color-dark--tint-90);
-        }
-        .map-transport__table td:last-child {
-          text-align: right;
-          color: var(--color-medium);
-        }
+        .map-transport-table td { padding: var(--space-3xs) 0; border-block-end: 1px solid var(--color-dark--tint-90); font-size: var(--step--1); }
+        .map-transport-table td:last-child { text-align: right; color: var(--color-medium); }
       `}</style>
     </article>
   );

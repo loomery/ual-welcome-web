@@ -1,14 +1,15 @@
 import Link from 'next/link';
 
 /**
- * Help category detail page — contact methods + CTA.
- *
  * @param {{ category: import('../../data/help').HelpCategory }} props
  */
 export function HelpDetailScreen({ category }) {
   return (
-    <article className="prose flow help-detail" data-flow="l">
-      <Link href="/help" className="help-detail__back">
+    <article className="prose flow" data-flow="l">
+      <Link
+        href="/help"
+        className="text-step-d1 text-ual-dark no-underline hover:text-ual-orange focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ual-orange"
+      >
         ← Back to help
       </Link>
 
@@ -17,19 +18,31 @@ export function HelpDetailScreen({ category }) {
         <p>{category.description}</p>
       </div>
 
-      <section className="help-detail__contact" aria-labelledby="contact-heading">
-        <h2 id="contact-heading" className="help-detail__contact-heading">
+      <section aria-labelledby="contact-heading" style={{ marginBlockStart: 'var(--space-m)' }}>
+        <h2 id="contact-heading" style={{ marginBlockEnd: 'var(--space-s)' }}>
           How to contact
         </h2>
 
-        <ul className="help-contact-list" role="list">
+        <ul
+          role="list"
+          className="border-2 border-ual-dark-90"
+          style={{ listStyle: 'none', margin: 0, padding: 0 }}
+        >
           {category.contacts.map((contact, i) => (
-            <li key={i} className="help-contact-card">
-              <span className="help-contact-card__label">{contact.label}</span>
+            <li
+              key={i}
+              className={[
+                'flex flex-col bg-ual-light px-s py-xs',
+                i > 0 ? 'border-t border-ual-dark-90' : '',
+              ].join(' ')}
+              style={{ gap: '2px' }}
+            >
+              <span className="text-step-d1 text-ual-medium">{contact.label}</span>
+
               {contact.href ? (
                 <a
                   href={contact.href}
-                  className="help-contact-card__value"
+                  className="text-step-0 font-ual-bold text-ual-dark no-underline hover:text-ual-orange hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ual-orange"
                   target={
                     contact.type !== 'email' && contact.type !== 'phone' ? '_blank' : undefined
                   }
@@ -40,9 +53,10 @@ export function HelpDetailScreen({ category }) {
                   {contact.value}
                 </a>
               ) : (
-                <span className="help-contact-card__value">{contact.value}</span>
+                <span className="text-step-0 font-ual-bold text-ual-dark">{contact.value}</span>
               )}
-              {contact.note && <span className="help-contact-card__note">{contact.note}</span>}
+
+              {contact.note && <span className="text-step-d1 text-ual-medium">{contact.note}</span>}
             </li>
           ))}
         </ul>
@@ -50,79 +64,12 @@ export function HelpDetailScreen({ category }) {
 
       <a
         href={category.ctaHref}
-        className="button help-detail__cta"
+        className="button flex w-full justify-center"
         target="_blank"
         rel="noreferrer"
       >
         {category.ctaLabel} →<span className="visually-hidden"> (opens in a new tab)</span>
       </a>
-
-      <style>{`
-        .help-detail__back {
-          display: inline-flex;
-          align-items: center;
-          color: var(--color-dark);
-          font-size: var(--step--1);
-          text-decoration: none;
-        }
-        .help-detail__back:hover,
-        .help-detail__back:focus-visible {
-          color: var(--color-orange);
-        }
-        .help-detail__back:focus-visible {
-          outline: 2px solid var(--color-orange);
-          outline-offset: 2px;
-        }
-
-        .help-detail__contact {
-          margin-block-start: var(--space-xl);
-        }
-        .help-detail__contact-heading {
-          margin-block-end: var(--space-l);
-        }
-        .help-contact-list {
-          list-style: none;
-          margin: 0;
-          padding: 0;
-          display: flex;
-          flex-direction: column;
-          gap: var(--space-s);
-        }
-
-        .help-contact-card {
-          display: flex;
-          flex-direction: column;
-          gap: var(--space-3xs);
-          padding: var(--space-s);
-          border: 2px solid var(--color-dark--tint-90);
-          background: var(--color-light);
-        }
-        .help-contact-card__label {
-          font-size: var(--step--1);
-          color: var(--color-medium);
-        }
-        .help-contact-card__value {
-          font-size: var(--step-0);
-          font-weight: var(--font-weight-bold);
-          color: var(--color-dark);
-          text-decoration: none;
-        }
-        a.help-contact-card__value:hover,
-        a.help-contact-card__value:focus-visible {
-          color: var(--color-orange);
-          text-decoration: underline;
-        }
-        .help-contact-card__note {
-          font-size: var(--step--1);
-          color: var(--color-medium);
-        }
-
-        .help-detail__cta {
-          display: inline-flex;
-          width: 100%;
-          justify-content: center;
-        }
-      `}</style>
     </article>
   );
 }
