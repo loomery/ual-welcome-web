@@ -6,7 +6,7 @@ export function HelpCategoriesScreen() {
     <article className="flow" data-flow="l">
       <div className="flow" data-flow="s">
         <h1>Get help and support</h1>
-        <p>Not sure who to contact? Find the right team or service below.</p>
+        <p className="standfirst">Not sure who to contact? Find the right team or service below.</p>
       </div>
 
       <ul role="list" className="border-2 border-ual-dark-90">

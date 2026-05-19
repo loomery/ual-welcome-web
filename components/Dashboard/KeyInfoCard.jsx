@@ -20,16 +20,14 @@ export function KeyInfoCard({ item }) {
     : null;
 
   return (
-    <a
-      href={item.href}
-      target="_blank"
-      rel="noreferrer"
-      className="flow card key-info-card"
-      data-flow="s"
-    >
-      {item.eyebrow && <p className="key-info-card__eyebrow">{item.eyebrow}</p>}
-      <h3>{item.title}</h3>
-      {dateRange ? <p>{dateRange}</p> : item.body ? <p>{item.body}</p> : null}
+    <a href={item.href} target="_blank" rel="noreferrer" className="card key-info-card">
+      {item.eyebrow && <p className="card__eyebrow">{item.eyebrow}</p>}
+      <h3 className="card__title">{item.title}</h3>
+      {(dateRange || item.body) && (
+        <div className="card__body">
+          <p>{dateRange ?? item.body}</p>
+        </div>
+      )}
       <p className="key-info-card__cta">{item.ctaLabel}</p>
     </a>
   );

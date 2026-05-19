@@ -35,7 +35,7 @@ export function TaskListScreen() {
     <article className="flow" data-flow="l">
       <div className="flow" data-flow="s">
         <h1>Get setup list</h1>
-        <p className="text-step-d1 text-ual-medium">
+        <p className="standfirst">
           {completeCount} of {TASKS.length} complete
         </p>
       </div>

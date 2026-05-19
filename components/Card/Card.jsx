@@ -2,60 +2,62 @@ import Link from 'next/link';
 import { ArrowRightIcon, ExternalLinkIcon } from '../Icon/NavIcons';
 
 /**
- * UAL DS Card pattern. If `to` or `external` is provided it becomes a link-card
- * (entire surface is the target) matching the DS "card:is(a)" style.
+ * UAL DDS Card pattern.
  *
- * The trailing icon doubles as a directional cue:
- *  - internal route (`to`): ArrowRightIcon
- *  - external (`external`): ExternalLinkIcon + visually-hidden "(opens in
- *    new tab)" so AT users get the same affordance sighted users get.
+ * Visual structure (matches the "Atoms / Body" frame in the UAL DDS Figma):
+ *   1. Optional eyebrow (meta label, small)
+ *   2. Title (h3)
+ *   3. Directional icon on its own row — ArrowRightIcon for internal `to`,
+ *      ExternalLinkIcon for external `external`. The icon sits *between*
+ *      the title and the body, not at the end of the card.
+ *   4. Optional body copy
+ *
+ * On hover/focus the entire card (title + icon + body) shifts to UAL
+ * orange (#ff5000); on press, to the lighter pressed orange (#ff8500).
+ * Driven by the `.card` CSS, not inline classes — keeps the JSX clean.
  *
  * @param {Object} props
  * @param {string} props.title
  * @param {import('react').ReactNode} [props.body]
- * @param {string} [props.to]
- * @param {string} [props.external]
- * @param {string} [props.eyebrow]
+ * @param {string} [props.to]        Internal route — renders next/link.
+ * @param {string} [props.external]  External URL — renders <a target="_blank">.
+ * @param {string} [props.eyebrow]   Small meta label rendered above the title.
  */
 export function Card({ title, body, to, external, eyebrow }) {
+  const isInternal = Boolean(to);
+  const isExternal = Boolean(external);
+  const Icon = isExternal ? ExternalLinkIcon : ArrowRightIcon;
+  const hasIcon = isInternal || isExternal;
+
   const inner = (
     <>
-      {eyebrow && <p className="step--1 event__meta">{eyebrow}</p>}
-      <h3>{title}</h3>
-      {body && (
-        <div className="flow" data-flow="s">
-          {body}
-        </div>
+      {eyebrow && <p className="card__eyebrow">{eyebrow}</p>}
+      <h3 className="card__title">{title}</h3>
+      {hasIcon && (
+        <span className="card__icon" aria-hidden="true">
+          <Icon />
+        </span>
       )}
-      {to && <ArrowRightIcon aria-hidden="true" />}
-      {external && (
-        <>
-          <ExternalLinkIcon aria-hidden="true" />
-          <span className="visually-hidden"> (opens in new tab)</span>
-        </>
-      )}
+      {body && <div className="card__body">{body}</div>}
+      {isExternal && <span className="visually-hidden"> (opens in new tab)</span>}
     </>
   );
 
-  if (to) {
+  if (isInternal) {
     return (
-      <Link href={to} className="flow card" data-flow="s">
+      <Link href={to} className="card">
         {inner}
       </Link>
     );
   }
 
-  if (external) {
+  if (isExternal) {
     return (
-      <a href={external} className="flow card" data-flow="s" target="_blank" rel="noreferrer">
+      <a href={external} className="card" target="_blank" rel="noreferrer">
         {inner}
       </a>
     );
   }
 
-  return (
-    <article className="flow card" data-flow="s">
-      {inner}
-    </article>
-  );
+  return <article className="card">{inner}</article>;
 }

@@ -144,6 +144,18 @@
   --color-dark--tint-90: #e6e6e6;
   --color-dark--tint-95: #f2f2f2;
   --color-orange: #ff5000;
+  /* DDS specifies a lighter orange for the pressed/active state — slightly
+     warmer than the hover orange. Maps to Other/pressed in Figma. */
+  --color-orange-pressed: #ff8500;
+
+  /* ---- DDS content colours ----
+     UAL DDS draws a distinction between heading ink (#171717, a touch
+     softer than absolute black) and body ink (#000). We expose both;
+     individual elements (h1–h4, p, span) opt in via the appropriate
+     token. The repo's `--color-dark` continues to mean "primary
+     foreground" and is kept at #000 so legacy components don't shift. */
+  --color-copy-headings: #171717;
+  --color-copy-body: #000000;
 
   /* ---- Utility / semantic ---- */
   --color-utility-blue: #0683db;
@@ -151,9 +163,14 @@
   --color-utility-orange: #ef7015;
   --color-utility-red: #f04150;
 
-  /* ---- Typography ---- */
-  --font-main: 'Helvetica Neue', 'Arial', sans-serif;
-  --font-heading: 'Helvetica Neue', 'Arial', sans-serif;
+  /* ---- Typography ----
+     UAL DDS specifies Helvetica Neue LT Pro (Linotype, licensed). We
+     reference it first; if the font isn't loaded, the cascade falls back
+     to system Helvetica Neue and Arial — visually near-identical at most
+     UI sizes. */
+  --font-main: 'Helvetica Neue LT Pro', 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif;
+  --font-heading: 'Helvetica Neue LT Pro', 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif;
+  /* DDS weights map: 55 roman → 400, 75 bold → 700. */
   --font-weight-normal: 400;
   --font-weight-bold: 700;
   --line-height-default: 1.4;
@@ -215,6 +232,12 @@
   --color-dark--tint-90: #333;
   --color-dark--tint-95: #1f1f1f;
   --color-orange: #ff7030;
+
+  /* DDS content tokens — invert for dark mode. Both map to the "light on
+     dark" pair Figma defines as colour/content/copy-headings and
+     colour/content/copy-body-ui (#f6f6f6 / #ffffff). */
+  --color-copy-headings: #f6f6f6;
+  --color-copy-body: #ffffff;
 
   /* Utility colours stay visible in dark mode */
   --color-utility-blue: #4fa3ff;
@@ -332,7 +355,9 @@ textarea:not([rows]) {
 
 body {
   background: var(--color-shade);
-  color: var(--color-dark);
+  /* DDS body copy uses `Content/copy-body` (#000) — same as legacy `--color-dark`
+     in light mode. We use the DDS token so the semantic is explicit. */
+  color: var(--color-copy-body);
   font-family: var(--font-main);
   font-size: var(--step-0);
   line-height: var(--line-height-default);
@@ -348,6 +373,9 @@ h1,
 h2,
 h3,
 h4 {
+  /* DDS heading colour (`Content/copy-headings` = #171717) — slightly softer
+     than pure black so headings feel less heavy next to body copy. */
+  color: var(--color-copy-headings);
   font-family: var(--font-heading);
   line-height: var(--line-height-single);
 }
@@ -821,7 +849,11 @@ main:focus {
 }
 
 .button:active {
-  background-color: var(--button-bg);
+  /* DDS pressed state uses `Other/pressed` (#ff8500) — a touch warmer than
+     the hover orange so the click feedback registers. */
+  background-color: var(--color-orange-pressed);
+  border-color: var(--color-orange-pressed);
+  color: var(--color-dark);
   transform: scale(99%);
 }
 
@@ -836,18 +868,86 @@ main:focus {
   opacity: 0.5;
 }
 
-/* ---------- Card ---------- */
+/* ---------- Card ----------
+   Matches the UAL DDS "Atoms / Body" card pattern: borderless surface,
+   vertical stack (eyebrow → title → directional icon → body), and a
+   single "everything goes orange" hover/pressed state — no background
+   change, no border, no underline. Used by components/Card/Card.jsx
+   and any composite that opts in via the `.card` class. */
 .card {
-  display: block;
-}
-
-.card:is(a) {
+  background: transparent;
+  border: 0;
+  color: var(--color-copy-headings);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+  padding: 0;
   text-decoration: none;
+  transition: color 0.15s ease;
 }
 
-.card:is(a):focus h3,
-.card:is(a):hover h3 {
-  text-decoration: underline;
+.card__eyebrow {
+  color: var(--color-medium);
+  font-size: var(--step--1);
+  font-weight: var(--font-weight-bold);
+  margin: 0;
+}
+
+.card__title {
+  color: var(--color-copy-headings);
+  font-size: var(--step-1);
+  font-weight: var(--font-weight-bold);
+  letter-spacing: var(--letter-spacing-tight);
+  line-height: var(--line-height-condensed);
+  margin: 0;
+}
+
+.card__icon {
+  color: inherit;
+  display: inline-flex;
+  inline-size: 1.5rem;
+  block-size: 1.5rem;
+}
+
+.card__icon > svg {
+  inline-size: 100%;
+  block-size: 100%;
+}
+
+.card__body {
+  color: var(--color-copy-body);
+  margin: 0;
+}
+
+.card__body > p {
+  margin: 0;
+}
+
+.card__body > p + p {
+  margin-block-start: var(--space-2xs);
+}
+
+/* Whole-card hover/focus/pressed — title, icon and body all shift
+   colour together. UAL DDS makes the orange a *content* signal, not a
+   surface signal (no background change). */
+.card:is(a):hover,
+.card:is(a):hover .card__title,
+.card:is(a):hover .card__body,
+.card:is(a):focus-visible,
+.card:is(a):focus-visible .card__title,
+.card:is(a):focus-visible .card__body {
+  color: var(--color-orange);
+}
+
+.card:is(a):active,
+.card:is(a):active .card__title,
+.card:is(a):active .card__body {
+  color: var(--color-orange-pressed);
+}
+
+.card:is(a):focus-visible {
+  outline: 2px solid var(--color-orange);
+  outline-offset: 4px;
 }
 
 /* ---------- Tag ---------- */
@@ -1659,6 +1759,15 @@ body[data-onboarding] .app-shell__main {
   font-size: var(--step--1);
   line-height: var(--line-height-default);
   margin: 0;
+  /* Clamp to 2 lines so cards in a list keep a consistent height
+     regardless of how long the description is. The `-webkit-` prefix
+     is needed even today — line-clamp is widely supported via this
+     vendor variant. */
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
 /* --- Footer: location pin, pinned to the card's bottom edge so cards in
@@ -1674,6 +1783,18 @@ body[data-onboarding] .app-shell__main {
   margin: 0;
   margin-block-start: auto;
   padding-block-start: var(--space-s);
+}
+
+.event-card__foot > span {
+  /* Long venue names (full street addresses) would wrap to 3 lines on
+     narrow cards. Clamp to 1 line with ellipsis so the footer stays
+     visually compact across all card widths. */
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  min-inline-size: 0;
 }
 
 .event-card__foot-icon {
@@ -1720,6 +1841,145 @@ body[data-onboarding] .app-shell__main {
 /* Make grid cells (<li>) stretch their card to the row's tallest height */
 ul.grid > li {
   display: flex;
+}
+
+/* ---------- Event list ----------
+   Vertical, single-column layout used by EventsScreen. We intentionally
+   don't use `.grid` here: with `auto-fit + 1fr` a single event stretches
+   to fill the row, two cards each take 50%, three split into thirds —
+   so the card visually changes shape based on how many are visible. A
+   one-column flex stack keeps every card the same width regardless of
+   filter or count, and matches the Figma "events list" frame which is
+   also a vertical list.
+
+   Width is capped so cards stay readable on wide monitors; on phones
+   the cap is naturally never hit because the parent .app-shell__main
+   already constrains width. */
+/* ---------- Campus filter — multi-select dropdown ----------
+   Lives next to the category filter buttons on EventsScreen. The
+   trigger is styled with the standard `.button` family (plus the
+   ghost variant when nothing is selected), so it sits naturally
+   alongside the other filter pills. The popover is anchored to the
+   trigger via `position: absolute` on a `position: relative` wrapper. */
+.campus-filter {
+  position: relative;
+}
+
+.campus-filter__trigger {
+  align-items: center;
+  display: inline-flex;
+  gap: var(--space-2xs);
+}
+
+/* Rotate the chevron when the popover is open so the trigger gives a
+   clear open/closed affordance. */
+.campus-filter__trigger svg[data-open] {
+  transform: rotate(180deg);
+}
+
+.campus-filter__trigger svg {
+  transition: transform 0.15s ease;
+}
+
+.campus-filter__panel {
+  background: var(--color-light);
+  border: 2px solid var(--color-dark);
+  color: var(--color-dark);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2xs);
+  inset-block-start: calc(100% + var(--space-2xs));
+  inset-inline-start: 0;
+  min-inline-size: 18rem;
+  padding: var(--space-s);
+  position: absolute;
+  z-index: 20;
+}
+
+.campus-filter__options {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3xs);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.campus-filter__option {
+  align-items: center;
+  cursor: pointer;
+  display: flex;
+  font-size: var(--step--1);
+  gap: var(--space-2xs);
+  padding: var(--space-3xs) 0;
+}
+
+.campus-filter__option:hover {
+  color: var(--color-orange);
+}
+
+.campus-filter__checkbox {
+  accent-color: var(--color-dark);
+  block-size: 1rem;
+  cursor: pointer;
+  inline-size: 1rem;
+  flex: none;
+}
+
+.campus-filter__clear {
+  align-self: flex-start;
+  background: transparent;
+  border: 0;
+  color: var(--color-dark);
+  cursor: pointer;
+  font: inherit;
+  font-size: var(--step--1);
+  font-weight: var(--font-weight-bold);
+  margin-block-start: var(--space-2xs);
+  padding: 0;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+.campus-filter__clear:hover,
+.campus-filter__clear:focus-visible {
+  color: var(--color-orange);
+}
+
+/* Align the panel to the right edge of the trigger on very narrow
+   viewports so it doesn't overflow off-screen. */
+@media (max-width: 30rem) {
+  .campus-filter__panel {
+    inset-inline-start: auto;
+    inset-inline-end: 0;
+  }
+}
+
+.event-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-m);
+  list-style: none;
+  padding: 0;
+  inline-size: 100%;
+  max-inline-size: 48rem;
+  /* Don't set `margin` here — the global `ul { margin: 0 }` reset already
+     does it, and we want the parent .flow cascade to be able to insert
+     the right top margin. The compound `.flow > .event-list` rule below
+     wins specificity-wise and provides the actual breathing room. */
+}
+
+.event-list > li {
+  display: block;
+}
+
+/* Extra breathing room above the event list. Specificity 0,2,0 ties
+   with `.flow[data-flow="l"] > * + *` (which would otherwise set
+   `--space-l` here); source order wins, so this rule applies. Result:
+   `--space-xl` (~48–60px) gap between the category-filter row and the
+   first event card — `--space-l` (~32–40px) felt cramped. */
+.flow > .event-list {
+  margin-block-start: var(--space-xl);
 }
 
 /* ---------- Event card — favourite (save) toggle ----------
@@ -1945,13 +2205,10 @@ ul.grid > li {
 
 /* ---------- Personalised home — Key info card ----------
    Used by components/Dashboard/KeyInfoCard.jsx for items rendered
-   in the "Key information" section (e.g. "Autumn term" dates). */
-.key-info-card__eyebrow {
-  color: var(--color-medium);
-  font-size: var(--step--1);
-  font-weight: var(--font-weight-bold);
-}
-
+   in the "Key information" section (e.g. "Autumn term" dates).
+   Eyebrow/title/body share the base `.card__*` styles from the DDS
+   card pattern; this block only adds the orange CTA link styling
+   that's specific to key-info cards. */
 .key-info-card__cta {
   font-size: var(--step--1);
   font-weight: var(--font-weight-bold);
@@ -3005,10 +3262,10 @@ ul.grid > li {
   color: var(--color-dark);
 }
 
-/* Inline link-button — flip ink in dark mode */
-[data-theme='dark'] .link-button {
-  color: var(--color-light);
-}
+/* No `[data-theme='dark'] .link-button` override needed — the base
+   `color: var(--color-dark)` already swaps to white in dark mode via
+   the UAL token system. A redundant override here was inverting the
+   inversion and rendering the link dark-on-dark (invisible). */
 
 /* Event card — higher contrast background in dark mode */
 [data-theme='dark'] .event-card {
