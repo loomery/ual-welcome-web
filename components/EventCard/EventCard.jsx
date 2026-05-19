@@ -1,6 +1,9 @@
+'use client';
+
 import Link from 'next/link';
 import { DAY_FMT, LONG_DATE_FMT, MONTH_FMT, TIME_FMT, WEEKDAY_FMT } from '../../utils/dates';
-import { PinIcon } from '../Icon/NavIcons';
+import { HeartIcon, PinIcon } from '../Icon/NavIcons';
+import { useEventFavourites } from '../../hooks/useEventFavourites';
 
 /**
  * Event card — UAL-branded.
@@ -13,14 +16,21 @@ import { PinIcon } from '../Icon/NavIcons';
  *  - Body: short description (hidden in the compact variant).
  *  - Footer: location-pin row pushed to the card's bottom edge so cards
  *    in a grid visually align regardless of content length.
+ *  - Top-right heart toggle (non-compact only): saves the event to the
+ *    student's favourites via useEventFavourites. The button is rendered
+ *    as a sibling of the surface link (not nested inside it) so the
+ *    save action doesn't navigate, and screen readers see them as two
+ *    independent controls.
  *
- * The whole card is a link, following the UAL DS card pattern.
+ * The whole card surface is a link, following the UAL DS card pattern.
  *
  * @param {Object} props
  * @param {import('../../data/events').UalEvent} props.event
  * @param {boolean} [props.compact]  Compact variant used in horizontal reels.
  */
 export function EventCard({ event, compact }) {
+  const { isFavourite, toggle, hydrated } = useEventFavourites();
+
   const start = new Date(event.startsAt);
   const end = new Date(event.endsAt);
 
@@ -39,6 +49,11 @@ export function EventCard({ event, compact }) {
   // UAL's editorial palette (sage / peach / sand / sky) while keeping text
   // legible in a single dark ink.
   const categorySlug = event.category.toLowerCase();
+
+  // Don't render a pressed state until the favourites list has hydrated
+  // from localStorage — otherwise the heart flashes outlined → filled on
+  // first paint of a saved event.
+  const saved = hydrated && isFavourite(event.id);
 
   return (
     <article className={className}>
@@ -79,6 +94,25 @@ export function EventCard({ event, compact }) {
           </span>
         </p>
       </Link>
+
+      {!compact && (
+        <button
+          type="button"
+          className="event-card__favourite"
+          onClick={() => toggle(event.id)}
+          aria-pressed={saved}
+          aria-label={saved ? `Remove ${event.title} from saved events` : `Save ${event.title}`}
+          data-saved={saved || undefined}
+        >
+          <HeartIcon
+            filled={saved}
+            aria-hidden="true"
+            width={20}
+            height={20}
+            className="event-card__favourite-icon"
+          />
+        </button>
+      )}
     </article>
   );
 }

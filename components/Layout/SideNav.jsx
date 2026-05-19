@@ -11,9 +11,9 @@ import { useOnboardingProfile } from '../../hooks/useOnboardingProfile';
 /**
  * Desktop sidebar navigation. Visible only at ≥49.5rem (same breakpoint
  * at which the mobile bottom nav hides). Fixed to the left edge of the
- * viewport, full height, with the UAL logo + "Student Centre" branding
- * at the top, nav items in the middle, and the student's college at the
- * bottom once they've completed onboarding.
+ * viewport, full height, with the UAL logo at the top, nav items in
+ * the middle, and the student's college at the bottom once they've
+ * completed onboarding.
  *
  * Active state: filled dark background + light text — mirrors the Figma
  * design and the existing bottom-nav active style.
@@ -36,11 +36,12 @@ export function SideNav() {
 
   return (
     <nav className="side-nav" aria-label="Primary desktop">
-      {/* Branding */}
+      {/* Branding — UAL logo only, no lock-up wordmark below
+          (the brand brief explicitly excluded "UAL <product name>"
+          locked-up logos). */}
       <div className="side-nav__brand">
-        <Link href="/" aria-label="UAL Student Centre — home" className="side-nav__logo-link">
+        <Link href="/" aria-label="UAL — home" className="side-nav__logo-link">
           <UalLogo className="side-nav__logo" aria-hidden="true" />
-          <span className="side-nav__brand-label">Student Centre</span>
         </Link>
       </div>
 

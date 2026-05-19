@@ -193,6 +193,16 @@ const SECTION_CONTENT = {
         body: 'Meet new people and see what is going on at the various campuses.',
         to: '/events',
       },
+      {
+        title: 'Ask a buddy',
+        body: 'Ask a student anything you like about studying at UAL.',
+        href: 'https://www.arts.ac.uk/students/student-union',
+      },
+      {
+        title: 'Find a community',
+        body: 'Meet people who have the same interests and beliefs as you.',
+        href: 'https://www.arts.ac.uk/students/student-union',
+      },
     ],
   },
   career: {
