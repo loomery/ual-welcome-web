@@ -2,13 +2,20 @@
 
 import { useMemo, useState } from 'react';
 import { EVENTS } from '../../data/events';
+import { COLLEGE_OPTIONS } from '../../data/onboardingOptions';
 import { EventCard } from '../../components/EventCard/EventCard';
 import { HeartIcon } from '../../components/Icon/NavIcons';
+import { CampusFilter } from '../../components/CampusFilter/CampusFilter';
 import { useEventFavourites } from '../../hooks/useEventFavourites';
 import { downloadIcsBulk } from '../../utils/ics';
 
 /** @type {Array<import('../../data/events').EventCategory | 'All'>} */
 const CATEGORIES = ['All', 'Talk', 'Tour', 'Social', 'Workshop'];
+
+/** Catch-all college tag — events tagged this way apply to every campus
+ *  and should remain visible regardless of which campuses the student
+ *  has selected. Matches the value used in data/events.js. */
+const ALL_CAMPUSES_TAG = 'All colleges';
 
 /**
  * Events index screen.
@@ -30,20 +37,37 @@ export function EventsScreen() {
   const [category, setCategory] = useState(
     /** @type {import('../../data/events').EventCategory | 'All'} */ ('All'),
   );
+  const [campuses, setCampuses] = useState(/** @type {string[]} */ ([]));
 
   const sorted = useMemo(
     () => [...EVENTS].sort((a, b) => a.startsAt.localeCompare(b.startsAt)),
     [],
   );
 
+  // Build the campus picker options from the seven UAL colleges that
+  // actually appear in the events dataset. Sorting alphabetically by
+  // full name keeps the dropdown easy to scan.
+  const campusOptions = useMemo(() => {
+    const present = new Set(EVENTS.map((e) => e.college));
+    return COLLEGE_OPTIONS.filter((c) => present.has(c.name)).sort((a, b) =>
+      a.name.localeCompare(b.name),
+    );
+  }, []);
+
   const savedSet = useMemo(() => new Set(favourites), [favourites]);
+  const campusSet = useMemo(() => new Set(campuses), [campuses]);
 
   const visible = useMemo(() => {
     let list = sorted;
     if (savedOnly) list = list.filter((e) => savedSet.has(e.id));
     if (category !== 'All') list = list.filter((e) => e.category === category);
+    // Campus filter — match selected campuses, but always include
+    // events tagged "All colleges" since they're institution-wide.
+    if (campuses.length > 0) {
+      list = list.filter((e) => e.college === ALL_CAMPUSES_TAG || campusSet.has(e.college));
+    }
     return list;
-  }, [sorted, savedOnly, savedSet, category]);
+  }, [sorted, savedOnly, savedSet, category, campuses, campusSet]);
 
   // Events to hand to the calendar export — always the full saved list,
   // regardless of the category filter, so students don't accidentally
@@ -90,7 +114,7 @@ export function EventsScreen() {
         </button>
       </div>
 
-      <div className="cluster" role="group" aria-label="Filter events by category">
+      <div className="cluster" role="group" aria-label="Filter events">
         {CATEGORIES.map((cat) => {
           const active = category === cat;
           return (
@@ -106,6 +130,12 @@ export function EventsScreen() {
             </button>
           );
         })}
+
+        {/* Multi-select campus dropdown — independent from the category
+            row, applied as an additional filter. Sits inline so the
+            cluster flex-wrap behaviour keeps everything on one row when
+            there's space and stacks on narrow viewports. */}
+        <CampusFilter campuses={campusOptions} selected={campuses} onChange={setCampuses} />
       </div>
 
       {visible.length === 0 ? (
@@ -117,7 +147,7 @@ export function EventsScreen() {
           </p>
         </div>
       ) : (
-        <ul className="grid" role="list">
+        <ul className="event-list" role="list">
           {visible.map((event) => (
             <li key={event.id}>
               <EventCard event={event} />
