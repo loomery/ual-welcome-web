@@ -97,6 +97,31 @@ export function PinIcon(props) {
   );
 }
 
+/**
+ * Heart icon — used as the "save this event" toggle on EventCard and
+ * as the "Saved" filter affordance in EventsScreen.
+ *
+ * `filled` swaps the rendering from outline-only to a solid fill. We do
+ * the visual swap inside the SVG (rather than two separate components)
+ * so the surrounding button can animate `filled` purely via state.
+ *
+ * @param {Object} props
+ * @param {boolean} [props.filled]
+ */
+export function HeartIcon({ filled, ...props }) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
+      <path
+        d="M12 20.4 4.6 13a4.6 4.6 0 1 1 6.5-6.5L12 7.4l.9-.9A4.6 4.6 0 1 1 19.4 13L12 20.4Z"
+        stroke="currentColor"
+        strokeWidth={1.6}
+        strokeLinejoin="round"
+        fill={filled ? 'currentColor' : 'none'}
+      />
+    </svg>
+  );
+}
+
 export function ArrowRightIcon(props) {
   return (
     <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>

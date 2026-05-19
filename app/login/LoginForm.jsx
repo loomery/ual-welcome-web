@@ -55,7 +55,7 @@ export function LoginForm() {
       <div style={styles.container}>
         <header style={styles.brand}>
           <span style={styles.wordmark}>UAL</span>
-          <h1 style={styles.title}>Student Centre</h1>
+          <h1 style={styles.title}>Welcome Week</h1>
         </header>
 
         <p style={styles.lede}>

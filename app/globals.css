@@ -1193,14 +1193,6 @@ main:focus {
   flex-shrink: 0;
 }
 
-.side-nav__brand-label {
-  font-size: var(--step--1);
-  font-weight: var(--font-weight-bold);
-  color: var(--color-medium);
-  border-inline-start: 1px solid var(--color-dark--tint-50);
-  padding-inline-start: var(--space-xs);
-}
-
 .side-nav__list {
   list-style: none;
   margin: 0;
@@ -1490,6 +1482,10 @@ body[data-onboarding] .app-shell__main {
   block-size: 100%;
   display: flex;
   flex-direction: column;
+  /* Make the heart button — which sits as a sibling of the surface link
+     and is positioned :absolute in the top-right — anchor to this card
+     rather than to some ancestor wrapper. */
+  position: relative;
   /* Outline (inset) gives the card a thin black border without affecting
      layout geometry and avoids double-borders against the surrounding grid. */
   outline: 1px solid var(--color-dark);
@@ -1694,6 +1690,131 @@ body[data-onboarding] .app-shell__main {
 /* Make grid cells (<li>) stretch their card to the row's tallest height */
 ul.grid > li {
   display: flex;
+}
+
+/* ---------- Event card — favourite (save) toggle ----------
+   Top-right heart, sibling to the surface link so the click toggles
+   `useEventFavourites` without navigating. The hit target is a square
+   slightly larger than the icon so it remains tappable on mobile
+   without crowding the card title. */
+.event-card__favourite {
+  align-items: center;
+  background: transparent;
+  border: 0;
+  color: var(--color-dark);
+  cursor: pointer;
+  display: inline-flex;
+  inset-block-start: var(--space-2xs);
+  inset-inline-end: var(--space-2xs);
+  justify-content: center;
+  min-block-size: 36px;
+  min-inline-size: 36px;
+  padding: var(--space-3xs);
+  position: absolute;
+  /* Sit above the surface link so the heart receives clicks instead of
+     the card navigating. */
+  z-index: 1;
+}
+
+.event-card__favourite:hover,
+.event-card__favourite:focus-visible {
+  color: var(--color-orange);
+}
+
+.event-card__favourite:focus-visible {
+  outline: 2px solid var(--color-orange);
+  outline-offset: 2px;
+}
+
+.event-card__favourite[data-saved] {
+  color: var(--color-dark);
+}
+
+/* ---------- Events screen — "Saved" filter pill ----------
+   Sits above the category row so saved + category combine. Mirrors the
+   .button visual but with a heart icon ahead of the label and a small
+   count badge after when the student has saved at least one event. */
+.events-saved-toggle {
+  align-items: center;
+  background: var(--color-light);
+  border: 2px solid var(--color-dark);
+  color: var(--color-dark);
+  cursor: pointer;
+  display: inline-flex;
+  font: inherit;
+  font-size: var(--step--1);
+  font-weight: var(--font-weight-bold);
+  gap: var(--space-2xs);
+  min-height: 44px;
+  padding: var(--space-2xs) var(--space-s);
+  transition:
+    background 0.12s,
+    color 0.12s;
+}
+
+.events-saved-toggle:hover {
+  background: var(--color-shade);
+}
+
+.events-saved-toggle:focus-visible {
+  outline: 2px solid var(--color-orange);
+  outline-offset: 2px;
+}
+
+.events-saved-toggle[data-active] {
+  background: var(--color-dark);
+  color: var(--color-light);
+}
+
+.events-saved-toggle__icon {
+  flex: none;
+}
+
+.events-saved-toggle__count {
+  background: var(--color-shade);
+  color: var(--color-dark);
+  font-size: var(--step--1);
+  font-weight: var(--font-weight-bold);
+  min-inline-size: 1.4em;
+  padding-inline: 0.4em;
+  text-align: center;
+}
+
+.events-saved-toggle[data-active] .events-saved-toggle__count {
+  background: var(--color-light);
+  color: var(--color-dark);
+}
+
+/* No dark-mode override needed for the toggle, the count badge, the
+   heart on event cards, or the bulk-export CTA — the UAL semantic
+   tokens (`--color-light` / `--color-dark` / `--color-shade`) already
+   swap their values when `[data-theme='dark']` is on the html root.
+   Re-flipping them per-component would invert the inversion and break
+   contrast (e.g. dark heart on dark card). */
+
+/* ---------- Events screen — bulk calendar export ----------
+   Visible only in the Saved view when there's something to export.
+   Matches the Figma "events saved" frame: a full-width-on-mobile black
+   CTA sitting below the list. On wider viewports it sits at its
+   natural width so it doesn't look stretched. */
+.events-bulk-export {
+  display: flex;
+  justify-content: stretch;
+  margin-block-start: var(--space-m);
+}
+
+.events-bulk-export__cta {
+  inline-size: 100%;
+  justify-content: center;
+}
+
+@media (min-width: 600px) {
+  .events-bulk-export {
+    justify-content: flex-start;
+  }
+  .events-bulk-export__cta {
+    inline-size: auto;
+  }
 }
 
 /* ---------- Home hero ---------- */
@@ -1931,8 +2052,7 @@ ul.grid > li {
 
 /* ---------- Login (prototype gate) ----------
    Rendered by app/login/page.jsx. Standalone screen (no AppShell chrome),
-   centered, with the UAL wordmark stacked above a "Student Centre" label
-   per the brand brief.
+   centered, with the UAL wordmark stacked above a "Welcome Week" label.
 
    Every layout class here uses explicit `display: flex; flex-direction:
    column; gap:` — no reliance on the `.flow` utility — so spacing
