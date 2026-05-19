@@ -23,11 +23,7 @@ export function HelpDetailScreen({ category }) {
           How to contact
         </h2>
 
-        <ul
-          role="list"
-          className="border-2 border-ual-dark-90"
-          style={{ listStyle: 'none', margin: 0, padding: 0 }}
-        >
+        <ul role="list" className="border-2 border-ual-dark-90">
           {category.contacts.map((contact, i) => (
             <li
               key={i}

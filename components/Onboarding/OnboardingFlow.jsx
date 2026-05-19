@@ -668,7 +668,7 @@ function CollegeStep({ headingRef, value, onChange }) {
         className="onboarding-grid onboarding-grid--two"
         role="radiogroup"
         aria-label="Choose your college"
-        style={{ listStyle: 'none', margin: 0, padding: 0 }}
+        style={{ listStyle: 'none', padding: 0 }}
       >
         {COLLEGE_OPTIONS.map((college) => (
           <li key={college.id}>
@@ -697,7 +697,7 @@ function StudyLevelStep({ headingRef, value, onChange }) {
         className="onboarding-grid onboarding-grid--two"
         role="radiogroup"
         aria-label="Choose your study level"
-        style={{ listStyle: 'none', margin: 0, padding: 0 }}
+        style={{ listStyle: 'none', padding: 0 }}
       >
         {STUDY_LEVEL_OPTIONS.map((opt) => (
           <li key={opt.id}>
@@ -723,7 +723,7 @@ function YearStep({ headingRef, value, onChange }) {
         className="onboarding-grid onboarding-grid--two"
         role="radiogroup"
         aria-label="Choose your year"
-        style={{ listStyle: 'none', margin: 0, padding: 0 }}
+        style={{ listStyle: 'none', padding: 0 }}
       >
         {YEAR_OPTIONS.map((opt) => (
           <li key={opt.id}>
@@ -758,7 +758,7 @@ function InterestsStep({ headingRef, value, onChange }) {
         className="onboarding-grid onboarding-grid--three"
         role="group"
         aria-label="Choose what interests you (optional, multiple)"
-        style={{ listStyle: 'none', margin: 0, padding: 0 }}
+        style={{ listStyle: 'none', padding: 0 }}
       >
         {INTEREST_OPTIONS.map((opt) => {
           const selected = value.includes(opt.id);

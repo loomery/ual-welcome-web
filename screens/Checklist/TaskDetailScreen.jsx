@@ -88,12 +88,7 @@ export function TaskDetailScreen({ task }) {
           <p className="text-step-d1 text-ual-medium">
             {stepsDone} of {stepsTotal} complete
           </p>
-          <ul
-            className="flow"
-            data-flow="2xs"
-            role="list"
-            style={{ listStyle: 'none', margin: 0, padding: 0 }}
-          >
+          <ul className="flow" data-flow="2xs" role="list">
             {task.steps.map((step) => (
               <StepRow
                 key={step.id}
@@ -236,7 +231,7 @@ function ContentSection({ section }) {
       <details className="task-accordion">
         <summary>{section.title}</summary>
         <div className="task-accordion__body">
-          <ul style={{ listStyle: 'none', margin: 0, padding: 0 }}>
+          <ul role="list">
             {section.items?.map((item, i) => (
               <li key={i} className="py-3xs text-step-d1">
                 {item}
