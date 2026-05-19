@@ -1274,6 +1274,36 @@ main:focus {
   padding-block-end: var(--space-l);
 }
 
+/* ── Content max-width inside the main area ────────────────────────────
+   On wide desktops the main area is `100vw - sidenav-width` (no inner
+   cap) and the wrapper's natural max-width is overridden so it doesn't
+   centre awkwardly within the full viewport. Without a cap, page
+   content (cards, lists, prose) stretches across 1500–1800px on a
+   typical monitor which makes the layout feel barren.
+
+   We cap every direct child `<article>` of #main-content at 72rem on
+   tablet+ and centre it within the available area. Map / canvas-heavy
+   screens that need the full width can opt out by adding the
+   `is-full-bleed` modifier on their root article.
+
+   Block padding is bumped on wider viewports so the H1 doesn't sit
+   right against the side nav border. */
+@media (min-width: 49.5rem) {
+  #main-content > article:not(.is-full-bleed) {
+    margin-inline: auto;
+    max-inline-size: 72rem;
+  }
+}
+
+@media (min-width: 75rem) {
+  /* Wider monitors: bigger inline gutters so the content doesn't kiss
+     the side nav. Override .wrapper's gutter — same element, higher
+     specificity via the compound selector. */
+  .app-shell__main.wrapper {
+    padding-inline: var(--space-xl);
+  }
+}
+
 /* ---------- Onboarding full-viewport mode ----------
    The /onboarding route tags <body data-onboarding> on mount. We hide
    the chrome (header / footer / feedback FAB / mobile bottom nav) so

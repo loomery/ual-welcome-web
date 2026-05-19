@@ -48,12 +48,7 @@ export function TaskListScreen() {
           <p>You need to complete these tasks in order to start your term.</p>
         </div>
 
-        <ul
-          className="flow"
-          data-flow="xs"
-          role="list"
-          style={{ listStyle: 'none', margin: 0, padding: 0 }}
-        >
+        <ul className="flow" data-flow="xs" role="list">
           {TASKS.map((task) => {
             const status = statuses[task.id] ?? 'not-started';
             const isComplete = status === 'complete';

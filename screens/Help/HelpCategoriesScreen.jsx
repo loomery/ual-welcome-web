@@ -9,11 +9,7 @@ export function HelpCategoriesScreen() {
         <p>Not sure who to contact? Find the right team or service below.</p>
       </div>
 
-      <ul
-        role="list"
-        className="border-2 border-ual-dark-90"
-        style={{ listStyle: 'none', margin: 0, padding: 0 }}
-      >
+      <ul role="list" className="border-2 border-ual-dark-90">
         {HELP_CATEGORIES.map((cat, i) => (
           <li key={cat.id} className={i > 0 ? 'border-t border-ual-dark-90' : ''}>
             <Link
