@@ -57,7 +57,7 @@ export function EventCard({ event, compact }) {
 
   return (
     <article className={className}>
-      <Link href={`/events/${event.id}`} className="event-card__link flow" data-flow="s">
+      <Link href={`/events/${event.id}`} className="event-card__link flow" data-flow="m">
         <header className="event-card__head">
           <time
             className="event-card__datestamp"
@@ -81,6 +81,7 @@ export function EventCard({ event, compact }) {
                 {weekday} · {timeRange}
               </span>
             </p>
+            <p className="event-card__college">{event.college}</p>
             <h3 className="event-card__title">{event.title}</h3>
           </div>
         </header>
@@ -89,9 +90,7 @@ export function EventCard({ event, compact }) {
 
         <p className="event-card__foot">
           <PinIcon aria-hidden="true" width={16} height={16} className="event-card__foot-icon" />
-          <span>
-            {event.location} · {event.college}
-          </span>
+          <span>{event.location}</span>
         </p>
       </Link>
 

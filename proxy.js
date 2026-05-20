@@ -8,7 +8,7 @@ import { NextResponse } from 'next/server';
  * behind a single shared password. It's a friction layer — not real auth.
  *
  * How it works:
- *  - Middleware checks for the `ual-prototype-auth` cookie on every
+ *  - Proxy checks for the `ual-prototype-auth` cookie on every
  *    non-asset request.
  *  - Missing or wrong cookie → redirect to /login.
  *  - /login POSTs to /api/login, which validates the password and sets
@@ -25,7 +25,7 @@ const COOKIE_VALUE = 'ok';
 /**
  * @param {import('next/server').NextRequest} request
  */
-export function middleware(request) {
+export function proxy(request) {
   const { pathname, search } = request.nextUrl;
 
   // Allow the login page itself and its API route through, otherwise

@@ -73,11 +73,38 @@ const THAMES = [
  */
 const PARKS = [
   { name: 'Hyde Park', lng: -0.165, lat: 51.507, w: 1.3, h: 0.7 },
-  { name: "Regent's Park", lng: -0.152, lat: 51.531, w: 1.0, h: 0.6 },
+  { name: 'Kensington Gardens', lng: -0.183, lat: 51.507, w: 0.9, h: 0.5 },
+  { name: "Regent's Park", lng: -0.152, lat: 51.531, w: 1.0, h: 0.9 },
+  { name: "St James's Park", lng: -0.133, lat: 51.502, w: 0.7, h: 0.3 },
+  { name: 'Green Park', lng: -0.143, lat: 51.505, w: 0.4, h: 0.35 },
+  { name: 'Battersea Park', lng: -0.1475, lat: 51.48, w: 0.85, h: 0.42 },
+  { name: 'Victoria Park', lng: -0.038, lat: 51.536, w: 0.9, h: 0.7 },
   { name: 'Olympic Park', lng: -0.017, lat: 51.545, w: 1.4, h: 1.1 },
   { name: 'Greenwich Park', lng: 0.003, lat: 51.477, w: 0.6, h: 0.6 },
+  { name: 'Hampstead Heath', lng: -0.165, lat: 51.562, w: 1.4, h: 1.1 },
   { name: 'Clapham Common', lng: -0.147, lat: 51.458, w: 0.7, h: 0.5 },
+  { name: 'Brockwell Park', lng: -0.108, lat: 51.454, w: 0.65, h: 0.5 },
   { name: 'Richmond Park', lng: -0.27, lat: 51.44, w: 2.0, h: 1.8 },
+];
+
+/**
+ * Regent's Canal — flows west→east from Paddington through Camden and
+ * Islington to Limehouse Basin. Helps orient the CSM / North London area.
+ * @type {Array<[number, number]>}
+ */
+const REGENT_CANAL = [
+  [-0.168, 51.52], // Paddington / Little Venice
+  [-0.157, 51.533], // Maida Vale
+  [-0.148, 51.536], // Regent's Park north
+  [-0.133, 51.54], // Camden Town
+  [-0.112, 51.544], // Caledonian Road
+  [-0.097, 51.54], // Islington / Angel
+  [-0.08, 51.534], // City Road Basin
+  [-0.068, 51.53], // Haggerston
+  [-0.054, 51.524], // Hackney / Shoreditch
+  [-0.038, 51.515], // Victoria Park
+  [-0.02, 51.513], // Mile End
+  [-0.008, 51.511], // Limehouse Basin
 ];
 
 /**
@@ -87,6 +114,10 @@ const PARKS = [
 export const NEIGHBOURHOODS = [
   { name: 'West End', lng: -0.135, lat: 51.514 },
   { name: 'The City', lng: -0.09, lat: 51.515 },
+  { name: 'South Bank', lng: -0.102, lat: 51.505 },
+  { name: 'Elephant & Castle', lng: -0.1, lat: 51.493 },
+  { name: 'Battersea', lng: -0.155, lat: 51.471 },
+  { name: 'Hackney', lng: -0.055, lat: 51.543 },
   { name: 'Canary Wharf', lng: -0.018, lat: 51.504 },
   { name: 'Greenwich', lng: 0.001, lat: 51.478 },
 ];
@@ -319,6 +350,22 @@ export function createLondonMapTexture(pxSize = 1024) {
   // Subtle darker edge — gives the river a touch of definition
   ctx.strokeStyle = '#6f9db3';
   ctx.lineWidth = kmToPx(0.05);
+  ctx.stroke();
+
+  // Regent's Canal — thinner, lighter blue than the Thames so it reads as a
+  // secondary waterway without competing with the river.
+  ctx.strokeStyle = '#a8c8dc';
+  ctx.lineWidth = kmToPx(0.1);
+  ctx.lineCap = 'round';
+  ctx.lineJoin = 'round';
+  ctx.beginPath();
+  REGENT_CANAL.forEach(([lng, lat], i) => {
+    const [sx, sz] = geoToScene(lng, lat);
+    const x = toPx(sx);
+    const y = toPy(sz);
+    if (i === 0) ctx.moveTo(x, y);
+    else ctx.lineTo(x, y);
+  });
   ctx.stroke();
 
   // ---- Tube lines — white underlay + full-strength coloured stroke ----

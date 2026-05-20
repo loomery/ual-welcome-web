@@ -1,11 +1,11 @@
 'use client';
 
 import { useMemo } from 'react';
-import { Card } from '../Card/Card';
-import { Countdown } from '../Countdown/Countdown';
-import { KeyInfoCard } from './KeyInfoCard';
-import { NextStepCard } from './NextStepCard';
-import { ViewToggle } from './ViewToggle';
+import { Card } from '../../components/Card/Card';
+import { Countdown } from '../../components/Countdown/Countdown';
+import { KeyInfoCard } from '../../components/Dashboard/KeyInfoCard';
+import { NextStepCard } from '../../components/Dashboard/NextStepCard';
+import { ViewToggle } from '../../components/Dashboard/ViewToggle';
 import { TASKS } from '../../data/checklist';
 import { USEFUL_INFO } from '../../data/usefulInfo';
 import { COLLEGE_OPTIONS, STUDY_LEVEL_OPTIONS, YEAR_OPTIONS } from '../../data/onboardingOptions';

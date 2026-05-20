@@ -51,18 +51,12 @@ export function TaskListScreen() {
         <ul className="flow" data-flow="xs" role="list">
           {TASKS.map((task) => {
             const status = statuses[task.id] ?? 'not-started';
-            const isComplete = status === 'complete';
-            const isInProgress = status === 'in-progress';
 
             return (
               <li key={task.id}>
-                <Link
-                  href={`/checklist/${task.id}`}
-                  className="flex items-center gap-s border-2 border-ual-dark-90 bg-ual-light p-s text-ual-dark no-underline transition-colors hover:border-ual-dark focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ual-orange"
-                >
+                <Link href={`/checklist/${task.id}`} className="task-row-link">
                   <StatusCircle status={status} />
 
-                  {/* Body */}
                   <span className="flex min-w-0 grow flex-col gap-3xs">
                     <span className="text-step-0 font-ual-bold">{task.title}</span>
                     <span className="text-step-d1/ual-condensed text-ual-medium">

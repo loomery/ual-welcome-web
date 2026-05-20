@@ -53,23 +53,16 @@ export function TaskDetailScreen({ task }) {
   return (
     <article className="flow" data-flow="l">
       {/* Back */}
-      <Link
-        href="/checklist"
-        className="inline-flex items-center gap-2xs text-step-d1 text-ual-dark no-underline hover:text-ual-orange focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ual-orange"
-      >
+      <Link href="/checklist" className="back-link">
         ← Back to setup list
       </Link>
 
-      {/* Tags */}
+      {/* Status badges — Complete is always rendered to avoid layout shift on state change */}
       <div className="cluster" data-justify="flex-start">
-        <span className="inline-block bg-ual-dark px-xs py-3xs text-step-d1 font-ual-bold tracking-wider text-ual-light uppercase">
-          Essential
+        <span className="badge-filled">Essential</span>
+        <span className="badge-outline" style={{ visibility: isComplete ? 'visible' : 'hidden' }}>
+          Complete
         </span>
-        {isComplete && (
-          <span className="inline-block border-2 border-ual-dark px-xs py-3xs text-step-d1 font-ual-bold tracking-wider text-ual-dark uppercase">
-            Complete
-          </span>
-        )}
       </div>
 
       <h1 className="text-step-4/ual-condensed">{task.title}</h1>
@@ -107,7 +100,7 @@ export function TaskDetailScreen({ task }) {
         <ContentSection key={i} section={section} />
       ))}
 
-      {/* CTA */}
+      {/* Primary CTA */}
       <a
         href={task.cta.href}
         className="button flex w-full justify-center"
@@ -117,49 +110,44 @@ export function TaskDetailScreen({ task }) {
         {task.cta.label} →<span className="visually-hidden"> (opens in a new tab)</span>
       </a>
 
-      {/* Progress controls */}
+      {/* Progress controls — single button element to avoid layout shift between states */}
       <section aria-labelledby="progress-heading" className="flow" data-flow="2xs">
         <p id="progress-heading" className="text-step-d1 text-ual-medium">
           Your progress
         </p>
-        {isComplete ? (
-          <button
-            type="button"
-            className="button flex w-full items-center justify-center gap-xs bg-ual-dark text-ual-light"
-            onClick={markIncomplete}
+        <button
+          type="button"
+          className="button w-full justify-center"
+          data-ghost-button={!isComplete && !isInProgress ? '' : undefined}
+          onClick={isComplete ? markIncomplete : isInProgress ? markComplete : markInProgress}
+        >
+          {/* Checkmark icon always occupies space — hidden until task is complete */}
+          <svg
+            viewBox="0 0 20 20"
+            fill="none"
+            aria-hidden="true"
+            width="18"
+            height="18"
+            style={{ visibility: isComplete ? 'visible' : 'hidden' }}
           >
-            <svg viewBox="0 0 20 20" fill="none" aria-hidden="true" width="18" height="18">
-              <path
-                d="M4 10l4.5 4.5L16 7"
-                stroke="currentColor"
-                strokeWidth="1.8"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>
-            Marked as complete
-          </button>
-        ) : isInProgress ? (
-          <button
-            type="button"
-            className="button flex w-full justify-center"
-            onClick={markComplete}
-          >
-            Mark as complete
-          </button>
-        ) : (
-          <button
-            type="button"
-            className="button flex w-full justify-center"
-            data-ghost-button
-            onClick={markInProgress}
-          >
-            Mark as in progress
-          </button>
-        )}
+            <path
+              d="M4 10l4.5 4.5L16 7"
+              stroke="currentColor"
+              strokeWidth="1.8"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+          </svg>
+          {isComplete
+            ? 'Marked as complete'
+            : isInProgress
+              ? 'Mark as complete'
+              : 'Mark as in progress'}
+        </button>
       </section>
 
-      {/* Minimal CSS — only irreducible patterns (pseudo-elements, attribute selectors) */}
+      {/* Only irreducible CSS — pseudo-elements and attribute selectors
+          that can't be expressed as Tailwind or component classes. */}
       <style>{`
         .step-row__title[data-done] { text-decoration: line-through; color: var(--color-medium); }
         .step-row__title a:hover { color: var(--color-orange); }
@@ -175,12 +163,15 @@ export function TaskDetailScreen({ task }) {
   );
 }
 
+/**
+ * @param {{ step: import('../../data/checklist').Step, done: boolean, onToggle: () => void, isTaskComplete: boolean }} props
+ */
 function StepRow({ step, done, onToggle, isTaskComplete }) {
   const [open, setOpen] = useState(false);
   const hasDetails = step.details?.length > 0;
 
   return (
-    <li className="flex items-start gap-s border-2 border-ual-dark-90 bg-ual-light p-s">
+    <li className="task-row">
       <button
         type="button"
         className="shrink-0 cursor-pointer border-0 bg-transparent p-0 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ual-orange disabled:cursor-default"
@@ -225,6 +216,9 @@ function StepRow({ step, done, onToggle, isTaskComplete }) {
   );
 }
 
+/**
+ * @param {{ section: import('../../data/checklist').Section }} props
+ */
 function ContentSection({ section }) {
   if (section.type === 'accordion') {
     return (
@@ -242,10 +236,11 @@ function ContentSection({ section }) {
       </details>
     );
   }
+
   return (
-    <section className="flow" data-flow="2xs">
-      <h2 className="text-step-0 font-ual-bold">{section.title}</h2>
-      {section.body && <p className="text-step-0 text-ual-dark">{section.body}</p>}
+    <section className="content-section flow" data-flow="2xs">
+      <h2>{section.title}</h2>
+      {section.body && <p className="text-step-0">{section.body}</p>}
     </section>
   );
 }

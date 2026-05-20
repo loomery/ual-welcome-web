@@ -175,6 +175,8 @@ export function MapCanvas({
         shadow-camera-bottom={-20}
       />
       <ambientLight intensity={0.7} />
+      {/* UAL orange (#ff5000 = --color-orange) warms the secondary fill light,
+          adding a subtle brand-coloured bounce to building surfaces. */}
       <directionalLight position={[-10, 8, -8]} intensity={0.25} color="#ff5000" />
 
       {/* Infinite-feel ground — single oversized plane in the shared base tone.

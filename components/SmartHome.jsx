@@ -2,7 +2,7 @@
 
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { DashboardScreen } from './Dashboard/DashboardScreen';
+import { DashboardScreen } from '../screens/Dashboard/DashboardScreen';
 import { useOnboardingProfile } from '../hooks/useOnboardingProfile';
 
 /**
