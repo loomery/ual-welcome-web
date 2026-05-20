@@ -1404,6 +1404,308 @@ main:focus {
   }
 }
 
+/* ---------- Onboarding component styles ----------
+   Tile grids, input, progress bar, and slide animations used by the
+   multi-step onboarding flow (components/Onboarding/). CSS lives here
+   so keyframe animations and media queries work globally — they can't
+   be declared inside a JSX <style> block when using Turbopack. */
+
+.onboarding-flow {
+  padding: var(--space-s) 0;
+  width: 100%;
+  max-width: 42rem;
+  margin-left: auto;
+  margin-right: auto;
+}
+/* No vertical padding on desktop — the parent main is flex-centered
+   with its own padding when /onboarding hides the AppShell chrome. */
+@media (min-width: 49.5rem) {
+  .onboarding-flow {
+    padding: 0;
+  }
+}
+/* Scale the heading down inside the flow so the centered content
+   block doesn't fill the viewport on desktop. */
+.onboarding-flow h1 {
+  font-size: var(--step-3);
+}
+
+.onboarding-flow__topbar {
+  align-items: center;
+  display: flex;
+  gap: var(--space-s);
+  margin-block-end: var(--space-m);
+}
+
+.onboarding-flow__back {
+  align-items: center;
+  background: transparent;
+  border: 0;
+  color: var(--color-dark);
+  cursor: pointer;
+  display: inline-flex;
+  font: inherit;
+  font-size: var(--step--1);
+  gap: var(--space-3xs);
+  padding: var(--space-2xs);
+  margin-inline-start: calc(var(--space-2xs) * -1);
+}
+.onboarding-flow__back:hover,
+.onboarding-flow__back:focus-visible {
+  color: var(--color-orange);
+}
+.onboarding-flow__back:focus-visible {
+  outline: 2px solid var(--color-orange);
+  outline-offset: 2px;
+}
+
+.onboarding-flow__progress {
+  background: var(--color-dark--tint-90);
+  block-size: 4px;
+  flex-grow: 1;
+  overflow: hidden;
+}
+.onboarding-flow__progress-bar {
+  background: var(--color-dark);
+  block-size: 100%;
+  transition: width 400ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.onboarding-flow__skip {
+  background: transparent;
+  border: 0;
+  color: var(--color-medium);
+  cursor: pointer;
+  font: inherit;
+  font-size: var(--step--1);
+  font-weight: var(--font-weight-bold);
+  padding: var(--space-2xs);
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+.onboarding-flow__skip:hover,
+.onboarding-flow__skip:focus-visible {
+  color: var(--color-orange);
+}
+.onboarding-flow__skip:focus-visible {
+  outline: 2px solid var(--color-orange);
+  outline-offset: 2px;
+}
+
+.onboarding-flow__content {
+  margin-block-end: var(--space-l);
+}
+
+.onboarding-flow__actions {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2xs);
+}
+.onboarding-flow__actions .button {
+  width: 100%;
+  justify-content: center;
+}
+
+/* Eyebrow label above step headings */
+.onboarding-eyebrow {
+  color: var(--color-orange);
+  font-size: var(--step--1);
+  font-weight: var(--font-weight-bold);
+  letter-spacing: 0.06em;
+  margin: 0 0 var(--space-2xs);
+  text-transform: uppercase;
+}
+
+/* Selectable option tile — college, study level, year */
+.onboarding-tile {
+  background: var(--color-light);
+  border: 2px solid var(--color-dark--tint-90);
+  color: var(--color-dark);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: var(--space-s);
+  font: inherit;
+  padding: var(--space-xs) var(--space-s);
+  inline-size: 100%;
+  block-size: 100%;
+  text-align: start;
+  transition:
+    border-color 0.15s,
+    background 0.15s;
+}
+.onboarding-tile:hover {
+  border-color: var(--color-dark);
+}
+.onboarding-tile:focus-visible {
+  outline: 2px solid var(--color-orange);
+  outline-offset: 2px;
+}
+.onboarding-tile[data-selected] {
+  background: var(--color-dark);
+  border-color: var(--color-dark);
+  color: var(--color-light);
+}
+.onboarding-tile__main {
+  flex-grow: 1;
+  min-inline-size: 0;
+}
+.onboarding-tile__title {
+  font-size: var(--step-0);
+  font-weight: var(--font-weight-bold);
+  line-height: var(--line-height-condensed);
+}
+.onboarding-tile__hint {
+  color: var(--color-dark--tint-50);
+  display: block;
+  font-size: var(--step--1);
+  margin-block-start: var(--space-3xs);
+}
+.onboarding-tile[data-selected] .onboarding-tile__hint {
+  color: var(--color-dark--tint-90);
+}
+.onboarding-tile__indicator {
+  align-items: center;
+  background: transparent;
+  block-size: 1.125rem;
+  border: 2px solid var(--color-dark--tint-50);
+  border-radius: 999px;
+  display: inline-flex;
+  flex-shrink: 0;
+  inline-size: 1.125rem;
+  justify-content: center;
+}
+.onboarding-tile[data-selected] .onboarding-tile__indicator {
+  background: var(--color-light);
+  border-color: var(--color-light);
+  color: var(--color-dark);
+}
+
+/* Name step text input */
+.onboarding-input {
+  background: var(--color-light);
+  border: 2px solid var(--color-dark--tint-90);
+  color: var(--color-dark);
+  font: inherit;
+  font-size: var(--step-1);
+  font-weight: var(--font-weight-bold);
+  padding: var(--space-s);
+  inline-size: 100%;
+}
+.onboarding-input::placeholder {
+  color: var(--color-dark--tint-50);
+  font-weight: var(--font-weight-normal);
+}
+.onboarding-input:focus {
+  border-color: var(--color-dark);
+  outline: 2px solid var(--color-orange);
+  outline-offset: 2px;
+}
+
+/* Option grid for tiles and interests */
+.onboarding-grid {
+  display: grid;
+  gap: var(--space-xs);
+  grid-template-columns: 1fr;
+  list-style: none;
+  padding: 0;
+}
+.onboarding-grid > li {
+  display: flex;
+}
+@media (min-width: 49.5rem) {
+  .onboarding-grid--two {
+    grid-template-columns: 1fr 1fr;
+  }
+  .onboarding-grid--three {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+/* Interest tile (larger, with icon + description) */
+.onboarding-interest {
+  background: var(--color-light);
+  border: 2px solid var(--color-dark--tint-90);
+  color: var(--color-dark);
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-3xs);
+  font: inherit;
+  padding: var(--space-xs) var(--space-s);
+  inline-size: 100%;
+  block-size: 100%;
+  text-align: start;
+  transition:
+    border-color 0.15s,
+    background 0.15s;
+}
+.onboarding-interest:hover {
+  border-color: var(--color-dark);
+}
+.onboarding-interest:focus-visible {
+  outline: 2px solid var(--color-orange);
+  outline-offset: 2px;
+}
+.onboarding-interest[data-selected] {
+  background: var(--color-dark);
+  border-color: var(--color-dark);
+  color: var(--color-light);
+}
+.onboarding-interest__icon {
+  align-items: center;
+  color: var(--color-dark);
+  display: inline-flex;
+  margin-block-end: var(--space-3xs);
+}
+.onboarding-interest[data-selected] .onboarding-interest__icon {
+  color: var(--color-light);
+}
+.onboarding-interest__icon svg {
+  display: block;
+}
+.onboarding-interest__label {
+  font-size: var(--step-0);
+  font-weight: var(--font-weight-bold);
+}
+.onboarding-interest__body {
+  color: var(--color-dark--tint-50);
+  font-size: var(--step--1);
+  line-height: var(--line-height-condensed);
+}
+.onboarding-interest[data-selected] .onboarding-interest__body {
+  color: var(--color-dark--tint-90);
+}
+
+/* Step slide-in animations */
+@keyframes onboardSlideIn {
+  from {
+    opacity: 0;
+    transform: translate3d(12px, 0, 0);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+@keyframes onboardSlideInBack {
+  from {
+    opacity: 0;
+    transform: translate3d(-12px, 0, 0);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .onboarding-flow__progress-bar {
+    transition: none;
+  }
+}
+
 /* ---------- Onboarding full-viewport mode ----------
    The /onboarding route tags <body data-onboarding> on mount. We hide
    the chrome (header / footer / feedback FAB / mobile bottom nav) so
@@ -1591,6 +1893,10 @@ body[data-onboarding] .app-shell__main {
 .building-item__detail {
   margin-block-start: var(--space-s);
 }
+.building-item__detail h3 {
+  font-size: var(--step-0);
+  font-weight: var(--font-weight-bold);
+}
 
 /* ==========================================================================
    Event card — UAL-branded
@@ -1739,10 +2045,16 @@ body[data-onboarding] .app-shell__main {
 }
 
 .event-card__when {
-  color: var(--color-dark);
+  color: var(--color-medium);
   font-size: var(--step--1);
-  font-weight: var(--font-weight-bold);
   letter-spacing: 0.02em;
+}
+
+.event-card__college {
+  color: var(--color-medium);
+  font-size: var(--step--1);
+  line-height: var(--line-height-condensed);
+  margin: 0;
 }
 
 .event-card__title {
@@ -1755,10 +2067,12 @@ body[data-onboarding] .app-shell__main {
 
 /* --- Body — kept secondary so the title leads. --- */
 .event-card__body {
+  border-block-start: 1px solid var(--color-dark--tint-90);
   color: var(--color-medium);
   font-size: var(--step--1);
   line-height: var(--line-height-default);
   margin: 0;
+  padding-block: var(--space-s);
   /* Clamp to 2 lines so cards in a list keep a consistent height
      regardless of how long the description is. The `-webkit-` prefix
      is needed even today — line-clamp is widely supported via this
@@ -1813,6 +2127,10 @@ body[data-onboarding] .app-shell__main {
 
 .event-card--compact .event-card__title {
   font-size: var(--step-0);
+}
+
+.event-card--compact .event-card__college {
+  display: none;
 }
 
 /* On very narrow screens, stack the datestamp inline with the meta so
@@ -2678,15 +2996,24 @@ ul.grid > li {
   font-size: var(--step--1);
   font-weight: var(--font-weight-bold);
   gap: 0.4rem;
+  justify-content: center;
   letter-spacing: 0.02em;
   line-height: 1;
+  /* On mobile: icon-only — square pill, 36px tap target */
   min-height: 36px;
-  padding: 0.45rem 0.65rem;
+  min-width: 36px;
+  padding: 0.45rem;
   text-transform: uppercase;
   transition:
     background 0.15s ease,
     color 0.15s ease,
     opacity 0.15s ease;
+}
+
+/* On mobile the label text is hidden — swatch alone identifies the layer.
+   aria-label on the button keeps screen readers informed. */
+.map-toggle__label {
+  display: none;
 }
 
 .map-toggle:hover,
@@ -2749,6 +3076,18 @@ ul.grid > li {
   inset: 50% 0;
   position: absolute;
   transform: translateY(-50%);
+}
+
+@media (min-width: 37.5rem) {
+  /* md (600px): restore text labels and full padding on wider screens */
+  .map-toggle__label {
+    display: inline;
+  }
+
+  .map-toggle {
+    min-width: unset;
+    padding: 0.45rem 0.65rem;
+  }
 }
 
 @media (min-width: 49.5rem) {
@@ -3088,6 +3427,22 @@ ul.grid > li {
   padding-inline-end: calc(44px + var(--space-2xs));
 }
 
+/* On mobile: hide the description — tag + title + address + directions is enough.
+   This keeps the banner compact so the map canvas stays visible. */
+@media (max-width: 37.4rem) {
+  .map-banner {
+    padding: var(--space-xs);
+  }
+
+  .map-banner__body {
+    display: none;
+  }
+
+  .map-banner__title {
+    font-size: var(--step-0);
+  }
+}
+
 @media (min-width: 49.5rem) {
   .map-banner {
     inline-size: min(26rem, calc(100% - var(--space-m) * 2));
@@ -3276,10 +3631,14 @@ ul.grid > li {
   --event-card-bg: var(--color-light);
 }
 
-[data-theme='dark'] .event-card__title,
-[data-theme='dark'] .event-card__body,
-[data-theme='dark'] .event-card__when {
+[data-theme='dark'] .event-card__title {
   color: var(--color-dark);
+}
+
+[data-theme='dark'] .event-card__body,
+[data-theme='dark'] .event-card__when,
+[data-theme='dark'] .event-card__college {
+  color: var(--color-medium);
 }
 
 /* Event card tags — ensure readable text in dark mode */
@@ -3361,4 +3720,156 @@ ul.grid > li {
 
 [data-theme='dark'] .map-toggle__swatch {
   border: 1px solid var(--color-dark);
+}
+
+/* ==========================================================================
+   Screen utilities — shared patterns extracted from screen JSX
+   ========================================================================== */
+
+/* ---------- Back navigation link ----------
+   Small arrow link used at the top of detail screens (checklist task,
+   help category) to return to the parent list. */
+.back-link {
+  align-items: center;
+  color: var(--color-dark);
+  display: inline-flex;
+  font-size: var(--step--1);
+  gap: var(--space-2xs);
+  text-decoration: none;
+}
+.back-link:hover,
+.back-link:focus-visible {
+  color: var(--color-orange);
+}
+.back-link:focus-visible {
+  outline: 2px solid var(--color-orange);
+  outline-offset: 2px;
+}
+
+/* ---------- Status badges ----------
+   Filled (Essential) and outline (Complete) label badges used on the
+   task detail screen. */
+.badge-filled,
+.badge-outline {
+  display: inline-block;
+  font-size: var(--step--1);
+  font-weight: var(--font-weight-bold);
+  letter-spacing: 0.06em;
+  padding: var(--space-3xs) var(--space-xs);
+  text-transform: uppercase;
+}
+.badge-filled {
+  background: var(--color-dark);
+  color: var(--color-light);
+}
+.badge-outline {
+  border: 2px solid var(--color-dark);
+  color: var(--color-dark);
+}
+
+/* ---------- Task row ----------
+   Bordered surface used for each step row inside the task detail screen.
+   Not a link — it wraps a toggle button and content side-by-side. */
+.task-row {
+  align-items: flex-start;
+  background: var(--color-light);
+  border: 2px solid var(--color-dark--tint-90);
+  display: flex;
+  gap: var(--space-s);
+  padding: var(--space-s);
+}
+
+/* ---------- Task row link ----------
+   Clickable variant of the task row used on the task list screen.
+   The border darkens on hover to signal interactivity. */
+.task-row-link {
+  align-items: center;
+  background: var(--color-light);
+  border: 2px solid var(--color-dark--tint-90);
+  color: var(--color-dark);
+  display: flex;
+  gap: var(--space-s);
+  padding: var(--space-s);
+  text-decoration: none;
+  transition: border-color 0.15s;
+}
+.task-row-link:hover {
+  border-color: var(--color-dark);
+}
+.task-row-link:focus-visible {
+  outline: 2px solid var(--color-orange);
+  outline-offset: 2px;
+}
+
+/* ---------- Stacked bordered list ----------
+   A <ul> with a 2px outer border and 1px dividers between items.
+   Used by the help categories list and help contact list. The CSS
+   child combinator handles "all but first" without conditional JSX. */
+.stacked-list {
+  border: 2px solid var(--color-dark--tint-90);
+}
+.stacked-list > li + li {
+  border-top: 1px solid var(--color-dark--tint-90);
+}
+
+/* ---------- Help row link ----------
+   Full-row tap target for each help category item. Background tints
+   on hover (no border change — this list uses contained borders). */
+.help-row-link {
+  align-items: center;
+  background: var(--color-light);
+  color: var(--color-dark);
+  display: flex;
+  gap: var(--space-s);
+  /* WCAG 2.2 — 2.5.8 Target Size */
+  min-height: 3.5rem;
+  padding: var(--space-xs) var(--space-s);
+  text-decoration: none;
+  transition: background 0.15s;
+}
+.help-row-link:hover {
+  background: var(--color-shade);
+}
+.help-row-link:focus-visible {
+  outline: 2px solid var(--color-orange);
+  outline-offset: -2px;
+}
+
+/* ---------- Direction link ----------
+   Ghost-style link used for external map links (Citymapper, Google Maps,
+   Apple Maps) inside the building detail panel on the map screen.
+   Inverts to light-on-dark on hover — distinct from the standard button
+   hover (orange) so direction links read as secondary utilities. */
+.direction-link {
+  align-items: center;
+  background: var(--color-light);
+  border: 2px solid var(--color-dark);
+  color: var(--color-dark);
+  display: inline-flex;
+  font-size: var(--step--1);
+  font-weight: var(--font-weight-bold);
+  /* WCAG 2.2 — 2.5.8 Target Size */
+  min-height: 44px;
+  padding: var(--space-2xs) var(--space-s);
+  text-decoration: none;
+  transition:
+    background 0.15s,
+    color 0.15s;
+}
+.direction-link:hover,
+.direction-link:focus-visible {
+  background: var(--color-dark);
+  color: var(--color-light);
+}
+.direction-link:focus-visible {
+  outline: 2px solid var(--color-orange);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .task-row-link,
+  .help-row-link,
+  .direction-link {
+    transition: none;
+  }
 }

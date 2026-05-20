@@ -118,22 +118,24 @@ export function MapScreen() {
               type="button"
               className="map-toggle"
               aria-pressed={showBuildingLabels}
+              aria-label="Toggle building labels"
               onClick={() => setShowBuildingLabels((v) => !v)}
             >
               <span
                 className="map-toggle__swatch map-toggle__swatch--building"
                 aria-hidden="true"
               />
-              Buildings
+              <span className="map-toggle__label">Buildings</span>
             </button>
             <button
               type="button"
               className="map-toggle"
               aria-pressed={showStationLabels}
+              aria-label="Toggle tube station labels"
               onClick={() => setShowStationLabels((v) => !v)}
             >
               <span className="map-toggle__swatch map-toggle__swatch--tube" aria-hidden="true" />
-              Tube
+              <span className="map-toggle__label">Tube</span>
             </button>
           </div>
 
@@ -198,7 +200,7 @@ export function MapScreen() {
                     >
                       {/* Location */}
                       <section className="flow" data-flow="2xs" aria-label="Location">
-                        <h3 className="mb-2xs text-step-0 font-ual-bold">Location</h3>
+                        <h3>Location</h3>
                         <p className="font-ual-bold">{b.name}</p>
                         <p className="text-step-d1 text-ual-medium">{b.address}</p>
                         <div className="cluster" data-justify="flex-start">
@@ -206,7 +208,7 @@ export function MapScreen() {
                             href={citymapperUrl(b)}
                             target="_blank"
                             rel="noreferrer"
-                            className="inline-flex items-center border-2 border-ual-dark bg-ual-light px-s py-2xs text-step-d1 font-ual-bold text-ual-dark no-underline transition-colors hover:bg-ual-dark hover:text-ual-light focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ual-orange"
+                            className="direction-link"
                           >
                             Citymapper
                           </a>
@@ -214,7 +216,7 @@ export function MapScreen() {
                             href={directionsUrl(b)}
                             target="_blank"
                             rel="noreferrer"
-                            className="inline-flex items-center border-2 border-ual-dark bg-ual-light px-s py-2xs text-step-d1 font-ual-bold text-ual-dark no-underline transition-colors hover:bg-ual-dark hover:text-ual-light focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ual-orange"
+                            className="direction-link"
                           >
                             Google Maps
                           </a>
@@ -222,7 +224,7 @@ export function MapScreen() {
                             href={appleMapsUrl(b)}
                             target="_blank"
                             rel="noreferrer"
-                            className="inline-flex items-center border-2 border-ual-dark bg-ual-light px-s py-2xs text-step-d1 font-ual-bold text-ual-dark no-underline transition-colors hover:bg-ual-dark hover:text-ual-light focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ual-orange"
+                            className="direction-link"
                           >
                             Apple Maps
                           </a>
@@ -232,10 +234,10 @@ export function MapScreen() {
                       {/* Transport */}
                       {b.transport && (
                         <section className="flow" data-flow="s" aria-label="Transport">
-                          <h3 className="mb-2xs text-step-0 font-ual-bold">Transport</h3>
+                          <h3>Transport</h3>
                           <div className="grid grid-cols-2 gap-m">
                             <div>
-                              <p className="mb-2xs text-step-d1 font-ual-bold text-ual-medium">
+                              <p className="text-step-d1 font-ual-bold text-ual-medium">
                                 Closest stations
                               </p>
                               <table className="map-transport-table w-full border-collapse">
@@ -250,7 +252,7 @@ export function MapScreen() {
                               </table>
                             </div>
                             <div>
-                              <p className="mb-2xs text-step-d1 font-ual-bold text-ual-medium">
+                              <p className="text-step-d1 font-ual-bold text-ual-medium">
                                 Closest buses
                               </p>
                               <table className="map-transport-table w-full border-collapse">
@@ -271,7 +273,7 @@ export function MapScreen() {
                       {/* Accessibility */}
                       {b.transport?.accessibilityNote && (
                         <section className="flow" data-flow="2xs" aria-label="Accessibility">
-                          <h3 className="mb-2xs text-step-0 font-ual-bold">Accessibility</h3>
+                          <h3>Accessibility</h3>
                           <p className="text-step-d1">
                             {b.transport.accessibilityNote.replace('on AccessAble', '')}{' '}
                             <a

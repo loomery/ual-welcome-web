@@ -9,20 +9,18 @@ export function HelpCategoriesScreen() {
         <p className="standfirst">Not sure who to contact? Find the right team or service below.</p>
       </div>
 
-      <ul role="list" className="border-2 border-ual-dark-90">
-        {HELP_CATEGORIES.map((cat, i) => (
-          <li key={cat.id} className={i > 0 ? 'border-t border-ual-dark-90' : ''}>
-            <Link
-              href={`/help/${cat.id}`}
-              className="flex min-h-14 items-center gap-s bg-ual-light px-s py-xs text-ual-dark no-underline transition-colors hover:bg-ual-shade focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-ual-orange"
-            >
-              <span className="flex min-w-0 grow flex-col" style={{ gap: '2px' }}>
+      <ul role="list" className="stacked-list">
+        {HELP_CATEGORIES.map((cat) => (
+          <li key={cat.id}>
+            <Link href={`/help/${cat.id}`} className="help-row-link">
+              <span className="flex min-w-0 grow flex-col gap-3xs">
                 <span className="text-step-0 font-ual-bold">{cat.title}</span>
                 <span className="text-step-d1/ual-condensed text-ual-medium">
                   {cat.shortDescription}
                 </span>
               </span>
 
+              {/* Chevron */}
               <svg
                 viewBox="0 0 24 24"
                 fill="none"

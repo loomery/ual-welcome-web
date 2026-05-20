@@ -6,10 +6,7 @@ import Link from 'next/link';
 export function HelpDetailScreen({ category }) {
   return (
     <article className="prose flow" data-flow="l">
-      <Link
-        href="/help"
-        className="text-step-d1 text-ual-dark no-underline hover:text-ual-orange focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ual-orange"
-      >
+      <Link href="/help" className="back-link">
         ← Back to help
       </Link>
 
@@ -23,16 +20,9 @@ export function HelpDetailScreen({ category }) {
           How to contact
         </h2>
 
-        <ul role="list" className="border-2 border-ual-dark-90">
+        <ul role="list" className="stacked-list">
           {category.contacts.map((contact, i) => (
-            <li
-              key={i}
-              className={[
-                'flex flex-col bg-ual-light px-s py-xs',
-                i > 0 ? 'border-t border-ual-dark-90' : '',
-              ].join(' ')}
-              style={{ gap: '2px' }}
-            >
+            <li key={i} className="flex flex-col bg-ual-light px-s py-xs" style={{ gap: '2px' }}>
               <span className="text-step-d1 text-ual-medium">{contact.label}</span>
 
               {contact.href ? (
