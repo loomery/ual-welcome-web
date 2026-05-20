@@ -2847,13 +2847,31 @@ ul.grid > li {
   background: rgba(0, 0, 0, 0.55);
   color: var(--color-light);
   font-size: var(--step--1);
+  /* Mobile: pin both sides so the pill never overflows the canvas edge. */
   left: var(--space-s);
+  right: var(--space-s);
   padding: var(--space-3xs) var(--space-2xs);
   pointer-events: none;
   position: absolute;
-  /* Sits clearly below the layer-toggle pills (pill ≈ 2.75rem with
-     padding + border, plus a comfortable gap so the two don't touch). */
-  top: calc(var(--space-s) + 2.75rem + var(--space-2xs));
+  /* Sits clearly below the icon-only toggle squares on mobile
+     (36 px tap target + space-s top offset + space-2xs gap). */
+  top: calc(var(--space-s) + 36px + var(--space-2xs));
+}
+
+@media (min-width: 37.5rem) {
+  /* md (600 px): labels appear but toggles stay 36 px tall (min-height).
+     Release the right pin so the hint pill sizes to its content width. */
+  .map-hint {
+    right: auto;
+  }
+}
+
+@media (min-width: 49.5rem) {
+  /* At this breakpoint .map-toggles moves to top: space-m, so the hint
+     must track the same offset to stay below the toggle row. */
+  .map-hint {
+    top: calc(var(--space-m) + 36px + var(--space-2xs));
+  }
 }
 
 /* Dark mode: the translucent-black pill becomes unreadable because
