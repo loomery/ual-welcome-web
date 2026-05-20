@@ -30,27 +30,40 @@ const TOPDOWN_TARGET = new Vector3(0, 0, 0);
 /**
  * Drives the camera + OrbitControls target.
  *
- * Two behaviours live here so they don't fight over the target Vector:
+ * Three animated behaviours share the same ease-out cubic tween so every
+ * transition feels part of the same motion language:
  *
- * 1. In standard mode, it lerps the orbit target toward the selected
- *    building (or the scene origin if nothing is selected), so tapping a
- *    college in the list below re-centres the 3D view.
+ * 1. **topDown toggle** — flies to/from the bird's-eye vantage.
+ * 2. **Building selection** — flies the camera close to the selected
+ *    building so the user immediately understands *where* on the map it
+ *    sits. Uses a fixed offset that mirrors the default viewing direction
+ *    ([14, 13, 18] → normalised ≈ [0.53, 0.49, 0.68]), scaled to ~13
+ *    scene units from the building centre.
+ * 3. **Deselection** — returns to the standard overview vantage.
  *
- * 2. When `topDown` flips, it runs a short eased transition of both the
- *    camera position and the orbit target to the mode's "home" pose, then
- *    hands control back to OrbitControls. The same transition plays on
- *    the way back to the standard vantage.
+ * A `targetRef` keeps the latest `target` prop always accessible inside
+ * the `selectedId` effect without adding `target` to its dependency array
+ * (which would re-trigger the effect on every render because `target` is
+ * a new Vector3 on every render when nothing is selected).
  *
  * @param {Object} props
  * @param {{ current: any }} props.controls
  * @param {boolean} props.topDown
- * @param {Vector3} props.target
+ * @param {Vector3} props.target   Building centre (or scene origin when nothing selected).
+ * @param {string | null} props.selectedId
  */
-function CameraController({ controls, topDown, target }) {
+function CameraController({ controls, topDown, target, selectedId }) {
   const { camera } = useThree();
-  const lerpedTarget = useRef(new Vector3().copy(STANDARD_TARGET));
+  const reducedMotion = usePrefersReducedMotion();
 
-  // Animation state for mode transitions.
+  // Always-current copy of the target prop — updated before each effect runs.
+  const targetRef = useRef(target);
+  useEffect(() => {
+    targetRef.current = target;
+  });
+
+  // Shared tween state — only one animation plays at a time; the last
+  // effect to fire wins (React runs effects in declaration order).
   const animating = useRef(false);
   const animStart = useRef(0);
   const fromPos = useRef(new Vector3());
@@ -58,52 +71,67 @@ function CameraController({ controls, topDown, target }) {
   const toPos = useRef(new Vector3());
   const toTarget = useRef(new Vector3());
 
-  // When the mode flag changes, snapshot the current pose and tween to the
-  // new home. useEffect (rather than tracking in useFrame) means we only
-  // react to actual flips, not every frame.
-  useEffect(() => {
+  /** Snapshot current pose and begin a tween toward destPos / destTarget. */
+  function startAnim(destPos, destTarget) {
     const c = controls.current;
     if (!c) return;
     fromPos.current.copy(camera.position);
     fromTarget.current.copy(c.target);
-    if (topDown) {
-      toPos.current.copy(TOPDOWN_CAMERA_POS);
-      toTarget.current.copy(TOPDOWN_TARGET);
-    } else {
-      toPos.current.copy(STANDARD_CAMERA_POS);
-      toTarget.current.copy(STANDARD_TARGET);
-    }
+    toPos.current.copy(destPos);
+    toTarget.current.copy(destTarget);
     animStart.current = performance.now();
     animating.current = true;
-  }, [topDown, camera, controls]);
+  }
+
+  // 1. Top-down toggle — flies to/from bird's-eye.
+  useEffect(() => {
+    if (topDown) {
+      startAnim(TOPDOWN_CAMERA_POS, TOPDOWN_TARGET);
+    } else {
+      // Return to overview; the selectedId effect (below) may immediately
+      // override this if a building is still selected — that's intentional.
+      startAnim(STANDARD_CAMERA_POS, STANDARD_TARGET);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [topDown]);
+
+  // 2. Building selection — zoom in; deselection — return to overview.
+  useEffect(() => {
+    if (topDown) return; // let the topDown effect own the camera in that mode
+    const t = targetRef.current;
+    if (selectedId) {
+      // Close-up offset: mirrors the standard [14, 13, 18] viewing direction
+      // scaled to ~13 units from the building centre so it lands above minDistance.
+      const camPos = new Vector3(t.x + 7, t.y + 7, t.z + 9);
+      startAnim(camPos, t.clone());
+    } else {
+      startAnim(STANDARD_CAMERA_POS, STANDARD_TARGET);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedId, topDown]);
 
   useFrame(() => {
     const c = controls.current;
     if (!c) return;
 
     if (animating.current) {
-      // Ease-out cubic over ~0.8s feels snappy without being jarring.
+      if (reducedMotion) {
+        // Honour prefers-reduced-motion: snap to destination instantly.
+        camera.position.copy(toPos.current);
+        c.target.copy(toTarget.current);
+        c.update();
+        animating.current = false;
+        return;
+      }
+      // Ease-out cubic over 0.85 s — snappy but not jarring.
       const elapsed = (performance.now() - animStart.current) / 1000;
-      const duration = 0.8;
+      const duration = 0.85;
       const t = Math.min(elapsed / duration, 1);
       const eased = 1 - Math.pow(1 - t, 3);
       camera.position.lerpVectors(fromPos.current, toPos.current, eased);
       c.target.lerpVectors(fromTarget.current, toTarget.current, eased);
-      lerpedTarget.current.copy(c.target);
       c.update();
-      if (t >= 1) {
-        animating.current = false;
-      }
-      return;
-    }
-
-    // Standard-mode selection targeting — only runs once transitions have
-    // settled, and only when not in top-down (where the target stays on
-    // the origin regardless of selection).
-    if (!topDown) {
-      lerpedTarget.current.lerp(target, 0.08);
-      c.target.copy(lerpedTarget.current);
-      c.update();
+      if (t >= 1) animating.current = false;
     }
   });
 
@@ -141,12 +169,13 @@ export function MapCanvas({
 
   const selected = selectedId ? BUILDINGS.find((b) => b.id === selectedId) : undefined;
 
-  const target = selected
-    ? (() => {
-        const [x, z] = geoToScene(selected.geo.lng, selected.geo.lat);
-        return new Vector3(x, selected.height / 2, z);
-      })()
-    : new Vector3(0, 0.5, 0);
+  // Stable Vector3 — only recreated when the selected building actually changes,
+  // so the CameraController's targetRef stays accurate without spurious re-renders.
+  const target = useMemo(() => {
+    if (!selected) return new Vector3(0, 0.5, 0);
+    const [x, z] = geoToScene(selected.geo.lng, selected.geo.lat);
+    return new Vector3(x, selected.height / 2, z);
+  }, [selected]);
 
   return (
     <Canvas
@@ -250,7 +279,12 @@ export function MapCanvas({
         ))}
       </Suspense>
 
-      <CameraController controls={controls} topDown={topDown} target={target} />
+      <CameraController
+        controls={controls}
+        topDown={topDown}
+        target={target}
+        selectedId={selectedId}
+      />
 
       {/* OrbitControls: in top-down mode we freeze rotation and the auto-spin
           so the map reads like a fixed floor plan — pan + zoom stay enabled
@@ -265,7 +299,7 @@ export function MapCanvas({
         dampingFactor={0.08}
         autoRotate={!topDown && !reducedMotion && selectedId === null}
         autoRotateSpeed={0.3}
-        minDistance={12}
+        minDistance={selectedId ? 4 : 12}
         maxDistance={topDown ? 60 : 36}
         maxPolarAngle={topDown ? 0.0001 : Math.PI / 2.25}
         minPolarAngle={topDown ? 0 : 0}
