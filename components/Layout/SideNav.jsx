@@ -54,15 +54,9 @@ export function SideNav() {
           return (
             <li key={item.href ?? item.to}>
               {isExternal ? (
-                <a
-                  href={item.href}
-                  className="side-nav__link"
-                  target="_blank"
-                  rel="noreferrer"
-                  aria-label={`${item.label} (opens in a new tab)`}
-                >
-                  <item.Icon className="side-nav__icon" aria-hidden="true" />
+                <a href={item.href} className="side-nav__link" target="_blank" rel="noreferrer">
                   <span>{item.label}</span>
+                  <span className="visually-hidden"> (opens in a new tab)</span>
                 </a>
               ) : (
                 <Link
@@ -71,7 +65,6 @@ export function SideNav() {
                   aria-current={active ? 'page' : undefined}
                   data-active={active || undefined}
                 >
-                  <item.Icon className="side-nav__icon" aria-hidden="true" />
                   <span>{item.label}</span>
                   {active && <span className="visually-hidden">(current page)</span>}
                 </Link>

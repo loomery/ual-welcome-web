@@ -243,12 +243,11 @@ export function MapCanvas({
         );
       })}
 
-      {/* Nearest-station markers — a pure TfL roundel icon (red ring + blue
-          bar through its middle) anchored exactly on the station, and a
-          separate name pill to its right. The outer flex container is
-          translated by half a roundel so the ring's centre — not the whole
-          composition's — sits precisely on the station's lat/lng. */}
+      {/* Nearest-station markers — hidden while a building is selected so the
+          map reads as cleanly as possible: only the selected building's label
+          stays visible, tube roundels would clutter the focused view. */}
       {showStationLabels &&
+        !selectedId &&
         STATIONS.map((s) => {
           const [x, z] = geoToScene(s.lng, s.lat);
           return (
@@ -273,6 +272,7 @@ export function MapCanvas({
             key={b.id}
             building={b}
             selected={selectedId === b.id}
+            dimmed={Boolean(selectedId) && selectedId !== b.id}
             onSelect={onSelect}
             showLabel={showBuildingLabels}
           />
@@ -289,7 +289,9 @@ export function MapCanvas({
       {/* OrbitControls: in top-down mode we freeze rotation and the auto-spin
           so the map reads like a fixed floor plan — pan + zoom stay enabled
           so users can still explore. Standard mode keeps the orbit controls
-          fully live. */}
+          fully live. autoRotate is not gated on selectedId — we want the
+          slow drift to continue even after a building is selected, orbiting
+          around the building target once CameraController's fly-in completes. */}
       <OrbitControls
         ref={controls}
         enablePan
@@ -297,7 +299,7 @@ export function MapCanvas({
         enableRotate={!topDown}
         enableDamping
         dampingFactor={0.08}
-        autoRotate={!topDown && !reducedMotion && selectedId === null}
+        autoRotate={!topDown && !reducedMotion}
         autoRotateSpeed={0.3}
         minDistance={selectedId ? 4 : 12}
         maxDistance={topDown ? 60 : 36}

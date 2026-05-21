@@ -880,7 +880,10 @@ main:focus {
   color: var(--color-copy-headings);
   display: flex;
   flex-direction: column;
-  gap: var(--space-xs);
+  /* DDS "Atoms / Body" uses --spacing/spacing-xs (16 px) for the gap
+     between the H4+icon block and the body copy. Our --space-s maps
+     to that value (clamp starting at 1 rem / 16 px). */
+  gap: var(--space-s);
   padding: 0;
   text-decoration: none;
   transition: color 0.15s ease;
@@ -896,8 +899,10 @@ main:focus {
 .card__title {
   color: var(--color-copy-headings);
   font-size: var(--step-1);
-  font-weight: var(--font-weight-bold);
-  letter-spacing: var(--letter-spacing-tight);
+  /* UAL DDS "H4 – Card title" uses 55 Roman (normal weight), no tight tracking.
+     font-weight explicitly normal here — the h3 reset also sets normal but we're
+     explicit so this class can't be accidentally overridden by specificity. */
+  font-weight: var(--font-weight-normal);
   line-height: var(--line-height-condensed);
   margin: 0;
 }
@@ -953,8 +958,8 @@ main:focus {
 /* ---------- Tag ---------- */
 .tag {
   background-color: var(--tag-bg-color, var(--color-dark--tint-95));
-  padding-block: 0.25rem;
-  padding-inline: 0.5rem;
+  padding-block: var(--space-3xs);
+  padding-inline: var(--space-2xs);
   width: fit-content;
   font-size: var(--step--1);
   line-height: var(--line-height-condensed);
@@ -1502,8 +1507,7 @@ main:focus {
   gap: var(--space-2xs);
 }
 .onboarding-flow__actions .button {
-  width: 100%;
-  justify-content: center;
+  align-self: flex-start;
 }
 
 /* Eyebrow label above step headings */
@@ -1832,7 +1836,9 @@ body[data-onboarding] .app-shell__main {
 /* ---------- Progress ---------- */
 .progress {
   background: var(--color-dark--tint-90);
-  block-size: 0.5rem;
+  /* --space-2xs ≈ 0.5 rem / 8 px — smallest space token, appropriate
+     for a hairline progress track. */
+  block-size: var(--space-2xs);
   inline-size: 100%;
   overflow: hidden;
 }
@@ -1973,7 +1979,7 @@ body[data-onboarding] .app-shell__main {
   display: inline-flex;
   flex-direction: column;
   justify-content: center;
-  line-height: 1;
+  line-height: var(--line-height-single);
   min-inline-size: 3.5rem;
   padding: var(--space-2xs) var(--space-xs);
   transition:
@@ -1992,7 +1998,7 @@ body[data-onboarding] .app-shell__main {
   font-size: var(--step-2);
   font-weight: var(--font-weight-bold);
   letter-spacing: var(--letter-spacing-tight);
-  line-height: 1;
+  line-height: var(--line-height-single);
 }
 
 .event-card__month {
@@ -2022,8 +2028,8 @@ body[data-onboarding] .app-shell__main {
   font-size: var(--step--1);
   font-weight: var(--font-weight-bold);
   letter-spacing: 0.06em;
-  line-height: 1;
-  padding: 0.3rem 0.5rem;
+  line-height: var(--line-height-single);
+  padding: var(--space-3xs) var(--space-2xs);
   text-transform: uppercase;
   width: fit-content;
 }
@@ -2445,15 +2451,7 @@ ul.grid > li {
   z-index: 1;
 }
 
-.home-hero__title::after {
-  background: var(--color-orange);
-  block-size: 0.5em;
-  content: '';
-  display: inline-block;
-  inline-size: 0.5em;
-  margin-inline-start: 0.2em;
-  vertical-align: baseline;
-}
+/* Orange square decoration removed — orange is reserved for hover/selection states */
 
 .home-hero__lede {
   color: var(--color-dark--tint-90);
@@ -2476,8 +2474,8 @@ ul.grid > li {
 /* ---------- Countdown pill ---------- */
 .countdown {
   align-items: baseline;
-  background: var(--color-orange);
-  color: var(--color-dark);
+  background: var(--color-dark);
+  color: var(--color-light);
   display: inline-flex;
   font-family: var(--font-main);
   font-weight: var(--font-weight-bold);
@@ -2693,7 +2691,7 @@ ul.grid > li {
   font-size: var(--step-0);
   font-weight: var(--font-weight-bold);
   letter-spacing: 0.04em;
-  line-height: 1;
+  line-height: var(--line-height-single);
   text-transform: uppercase;
 }
 
@@ -2901,7 +2899,7 @@ ul.grid > li {
   font-weight: var(--font-weight-bold);
   height: 2.5rem;
   justify-content: center;
-  line-height: 1;
+  line-height: var(--line-height-single);
   padding: 0;
   position: absolute;
   right: var(--space-s);
@@ -3016,7 +3014,7 @@ ul.grid > li {
   gap: 0.4rem;
   justify-content: center;
   letter-spacing: 0.02em;
-  line-height: 1;
+  line-height: var(--line-height-single);
   /* On mobile: icon-only — square pill, 36px tap target */
   min-height: 36px;
   min-width: 36px;
@@ -3529,8 +3527,8 @@ ul.grid > li {
 }
 
 .map-station__name {
-  background: #1a1a1a;
-  color: #ffffff;
+  background: var(--color-dark);
+  color: var(--color-light);
   font-family: var(--font-main);
   font-size: 0.68rem;
   font-weight: var(--font-weight-bold);
