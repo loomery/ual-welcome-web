@@ -167,18 +167,26 @@ export function EventDetailScreen({ id }) {
         </Button>
       </div>
 
-      {/* Related events */}
+      {/* Related events — full cards so the description helps users decide
+          whether to attend. The compact variant is designed for horizontal
+          reels (fixed 18 rem width); in a grid it leaves awkward whitespace. */}
       {related.length > 0 && (
-        <section className="flow" data-flow="s" aria-labelledby="related-heading">
+        <section
+          className="flow event-detail__related"
+          data-flow="s"
+          aria-labelledby="related-heading"
+        >
           <div className="cluster" data-justify="space-between">
-            <h2 id="related-heading">More from {event.college}</h2>
+            <h2 id="related-heading" className="event-detail__related-heading">
+              More from {event.college}
+            </h2>
             <Link className="home-section__cta" href="/events">
               See all →
             </Link>
           </div>
           <div className="grid">
             {related.map((e) => (
-              <EventCard key={e.id} event={e} compact />
+              <EventCard key={e.id} event={e} />
             ))}
           </div>
         </section>
@@ -225,6 +233,23 @@ export function EventDetailScreen({ id }) {
 
         .event-detail__cta {
           display: inline-flex;
+        }
+
+        /* ── Related events section ────────────────────────────────────── */
+        /* A hairline separator + extra block-start breathing room gives the
+           section a clear visual break from the main article content. */
+        .event-detail__related {
+          border-block-start: 1px solid var(--color-dark--tint-90);
+          padding-block-start: var(--space-l);
+          /* Negative margin pulls the border flush with the article's own
+             top padding so the divider feels intentional, not accidental. */
+          margin-block-start: var(--space-l);
+        }
+
+        /* Scale the heading down one step from the default h2 — the section
+           is supplementary content, not a primary page landmark. */
+        .event-detail__related-heading {
+          font-size: var(--step-1);
         }
       `}</style>
     </article>
