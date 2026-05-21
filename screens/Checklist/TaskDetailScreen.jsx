@@ -101,12 +101,7 @@ export function TaskDetailScreen({ task }) {
       ))}
 
       {/* Primary CTA */}
-      <a
-        href={task.cta.href}
-        className="button flex w-full justify-center"
-        target="_blank"
-        rel="noreferrer"
-      >
+      <a href={task.cta.href} className="button" target="_blank" rel="noreferrer">
         {task.cta.label} →<span className="visually-hidden"> (opens in a new tab)</span>
       </a>
 
@@ -117,7 +112,7 @@ export function TaskDetailScreen({ task }) {
         </p>
         <button
           type="button"
-          className="button w-full justify-center"
+          className="button"
           data-ghost-button={!isComplete && !isInProgress ? '' : undefined}
           onClick={isComplete ? markIncomplete : isInProgress ? markComplete : markInProgress}
         >

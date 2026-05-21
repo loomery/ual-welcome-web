@@ -289,7 +289,9 @@ export function MapCanvas({
       {/* OrbitControls: in top-down mode we freeze rotation and the auto-spin
           so the map reads like a fixed floor plan — pan + zoom stay enabled
           so users can still explore. Standard mode keeps the orbit controls
-          fully live. */}
+          fully live. autoRotate is not gated on selectedId — we want the
+          slow drift to continue even after a building is selected, orbiting
+          around the building target once CameraController's fly-in completes. */}
       <OrbitControls
         ref={controls}
         enablePan
@@ -297,7 +299,7 @@ export function MapCanvas({
         enableRotate={!topDown}
         enableDamping
         dampingFactor={0.08}
-        autoRotate={!topDown && !reducedMotion && selectedId === null}
+        autoRotate={!topDown && !reducedMotion}
         autoRotateSpeed={0.3}
         minDistance={selectedId ? 4 : 12}
         maxDistance={topDown ? 60 : 36}

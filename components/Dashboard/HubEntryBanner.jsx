@@ -21,7 +21,7 @@ export function HubEntryBanner() {
       <style>{`
         .hub-entry-banner {
           background: var(--color-shade);
-          border-inline-start: 4px solid var(--color-orange);
+          border-inline-start: 4px solid var(--color-dark);
           padding: var(--space-s) var(--space-m);
           transition: background-color 150ms ease;
           color: inherit;

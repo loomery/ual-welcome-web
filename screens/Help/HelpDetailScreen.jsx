@@ -48,12 +48,7 @@ export function HelpDetailScreen({ category }) {
         </ul>
       </section>
 
-      <a
-        href={category.ctaHref}
-        className="button flex w-full justify-center"
-        target="_blank"
-        rel="noreferrer"
-      >
+      <a href={category.ctaHref} className="button" target="_blank" rel="noreferrer">
         {category.ctaLabel} →<span className="visually-hidden"> (opens in a new tab)</span>
       </a>
     </article>

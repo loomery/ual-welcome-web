@@ -225,8 +225,6 @@ export function EventDetailScreen({ id }) {
 
         .event-detail__cta {
           display: inline-flex;
-          width: 100%;
-          justify-content: center;
         }
       `}</style>
     </article>
