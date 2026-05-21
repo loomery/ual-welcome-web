@@ -98,6 +98,15 @@ export function CampusFilter({ campuses, selected, onChange }) {
                     type="checkbox"
                     checked={isChecked}
                     onChange={() => toggleCampus(c.name)}
+                    onKeyDown={(e) => {
+                      // Native checkboxes respond to Space but not Enter.
+                      // Map Enter → toggle so keyboard users can select
+                      // with either key (matches ARIA checkbox pattern).
+                      if (e.key === 'Enter') {
+                        e.preventDefault();
+                        toggleCampus(c.name);
+                      }
+                    }}
                     className="campus-filter__checkbox"
                   />
                   <span className="campus-filter__option-text">{c.name}</span>
