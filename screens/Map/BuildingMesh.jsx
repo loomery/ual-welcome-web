@@ -10,18 +10,22 @@ import { geoToScene } from './londonMap';
 const COLOR_SURFACE_DEFAULT = '#fafafa'; // near-white resting fill
 const COLOR_SURFACE_HOVER = '#ffffff'; // --color-light lifted on hover
 const COLOR_SURFACE_SELECTED = '#ff5000'; // --color-orange
+const COLOR_SURFACE_DIMMED = '#c4c4c4'; // grey — all non-selected when a building is active
+const COLOR_SURFACE_DIMMED_HOVER = '#d4d4d4'; // slightly lifted dimmed grey on hover
 const COLOR_EDGE_DEFAULT = '#000000'; // --color-dark
 const COLOR_EDGE_HOVER = '#ff5000'; // --color-orange
 const COLOR_EDGE_SELECTED = '#000000'; // --color-dark
+const COLOR_EDGE_DIMMED = '#999999'; // lighter edge for dimmed buildings
 
 /**
  * @param {Object} props
  * @param {import('../../data/buildings').Building} props.building
  * @param {boolean} props.selected
+ * @param {boolean} props.dimmed   True when another building is selected — greys out this mesh.
  * @param {(id: string) => void} props.onSelect
  * @param {boolean} props.showLabel
  */
-export function BuildingMesh({ building, selected, onSelect, showLabel }) {
+export function BuildingMesh({ building, selected, dimmed, onSelect, showLabel }) {
   const groupRef = useRef(null);
   const [hovered, setHovered] = useState(false);
 
@@ -42,10 +46,20 @@ export function BuildingMesh({ building, selected, onSelect, showLabel }) {
 
   const fill = selected
     ? COLOR_SURFACE_SELECTED
-    : hovered
-      ? COLOR_SURFACE_HOVER
-      : COLOR_SURFACE_DEFAULT;
-  const edge = selected ? COLOR_EDGE_SELECTED : hovered ? COLOR_EDGE_HOVER : COLOR_EDGE_DEFAULT;
+    : dimmed
+      ? hovered
+        ? COLOR_SURFACE_DIMMED_HOVER
+        : COLOR_SURFACE_DIMMED
+      : hovered
+        ? COLOR_SURFACE_HOVER
+        : COLOR_SURFACE_DEFAULT;
+  const edge = selected
+    ? COLOR_EDGE_SELECTED
+    : dimmed
+      ? COLOR_EDGE_DIMMED
+      : hovered
+        ? COLOR_EDGE_HOVER
+        : COLOR_EDGE_DEFAULT;
 
   const [w, d] = building.size;
   const h = building.height;
@@ -107,7 +121,7 @@ export function BuildingMesh({ building, selected, onSelect, showLabel }) {
           </group>
         ))}
 
-        {(showLabel || selected) && (
+        {(selected || (showLabel && !dimmed)) && (
           <Html
             position={[0, h + 0.9, 0]}
             center
@@ -204,7 +218,7 @@ export function BuildingMesh({ building, selected, onSelect, showLabel }) {
           <Edges color={edge} threshold={15} />
         </mesh>
 
-        {(showLabel || selected) && (
+        {(selected || (showLabel && !dimmed)) && (
           <Html
             position={[0, h + 0.9, 0]}
             center
@@ -328,7 +342,7 @@ export function BuildingMesh({ building, selected, onSelect, showLabel }) {
           </mesh>
         ))}
 
-        {(showLabel || selected) && (
+        {(selected || (showLabel && !dimmed)) && (
           <Html
             position={[0, h + 0.9, 0]}
             center
@@ -436,7 +450,7 @@ export function BuildingMesh({ building, selected, onSelect, showLabel }) {
           <Edges color={edge} threshold={15} />
         </mesh>
 
-        {(showLabel || selected) && (
+        {(selected || (showLabel && !dimmed)) && (
           <Html
             position={[0, h + 0.9, 0]}
             center
@@ -537,7 +551,7 @@ export function BuildingMesh({ building, selected, onSelect, showLabel }) {
           )),
         )}
 
-        {(showLabel || selected) && (
+        {(selected || (showLabel && !dimmed)) && (
           <Html
             position={[0, h + 0.9, 0]}
             center
@@ -632,7 +646,7 @@ export function BuildingMesh({ building, selected, onSelect, showLabel }) {
           );
         })}
 
-        {(showLabel || selected) && (
+        {(selected || (showLabel && !dimmed)) && (
           <Html
             position={[0, h + ridgeH + 0.7, 0]}
             center
@@ -725,7 +739,7 @@ export function BuildingMesh({ building, selected, onSelect, showLabel }) {
           Hidden when the "Buildings" layer toggle is off, except for the
           currently selected building, which always shows its label so
           users retain context after tapping through the list below. */}
-      {(showLabel || selected) && (
+      {(selected || (showLabel && !dimmed)) && (
         <Html
           position={[0, h + 0.9, 0]}
           center
