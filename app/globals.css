@@ -1823,7 +1823,10 @@ body[data-onboarding] .app-shell__main {
   .app-footer__inner {
     align-items: center;
     flex-direction: row;
-    justify-content: space-between;
+    /* Group note + Reset on the left with a generous gap — the fixed
+       Feedback FAB owns the right corner so space-between would collide. */
+    justify-content: flex-start;
+    gap: var(--space-l);
   }
 }
 
