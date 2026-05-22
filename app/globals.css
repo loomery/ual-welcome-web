@@ -3346,19 +3346,29 @@ ul.grid > li {
   }
 }
 
-/* ---------- In-canvas info banner (shown when a building is selected) ---------- */
+/* ---------- Building info banner (shown when a building is selected) ---------- */
+/*
+ * Two modes, same element:
+ *
+ * Mobile (< 49.5 rem): compact strip pinned to the BOTTOM edge of the canvas.
+ *   Only the college tag, building name, and Directions button are shown.
+ *   The strip is ~100 px tall, leaving ~75 % of the 1:1 canvas unobstructed.
+ *
+ * Desktop (≥ 49.5 rem): full corner card bottom-left, 26 rem wide, with
+ *   address, description, and a drop shadow.
+ *
+ * Both modes use position: absolute relative to .map-canvas-wrapper
+ * (which carries position: relative).
+ */
 .map-banner {
   background: var(--color-light);
-  border: 1px solid var(--color-dark);
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+  border-block-start: 2px solid var(--color-dark);
   color: var(--color-dark);
-  inline-size: min(22rem, calc(100% - var(--space-s) * 2));
-  inset-block-end: var(--space-s);
-  inset-inline-start: var(--space-s);
-  padding: var(--space-s);
+  /* Mobile compact strip — full width, pinned to bottom of canvas */
+  inset-block-end: 0;
+  inset-inline: 0;
+  padding: var(--space-2xs) var(--space-s);
   position: absolute;
-  /* Must sit above drei <Html> labels (zIndexRange max 5) and any other
-     canvas overlay — this is the focused UI when a building is selected. */
   z-index: 20;
   animation: map-banner-in 180ms ease-out;
 }
@@ -3443,13 +3453,10 @@ ul.grid > li {
   padding-inline-end: calc(44px + var(--space-2xs));
 }
 
-/* On mobile: hide the description — tag + title + address + directions is enough.
-   This keeps the banner compact so the map canvas stays visible. */
-@media (max-width: 37.4rem) {
-  .map-banner {
-    padding: var(--space-xs);
-  }
-
+/* Mobile compact strip: hide address and description, reduce title size so the
+   strip stays tight (~100 px) and the canvas above it stays legible. */
+@media (max-width: 49.499rem) {
+  .map-banner__meta,
   .map-banner__body {
     display: none;
   }
@@ -3459,11 +3466,21 @@ ul.grid > li {
   }
 }
 
+/* Desktop (≥ 49.5 rem): full corner card — restore address, description, shadow. */
 @media (min-width: 49.5rem) {
   .map-banner {
+    border: 1px solid var(--color-dark);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
     inline-size: min(26rem, calc(100% - var(--space-m) * 2));
     inset-block-end: var(--space-m);
+    inset-inline: auto auto; /* reset the mobile full-width stretch */
     inset-inline-start: var(--space-m);
+    padding: var(--space-s);
+  }
+
+  .map-banner__meta,
+  .map-banner__body {
+    display: block;
   }
 }
 

@@ -139,6 +139,10 @@ export function MapScreen() {
             </button>
           </div>
 
+          {/* Building info banner — absolutely positioned inside the canvas wrapper.
+              Mobile: compact two-line strip pinned to the bottom edge of the canvas,
+              covering only ~25% of the map so the 3D view stays mostly visible.
+              Desktop: corner card (wider, with full details). */}
           {selected && (
             <div
               className="map-banner flow"
