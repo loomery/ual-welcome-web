@@ -10,8 +10,11 @@ import { INTEREST_ICONS } from '../../Icon/InterestIcons';
  * @param {{ current: HTMLHeadingElement | null }} props.headingRef
  * @param {string[]} props.value  Array of selected interest IDs.
  * @param {(interests: string[]) => void} props.onChange
+ * @param {import('../../../data/onboardingOptions').InterestOption[]} [props.options]
+ *   Subset of interests to display. Defaults to all INTEREST_OPTIONS. The
+ *   orchestrator (OnboardingFlow) passes a filtered list based on student type.
  */
-export function InterestsStep({ headingRef, value, onChange }) {
+export function InterestsStep({ headingRef, value, onChange, options = INTEREST_OPTIONS }) {
   function toggle(id) {
     if (value.includes(id)) onChange(value.filter((i) => i !== id));
     else onChange([...value, id]);
@@ -30,7 +33,7 @@ export function InterestsStep({ headingRef, value, onChange }) {
         role="group"
         aria-label="Choose what interests you (optional, multiple)"
       >
-        {INTEREST_OPTIONS.map((opt) => {
+        {options.map((opt) => {
           const selected = value.includes(opt.id);
           const Icon = INTEREST_ICONS[opt.id];
 
