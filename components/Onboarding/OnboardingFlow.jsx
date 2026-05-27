@@ -4,15 +4,28 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Button } from '../Button/Button';
 import { useOnboardingProfile } from '../../hooks/useOnboardingProfile';
+import { INTEREST_OPTIONS } from '../../data/onboardingOptions';
 import { IntroStep } from './steps/IntroStep';
 import { NameStep } from './steps/NameStep';
 import { CollegeStep } from './steps/CollegeStep';
 import { StudyLevelStep } from './steps/StudyLevelStep';
 import { YearStep } from './steps/YearStep';
+import { StudentTypeStep } from './steps/StudentTypeStep';
+import { VisaStatusStep } from './steps/VisaStatusStep';
 import { InterestsStep } from './steps/InterestsStep';
 import { FinishStep } from './steps/FinishStep';
 
-const STEPS = ['intro', 'name', 'college', 'studyLevel', 'year', 'interests', 'finish'];
+const ALL_STEPS = [
+  'intro',
+  'name',
+  'college',
+  'studyLevel',
+  'year',
+  'studentType',
+  'visaStatus',
+  'interests',
+  'finish',
+];
 
 /**
  * Multi-step onboarding flow.
@@ -37,11 +50,37 @@ export function OnboardingFlow() {
     collegeId: profile?.collegeId ?? '',
     studyLevel: profile?.studyLevel ?? '',
     year: profile?.year ?? '',
+    studentType: profile?.studentType ?? '',
+    visaStatus: profile?.visaStatus ?? '',
     interests: profile?.interests ?? [],
   }));
 
-  const stepId = STEPS[stepIndex];
-  const isLast = stepIndex === STEPS.length - 1;
+  const activeSteps = useMemo(() => {
+    let steps = ALL_STEPS;
+    // Year is only relevant for undergraduates — postgrad, pre-degree and
+    // short-course students skip straight to StudentType.
+    if (draft.studyLevel !== 'undergraduate') {
+      steps = steps.filter((s) => s !== 'year');
+    }
+    // VisaStatus is only shown to international students.
+    if (draft.studentType !== 'international') {
+      steps = steps.filter((s) => s !== 'visaStatus');
+    }
+    return steps;
+  }, [draft.studyLevel, draft.studentType]);
+
+  // Interests available to this student — international students see the
+  // additional "Visa & immigration" option; domestic students do not.
+  const interestOptions = useMemo(
+    () =>
+      draft.studentType === 'international'
+        ? INTEREST_OPTIONS
+        : INTEREST_OPTIONS.filter((o) => !o.internationalOnly),
+    [draft.studentType],
+  );
+
+  const stepId = activeSteps[stepIndex];
+  const isLast = stepIndex === activeSteps.length - 1;
 
   // Move keyboard focus to the step heading whenever the step changes
   useEffect(() => {
@@ -58,21 +97,41 @@ export function OnboardingFlow() {
         return Boolean(draft.studyLevel);
       case 'year':
         return Boolean(draft.year);
+      case 'studentType':
+        return Boolean(draft.studentType);
+      case 'visaStatus':
+        return Boolean(draft.visaStatus);
       default:
         return true;
     }
   }, [stepId, draft]);
+
+  // Trap the browser back gesture so a trackpad swipe can't escape the flow
+  // mid-onboarding. We push a duplicate history entry on mount; popstate
+  // fires when the user navigates back and we immediately re-push to keep
+  // the URL at /onboarding. The listener is removed on unmount (when the
+  // flow navigates away intentionally via replace).
+  useEffect(() => {
+    window.history.pushState(null, '', '/onboarding');
+
+    function trapBack() {
+      window.history.pushState(null, '', '/onboarding');
+    }
+
+    window.addEventListener('popstate', trapBack);
+    return () => window.removeEventListener('popstate', trapBack);
+  }, []);
 
   function goNext() {
     if (!canAdvance) return;
     patch(stepSlice(stepId, draft));
     if (isLast) {
       commit();
-      router.push('/');
+      router.replace('/');
       return;
     }
     setDirection('forward');
-    setStepIndex((i) => Math.min(i + 1, STEPS.length - 1));
+    setStepIndex((i) => Math.min(i + 1, activeSteps.length - 1));
   }
 
   function goBack() {
@@ -84,16 +143,24 @@ export function OnboardingFlow() {
   function handleSkip() {
     patch(stepSlice(stepId, draft));
     commit();
-    router.push('/');
+    router.replace('/');
   }
 
   function handleStartOver() {
     reset();
-    setDraft({ name: '', collegeId: '', studyLevel: '', year: '', interests: [] });
+    setDraft({
+      name: '',
+      collegeId: '',
+      studyLevel: '',
+      year: '',
+      studentType: '',
+      visaStatus: '',
+      interests: [],
+    });
     setStepIndex(0);
   }
 
-  const progressTotal = STEPS.length - 2;
+  const progressTotal = activeSteps.length - 2;
   const progressCurrent = Math.max(0, Math.min(stepIndex, progressTotal));
 
   return (
@@ -188,11 +255,26 @@ export function OnboardingFlow() {
               onChange={(v) => setDraft((d) => ({ ...d, year: v }))}
             />
           )}
+          {stepId === 'studentType' && (
+            <StudentTypeStep
+              headingRef={headingRef}
+              value={draft.studentType}
+              onChange={(v) => setDraft((d) => ({ ...d, studentType: v }))}
+            />
+          )}
+          {stepId === 'visaStatus' && (
+            <VisaStatusStep
+              headingRef={headingRef}
+              value={draft.visaStatus}
+              onChange={(v) => setDraft((d) => ({ ...d, visaStatus: v }))}
+            />
+          )}
           {stepId === 'interests' && (
             <InterestsStep
               headingRef={headingRef}
               value={draft.interests}
               onChange={(v) => setDraft((d) => ({ ...d, interests: v }))}
+              options={interestOptions}
             />
           )}
           {stepId === 'finish' && <FinishStep headingRef={headingRef} draft={draft} />}
@@ -237,6 +319,10 @@ function stepSlice(stepId, draft) {
       return { studyLevel: draft.studyLevel };
     case 'year':
       return { year: draft.year };
+    case 'studentType':
+      return { studentType: draft.studentType };
+    case 'visaStatus':
+      return { visaStatus: draft.visaStatus };
     case 'interests':
       return { interests: draft.interests };
     default:

@@ -190,7 +190,7 @@ const SECTION_CONTENT = {
     cards: [
       {
         title: 'Welcome events',
-        body: 'Meet new people and see what is going on at the various campuses.',
+        body: 'See what is going on across the UAL campuses during welcome week.',
         to: '/events',
       },
       {
