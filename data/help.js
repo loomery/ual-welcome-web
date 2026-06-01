@@ -34,6 +34,7 @@ export const SECTIONS = [
   { id: 'safety', label: 'Safety' },
   { id: 'wellbeing', label: 'Wellbeing and support' },
   { id: 'technology', label: 'Technology support & guides' },
+  { id: 'academic', label: 'Academic orientation' },
   { id: 'money-housing', label: 'Money & housing' },
   { id: 'more-support', label: 'More support' },
 ];
@@ -54,6 +55,12 @@ export const HELP_CATEGORIES = [
         label: 'Online',
         value: 'Immigration and visas',
         href: 'https://www.arts.ac.uk/study-at-ual/international/immigration-and-visas',
+      },
+      {
+        type: 'online',
+        label: 'Student visa',
+        value: 'Student visa guidance',
+        href: 'https://www.arts.ac.uk/study-at-ual/international/immigration-and-visas/student-visa',
       },
     ],
     ctaLabel: 'Visit Immigration & visas',
@@ -338,6 +345,45 @@ export const HELP_CATEGORIES = [
     ],
     ctaLabel: 'Browse workshop events',
     ctaHref: '/events',
+  },
+
+  // ─── Academic orientation ──────────────────────────────────────────
+  {
+    id: 'online-study-tools',
+    section: 'academic',
+    title: 'Find online study tools',
+    shortDescription: 'Digital learning tools and studying online',
+    description:
+      'Discover the digital learning tools available at UAL and how to make the most of studying online.',
+    contacts: [
+      {
+        type: 'online',
+        label: 'Online',
+        value: 'Studying online',
+        href: 'https://www.arts.ac.uk/about-ual/learning-and-teaching/digital-learning/studying-online',
+      },
+    ],
+    ctaLabel: 'Explore digital learning',
+    ctaHref:
+      'https://www.arts.ac.uk/about-ual/learning-and-teaching/digital-learning/studying-online',
+  },
+  {
+    id: 'libraries',
+    section: 'academic',
+    title: 'Use of libraries',
+    shortDescription: 'Library services, collections and study spaces',
+    description:
+      'Explore UAL Library Services — collections, online resources, study spaces, and how to borrow books and equipment.',
+    contacts: [
+      {
+        type: 'online',
+        label: 'Online',
+        value: 'Library Services',
+        href: 'https://www.arts.ac.uk/students/library-services',
+      },
+    ],
+    ctaLabel: 'Visit Library Services',
+    ctaHref: 'https://www.arts.ac.uk/students/library-services',
   },
 
   // ─── Money & housing ───────────────────────────────────────────────

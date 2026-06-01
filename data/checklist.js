@@ -43,6 +43,7 @@
  * @property {ContentSection[]} [sections]
  * @property {Step[]} [steps]
  * @property {Cta} cta
+ * @property {boolean} [internationalOnly]  If true, only shown to international students
  */
 
 /** @type {Task[]} */
@@ -106,6 +107,51 @@ export const TASKS = [
     },
   },
   {
+    id: 'pay-tuition',
+    title: 'Pay your tuition fees',
+    tag: 'essential',
+    shortDescription: 'Pay or confirm funding for your tuition fees to complete enrolment.',
+    sections: [
+      {
+        title: 'Why this matters',
+        body: 'You need to pay your tuition fees, or confirm how they will be funded (for example by a student loan or sponsor), before you can fully enrol at UAL.',
+        type: 'text',
+      },
+      {
+        title: 'How to pay',
+        body: 'You can pay online, set up an instalment plan, or confirm your funding through the UAL fees pages. Check the deadlines and accepted payment methods before you start.',
+        type: 'text',
+      },
+    ],
+    cta: {
+      label: 'Pay your tuition fees',
+      href: 'https://www.arts.ac.uk/study-at-ual/how-to-enrol/pay-your-tuition-fees',
+    },
+  },
+  {
+    id: 'get-cas-number',
+    title: 'Get your CAS number',
+    tag: 'essential',
+    internationalOnly: true,
+    shortDescription: 'International students need a CAS to apply for a Student visa.',
+    sections: [
+      {
+        title: 'What a CAS is',
+        body: 'A CAS (Confirmation of Acceptance for Studies) is a reference number UAL issues to international students. You need it to apply for your Student visa.',
+        type: 'text',
+      },
+      {
+        title: 'How to get yours',
+        body: 'UAL issues your CAS once you have met the conditions of your offer and confirmed your place. Follow the Student visa guidance to request it and check which documents you need.',
+        type: 'text',
+      },
+    ],
+    cta: {
+      label: 'Student visa & CAS guidance',
+      href: 'https://www.arts.ac.uk/study-at-ual/international/immigration-and-visas/student-visa',
+    },
+  },
+  {
     id: 'student-id',
     title: 'Collect your student ID',
     tag: 'essential',
@@ -159,3 +205,16 @@ export const TASKS = [
 
 /** Convenience lookup by id */
 export const TASKS_BY_ID = Object.fromEntries(TASKS.map((t) => [t.id, t]));
+
+/**
+ * Tasks visible to a given student type. International-only tasks (e.g. the
+ * CAS number) are hidden from UK/Home students. While the profile is still
+ * hydrating, `studentType` is undefined and international-only tasks stay
+ * hidden — the safe default.
+ *
+ * @param {string} [studentType]  one of STUDENT_TYPE_OPTIONS[].id ('domestic' | 'international')
+ * @returns {Task[]}
+ */
+export function visibleTasks(studentType) {
+  return TASKS.filter((t) => !t.internationalOnly || studentType === 'international');
+}
