@@ -6,7 +6,7 @@ import { Countdown } from '../../components/Countdown/Countdown';
 import { KeyInfoCard } from '../../components/Dashboard/KeyInfoCard';
 import { NextStepCard } from '../../components/Dashboard/NextStepCard';
 import { ViewToggle } from '../../components/Dashboard/ViewToggle';
-import { TASKS } from '../../data/checklist';
+import { visibleTasks } from '../../data/checklist';
 import { USEFUL_INFO } from '../../data/usefulInfo';
 import { COLLEGE_OPTIONS, STUDY_LEVEL_OPTIONS, YEAR_OPTIONS } from '../../data/onboardingOptions';
 import { useOnboardingProfile } from '../../hooks/useOnboardingProfile';
@@ -18,6 +18,7 @@ import { usePersistedState } from '../../hooks/usePersistedState';
  * "08 Personalised Home V1" frame.
  */
 const OPTIONAL_SECTIONS = [
+  { id: 'visa', label: 'Visa & immigration' },
   { id: 'social', label: 'Social' },
   { id: 'career', label: 'Jobs and opportunities' },
   { id: 'wellbeing', label: 'Wellbeing' },
@@ -81,8 +82,8 @@ export function DashboardScreen() {
   }, [view, interests]);
 
   const nextTask = useMemo(
-    () => TASKS.find((t) => taskStatuses[t.id] !== 'complete') ?? null,
-    [taskStatuses],
+    () => visibleTasks(profile?.studentType).find((t) => taskStatuses[t.id] !== 'complete') ?? null,
+    [taskStatuses, profile?.studentType],
   );
 
   const firstName = (profile?.name ?? '').split(' ')[0] || 'there';
@@ -186,6 +187,15 @@ export function DashboardScreen() {
 
 /** @type {Record<string, { cards: Array<{ title: string, body: string, to?: string, href?: string }> }>} */
 const SECTION_CONTENT = {
+  visa: {
+    cards: [
+      {
+        title: 'Visa & immigration support',
+        body: 'Student visa guidance, documents and next steps for international students.',
+        to: '/help/immigration-visas',
+      },
+    ],
+  },
   social: {
     cards: [
       {
