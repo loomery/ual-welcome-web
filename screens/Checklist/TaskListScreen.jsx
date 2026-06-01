@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { useEffect, useMemo } from 'react';
 import { useRouter } from 'next/navigation';
-import { TASKS } from '../../data/checklist';
+import { visibleTasks } from '../../data/checklist';
 import { usePersistedState } from '../../hooks/usePersistedState';
 import { useOnboardingProfile } from '../../hooks/useOnboardingProfile';
 import { StatusCircle } from '../../components/StatusCircle/StatusCircle';
@@ -12,7 +12,7 @@ const STATUS_KEY = 'ual:task:status:v1';
 
 export function TaskListScreen() {
   const router = useRouter();
-  const { isComplete, hydrated } = useOnboardingProfile();
+  const { profile, isComplete, hydrated } = useOnboardingProfile();
   const [statuses] = usePersistedState(
     STATUS_KEY,
     /** @type {Record<string, import('../../data/checklist').TaskStatus>} */ ({}),
@@ -24,9 +24,11 @@ export function TaskListScreen() {
     }
   }, [hydrated, isComplete, router]);
 
+  const tasks = useMemo(() => visibleTasks(profile?.studentType), [profile?.studentType]);
+
   const completeCount = useMemo(
-    () => TASKS.filter((t) => statuses[t.id] === 'complete').length,
-    [statuses],
+    () => tasks.filter((t) => statuses[t.id] === 'complete').length,
+    [tasks, statuses],
   );
 
   if (!hydrated || !isComplete) return null;
@@ -36,7 +38,7 @@ export function TaskListScreen() {
       <div className="flow" data-flow="s">
         <h1>Get setup list</h1>
         <p className="standfirst">
-          {completeCount} of {TASKS.length} complete
+          {completeCount} of {tasks.length} complete
         </p>
       </div>
 
@@ -49,7 +51,7 @@ export function TaskListScreen() {
         </div>
 
         <ul className="flow" data-flow="xs" role="list">
-          {TASKS.map((task) => {
+          {tasks.map((task) => {
             const status = statuses[task.id] ?? 'not-started';
 
             return (
