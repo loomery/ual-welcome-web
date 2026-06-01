@@ -30,6 +30,7 @@
  * @type {HelpSection[]}
  */
 export const SECTIONS = [
+  { id: 'intro', label: 'Get to know UAL' },
   { id: 'moving-uk', label: 'Moving to the UK' },
   { id: 'safety', label: 'Safety' },
   { id: 'wellbeing', label: 'Wellbeing and support' },
@@ -41,6 +42,26 @@ export const SECTIONS = [
 
 /** @type {HelpCategory[]} */
 export const HELP_CATEGORIES = [
+  // ─── Get to know UAL ───────────────────────────────────────────────
+  {
+    id: 'about-ual',
+    section: 'intro',
+    title: 'Get to know UAL',
+    shortDescription: 'A general introduction to UAL — values, history and more',
+    description:
+      'A general introduction to University of the Arts London — its values, history, and what makes it unique.',
+    contacts: [
+      {
+        type: 'online',
+        label: 'Online',
+        value: 'About UAL',
+        href: 'https://www.arts.ac.uk/about-ual',
+      },
+    ],
+    ctaLabel: 'Learn about UAL',
+    ctaHref: 'https://www.arts.ac.uk/about-ual',
+  },
+
   // ─── Moving to the UK ──────────────────────────────────────────────
   {
     id: 'immigration-visas',
