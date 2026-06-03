@@ -8,6 +8,7 @@ import { BottomNav } from './BottomNav';
 import { Footer } from './Footer';
 import { FeedbackButton } from '../Feedback/FeedbackButton';
 import { RouteAnnouncer } from './RouteAnnouncer';
+import { SearchProvider } from '../Search/SearchProvider';
 
 /**
  * Routes that render full-bleed without the standard app chrome
@@ -41,17 +42,19 @@ export function AppShell({ children }) {
   }
 
   return (
-    <div className="app-shell">
-      <SkipLinks />
-      <Header />
-      <SideNav />
-      <main id="main-content" className="app-shell__main wrapper" tabIndex={-1}>
-        {children}
-      </main>
-      <Footer />
-      <FeedbackButton />
-      <BottomNav />
-      <RouteAnnouncer />
-    </div>
+    <SearchProvider>
+      <div className="app-shell">
+        <SkipLinks />
+        <Header />
+        <SideNav />
+        <main id="main-content" className="app-shell__main wrapper" tabIndex={-1}>
+          {children}
+        </main>
+        <Footer />
+        <FeedbackButton />
+        <BottomNav />
+        <RouteAnnouncer />
+      </div>
+    </SearchProvider>
   );
 }

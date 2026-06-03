@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { UalLogo } from '../Icon/UalLogo';
 import { ThemeToggle } from '../Theme/ThemeToggle';
+import { SearchButton } from '../Search/SearchButton';
 import { NAV_ITEMS } from './navConfig';
 import { COLLEGE_OPTIONS } from '../../data/onboardingOptions';
 import { useOnboardingProfile } from '../../hooks/useOnboardingProfile';
@@ -43,6 +44,13 @@ export function SideNav() {
         <Link href="/" aria-label="UAL — home" className="side-nav__logo-link">
           <UalLogo className="side-nav__logo" aria-hidden="true" />
         </Link>
+      </div>
+
+      {/* Global search trigger (desktop — the header is hidden here).
+          Bordered off as its own band, mirroring the brand section above,
+          so it reads as a distinct zone rather than hugging the nav list. */}
+      <div className="border-b border-ual-dark-90 p-s">
+        <SearchButton className="w-full" />
       </div>
 
       {/* Nav items */}

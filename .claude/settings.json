@@ -1,0 +1,16 @@
+{
+  "permissions": {
+    "allow": [
+      "WebFetch",
+      "ToolSearch",
+      "mcp__ccd_session__mark_chapter",
+      "mcp__9df51cca-db3b-4c54-b755-071a1e84fd78__get_design_context",
+      "mcp__9df51cca-db3b-4c54-b755-071a1e84fd78__search_design_system",
+      "mcp__9df51cca-db3b-4c54-b755-071a1e84fd78__get_metadata",
+      "mcp__9df51cca-db3b-4c54-b755-071a1e84fd78__get_screenshot",
+      "mcp__Claude_Preview__preview_console_logs",
+      "Bash(curl -s -I *)",
+      "Bash(npm run lint *)"
+    ]
+  }
+}

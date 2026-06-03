@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { UalLogo } from '../Icon/UalLogo';
 import { ThemeToggle } from '../Theme/ThemeToggle';
+import { SearchButton } from '../Search/SearchButton';
 import { NAV_ITEMS } from './navConfig';
 
 /**
@@ -64,6 +65,7 @@ export function Header() {
                 })}
               </ul>
             </nav>
+            <SearchButton />
             <ThemeToggle />
           </div>
         </div>
