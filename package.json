@@ -13,7 +13,8 @@
     "audit": "npm audit --audit-level=high --omit=dev",
     "audit:full": "npm audit --audit-level=moderate",
     "verify": "npm run lint && npm run audit && npm run build",
-    "prepare": "husky"
+    "prepare": "husky",
+    "compress": "cd out && tar -czf ../student-centre.tar.gz * && cd .."
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx}": [
@@ -37,6 +38,7 @@
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4.2.4",
+    "dotenv": "^17.4.2",
     "eslint": "^9.0.0",
     "eslint-config-next": "^16.2.4",
     "eslint-plugin-better-tailwindcss": "^4.5.0",

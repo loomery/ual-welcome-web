@@ -94,6 +94,9 @@ const securityHeaders = [
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  output: 'export',
+  assetPrefix: './',
+  basePath: process.env.DEPLOY_PATH ? `/${process.env.DEPLOY_PATH}` : '',
   reactStrictMode: true,
   // Allow HMR WebSocket connections from local network devices (phones,
   // tablets, other machines on the same LAN) during development.
