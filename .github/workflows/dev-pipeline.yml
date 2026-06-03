@@ -12,6 +12,7 @@ jobs:
       DXP_ACCESS_KEY: ${{ secrets.DXP_ACCESS_KEY }}
       DXP_TENANT_ID: ${{ secrets.DXP_TENANT_ID }}
       DXP_SERVER_URL: ${{ secrets.DXP_SERVER_URL }}
+      DEPLOY_PATH: ${{ vars.DEPLOY_PATH }}
     environment: dev
     steps:
       - uses: actions/checkout@v2
