@@ -1228,16 +1228,81 @@ main:focus {
 .nav-sheet__panel {
   background: var(--color-light);
   border-block-start: 1px solid var(--color-dark);
-  padding-block: var(--space-s);
-  padding-block-end: max(var(--space-s), env(safe-area-inset-bottom));
-  padding-inline: var(--space-s);
+  /* Fixed header + scrollable list: cap the panel and let the list overflow,
+     so the "More" title and close stay pinned no matter how many items. */
+  display: flex;
+  flex-direction: column;
+  max-block-size: 85dvh;
+  overflow: hidden;
 }
 
 .nav-sheet__header {
   align-items: center;
   display: flex;
+  flex-shrink: 0;
   justify-content: space-between;
-  margin-block-end: var(--space-2xs);
+  padding-block: var(--space-2xs);
+  padding-inline: var(--space-s);
+}
+
+/* In-menu filter field — flat DDS input; orange focus ring on the wrapper. */
+.nav-sheet__search {
+  align-items: center;
+  background: var(--color-light);
+  border: 1px solid var(--color-dark--tint-90);
+  display: flex;
+  flex-shrink: 0;
+  gap: var(--space-2xs);
+  margin: 0 var(--space-s) var(--space-2xs);
+  padding-inline: var(--space-2xs);
+}
+
+.nav-sheet__search:focus-within {
+  border-color: var(--color-dark);
+  outline: 2px solid var(--color-orange);
+  outline-offset: -1px;
+}
+
+.nav-sheet__search-icon {
+  color: var(--color-medium);
+  flex-shrink: 0;
+  height: 1.1rem;
+  width: 1.1rem;
+}
+
+.nav-sheet__search-input {
+  background: transparent;
+  border: 0;
+  color: var(--color-dark);
+  flex-grow: 1;
+  font-family: inherit;
+  font-size: var(--step-0);
+  /* WCAG 2.2 — 2.5.8 Target Size */
+  min-height: 44px;
+  padding: 0;
+}
+
+/* The wrapper shows focus; suppress the global :focus-visible ring on the
+   input itself (this class+pseudo selector outranks the unlayered global). */
+.nav-sheet__search-input:focus-visible {
+  outline: none;
+}
+
+.nav-sheet__search-input::placeholder {
+  color: var(--color-medium);
+}
+
+.nav-sheet__empty {
+  color: var(--color-medium);
+  font-size: var(--step--1);
+  margin: 0;
+  padding: var(--space-l) var(--space-s);
+  text-align: center;
+}
+
+.nav-sheet__empty-term {
+  color: var(--color-dark);
+  font-weight: var(--font-weight-bold);
 }
 
 .nav-sheet__title {
@@ -1279,10 +1344,90 @@ main:focus {
 .nav-sheet__list {
   display: flex;
   flex-direction: column;
-  gap: 1px;
   list-style: none;
   margin: 0;
-  padding: 0;
+  /* Scrollable region; header above stays fixed. Bottom padding clears the
+     iOS home indicator. */
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: 0 var(--space-s);
+  padding-block-end: max(var(--space-s), env(safe-area-inset-bottom));
+}
+
+/* ---------- Accordion sections (UAL DDS) ---------- */
+.nav-sheet__group {
+  border-top: 1px solid var(--color-dark--tint-90);
+}
+
+.nav-sheet__group:last-child {
+  border-bottom: 1px solid var(--color-dark--tint-90);
+}
+
+/* Section header — full-width button toggling its panel. Flat & sharp: no
+   radius, no shadow; chevron flips on open. */
+.nav-sheet__group-trigger {
+  align-items: center;
+  appearance: none;
+  background: none;
+  border: 0;
+  color: var(--color-dark);
+  cursor: pointer;
+  display: flex;
+  font-family: inherit;
+  font-size: var(--step-0);
+  font-weight: var(--font-weight-bold);
+  gap: var(--space-xs);
+  /* WCAG 2.2 — 2.5.8 Target Size */
+  min-height: 56px;
+  padding: var(--space-xs) var(--space-2xs);
+  text-align: start;
+  width: 100%;
+}
+
+.nav-sheet__group-trigger:hover {
+  background: var(--color-shade);
+}
+
+.nav-sheet__group-trigger:focus-visible {
+  outline: 2px solid var(--color-orange);
+  outline-offset: -2px;
+}
+
+.nav-sheet__group-name {
+  flex-grow: 1;
+}
+
+.nav-sheet__group-count {
+  color: var(--color-medium);
+  font-weight: 400;
+  font-variant-numeric: tabular-nums;
+}
+
+.nav-sheet__chevron {
+  color: var(--color-medium);
+  flex-shrink: 0;
+  height: 1.25rem;
+  transition: transform 0.18s ease;
+  width: 1.25rem;
+}
+
+.nav-sheet__chevron[data-open] {
+  transform: rotate(180deg);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nav-sheet__chevron {
+    transition: none;
+  }
+}
+
+/* Links inside an open section — indented under their heading. */
+.nav-sheet__sublist {
+  display: flex;
+  flex-direction: column;
+  list-style: none;
+  margin: 0;
+  padding: 0 0 var(--space-2xs);
 }
 
 .nav-sheet__link {
@@ -1293,8 +1438,8 @@ main:focus {
   font-weight: var(--font-weight-bold);
   gap: var(--space-s);
   /* WCAG 2.2 — 2.5.8 Target Size */
-  min-height: 56px;
-  padding: var(--space-xs) var(--space-2xs);
+  min-height: 52px;
+  padding: var(--space-2xs) var(--space-2xs) var(--space-2xs) var(--space-m);
   text-decoration: none;
 }
 

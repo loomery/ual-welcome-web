@@ -190,3 +190,32 @@ export function MenuIcon(props) {
     </svg>
   );
 }
+
+/**
+ * Chevron — accordion expand/collapse affordance in the "More" sheet.
+ * Points down at rest; the section trigger rotates it 180° when open
+ * (see `.nav-sheet__chevron` in globals.css).
+ */
+export function ChevronIcon(props) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
+      <path
+        d="m6 9 6 6 6-6"
+        stroke="currentColor"
+        strokeWidth={1.6}
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
+/** Magnifier — used by the in-menu filter field. */
+export function SearchIcon(props) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
+      <circle cx="11" cy="11" r="7" stroke="currentColor" strokeWidth={1.6} />
+      <path d="m16.5 16.5 4 4" stroke="currentColor" strokeWidth={1.6} strokeLinecap="round" />
+    </svg>
+  );
+}

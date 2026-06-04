@@ -3,9 +3,14 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { PRIMARY_NAV_ITEMS, SECONDARY_NAV_ITEMS } from './navConfig';
+import { PRIMARY_NAV_ITEMS, SECONDARY_NAV_ITEMS, DEMO_OVERFLOW_ITEMS } from './navConfig';
 import { MenuIcon } from '../Icon/NavIcons';
 import { NavSheet } from './NavSheet';
+
+// ⚠️ TEMPORARY — scalability simulation. Pads the "More" sheet with demo items
+// to evaluate behaviour with many entries. Restore to just SECONDARY_NAV_ITEMS
+// (and remove DEMO_OVERFLOW_ITEMS in navConfig.js) when done.
+const OVERFLOW_ITEMS = [...SECONDARY_NAV_ITEMS, ...DEMO_OVERFLOW_ITEMS];
 
 /**
  * Mobile primary navigation — fixed bottom tab bar.
@@ -36,8 +41,8 @@ export function BottomNav() {
 
   // Highlight "More" when the current route lives in the overflow sheet, so
   // the bar still reflects where you are.
-  const moreActive = SECONDARY_NAV_ITEMS.some((item) => isActive(item.to));
-  const hasOverflow = SECONDARY_NAV_ITEMS.length > 0;
+  const moreActive = OVERFLOW_ITEMS.some((item) => isActive(item.to));
+  const hasOverflow = OVERFLOW_ITEMS.length > 0;
 
   return (
     <>
@@ -96,7 +101,7 @@ export function BottomNav() {
       </nav>
 
       {hasOverflow && (
-        <NavSheet open={moreOpen} onClose={() => setMoreOpen(false)} items={SECONDARY_NAV_ITEMS} />
+        <NavSheet open={moreOpen} onClose={() => setMoreOpen(false)} items={OVERFLOW_ITEMS} />
       )}
     </>
   );
