@@ -100,10 +100,24 @@ export function TaskDetailScreen({ task }) {
         <ContentSection key={i} section={section} />
       ))}
 
-      {/* Primary CTA */}
-      <a href={task.cta.href} className="button" target="_blank" rel="noreferrer">
-        {task.cta.label} →<span className="visually-hidden"> (opens in a new tab)</span>
-      </a>
+      {/* Secondary, link-styled help action */}
+      {task.helpLink && (
+        <a
+          href={task.helpLink.href}
+          className="step-help-link text-step-d1 text-ual-medium"
+          target="_blank"
+          rel="noreferrer"
+        >
+          {task.helpLink.label} →<span className="visually-hidden"> (opens in a new tab)</span>
+        </a>
+      )}
+
+      {/* Primary CTA — optional; step-only tasks complete via the button below */}
+      {task.cta && (
+        <a href={task.cta.href} className="button" target="_blank" rel="noreferrer">
+          {task.cta.label} →<span className="visually-hidden"> (opens in a new tab)</span>
+        </a>
+      )}
 
       {/* Progress controls — single button element to avoid layout shift between states */}
       <section aria-labelledby="progress-heading" className="flow" data-flow="2xs">
@@ -153,6 +167,29 @@ export function TaskDetailScreen({ task }) {
         .task-accordion__body { padding-block-start: var(--space-xs); }
         .task-accordion__body li { font-size: var(--step--1); padding: var(--space-3xs) 0; }
         .content-section h2 { font-size: var(--step-0); font-weight: var(--font-weight-bold); margin-block-end: var(--space-2xs); }
+
+        /* Rich step cards (e.g. "Set up your digital accounts") */
+        .step-card { border: 1px solid var(--color-dark--tint-90); padding: var(--space-s); }
+        .step-card[data-done] { background: var(--color-shade); }
+        .step-desc { font-size: var(--step--1); color: var(--color-medium); line-height: 1.4; }
+        /* Each action sits on its own line; width:fit-content keeps the hit area
+           tight to the text/pill instead of spanning the card. */
+        .step-cta { display: flex; align-items: center; width: fit-content; font-size: var(--step--1); font-weight: var(--font-weight-bold); color: var(--color-dark); text-decoration: underline; text-underline-offset: 2px; }
+        .step-cta:hover { color: var(--color-orange); }
+        .step-note { display: flex; align-items: center; gap: var(--space-3xs); width: fit-content; background: var(--color-shade); padding: var(--space-2xs) var(--space-xs); font-size: var(--step--1); color: var(--color-medium); }
+        .step-apps { display: flex; align-items: center; flex-wrap: wrap; gap: var(--space-2xs); }
+        .step-apps__label { font-size: var(--step--1); font-weight: var(--font-weight-bold); margin-inline-end: auto; }
+        .step-apps__btn { border: 1px solid var(--color-dark--tint-90); padding: var(--space-3xs) var(--space-s); font-size: var(--step--1); color: var(--color-dark); text-decoration: none; }
+        .step-apps__btn:hover { background: var(--color-shade); }
+
+        /* "About your timetable"-style info box */
+        .step-note-box { background: var(--color-shade); border: 1px solid var(--color-dark--tint-90); padding: var(--space-s); }
+        .step-note-box__title { font-weight: var(--font-weight-bold); font-size: var(--step--1); }
+        .step-note-box__body { font-size: var(--step--1); color: var(--color-medium); margin-block-start: var(--space-3xs); line-height: 1.4; }
+
+        /* Secondary help link */
+        .step-help-link { text-decoration: none; }
+        .step-help-link:hover { color: var(--color-orange); }
       `}</style>
     </article>
   );
@@ -164,9 +201,15 @@ export function TaskDetailScreen({ task }) {
 function StepRow({ step, done, onToggle, isTaskComplete }) {
   const [open, setOpen] = useState(false);
   const hasDetails = step.details?.length > 0;
+  // Rich steps (description / inline action / app links / note) render as a
+  // bordered card; plain title-only steps keep the original compact row.
+  const isCard = Boolean(step.description || step.cta || step.apps || step.note);
 
   return (
-    <li className="task-row">
+    <li
+      className={isCard ? 'task-row step-card' : 'task-row'}
+      data-done={isCard && done ? '' : undefined}
+    >
       <button
         type="button"
         className="shrink-0 cursor-pointer border-0 bg-transparent p-0 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ual-orange disabled:cursor-default"
@@ -179,7 +222,7 @@ function StepRow({ step, done, onToggle, isTaskComplete }) {
         <StatusCircle status={done ? 'complete' : 'not-started'} size={18} />
       </button>
 
-      <div className="flow min-w-0 grow" data-flow="2xs">
+      <div className="flow min-w-0 grow" data-flow={isCard ? 'xs' : '2xs'}>
         <p className="step-row__title text-step-0 font-ual-bold" data-done={done || undefined}>
           {step.href ? (
             <a
@@ -194,6 +237,9 @@ function StepRow({ step, done, onToggle, isTaskComplete }) {
             step.title
           )}
         </p>
+
+        {step.description && <p className="step-desc">{step.description}</p>}
+
         {hasDetails && (
           <details className="task-accordion" open={open} onToggle={(e) => setOpen(e.target.open)}>
             <summary>{"What you'll need to do"}</summary>
@@ -206,6 +252,39 @@ function StepRow({ step, done, onToggle, isTaskComplete }) {
             </div>
           </details>
         )}
+
+        {step.note && (
+          <span className="step-note">
+            <span aria-hidden="true">ⓘ</span> {step.note}
+          </span>
+        )}
+
+        {step.apps && (
+          <div className="step-apps">
+            <span className="step-apps__label">Download the app</span>
+            {step.apps.apple && (
+              <a href={step.apps.apple} className="step-apps__btn" target="_blank" rel="noreferrer">
+                Apple<span className="visually-hidden"> (opens in a new tab)</span>
+              </a>
+            )}
+            {step.apps.android && (
+              <a
+                href={step.apps.android}
+                className="step-apps__btn"
+                target="_blank"
+                rel="noreferrer"
+              >
+                Android<span className="visually-hidden"> (opens in a new tab)</span>
+              </a>
+            )}
+          </div>
+        )}
+
+        {step.cta && (
+          <a href={step.cta.href} className="step-cta" target="_blank" rel="noreferrer">
+            {step.cta.label} →<span className="visually-hidden"> (opens in a new tab)</span>
+          </a>
+        )}
       </div>
     </li>
   );
@@ -215,6 +294,17 @@ function StepRow({ step, done, onToggle, isTaskComplete }) {
  * @param {{ section: import('../../data/checklist').Section }} props
  */
 function ContentSection({ section }) {
+  if (section.type === 'note') {
+    return (
+      <aside className="step-note-box">
+        <p className="step-note-box__title">
+          <span aria-hidden="true">ⓘ</span> {section.title}
+        </p>
+        {section.body && <p className="step-note-box__body">{section.body}</p>}
+      </aside>
+    );
+  }
+
   if (section.type === 'accordion') {
     return (
       <details className="task-accordion">
