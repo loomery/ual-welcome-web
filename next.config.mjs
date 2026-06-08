@@ -80,8 +80,7 @@ const securityHeaders = [
     // Deny the lot — this app needs none of these. interest-cohort
     // disables FLoC. browsing-topics is the successor knob; harmless to
     // include even on browsers that ignore it.
-    value:
-      'camera=(), microphone=(), geolocation=(), interest-cohort=(), browsing-topics=()',
+    value: 'camera=(), microphone=(), geolocation=(), interest-cohort=(), browsing-topics=()',
   },
   {
     key: 'Strict-Transport-Security',
@@ -95,8 +94,18 @@ const securityHeaders = [
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   output: 'export',
-  assetPrefix: './',
-  basePath: process.env.DEPLOY_PATH ? `/${process.env.DEPLOY_PATH}` : '',
+  // Static-export hosting bits (Squiz file store). `assetPrefix: './'` makes
+  // every asset URL relative so the export can be served from any sub-path —
+  // but under `next dev` those relative URLs resolve against the current route
+  // and 404 on nested pages (e.g. from /events, `./_next/...` becomes
+  // `/events/_next/...`), which kills JS, CSS and the map. They're only needed
+  // for the production export, so apply them to builds only and keep dev clean.
+  ...(isDev
+    ? {}
+    : {
+        assetPrefix: './',
+        basePath: process.env.DEPLOY_PATH ? `/${process.env.DEPLOY_PATH}` : '',
+      }),
   reactStrictMode: true,
   // Allow HMR WebSocket connections from local network devices (phones,
   // tablets, other machines on the same LAN) during development.
@@ -134,10 +143,7 @@ if (process.env.ENABLE_PWA === '1' && process.env.NODE_ENV === 'production') {
   } catch (err) {
     // Surface the failure but don't block the build — PWA is non-essential
     // for a beta and the rest of the app still ships.
-    console.warn(
-      '[next.config] @serwist/next unavailable, building without PWA:',
-      err?.message,
-    );
+    console.warn('[next.config] @serwist/next unavailable, building without PWA:', err?.message);
   }
 }
 
