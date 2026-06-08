@@ -22,18 +22,26 @@
  * @typedef {Object} ContentSection
  * @property {string} title
  * @property {string} [body]
- * @property {'text'|'accordion'} [type]
+ * @property {'text'|'accordion'|'note'} [type]  'note' renders a muted info box
  * @property {string[]} [items]
- *
- * @typedef {Object} Step
- * @property {string} id
- * @property {string} title
- * @property {string} [href]
- * @property {string[]} [details]
  *
  * @typedef {Object} Cta
  * @property {string} label
  * @property {string} href
+ *
+ * @typedef {Object} AppLinks
+ * @property {string} [apple]    App Store URL
+ * @property {string} [android]  Google Play URL
+ *
+ * @typedef {Object} Step
+ * @property {string} id
+ * @property {string} title
+ * @property {string} [href]         Makes the title itself a link
+ * @property {string} [description]  Supporting copy under the title
+ * @property {string[]} [details]    Expandable "what you'll need to do" list
+ * @property {Cta} [cta]             Inline action link, e.g. "Go to Moodle →"
+ * @property {AppLinks} [apps]       App download buttons (Apple / Android)
+ * @property {string} [note]         Muted inline badge, e.g. availability caveat
  *
  * @typedef {Object} Task
  * @property {string} id
@@ -42,7 +50,8 @@
  * @property {string} shortDescription
  * @property {ContentSection[]} [sections]
  * @property {Step[]} [steps]
- * @property {Cta} cta
+ * @property {Cta} [cta]         Primary action button (omit for step-only tasks)
+ * @property {Cta} [helpLink]    Secondary, link-styled help action
  * @property {boolean} [internationalOnly]  If true, only shown to international students
  */
 
@@ -176,29 +185,64 @@ export const TASKS = [
   },
   {
     id: 'activate-accounts',
-    title: 'Activate your UAL accounts',
+    title: 'Set up your digital accounts',
     tag: 'essential',
-    shortDescription: 'The accounts you need to do setup for term.',
-    sections: [
+    shortDescription: 'The accounts you need to do setup for term',
+    steps: [
       {
-        title: 'What you need to activate',
-        body: 'Once you have your UAL email, you can activate your full suite of UAL digital accounts — including Moodle (your virtual learning environment), Microsoft 365, and library access.',
-        type: 'text',
+        id: 'mfa',
+        title: 'Multi-factor authentication',
+        description:
+          'Multi-Factor Authentication (MFA) adds an extra layer of protection to your identity, your data and our systems.',
+        cta: { label: 'Get started', href: 'https://aka.ms/mfasetup' },
       },
       {
-        title: 'How to activate',
-        body: 'Log in to the UAL IT portal using your UAL email and the password you set up. From there you can activate all connected services. Allow up to 24 hours for all services to become available.',
-        type: 'text',
+        id: 'student-portal',
+        title: 'Student portal',
+        description: 'Get the latest UAL news, timetable and access available online resources.',
+        // TODO(UAL): confirm the canonical Student portal URL.
+        cta: { label: 'Go to Student portal', href: 'https://www.arts.ac.uk/students' },
       },
       {
-        title: 'Need help?',
-        type: 'accordion',
-        items: ['Email: servicedesk@arts.ac.uk', 'Phone number: +44 (0)20 7514 9898'],
+        id: 'myual-app',
+        title: 'Download your MyUAL app',
+        description: 'Get the latest UAL news, timetable and access available online resources.',
+        // TODO(UAL): replace with the real MyUAL App Store / Google Play links.
+        apps: {
+          apple: 'https://www.apple.com/app-store/',
+          android: 'https://play.google.com/store',
+        },
+      },
+      {
+        id: 'moodle',
+        title: 'Set up Moodle',
+        description:
+          'Moodle is your virtual learning environment, it has course materials, assignments, announcements.',
+        note: 'Available after you have fully enrolled',
+        cta: { label: 'Go to Moodle', href: 'https://moodle.arts.ac.uk' },
+      },
+      {
+        id: 'seats-app',
+        title: 'Download your SEAtS app',
+        description:
+          'You will need to mark your own attendance to sessions using the SEAtS mobile phone app once you start.',
+        // TODO(UAL): replace with the real SEAtS App Store / Google Play links.
+        apps: {
+          apple: 'https://www.apple.com/app-store/',
+          android: 'https://play.google.com/store',
+        },
       },
     ],
-    cta: {
-      label: 'Go to IT setup',
-      href: 'https://www.arts.ac.uk/students/welcome/your-journey-to-UAL/get-connected',
+    sections: [
+      {
+        type: 'note',
+        title: 'About your timetable',
+        body: "Your personal timetable won't be available until your course starts. Check back once your course begins.",
+      },
+    ],
+    helpLink: {
+      label: 'Having problems? Contact IT support',
+      href: 'https://www.arts.ac.uk/students/it-services',
     },
   },
 ];
