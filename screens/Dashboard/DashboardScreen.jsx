@@ -36,7 +36,7 @@ const DASHBOARD_SECTIONS = [
     label: 'Course and studying',
     cards: [
       { title: 'Course details via Moodle', external: 'https://moodle.arts.ac.uk' },
-      { title: 'Resources', to: '#' },
+      { title: 'Resources', to: '/info/resources' },
       { title: 'What is Moodle', to: '#' },
     ],
   },
@@ -45,8 +45,8 @@ const DASHBOARD_SECTIONS = [
     label: 'IT & UAL access',
     cards: [
       { title: 'Tools to set up', to: '/checklist' },
-      { title: 'Resources', to: '#' },
-      { title: 'Campus access', to: '#' },
+      { title: 'Resources', to: '/info/resources' },
+      { title: 'Campus access', to: '/map' },
     ],
   },
   {
@@ -62,9 +62,9 @@ const DASHBOARD_SECTIONS = [
     id: 'health',
     label: 'Health, wellbeing and safety',
     cards: [
-      { title: 'Set up with a local doctor', to: '#' },
+      { title: 'Set up with a local doctor', to: '/info/local-doctor' },
       { title: 'Disability service', to: '#' },
-      { title: 'Safety at UAL', to: '#' },
+      { title: 'Safety at UAL', to: '/info/safety-at-ual' },
       { title: 'Campus safety', to: '#' },
     ],
   },
