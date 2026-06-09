@@ -16,13 +16,13 @@ export function useTheme() {
   // disabilitiamo perché è il caso d'uso esplicitamente esentato:
   // hand-off del valore "vero" da un external system al primo paint.
   useEffect(() => {
-    const storedTheme = localStorage.getItem('ual-theme');
-    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-
-    const initialTheme = storedTheme || (prefersDark ? 'dark' : 'light');
-    document.documentElement.setAttribute('data-theme', initialTheme);
+    // The new home/product design is single-theme (black-on-light) and the
+    // dark-mode toggle was retired with the old side nav. Lock to light so a
+    // user whose OS prefers dark doesn't get an orphaned, un-toggleable dark
+    // theme that inverts the hero/CTA surfaces away from the design.
+    document.documentElement.setAttribute('data-theme', 'light');
     /* eslint-disable react-hooks/set-state-in-effect */
-    setTheme(initialTheme);
+    setTheme('light');
     setIsLoading(false);
     /* eslint-enable react-hooks/set-state-in-effect */
   }, []);

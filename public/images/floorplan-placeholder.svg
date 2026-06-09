@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" role="img" aria-label="Floor plan placeholder" preserveAspectRatio="xMidYMid meet">
+  <rect width="800" height="600" fill="#f3f3f0"/>
+  <g fill="none" stroke="#b5b5ad" stroke-width="1">
+    <path d="M0 40h800M0 80h800M0 120h800M0 160h800M0 200h800M0 240h800M0 280h800M0 320h800M0 360h800M0 400h800M0 440h800M0 480h800M0 520h800M0 560h800"/>
+    <path d="M40 0v600M80 0v600M120 0v600M160 0v600M200 0v600M240 0v600M280 0v600M320 0v600M360 0v600M400 0v600M440 0v600M480 0v600M520 0v600M560 0v600M600 0v600M640 0v600M680 0v600M720 0v600M760 0v600"/>
+  </g>
+  <g fill="#dcdcd6" stroke="#8f8f86" stroke-width="4" stroke-linejoin="round">
+    <rect x="80" y="80" width="240" height="180"/>
+    <rect x="360" y="80" width="180" height="120"/>
+    <rect x="580" y="80" width="140" height="260"/>
+    <rect x="80" y="320" width="200" height="200"/>
+    <rect x="320" y="240" width="220" height="280"/>
+  </g>
+  <g fill="#8f8f86" font-family="system-ui, sans-serif" font-size="20" font-weight="700">
+    <text x="100" y="180">Studios</text>
+    <text x="380" y="148">Reception</text>
+    <text x="600" y="220">Library</text>
+    <text x="100" y="430">Cafe</text>
+    <text x="340" y="390">Workshops</text>
+  </g>
+  <circle cx="700" cy="520" r="34" fill="#1a1a1a"/>
+  <text x="700" y="528" fill="#fff" font-family="system-ui, sans-serif" font-size="22" font-weight="700" text-anchor="middle">N</text>
+</svg>

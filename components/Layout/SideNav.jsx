@@ -2,27 +2,22 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { UalLogo } from '../Icon/UalLogo';
-import { ThemeToggle } from '../Theme/ThemeToggle';
-import { NAV_ITEMS } from './navConfig';
-import { COLLEGE_OPTIONS } from '../../data/onboardingOptions';
-import { useOnboardingProfile } from '../../hooks/useOnboardingProfile';
+import { SIDE_NAV_ITEMS } from './navConfig';
 
 /**
- * Desktop sidebar navigation. Visible only at ≥49.5rem (same breakpoint
- * at which the mobile bottom nav hides). Fixed to the left edge of the
- * viewport, full height, with the UAL logo at the top, nav items in
- * the middle, and the student's college at the bottom once they've
- * completed onboarding.
+ * Desktop side navigation. Visible only at ≥49.5rem (the same breakpoint at
+ * which the mobile bottom nav hides). It sits in the left column of the app
+ * body on a grey panel, beneath the black top bar, and lists the product nav
+ * (Home / Tasks / Events / Map / Settings / Help).
  *
- * Active state: filled dark background + light text — mirrors the Figma
- * design and the existing bottom-nav active style.
+ * Branding lives in the top bar now, so the sidebar carries no logo; the
+ * theme toggle was retired with the single-theme redesign.
+ *
+ * Active state: bold text with a golden left rule that runs the full height
+ * of the item — mirrors the Figma design.
  */
 export function SideNav() {
   const pathname = usePathname();
-  const { profile } = useOnboardingProfile();
-
-  const college = COLLEGE_OPTIONS.find((c) => c.id === profile?.collegeId);
 
   /**
    * @param {string | undefined} to
@@ -36,18 +31,8 @@ export function SideNav() {
 
   return (
     <nav className="side-nav" aria-label="Primary desktop">
-      {/* Branding — UAL logo only, no lock-up wordmark below
-          (the brand brief explicitly excluded "UAL <product name>"
-          locked-up logos). */}
-      <div className="side-nav__brand">
-        <Link href="/" aria-label="UAL — home" className="side-nav__logo-link">
-          <UalLogo className="side-nav__logo" aria-hidden="true" />
-        </Link>
-      </div>
-
-      {/* Nav items */}
       <ul className="side-nav__list" role="list">
-        {NAV_ITEMS.map((item) => {
+        {SIDE_NAV_ITEMS.map((item) => {
           const active = isActive(item.to);
           const isExternal = Boolean(item.href);
 
@@ -73,19 +58,6 @@ export function SideNav() {
           );
         })}
       </ul>
-
-      {/* Footer: college chip + theme toggle, stacked */}
-      <div className="side-nav__footer">
-        {college && (
-          <div className="side-nav__college-chip">
-            <span className="side-nav__college-short">{college.short}</span>
-            <span className="side-nav__college-area">{college.area}</span>
-          </div>
-        )}
-        <div className="side-nav__footer-actions">
-          <ThemeToggle />
-        </div>
-      </div>
     </nav>
   );
 }
