@@ -7,12 +7,22 @@ import { useOnboardingProfile } from '../../hooks/useOnboardingProfile';
 import { IntroStep } from './steps/IntroStep';
 import { NameStep } from './steps/NameStep';
 import { CollegeStep } from './steps/CollegeStep';
+import { YearStep } from './steps/YearStep';
 import { StudentTypeStep } from './steps/StudentTypeStep';
 import { VisaStatusStep } from './steps/VisaStatusStep';
 import { InterestsStep } from './steps/InterestsStep';
 import { FinishStep } from './steps/FinishStep';
 
-const ALL_STEPS = ['intro', 'name', 'college', 'studentType', 'visaStatus', 'interests', 'finish'];
+const ALL_STEPS = [
+  'intro',
+  'name',
+  'college',
+  'year',
+  'studentType',
+  'visaStatus',
+  'interests',
+  'finish',
+];
 
 /**
  * Multi-step onboarding flow.
@@ -35,6 +45,7 @@ export function OnboardingFlow() {
   const [draft, setDraft] = useState(() => ({
     name: profile?.name ?? '',
     collegeId: profile?.collegeId ?? '',
+    year: profile?.year ?? '',
     studentType: profile?.studentType ?? '',
     visaStatus: profile?.visaStatus ?? '',
     interests: profile?.interests ?? [],
@@ -63,6 +74,8 @@ export function OnboardingFlow() {
         return draft.name.trim().length >= 1;
       case 'college':
         return Boolean(draft.collegeId);
+      case 'year':
+        return Boolean(draft.year);
       case 'studentType':
         return Boolean(draft.studentType);
       case 'visaStatus':
@@ -117,6 +130,7 @@ export function OnboardingFlow() {
     setDraft({
       name: '',
       collegeId: '',
+      year: '',
       studentType: '',
       visaStatus: '',
       interests: [],
@@ -205,6 +219,13 @@ export function OnboardingFlow() {
               onChange={(v) => setDraft((d) => ({ ...d, collegeId: v }))}
             />
           )}
+          {stepId === 'year' && (
+            <YearStep
+              headingRef={headingRef}
+              value={draft.year}
+              onChange={(v) => setDraft((d) => ({ ...d, year: v }))}
+            />
+          )}
           {stepId === 'studentType' && (
             <StudentTypeStep
               headingRef={headingRef}
@@ -264,6 +285,8 @@ function stepSlice(stepId, draft) {
       return { name: draft.name.trim() };
     case 'college':
       return { collegeId: draft.collegeId };
+    case 'year':
+      return { year: draft.year };
     case 'studentType':
       return { studentType: draft.studentType };
     case 'visaStatus':
