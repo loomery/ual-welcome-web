@@ -15,7 +15,7 @@ import { useOnboardingProfile } from '../../hooks/useOnboardingProfile';
 import { usePersistedState } from '../../hooks/usePersistedState';
 
 const VIEW_OPTIONS = /** @type {const} */ ([
-  { value: 'focus', label: 'My focus' },
+  { value: 'focus', label: 'My selected interests' },
   { value: 'all', label: 'All at UAL' },
 ]);
 

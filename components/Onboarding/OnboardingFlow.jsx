@@ -142,7 +142,11 @@ export function OnboardingFlow() {
   const progressCurrent = Math.max(0, Math.min(stepIndex, progressTotal));
 
   return (
-    <div className="onboarding-flow">
+    <div
+      className={['onboarding-flow', stepId === 'interests' && 'onboarding-flow--wide']
+        .filter(Boolean)
+        .join(' ')}
+    >
       {/* ── TOP BAR — back button + progress bar + skip ────────────────── */}
       {stepId !== 'intro' && stepId !== 'finish' && (
         <div className="onboarding-flow__topbar">

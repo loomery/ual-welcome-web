@@ -1367,6 +1367,12 @@ main:focus {
   margin-left: auto;
   margin-right: auto;
 }
+/* The interests step ("Build your UAL guide your way") uses a wider
+   container so its title and 3-column tile grid fill the full width,
+   matching the Figma frame (node 437-16781). */
+.onboarding-flow--wide {
+  max-width: var(--content-max);
+}
 /* No vertical padding on desktop — the parent main is flex-centered
    with its own padding when /onboarding hides the AppShell chrome. */
 @media (min-width: 49.5rem) {
