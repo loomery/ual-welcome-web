@@ -5,10 +5,11 @@ import { daysUntil } from '../../utils/dates';
 import { WELCOME_WEEK } from '../../data/welcomeWeek';
 
 /**
- * Welcome Week countdown.
- * - If starts in the future: "Starts in X days"
- * - If currently running:    "It's on — X days left"
- * - If finished:              returns null (component renders nothing)
+ * Welcome Week countdown — the golden full-bleed strip that sits directly
+ * under the navbar in the new home design.
+ * - If it starts in the future: "Welcome Week is in X days"
+ * - If currently running:       "Welcome Week is on now"
+ * - If finished:                returns null (component renders nothing)
  *
  * Client component so SSR/CSR don't mismatch on `new Date()`.
  */
@@ -30,21 +31,17 @@ export function Countdown() {
   const toEnd = daysUntil(WELCOME_WEEK.endsAt, now);
 
   let label;
-  let eyebrow;
   if (toStart > 0) {
-    eyebrow = 'Welcome Week';
-    label = toStart === 1 ? 'Starts tomorrow' : `Starts in ${toStart} days`;
+    label = toStart === 1 ? 'Welcome Week starts tomorrow' : `Welcome Week is in ${toStart} days`;
   } else if (toEnd > 0) {
-    eyebrow = 'Welcome Week';
-    label = toEnd === 1 ? 'Ends tomorrow' : `${toEnd} days to go`;
+    label = 'Welcome Week is on now';
   } else {
     return null;
   }
 
   return (
-    <div className="countdown" role="status">
-      <span className="countdown__eyebrow">{eyebrow}</span>
-      <span className="countdown__label">{label}</span>
+    <div className="welcome-strip" role="status">
+      <p className="welcome-strip__inner">{label}</p>
     </div>
   );
 }

@@ -1,18 +1,17 @@
 import { StepHeader } from '../StepHeader';
 import { INTEREST_OPTIONS } from '../../../data/onboardingOptions';
-import { INTEREST_ICONS } from '../../Icon/InterestIcons';
 
 /**
- * Step 6 — choose focus areas (optional, multi-select).
- * Selected interests drive the "My focus" view on the dashboard.
+ * Step — choose topics to show on the personalised home page (optional,
+ * multi-select). Selected topics drive the "My focus" view on the dashboard.
+ * Copy and tiles match the Figma "Build your UAL guide your way" frame.
  *
  * @param {Object} props
  * @param {{ current: HTMLHeadingElement | null }} props.headingRef
  * @param {string[]} props.value  Array of selected interest IDs.
  * @param {(interests: string[]) => void} props.onChange
  * @param {import('../../../data/onboardingOptions').InterestOption[]} [props.options]
- *   Subset of interests to display. Defaults to all INTEREST_OPTIONS. The
- *   orchestrator (OnboardingFlow) passes a filtered list based on student type.
+ *   Subset of topics to display. Defaults to all INTEREST_OPTIONS.
  */
 export function InterestsStep({ headingRef, value, onChange, options = INTEREST_OPTIONS }) {
   function toggle(id) {
@@ -24,18 +23,17 @@ export function InterestsStep({ headingRef, value, onChange, options = INTEREST_
     <div className="flow" data-flow="m">
       <StepHeader
         headingRef={headingRef}
-        title="Choose your focus"
-        body="Pick as many as you like, or none. We'll surface things that match."
+        title="Build your UAL guide your way"
+        body="Select topics to show on your home page. Choose as many or as little as you like. You can change these any time."
       />
 
       <ul
         className="onboarding-grid onboarding-grid--three"
         role="group"
-        aria-label="Choose what interests you (optional, multiple)"
+        aria-label="Choose the topics to show on your home page (optional, multiple)"
       >
         {options.map((opt) => {
           const selected = value.includes(opt.id);
-          const Icon = INTEREST_ICONS[opt.id];
 
           return (
             <li key={opt.id}>
@@ -47,11 +45,6 @@ export function InterestsStep({ headingRef, value, onChange, options = INTEREST_
                 data-selected={selected || undefined}
                 className="onboarding-interest"
               >
-                {Icon && (
-                  <span className="onboarding-interest__icon" aria-hidden="true">
-                    <Icon width={24} height={24} />
-                  </span>
-                )}
                 <span className="onboarding-interest__label">{opt.label}</span>
                 <span className="onboarding-interest__body">{opt.body}</span>
               </button>

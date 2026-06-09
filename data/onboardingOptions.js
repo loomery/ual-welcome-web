@@ -3,8 +3,6 @@
  * dataset for college choice, but keeps the option-set decoupled from
  * the 3D scene config (different concerns).
  *
- * @typedef {'undergraduate' | 'postgraduate' | 'pre-degree' | 'short-course'} StudyLevel
- * @typedef {'1st' | '2nd' | 'placement' | '3rd'} Year
  * @typedef {'domestic' | 'international'} StudentType
  * @typedef {'not_started' | 'having_issues' | 'waiting' | 'received'} VisaStatus
  *
@@ -14,16 +12,6 @@
  * @property {string} short     Short label for compact contexts ("CSM")
  * @property {string} area      Where the campus is in London — used in the dashboard hero
  * @property {string} eventsUrl Deep-link to the college's What's On page on arts.ac.uk
- *
- * @typedef {Object} StudyLevelOption
- * @property {StudyLevel} id
- * @property {string} label
- * @property {string} hint      Single-line clarifier shown under the label
- *
- * @typedef {Object} YearOption
- * @property {Year} id
- * @property {string} label
- * @property {string} hint
  *
  * @typedef {Object} StudentTypeOption
  * @property {StudentType} id
@@ -39,8 +27,6 @@
  * @property {string} id
  * @property {string} label
  * @property {string} body           One-liner that explains what they'll see if they pick this
- * @property {string} emoji          Inline glyph for visual scan; also serves as a non-text marker
- * @property {boolean} [internationalOnly]  If true, only shown to international students
  */
 
 /** @type {CollegeOption[]} */
@@ -110,22 +96,6 @@ export const COLLEGE_OPTIONS = [
   },
 ];
 
-/** @type {StudyLevelOption[]} */
-export const STUDY_LEVEL_OPTIONS = [
-  { id: 'undergraduate', label: 'Undergraduate', hint: 'BA, BSc, foundation' },
-  { id: 'postgraduate', label: 'Postgraduate', hint: 'MA, MSc, MArch, MPhil, PhD' },
-  { id: 'pre-degree', label: 'Pre-degree', hint: 'Foundation, access or diploma' },
-  { id: 'short-course', label: 'Short course', hint: 'A few weeks to a term' },
-];
-
-/** @type {YearOption[]} */
-export const YEAR_OPTIONS = [
-  { id: '1st', label: '1st year', hint: 'Just starting your course' },
-  { id: '2nd', label: '2nd year', hint: 'Continuing your studies' },
-  { id: 'placement', label: 'Placement year', hint: 'Industry placement' },
-  { id: '3rd', label: '3rd year', hint: 'Final year or beyond' },
-];
-
 /** @type {StudentTypeOption[]} */
 export const STUDENT_TYPE_OPTIONS = [
   { id: 'domestic', label: 'UK / Home', hint: "I'm a UK or EU-settled student" },
@@ -144,86 +114,43 @@ export const VISA_STATUS_OPTIONS = [
   { id: 'received', label: "Yes, I've received it", hint: "You're all set on the visa front" },
 ];
 
-/** @type {InterestOption[]} */
+/**
+ * Topics a student can choose to show on their personalised home page.
+ * Mirrors the dashboard's optional sections — the `id`s here must match
+ * the section ids in DashboardScreen. Copy matches the Figma onboarding
+ * "Build your UAL guide your way" frame.
+ *
+ * @type {InterestOption[]}
+ */
 export const INTEREST_OPTIONS = [
   {
-    id: 'social',
-    label: 'Social',
-    body: 'Socials, clubs, the SU.',
-    emoji: '🎉',
+    id: 'course',
+    label: 'Course and studying',
+    body: 'Explore study materials to support you throughout the year',
   },
   {
-    id: 'creative',
-    label: 'Workshops & studios',
-    body: 'Hands-on sessions and studio access.',
-    emoji: '🎨',
+    id: 'access',
+    label: 'IT & UAL access',
+    body: 'Access UAL systems, get onto campus and find IT support',
   },
   {
-    id: 'study',
-    label: 'Study skills',
-    body: 'Library, Moodle, academic support.',
-    emoji: '📚',
+    id: 'life',
+    label: 'Life at UAL',
+    body: 'Your Student Union, events and guides to help you settle into life at university',
   },
   {
-    id: 'wellbeing',
-    label: 'Wellbeing',
-    body: 'Mental health, counselling, healthcare.',
-    emoji: '🌱',
+    id: 'health',
+    label: 'Health, wellbeing and safety',
+    body: 'Access disability support, joining a GP and safety information',
   },
   {
-    id: 'career',
-    label: 'Jobs & opportunities',
-    body: 'Talks, mentoring, industry links.',
-    emoji: '💼',
+    id: 'finances',
+    label: 'Finances',
+    body: 'Tuition fees, bank accounts, financial support and student discounts.',
   },
   {
-    id: 'area',
-    label: 'Area guide',
-    body: 'Travel information, campus map and discounts.',
-    emoji: '🗺️',
-  },
-  {
-    id: 'tech',
-    label: 'Tech setup',
-    body: 'IT, email, software, devices.',
-    emoji: '💻',
-  },
-  {
-    id: 'visa',
-    label: 'Visa & immigration',
-    body: 'Student visa support, documents and next steps.',
-    emoji: '🛂',
-    internationalOnly: true,
+    id: 'careers',
+    label: 'Careers',
+    body: 'Job opportunities and advice to help you build your future while you study',
   },
 ];
-
-/**
- * Maps interest IDs to event categories from data/events.js.
- * Used by the dashboard to surface relevant events.
- *
- * @type {Record<string, ('Talk' | 'Tour' | 'Social' | 'Workshop')[]>}
- */
-export const INTEREST_TO_EVENT_CATEGORIES = {
-  social: ['Social'],
-  creative: ['Workshop', 'Tour'],
-  study: ['Talk', 'Tour'],
-  wellbeing: ['Talk'],
-  career: ['Talk'],
-  area: ['Tour'],
-  tech: ['Talk', 'Workshop'],
-};
-
-/**
- * Maps interest IDs to checklist item IDs from data/checklist.js.
- * Used by the dashboard to highlight tasks the student opted into.
- *
- * @type {Record<string, string[]>}
- */
-export const INTEREST_TO_CHECKLIST = {
-  study: ['libraries', 'moodle', 'timetable'],
-  tech: ['it-account'],
-  creative: ['libraries'],
-  social: [],
-  wellbeing: [],
-  career: [],
-};

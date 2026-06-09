@@ -1,72 +1,25 @@
-'use client';
-
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
 import { UalLogo } from '../Icon/UalLogo';
-import { ThemeToggle } from '../Theme/ThemeToggle';
-import { NAV_ITEMS } from './navConfig';
 
 /**
- * Top-of-page header. Logo links home; on desktop the primary nav is shown
- * inline. On mobile the same nav lives in the bottom tab bar instead.
+ * Top bar — a slim black band with just the `ual:` wordmark, mirroring the
+ * new home design.
+ *
+ * Per the brief, the global UAL site controls that sit on the right of the
+ * real arts.ac.uk bar (Subjects, Courses, Search, language, Accessibility
+ * tools, Menu) are deliberately omitted — they aren't needed for this
+ * prototype. The product navigation (Home / Tasks / Events / Map) lives in
+ * the desktop side nav and the mobile bottom tab bar, NOT here.
+ *
+ * The bar shows at every breakpoint and stays pinned to the top.
  */
 export function Header() {
-  const pathname = usePathname();
-
-  /**
-   * @param {string} to
-   * @returns {boolean}
-   */
-  const isActive = (to) => {
-    if (to === '/') return pathname === '/';
-    return pathname === to || pathname.startsWith(`${to}/`);
-  };
-
   return (
     <header className="header">
       <div className="wrapper">
-        <div className="cluster" data-justify="space-between">
-          <Link href="/" className="header__link" aria-label="UAL Welcome Week — home">
-            <UalLogo className="header__logo" />
-            <p>Welcome Week</p>
-          </Link>
-
-          <div className="header__actions">
-            <nav id="primary-nav" className="top-nav" aria-label="Primary">
-              <ul className="top-nav__list" role="list">
-                {NAV_ITEMS.map((item) => {
-                  const isExternal = Boolean(item.href);
-                  const active = isActive(item.to);
-                  const key = item.href ?? item.to;
-                  return (
-                    <li key={key}>
-                      {isExternal ? (
-                        <a
-                          href={item.href}
-                          className="top-nav__link"
-                          target="_blank"
-                          rel="noreferrer"
-                        >
-                          {item.label}
-                        </a>
-                      ) : (
-                        <Link
-                          href={item.to}
-                          className="top-nav__link"
-                          aria-current={active ? 'page' : undefined}
-                          data-active={active ? '' : undefined}
-                        >
-                          {item.label}
-                        </Link>
-                      )}
-                    </li>
-                  );
-                })}
-              </ul>
-            </nav>
-            <ThemeToggle />
-          </div>
-        </div>
+        <Link href="/" className="header__link" aria-label="UAL — home">
+          <UalLogo className="header__logo" />
+        </Link>
       </div>
     </header>
   );

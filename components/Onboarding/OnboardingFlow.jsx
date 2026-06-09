@@ -4,28 +4,15 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Button } from '../Button/Button';
 import { useOnboardingProfile } from '../../hooks/useOnboardingProfile';
-import { INTEREST_OPTIONS } from '../../data/onboardingOptions';
 import { IntroStep } from './steps/IntroStep';
 import { NameStep } from './steps/NameStep';
 import { CollegeStep } from './steps/CollegeStep';
-import { StudyLevelStep } from './steps/StudyLevelStep';
-import { YearStep } from './steps/YearStep';
 import { StudentTypeStep } from './steps/StudentTypeStep';
 import { VisaStatusStep } from './steps/VisaStatusStep';
 import { InterestsStep } from './steps/InterestsStep';
 import { FinishStep } from './steps/FinishStep';
 
-const ALL_STEPS = [
-  'intro',
-  'name',
-  'college',
-  'studyLevel',
-  'year',
-  'studentType',
-  'visaStatus',
-  'interests',
-  'finish',
-];
+const ALL_STEPS = ['intro', 'name', 'college', 'studentType', 'visaStatus', 'interests', 'finish'];
 
 /**
  * Multi-step onboarding flow.
@@ -48,8 +35,6 @@ export function OnboardingFlow() {
   const [draft, setDraft] = useState(() => ({
     name: profile?.name ?? '',
     collegeId: profile?.collegeId ?? '',
-    studyLevel: profile?.studyLevel ?? '',
-    year: profile?.year ?? '',
     studentType: profile?.studentType ?? '',
     visaStatus: profile?.visaStatus ?? '',
     interests: profile?.interests ?? [],
@@ -57,27 +42,12 @@ export function OnboardingFlow() {
 
   const activeSteps = useMemo(() => {
     let steps = ALL_STEPS;
-    // Year is only relevant for undergraduates — postgrad, pre-degree and
-    // short-course students skip straight to StudentType.
-    if (draft.studyLevel !== 'undergraduate') {
-      steps = steps.filter((s) => s !== 'year');
-    }
     // VisaStatus is only shown to international students.
     if (draft.studentType !== 'international') {
       steps = steps.filter((s) => s !== 'visaStatus');
     }
     return steps;
-  }, [draft.studyLevel, draft.studentType]);
-
-  // Interests available to this student — international students see the
-  // additional "Visa & immigration" option; domestic students do not.
-  const interestOptions = useMemo(
-    () =>
-      draft.studentType === 'international'
-        ? INTEREST_OPTIONS
-        : INTEREST_OPTIONS.filter((o) => !o.internationalOnly),
-    [draft.studentType],
-  );
+  }, [draft.studentType]);
 
   const stepId = activeSteps[stepIndex];
   const isLast = stepIndex === activeSteps.length - 1;
@@ -93,10 +63,6 @@ export function OnboardingFlow() {
         return draft.name.trim().length >= 1;
       case 'college':
         return Boolean(draft.collegeId);
-      case 'studyLevel':
-        return Boolean(draft.studyLevel);
-      case 'year':
-        return Boolean(draft.year);
       case 'studentType':
         return Boolean(draft.studentType);
       case 'visaStatus':
@@ -151,8 +117,6 @@ export function OnboardingFlow() {
     setDraft({
       name: '',
       collegeId: '',
-      studyLevel: '',
-      year: '',
       studentType: '',
       visaStatus: '',
       interests: [],
@@ -241,20 +205,6 @@ export function OnboardingFlow() {
               onChange={(v) => setDraft((d) => ({ ...d, collegeId: v }))}
             />
           )}
-          {stepId === 'studyLevel' && (
-            <StudyLevelStep
-              headingRef={headingRef}
-              value={draft.studyLevel}
-              onChange={(v) => setDraft((d) => ({ ...d, studyLevel: v }))}
-            />
-          )}
-          {stepId === 'year' && (
-            <YearStep
-              headingRef={headingRef}
-              value={draft.year}
-              onChange={(v) => setDraft((d) => ({ ...d, year: v }))}
-            />
-          )}
           {stepId === 'studentType' && (
             <StudentTypeStep
               headingRef={headingRef}
@@ -274,7 +224,6 @@ export function OnboardingFlow() {
               headingRef={headingRef}
               value={draft.interests}
               onChange={(v) => setDraft((d) => ({ ...d, interests: v }))}
-              options={interestOptions}
             />
           )}
           {stepId === 'finish' && <FinishStep headingRef={headingRef} draft={draft} />}
@@ -315,10 +264,6 @@ function stepSlice(stepId, draft) {
       return { name: draft.name.trim() };
     case 'college':
       return { collegeId: draft.collegeId };
-    case 'studyLevel':
-      return { studyLevel: draft.studyLevel };
-    case 'year':
-      return { year: draft.year };
     case 'studentType':
       return { studentType: draft.studentType };
     case 'visaStatus':

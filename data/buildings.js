@@ -15,7 +15,7 @@
  * @property {[number, number]} size  Relative footprint [width, depth] in scene units (~km).
  * @property {number} height          Relative building height in scene units.
  * @property {string} description
- * @property {{ lat: number, lng: number }} geo  Real-world lat/lng — drives scene position via geoToScene.
+ * @property {{ lat: number, lng: number }} geo  Real-world lat/lng — used to build map-directions links.
  * @property {BuildingTransport} [transport]
  */
 

@@ -66,7 +66,11 @@ export function HomeScreen() {
             to="/checklist"
             body={<p>Tick off the essentials before and during your first week.</p>}
           />
-          <Card title="Campus map" to="/map" body={<p>Explore UAL’s six colleges in 3D.</p>} />
+          <Card
+            title="Find your campus"
+            to="/map"
+            body={<p>Floor plans, address and transport for your college.</p>}
+          />
           <Card
             title="Events"
             to="/events"

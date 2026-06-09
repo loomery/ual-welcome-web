@@ -1,59 +1,44 @@
 /**
- * Essential tasks for new UAL students.
+ * Essential setup tasks for new UAL students.
  *
- * Data model:
- *
- * Task
- *  ├─ id              string — used as URL slug (/checklist/[id])
- *  ├─ title           string
- *  ├─ tag             'essential'
- *  ├─ shortDescription  shown in the task list card
- *  ├─ sections[]      rich content blocks on the detail page
- *  ├─ steps[]         optional sub-tasks with individual completion tracking
- *  └─ cta             { label, href } — primary action button on detail page
+ * The "Get set up for term" page (/checklist) lists these inline: each task
+ * shows a completion circle, a title, a short description, and an inline
+ * action — either a link (`cta`), app-download buttons (`apps`), or both,
+ * plus an optional availability `note`. Most tasks complete in place; only
+ * MFA has its own detail page (/checklist/mfa) with the device-path guide.
  *
  * Progress is tracked separately in localStorage:
  *   'ual:task:status:v1'  →  Record<taskId, 'not-started'|'in-progress'|'complete'>
- *   'ual:task:steps:v1'   →  Record<taskId, Record<stepId, boolean>>
  *
  * @typedef {'essential'} TaskTag
  * @typedef {'not-started'|'in-progress'|'complete'} TaskStatus
  *
- * @typedef {Object} ContentSection
- * @property {string} title
- * @property {string} [body]
- * @property {'text'|'accordion'|'note'} [type]  'note' renders a muted info box
- * @property {string[]} [items]
- *
  * @typedef {Object} Cta
  * @property {string} label
- * @property {string} href
+ * @property {string} href   Internal route if it starts with '/', else an external link.
  *
  * @typedef {Object} AppLinks
  * @property {string} [apple]    App Store URL
  * @property {string} [android]  Google Play URL
  *
- * @typedef {Object} Step
- * @property {string} id
- * @property {string} title
- * @property {string} [href]         Makes the title itself a link
- * @property {string} [description]  Supporting copy under the title
- * @property {string[]} [details]    Expandable "what you'll need to do" list
- * @property {Cta} [cta]             Inline action link, e.g. "Go to Moodle →"
- * @property {AppLinks} [apps]       App download buttons (Apple / Android)
- * @property {string} [note]         Muted inline badge, e.g. availability caveat
- *
  * @typedef {Object} Task
  * @property {string} id
  * @property {string} title
  * @property {TaskTag} tag
- * @property {string} shortDescription
- * @property {ContentSection[]} [sections]
- * @property {Step[]} [steps]
- * @property {Cta} [cta]         Primary action button (omit for step-only tasks)
- * @property {Cta} [helpLink]    Secondary, link-styled help action
- * @property {boolean} [internationalOnly]  If true, only shown to international students
+ * @property {string} shortDescription   One-liner shown in the list and the dashboard.
+ * @property {Cta} [cta]                 Inline action link.
+ * @property {AppLinks} [apps]           App download buttons (Apple / Android).
+ * @property {string} [note]             Muted availability caveat.
+ * @property {boolean} [internationalOnly]  If true, only shown to international students.
  */
+
+// TODO(UAL): replace placeholder URLs with the canonical UAL destinations.
+const AUTHENTICATOR_APPS = {
+  apple: 'https://apps.apple.com/app/microsoft-authenticator/id983156458',
+  android: 'https://play.google.com/store/apps/details?id=com.azure.authenticator',
+};
+
+const MICROSOFT_SIGNIN = 'https://www.office.com';
 
 /** @type {Task[]} */
 export const TASKS = [
@@ -62,187 +47,56 @@ export const TASKS = [
     title: 'Access your UAL email',
     tag: 'essential',
     shortDescription: 'This email is needed to enrol and get setup on all available UAL services.',
-    sections: [
-      {
-        title: 'What your UAL email is for',
-        body: 'This email is needed to enrol and get setup on all available UAL services. You will use it to receive important communications from UAL throughout your studies.',
-        type: 'text',
-      },
-      {
-        title: 'How to access your UAL email',
-        body: 'You\'ll be sent an email labelled "[email]" containing your network username and a link asking you to set a password 72 hours after official acceptance and within 10 weeks of your course start date.',
-        type: 'text',
-      },
-      {
-        title: 'Contact IT services for help',
-        type: 'accordion',
-        items: ['Email: servicedesk@arts.ac.uk', 'Phone number: +44 (0)20 7514 9898'],
-      },
-    ],
     cta: {
-      label: 'Go to enrolment email',
+      label: 'Setup email',
       href: 'https://www.arts.ac.uk/students/welcome/your-journey-to-UAL/get-connected',
     },
   },
   {
-    id: 'enrol',
-    title: 'Enrol at UAL',
+    id: 'student-portal',
+    title: 'Student portal',
     tag: 'essential',
-    shortDescription: 'Register as an official UAL student.',
-    steps: [
-      {
-        id: 'portal-login',
-        title: 'Log in to your UAL Portal',
-        href: 'https://www.arts.ac.uk/study-at-ual/how-to-enrol',
-      },
-      {
-        id: 'enrolment-form',
-        title: 'Complete the online enrolment form',
-        details: [
-          'Add your student number. Find in the portal.',
-          "Upload copies of: Passport (Birth certificate if you don't have a passport) and Academic qualifications.",
-          'Confirm tuition payment/funding.',
-          'Upload a passport-sized photo for your student ID card.',
-        ],
-      },
-      {
-        id: 'confirmation',
-        title: 'Await your confirmation email',
-      },
-    ],
-    cta: {
-      label: 'Go to enrolment portal',
-      href: 'https://www.arts.ac.uk/study-at-ual/how-to-enrol',
-    },
+    shortDescription: 'Get the latest UAL news, timetable and access available online resources',
+    cta: { label: 'Go to Student portal', href: 'https://www.arts.ac.uk/students' },
   },
   {
-    id: 'pay-tuition',
-    title: 'Pay your tuition fees',
-    tag: 'essential',
-    shortDescription: 'Pay or confirm funding for your tuition fees to complete enrolment.',
-    sections: [
-      {
-        title: 'Why this matters',
-        body: 'You need to pay your tuition fees, or confirm how they will be funded (for example by a student loan or sponsor), before you can fully enrol at UAL.',
-        type: 'text',
-      },
-      {
-        title: 'How to pay',
-        body: 'You can pay online, set up an instalment plan, or confirm your funding through the UAL fees pages. Check the deadlines and accepted payment methods before you start.',
-        type: 'text',
-      },
-    ],
-    cta: {
-      label: 'Pay your tuition fees',
-      href: 'https://www.arts.ac.uk/study-at-ual/how-to-enrol/pay-your-tuition-fees',
-    },
-  },
-  {
-    id: 'get-cas-number',
-    title: 'Get your CAS number',
-    tag: 'essential',
-    internationalOnly: true,
-    shortDescription: 'International students need a CAS to apply for a Student visa.',
-    sections: [
-      {
-        title: 'What a CAS is',
-        body: 'A CAS (Confirmation of Acceptance for Studies) is a reference number UAL issues to international students. You need it to apply for your Student visa.',
-        type: 'text',
-      },
-      {
-        title: 'How to get yours',
-        body: 'UAL issues your CAS once you have met the conditions of your offer and confirmed your place. Follow the Student visa guidance to request it and check which documents you need.',
-        type: 'text',
-      },
-    ],
-    cta: {
-      label: 'Student visa & CAS guidance',
-      href: 'https://www.arts.ac.uk/study-at-ual/international/immigration-and-visas/student-visa',
-    },
-  },
-  {
-    id: 'student-id',
-    title: 'Collect your student ID',
+    id: 'mfa',
+    title: 'Multi-factor authentication',
     tag: 'essential',
     shortDescription:
-      'Get your ID card to access our college and institute buildings and facilities.',
-    sections: [
-      {
-        title: 'What your student ID is for',
-        body: "Your student ID card gives you access to all UAL buildings, libraries, and facilities. You'll also need it to prove your student status for discounts and services.",
-        type: 'text',
-      },
-      {
-        title: 'How to collect your card',
-        body: "Your card will be ready to collect from your college's main reception once you have completed enrolment. Bring a form of photo ID when you collect it.",
-        type: 'text',
-      },
-    ],
-    cta: {
-      label: 'Student ID card info',
-      href: 'https://www.arts.ac.uk/study-at-ual/how-to-enrol/student-id-card-collection',
+      'Multi-Factor Authentication (MFA) adds an extra layer of protection to your identity, your data and our systems',
+    cta: { label: 'Get started', href: '/checklist/mfa' },
+  },
+  {
+    id: 'myual-app',
+    title: 'Download your MyUAL app',
+    tag: 'essential',
+    shortDescription: 'Get the latest UAL news, timetable and access available online resources',
+    // TODO(UAL): replace with the real MyUAL App Store / Google Play links.
+    apps: {
+      apple: 'https://www.apple.com/app-store/',
+      android: 'https://play.google.com/store',
     },
   },
   {
-    id: 'activate-accounts',
-    title: 'Set up your digital accounts',
+    id: 'moodle',
+    title: 'Set up Moodle',
     tag: 'essential',
-    shortDescription: 'The accounts you need to do setup for term',
-    steps: [
-      {
-        id: 'mfa',
-        title: 'Multi-factor authentication',
-        description:
-          'Multi-Factor Authentication (MFA) adds an extra layer of protection to your identity, your data and our systems.',
-        cta: { label: 'Get started', href: 'https://aka.ms/mfasetup' },
-      },
-      {
-        id: 'student-portal',
-        title: 'Student portal',
-        description: 'Get the latest UAL news, timetable and access available online resources.',
-        // TODO(UAL): confirm the canonical Student portal URL.
-        cta: { label: 'Go to Student portal', href: 'https://www.arts.ac.uk/students' },
-      },
-      {
-        id: 'myual-app',
-        title: 'Download your MyUAL app',
-        description: 'Get the latest UAL news, timetable and access available online resources.',
-        // TODO(UAL): replace with the real MyUAL App Store / Google Play links.
-        apps: {
-          apple: 'https://www.apple.com/app-store/',
-          android: 'https://play.google.com/store',
-        },
-      },
-      {
-        id: 'moodle',
-        title: 'Set up Moodle',
-        description:
-          'Moodle is your virtual learning environment, it has course materials, assignments, announcements.',
-        note: 'Available after you have fully enrolled',
-        cta: { label: 'Go to Moodle', href: 'https://moodle.arts.ac.uk' },
-      },
-      {
-        id: 'seats-app',
-        title: 'Download your SEAtS app',
-        description:
-          'You will need to mark your own attendance to sessions using the SEAtS mobile phone app once you start.',
-        // TODO(UAL): replace with the real SEAtS App Store / Google Play links.
-        apps: {
-          apple: 'https://www.apple.com/app-store/',
-          android: 'https://play.google.com/store',
-        },
-      },
-    ],
-    sections: [
-      {
-        type: 'note',
-        title: 'About your timetable',
-        body: "Your personal timetable won't be available until your course starts. Check back once your course begins.",
-      },
-    ],
-    helpLink: {
-      label: 'Having problems? Contact IT support',
-      href: 'https://www.arts.ac.uk/students/it-services',
+    shortDescription:
+      'Moodle is your virtual learning environment, it has course materials, assignments, announcements.',
+    note: 'Available after you have fully enrolled',
+    cta: { label: 'Go to Moodle', href: 'https://moodle.arts.ac.uk' },
+  },
+  {
+    id: 'seats-app',
+    title: 'Download your SEAtS app',
+    tag: 'essential',
+    shortDescription:
+      'You will need to mark your own attendance to sessions using the SEAtS mobile phone app once you start',
+    // TODO(UAL): replace with the real SEAtS App Store / Google Play links.
+    apps: {
+      apple: 'https://www.apple.com/app-store/',
+      android: 'https://play.google.com/store',
     },
   },
 ];
@@ -251,10 +105,9 @@ export const TASKS = [
 export const TASKS_BY_ID = Object.fromEntries(TASKS.map((t) => [t.id, t]));
 
 /**
- * Tasks visible to a given student type. International-only tasks (e.g. the
- * CAS number) are hidden from UK/Home students. While the profile is still
- * hydrating, `studentType` is undefined and international-only tasks stay
- * hidden — the safe default.
+ * Tasks visible to a given student type. (No task is currently
+ * international-only, but the filter is kept so the data model and the
+ * screens that consume it stay forward-compatible.)
  *
  * @param {string} [studentType]  one of STUDENT_TYPE_OPTIONS[].id ('domestic' | 'international')
  * @returns {Task[]}
@@ -262,3 +115,128 @@ export const TASKS_BY_ID = Object.fromEntries(TASKS.map((t) => [t.id, t]));
 export function visibleTasks(studentType) {
   return TASKS.filter((t) => !t.internationalOnly || studentType === 'international');
 }
+
+/* ─────────────────────────────────────────────────────────────────────────
+ * Multi-factor authentication detail
+ * Two registration paths the student can choose between, each with its own
+ * ordered step list. Consumed by screens/Checklist/MfaScreen.
+ * ───────────────────────────────────────────────────────────────────────── */
+
+/**
+ * @typedef {Object} MfaStep
+ * @property {string} id
+ * @property {string} text
+ * @property {Cta} [cta]        Inline action link (e.g. "Go to our Microsoft URL sign in").
+ * @property {AppLinks} [apps]  App download buttons.
+ *
+ * @typedef {Object} MfaPath
+ * @property {string} id
+ * @property {string} badge     Pill label ("Recommended" / "Quick set up").
+ * @property {string} title
+ * @property {string} body      One-line description of the path.
+ * @property {MfaStep[]} steps
+ */
+
+/** @type {MfaPath[]} */
+export const MFA_PATHS = [
+  {
+    id: 'two-device',
+    badge: 'Recommended',
+    title: 'Smartphone and another device',
+    body: 'Use your phone, computer or tablet to approve logins.',
+    steps: [
+      {
+        id: 'signin',
+        text: 'On a tablet or computer, sign in to our Microsoft URL using your UAL email and password',
+        cta: { label: 'Go to our Microsoft URL sign in', href: MICROSOFT_SIGNIN },
+      },
+      { id: 'qr', text: 'Follow the on-screen steps until a QR code appears' },
+      {
+        id: 'app',
+        text: "On your phone, download the Microsoft Authenticator app, then tap '+', 'Work or School Account' and 'Scan a QR Code'",
+        apps: AUTHENTICATOR_APPS,
+      },
+      { id: 'scan', text: 'Scan the QR code (allow camera access if prompted)' },
+      {
+        id: 'code',
+        text: "Back on your tablet or computer, select 'Next' and enter the code shown in your Authenticator app",
+      },
+      { id: 'finish', text: 'Complete the remaining steps on your tablet or computer' },
+    ],
+  },
+  {
+    id: 'one-device',
+    badge: 'Quick set up',
+    title: 'Smartphone only registration',
+    body: 'Quick to set up, all you need is your phone.',
+    steps: [
+      {
+        id: 'app',
+        text: 'Download the Microsoft Authenticator app on your phone',
+        apps: AUTHENTICATOR_APPS,
+      },
+      {
+        id: 'signin',
+        text: 'Open a browser and go to our Microsoft URL using your UAL email and password',
+        cta: { label: 'Go to our Microsoft URL sign in', href: MICROSOFT_SIGNIN },
+      },
+      {
+        id: 'secure',
+        text: "On the 'Keep your account secure' screen, select Next and follow the steps until you reach 'Set up your account in the app'",
+      },
+      {
+        id: 'pair',
+        text: "Select 'Pair your account to the app'. The authenticator will open automatically",
+      },
+      { id: 'await', text: 'Follow the steps in the app until your UAL account appears' },
+      {
+        id: 'code',
+        text: 'Go back in the browser, select Next and enter the code sent to your Authenticator app',
+      },
+      { id: 'finish', text: 'Complete the remaining steps in the browser' },
+    ],
+  },
+];
+
+/**
+ * Shared "Get help" contact block on the MFA page.
+ *
+ * @typedef {Object} HelpChannel
+ * @property {string} id
+ * @property {string} label
+ * @property {string} value
+ * @property {string} href
+ * @property {string} [note]
+ */
+
+/** @type {{ title: string, channels: HelpChannel[] }} */
+export const MFA_HELP = {
+  title: 'Contact the UAL IT Service Desk',
+  channels: [
+    {
+      id: 'call',
+      label: 'Call us',
+      value: '+44 (0)20 7514 9898',
+      note: '24/7, 365 days a year',
+      href: 'tel:+442075149898',
+    },
+    {
+      id: 'ticket',
+      label: 'Raise a ticket',
+      value: 'MySupport',
+      href: 'https://www.arts.ac.uk/students/it-services',
+    },
+    {
+      id: 'email',
+      label: 'Email us',
+      value: 'servicedesk@arts.ac.uk',
+      href: 'mailto:servicedesk@arts.ac.uk',
+    },
+  ],
+};
+
+/** @type {Cta} */
+export const MFA_READ_MORE = {
+  label: 'Read more about MFA at UAL',
+  href: 'https://www.arts.ac.uk/students/it-services',
+};

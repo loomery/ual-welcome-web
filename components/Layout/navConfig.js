@@ -11,8 +11,25 @@ import { HomeIcon, ChecklistIcon, MapIcon, CalendarIcon, SupportIcon } from '../
 /** @type {NavItem[]} */
 export const NAV_ITEMS = [
   { to: '/', label: 'Home', Icon: HomeIcon },
-  { to: '/checklist', label: 'Get Setup', Icon: ChecklistIcon },
+  { to: '/checklist', label: 'Get set up', Icon: ChecklistIcon },
   { to: '/events', label: 'Events', Icon: CalendarIcon },
   { to: '/map', label: 'Map', Icon: MapIcon },
-  { to: '/help', label: 'Support', Icon: SupportIcon },
+  { to: '/help', label: 'Get help', Icon: SupportIcon },
+];
+
+/**
+ * Desktop side-nav order + labels, matching the Figma home design
+ * (Home / Tasks / Events / Map / Settings / Help). The side nav is
+ * text-only, so these items carry no icon. "Settings" has no page in the
+ * prototype yet — it points at a placeholder.
+ *
+ * @type {Array<{ to: string, label: string }>}
+ */
+export const SIDE_NAV_ITEMS = [
+  { to: '/', label: 'Home' },
+  { to: '/checklist', label: 'Tasks' },
+  { to: '/events', label: 'Events' },
+  { to: '/map', label: 'Map' },
+  { to: '#', label: 'Settings' },
+  { to: '/help', label: 'Help' },
 ];

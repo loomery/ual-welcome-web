@@ -28,9 +28,21 @@ export function NextStepCard({ title, body, primary, secondary }) {
       <h3 className="next-step-card__title">{title}</h3>
       <p className="next-step-card__body">{body}</p>
       <div className="cluster next-step-card__ctas" data-justify="flex-start">
-        <Link href={primary.href} className="button next-step-card__primary">
-          {primary.label}
-        </Link>
+        {primary.href.startsWith('/') ? (
+          <Link href={primary.href} className="button next-step-card__primary">
+            {primary.label}
+          </Link>
+        ) : (
+          <a
+            href={primary.href}
+            target="_blank"
+            rel="noreferrer"
+            className="button next-step-card__primary"
+          >
+            {primary.label}
+            <span className="visually-hidden"> (opens in a new tab)</span>
+          </a>
+        )}
         {secondary && (
           <Link href={secondary.href} className="next-step-card__secondary">
             {secondary.label}
