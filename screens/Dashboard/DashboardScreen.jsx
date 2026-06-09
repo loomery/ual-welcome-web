@@ -15,7 +15,7 @@ import { useOnboardingProfile } from '../../hooks/useOnboardingProfile';
 import { usePersistedState } from '../../hooks/usePersistedState';
 
 const VIEW_OPTIONS = /** @type {const} */ ([
-  { value: 'focus', label: 'My focus' },
+  { value: 'focus', label: 'My selected interests' },
   { value: 'all', label: 'All at UAL' },
 ]);
 
@@ -190,8 +190,12 @@ export function DashboardScreen() {
               title={nextTask.title}
               body={nextTask.shortDescription}
               primary={{
+                // The home next-step keeps the student inside the app: it
+                // follows the task's own internal route (e.g. MFA →
+                // /checklist/mfa) but falls back to the checklist page when
+                // the task's cta is an external link (e.g. "Setup email").
                 label: nextTask.cta?.label ?? 'View task',
-                href: nextTask.cta?.href ?? '/checklist',
+                href: nextTask.cta?.href?.startsWith('/') ? nextTask.cta.href : '/checklist',
               }}
             />
           )}

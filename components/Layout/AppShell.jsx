@@ -60,7 +60,7 @@ export function AppShell({ children }) {
         </main>
       </div>
       <Footer />
-      <FeedbackButton />
+      {/* <FeedbackButton /> */}
       <BottomNav />
       <RouteAnnouncer />
       <ScrollToTop />

@@ -3,6 +3,7 @@
  * dataset for college choice, but keeps the option-set decoupled from
  * the 3D scene config (different concerns).
  *
+ * @typedef {'1st' | '2nd' | 'placement' | '3rd'} Year
  * @typedef {'domestic' | 'international'} StudentType
  * @typedef {'not_started' | 'having_issues' | 'waiting' | 'received'} VisaStatus
  *
@@ -12,6 +13,11 @@
  * @property {string} short     Short label for compact contexts ("CSM")
  * @property {string} area      Where the campus is in London — used in the dashboard hero
  * @property {string} eventsUrl Deep-link to the college's What's On page on arts.ac.uk
+ *
+ * @typedef {Object} YearOption
+ * @property {Year} id
+ * @property {string} label
+ * @property {string} hint
  *
  * @typedef {Object} StudentTypeOption
  * @property {StudentType} id
@@ -94,6 +100,14 @@ export const COLLEGE_OPTIONS = [
     area: 'East Bank, Stratford',
     eventsUrl: 'https://www.arts.ac.uk/whats-on',
   },
+];
+
+/** @type {YearOption[]} */
+export const YEAR_OPTIONS = [
+  { id: '1st', label: '1st year', hint: 'Just starting your course' },
+  { id: '2nd', label: '2nd year', hint: 'Continuing your studies' },
+  { id: 'placement', label: 'Placement year', hint: 'Industry placement' },
+  { id: '3rd', label: '3rd year', hint: 'Final year or beyond' },
 ];
 
 /** @type {StudentTypeOption[]} */

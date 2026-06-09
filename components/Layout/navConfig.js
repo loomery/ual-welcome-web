@@ -19,9 +19,8 @@ export const NAV_ITEMS = [
 
 /**
  * Desktop side-nav order + labels, matching the Figma home design
- * (Home / Tasks / Events / Map / Settings / Help). The side nav is
- * text-only, so these items carry no icon. "Settings" has no page in the
- * prototype yet — it points at a placeholder.
+ * (Home / Tasks / Events / Map / Help). The side nav is text-only, so
+ * these items carry no icon.
  *
  * @type {Array<{ to: string, label: string }>}
  */
@@ -30,6 +29,5 @@ export const SIDE_NAV_ITEMS = [
   { to: '/checklist', label: 'Tasks' },
   { to: '/events', label: 'Events' },
   { to: '/map', label: 'Map' },
-  { to: '#', label: 'Settings' },
   { to: '/help', label: 'Help' },
 ];

@@ -214,10 +214,17 @@ export function MfaScreen() {
         href={MFA_READ_MORE.href}
         target="_blank"
         rel="noreferrer"
-        className="flex items-center justify-between gap-m bg-ual-dark p-l text-ual-light hover:text-ual-orange focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ual-light dark:bg-ual-dark-95"
+        className="group flex items-center justify-between gap-m bg-ual-dark p-l focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ual-light dark:bg-ual-dark-95"
       >
-        <span className="text-step-2 font-bold tracking-ual-tight">{MFA_READ_MORE.label}</span>
-        <ArrowRightIcon width={28} height={28} aria-hidden="true" className="shrink-0" />
+        <span className="text-step-2 font-bold tracking-ual-tight text-ual-light group-hover:text-ual-orange">
+          {MFA_READ_MORE.label}
+        </span>
+        <ArrowRightIcon
+          width={28}
+          height={28}
+          aria-hidden="true"
+          className="shrink-0 text-ual-light group-hover:text-ual-orange"
+        />
         <span className="sr-only"> (opens in a new tab)</span>
       </a>
     </article>

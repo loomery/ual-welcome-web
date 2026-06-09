@@ -7,6 +7,7 @@ import { usePersistedState } from './usePersistedState';
  * @typedef {Object} OnboardingProfile
  * @property {string} name
  * @property {string} collegeId           one of COLLEGE_OPTIONS[].id
+ * @property {string} year                one of YEAR_OPTIONS[].id
  * @property {string} studentType         one of STUDENT_TYPE_OPTIONS[].id ('domestic' | 'international')
  * @property {string} [visaStatus]        one of VISA_STATUS_OPTIONS[].id — only set for international students
  * @property {string[]} interests         array of INTEREST_OPTIONS[].id
