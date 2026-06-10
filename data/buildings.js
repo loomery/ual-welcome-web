@@ -17,6 +17,8 @@
  * @property {string} description
  * @property {{ lat: number, lng: number }} geo  Real-world lat/lng — used to build map-directions links.
  * @property {BuildingTransport} [transport]
+ * @property {string} [floorPlan]     Path to the campus map PDF (in /public). When set, the
+ *                                    map screen embeds this instead of the placeholder gallery.
  */
 
 /** @type {Building[]} */
@@ -103,6 +105,7 @@ export const BUILDINGS = [
     height: 0.95,
     description: 'Fine art, illustration, conservation and 3D design.',
     geo: { lat: 51.4738, lng: -0.0894 },
+    floorPlan: '/floorplans/Camberwell-Digital-Map2025.pdf',
     transport: {
       stations: [
         { name: 'Denmark Hill', walk: '15 min walk' },
@@ -127,6 +130,7 @@ export const BUILDINGS = [
     height: 0.8,
     description: 'Fine art, graphic design, interior and spatial design.',
     geo: { lat: 51.4906, lng: -0.1282 },
+    floorPlan: '/floorplans/Chelsea-Digital-Map2025.pdf',
     transport: {
       stations: [
         { name: 'Pimlico', walk: '10 min walk' },

@@ -71,6 +71,9 @@ export function MapScreen() {
   }, [lightboxOpen]);
 
   const activeLabel = FLOOR_PLANS[activePlan].label;
+  // Some campuses ship a real PDF map; when present we embed it instead of the
+  // placeholder per-floor gallery.
+  const floorPlanPdf = building.floorPlan;
 
   return (
     <article className="flex flex-col gap-l">
@@ -108,49 +111,70 @@ export function MapScreen() {
       </section>
 
       {/* ── FLOOR-PLAN GALLERY ───────────────────────────────────────── */}
-      <section className="flex flex-col gap-s" aria-label={`${building.name} floor plans`}>
-        <div className="flex flex-col gap-s md:flex-row-reverse md:items-start">
-          <button
-            type="button"
-            onClick={() => setLightboxOpen(true)}
-            aria-label={`Expand ${activeLabel} plan`}
-            className="aspect-4/3 w-full grow cursor-zoom-in overflow-hidden bg-ual-shade focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ual-orange dark:bg-ual-dark-95"
-          >
-            {/* Plain <img>: static export + dummy placeholder SVG — no next/image. */}
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src={FLOOR_PLAN}
-              alt={`${building.name} — ${activeLabel} plan`}
-              className="size-full object-contain"
+      <section className="flex flex-col gap-s" aria-label={`${building.name} campus map`}>
+        {floorPlanPdf ? (
+          <>
+            <iframe
+              src={floorPlanPdf}
+              title={`${building.name} campus map`}
+              className="aspect-4/3 w-full bg-ual-shade dark:bg-ual-dark-95"
             />
-          </button>
+            <a
+              href={floorPlanPdf}
+              target="_blank"
+              rel="noreferrer"
+              className="w-fit text-step-d1 font-bold text-ual-dark underline underline-offset-2 hover:text-ual-orange dark:text-ual-light"
+            >
+              Open campus map (PDF)
+              <span className="sr-only"> (opens in a new tab)</span>
+            </a>
+          </>
+        ) : (
+          <>
+            <div className="flex flex-col gap-s md:flex-row-reverse md:items-start">
+              <button
+                type="button"
+                onClick={() => setLightboxOpen(true)}
+                aria-label={`Expand ${activeLabel} plan`}
+                className="aspect-4/3 w-full grow cursor-zoom-in overflow-hidden bg-ual-shade focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ual-orange dark:bg-ual-dark-95"
+              >
+                {/* Plain <img>: static export + dummy placeholder SVG — no next/image. */}
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={FLOOR_PLAN}
+                  alt={`${building.name} — ${activeLabel} plan`}
+                  className="size-full object-contain"
+                />
+              </button>
 
-          <ul role="list" className="flex gap-2xs md:w-30 md:shrink-0 md:flex-col">
-            {FLOOR_PLANS.map((plan, i) => {
-              const selected = i === activePlan;
-              return (
-                <li key={plan.id} className="grow md:grow-0">
-                  <button
-                    type="button"
-                    onClick={() => setActivePlan(i)}
-                    aria-pressed={selected}
-                    aria-label={`Show ${plan.label} plan`}
-                    className={[
-                      'aspect-4/3 w-full cursor-pointer overflow-hidden bg-ual-shade focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ual-orange dark:bg-ual-dark-95',
-                      selected
-                        ? 'outline-2 outline-ual-dark dark:outline-ual-light'
-                        : 'opacity-70 hover:opacity-100',
-                    ].join(' ')}
-                  >
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img src={FLOOR_PLAN} alt="" className="size-full object-contain" />
-                  </button>
-                </li>
-              );
-            })}
-          </ul>
-        </div>
-        <p className="text-step-d1 text-ual-medium">{activeLabel}</p>
+              <ul role="list" className="flex gap-2xs md:w-30 md:shrink-0 md:flex-col">
+                {FLOOR_PLANS.map((plan, i) => {
+                  const selected = i === activePlan;
+                  return (
+                    <li key={plan.id} className="grow md:grow-0">
+                      <button
+                        type="button"
+                        onClick={() => setActivePlan(i)}
+                        aria-pressed={selected}
+                        aria-label={`Show ${plan.label} plan`}
+                        className={[
+                          'aspect-4/3 w-full cursor-pointer overflow-hidden bg-ual-shade focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ual-orange dark:bg-ual-dark-95',
+                          selected
+                            ? 'outline-2 outline-ual-dark dark:outline-ual-light'
+                            : 'opacity-70 hover:opacity-100',
+                        ].join(' ')}
+                      >
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img src={FLOOR_PLAN} alt="" className="size-full object-contain" />
+                      </button>
+                    </li>
+                  );
+                })}
+              </ul>
+            </div>
+            <p className="text-step-d1 text-ual-medium">{activeLabel}</p>
+          </>
+        )}
       </section>
 
       {/* ── ADDRESS ──────────────────────────────────────────────────── */}
@@ -222,7 +246,7 @@ export function MapScreen() {
       )}
 
       {/* ── LIGHTBOX ─────────────────────────────────────────────────── */}
-      {lightboxOpen && (
+      {!floorPlanPdf && lightboxOpen && (
         <div
           role="dialog"
           aria-modal="true"
