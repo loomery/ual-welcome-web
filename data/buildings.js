@@ -19,6 +19,16 @@
  * @property {BuildingTransport} [transport]
  * @property {string} [floorPlan]     Path to the campus map PDF (in /public). When set, the
  *                                    map screen embeds this instead of the placeholder gallery.
+ *
+ * @typedef {Object} FloorPlanImage
+ * @property {string} id
+ * @property {string} label            Floor name, e.g. 'Ground floor'.
+ * @property {string} mobile           Portrait plan image (in /public), shown on narrow screens.
+ * @property {string} desktop          Landscape plan image (in /public), shown from md up.
+ *
+ * @typedef {FloorPlanImage[]} [floorPlans]  Real per-floor plan images. When set, the map screen
+ *                                    shows a gallery of these (responsive mobile/desktop) instead
+ *                                    of the placeholder.
  */
 
 /** @type {Building[]} */
@@ -33,6 +43,32 @@ export const BUILDINGS = [
     description:
       'Home to art, design, fashion, performance and communication courses at King’s Cross.',
     geo: { lat: 51.5378, lng: -0.1253 },
+    floorPlans: [
+      {
+        id: 'ground',
+        label: 'Ground floor',
+        mobile: '/floorplans/csm-floor-0-mobile.png',
+        desktop: '/floorplans/csm-floor-0-desktop.png',
+      },
+      {
+        id: 'first',
+        label: 'First floor',
+        mobile: '/floorplans/csm-floor-1-mobile.png',
+        desktop: '/floorplans/csm-floor-1-desktop.png',
+      },
+      {
+        id: 'second',
+        label: 'Second floor',
+        mobile: '/floorplans/csm-floor-2-mobile.png',
+        desktop: '/floorplans/csm-floor-2-desktop.png',
+      },
+      {
+        id: 'third',
+        label: 'Third floor',
+        mobile: '/floorplans/csm-floor-3-mobile.png',
+        desktop: '/floorplans/csm-floor-3-desktop.png',
+      },
+    ],
     transport: {
       stations: [
         { name: 'Kings Cross', walk: '10 min walk' },
