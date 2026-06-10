@@ -1,10 +1,11 @@
 import Link from 'next/link';
 import { Card } from '../../components/Card/Card';
 import { ArrowRightIcon } from '../../components/Icon/NavIcons';
+import { asset } from '../../utils/asset';
 
 // Shared fallback artwork for media cards (matches the placeholder imagery in
 // the Figma board until real photography is supplied).
-const FALLBACK_IMAGE = '/images/card-fallback.png';
+const FALLBACK_IMAGE = asset('/images/card-fallback.png');
 
 /**
  * Renders a personalised-home info page from its data description
