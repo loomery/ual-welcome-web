@@ -2,20 +2,25 @@ import './globals.css';
 import { AppShell } from '../components/Layout/AppShell';
 import { ThemeProvider } from '../components/Theme/ThemeProvider';
 
+// Next does NOT prepend basePath to the `manifest` metadata field (unlike
+// icons), so under a sub-path deploy (/student-centre) a root-absolute value
+// 404s. Bake the basePath in to match next.config's basePath.
+const basePath = process.env.DEPLOY_PATH ? `/${process.env.DEPLOY_PATH}` : '';
+
 export const metadata = {
   title: 'UAL Welcome Week',
   description:
     'Your first week at the University of the Arts London — induction checklist, explorable campus map, and Welcome Week events.',
   applicationName: 'UAL Welcome Week',
-  manifest: '/manifest.webmanifest',
+  manifest: `${basePath}/manifest.webmanifest`,
   appleWebApp: {
     capable: true,
     statusBarStyle: 'default',
     title: 'UAL Welcome',
   },
   icons: {
-    icon: '/icon.svg',
-    apple: '/icon.svg',
+    icon: `${basePath}/icon.svg`,
+    apple: `${basePath}/icon.svg`,
   },
 };
 

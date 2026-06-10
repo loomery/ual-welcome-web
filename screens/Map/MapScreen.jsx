@@ -5,9 +5,10 @@ import { BUILDINGS } from '../../data/buildings';
 import { directionsUrl } from '../../utils/directions';
 import { useOnboardingProfile } from '../../hooks/useOnboardingProfile';
 import { CloseIcon } from '../../components/Icon/NavIcons';
+import { asset } from '../../utils/asset';
 
 /** Placeholder floor plans shown for every college until real plans land. */
-const FLOOR_PLAN = '/images/floorplan-placeholder.svg';
+const FLOOR_PLAN = asset('/images/floorplan-placeholder.svg');
 const FLOOR_PLANS = [
   { id: 'ground', label: 'Ground floor' },
   { id: 'first', label: 'First floor' },
@@ -73,7 +74,7 @@ export function MapScreen() {
   const activeLabel = FLOOR_PLANS[activePlan].label;
   // Some campuses ship a real PDF map; when present we embed it instead of the
   // placeholder per-floor gallery.
-  const floorPlanPdf = building.floorPlan;
+  const floorPlanPdf = building.floorPlan ? asset(building.floorPlan) : null;
 
   return (
     <article className="flex flex-col gap-l">

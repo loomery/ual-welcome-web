@@ -44,10 +44,18 @@
  *  - connect-src is 'self' only — the app is fully static and talks to
  *    no backends. When feedback moves to a real endpoint, add that
  *    origin here AND in form-action.
- *  - frame-ancestors 'none' blocks click-jacking via iframe embedding.
+ *  - frame-ancestors 'self' blocks cross-origin click-jacking while still
+ *    allowing the app to embed its own same-origin resources (the campus
+ *    floor-plan PDF is shown in an <iframe> on the map screen). 'none' would
+ *    block that legitimate same-origin embed too.
  *  - base-uri 'self' blocks <base> tag injection.
  */
 const isDev = process.env.NODE_ENV !== 'production';
+
+// Single source of truth for the deploy sub-path. Baked in at build time and
+// re-exported to the client bundle (below) so plain references to public/
+// assets — which Next does NOT auto-prefix — can resolve under the sub-path.
+const basePath = process.env.DEPLOY_PATH ? `/${process.env.DEPLOY_PATH}` : '';
 
 const CSP = [
   "default-src 'self'",
@@ -65,14 +73,14 @@ const CSP = [
   // (e.g. KTX2, draco). Allow blob: in both dev and prod so we don't
   // get a surprise regression when adding GLTF/draco assets later.
   "worker-src 'self' blob:",
-  "frame-ancestors 'none'",
+  "frame-ancestors 'self'",
   "base-uri 'self'",
   "form-action 'self'",
 ].join('; ');
 
 const securityHeaders = [
   { key: 'Content-Security-Policy', value: CSP },
-  { key: 'X-Frame-Options', value: 'DENY' },
+  { key: 'X-Frame-Options', value: 'SAMEORIGIN' },
   { key: 'X-Content-Type-Options', value: 'nosniff' },
   { key: 'Referrer-Policy', value: 'strict-origin-when-cross-origin' },
   {
@@ -95,8 +103,21 @@ const securityHeaders = [
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   output: 'export',
-  assetPrefix: './',
-  basePath: process.env.DEPLOY_PATH ? `/${process.env.DEPLOY_PATH}` : '',
+  // No assetPrefix: with a baked-in basePath, Next already emits
+  // `${basePath}/_next/...` absolute asset URLs that resolve correctly at
+  // any route depth. A relative assetPrefix ('./') breaks on hard loads of
+  // nested pages (e.g. /events/[id]) because './_next' resolves relative to
+  // the page's own directory instead of the deploy root.
+  basePath,
+  // Expose the sub-path to the browser bundle so `asset()` (utils/asset.js)
+  // can prefix public/ asset references (images, PDFs) that Next leaves alone.
+  env: {
+    NEXT_PUBLIC_BASE_PATH: basePath,
+  },
+  // Export every route as a directory with an index.html (events/foo/index.html)
+  // so a dumb static host (Apache DirectoryIndex) resolves extensionless,
+  // clean URLs — and App Router prefetches stop 404-ing.
+  trailingSlash: true,
   reactStrictMode: true,
   // Allow HMR WebSocket connections from local network devices (phones,
   // tablets, other machines on the same LAN) during development.
