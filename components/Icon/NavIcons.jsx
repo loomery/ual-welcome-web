@@ -134,6 +134,22 @@ export function ArrowRightIcon(props) {
 }
 
 /**
+ * DDS "icon / information / caption" — the glyph inside the black chip
+ * pinned to the bottom-left of every media-card image. Path lifted
+ * verbatim from the UAL DDS Figma (20×20 grid).
+ */
+export function CaptionIcon(props) {
+  return (
+    <svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
+      <path
+        d="M4 20H0V16H4V20ZM20 16V20H8V16H20ZM12 12H0V8H12V12ZM20 12H16V8H20V12ZM4 4H0V0H4V4ZM20 4H8V0H20V4Z"
+        fill="currentColor"
+      />
+    </svg>
+  );
+}
+
+/**
  * "Opens in a new tab" affordance. Stroke-based to match the rest of
  * the icon family. Combine with visually-hidden text for AT users.
  */
