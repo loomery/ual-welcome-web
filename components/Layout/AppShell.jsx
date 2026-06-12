@@ -13,10 +13,11 @@ import { ScrollToTop } from './ScrollToTop';
 
 /**
  * Routes that render full-bleed without the standard app chrome
- * (header, side nav, bottom nav, footer, feedback FAB). None for now;
- * add paths here if they need to escape the shell.
+ * (header, side nav, bottom nav, footer, feedback FAB). The password
+ * gate is the only one for now; add others here if they need to
+ * escape the shell.
  */
-const FULL_BLEED_PATHS = new Set();
+const FULL_BLEED_PATHS = new Set(['/login']);
 
 /**
  * App shell — matches the new UAL home design:
@@ -30,15 +31,18 @@ const FULL_BLEED_PATHS = new Set();
  *  - Full-width footer beneath the row (privacy note + on-device reset)
  *  - Live region announcing route changes
  *
- * `'use client'` so it can read `usePathname()`. Children keep their own
- * server/client boundaries.
+ * `'use client'` so it can read `usePathname()` and drop the chrome on auth
+ * screens (e.g. /login). Children keep their own server/client boundaries.
  *
  * @param {Object} props
  * @param {import('react').ReactNode} props.children
  */
 export function AppShell({ children }) {
   const pathname = usePathname();
-  if (FULL_BLEED_PATHS.has(pathname)) {
+  // trailingSlash: true canonicalises /login → /login/ — normalise before
+  // matching or the gate page renders inside the app chrome.
+  const path = pathname !== '/' && pathname.endsWith('/') ? pathname.slice(0, -1) : pathname;
+  if (FULL_BLEED_PATHS.has(path)) {
     return <>{children}</>;
   }
 

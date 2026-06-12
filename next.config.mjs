@@ -102,7 +102,12 @@ const securityHeaders = [
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  output: 'export',
+  // Static export only for the dumb-host /student-centre deploy (the only
+  // build that sets DEPLOY_PATH). Everywhere else — Vercel, next dev — we
+  // need a server build: Next skips middleware entirely under
+  // `output: 'export'`, which would silently disable the proxy.js password
+  // gate (and /api/login).
+  ...(process.env.DEPLOY_PATH ? { output: 'export' } : {}),
   // No assetPrefix: with a baked-in basePath, Next already emits
   // `${basePath}/_next/...` absolute asset URLs that resolve correctly at
   // any route depth. A relative assetPrefix ('./') breaks on hard loads of
