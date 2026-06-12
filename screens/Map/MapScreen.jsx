@@ -31,7 +31,7 @@ function PlanGraphic({ plan, hasImages, alt, className }) {
   return (
     <picture>
       <source media="(min-width: 768px)" srcSet={asset(plan.desktop)} />
-      {/* eslint-disable-next-line @next/next/no-img-element */}
+      {}
       <img src={asset(plan.mobile)} alt={alt} className={className} />
     </picture>
   );
@@ -108,10 +108,10 @@ export function MapScreen() {
     <article className="flex flex-col gap-l">
       <header className="flex flex-col gap-xs">
         <h1 className="text-step-4/ual-condensed font-bold tracking-ual-tight text-ual-dark dark:text-ual-light">
-          Find your campus
+          Find your college
         </h1>
         <p className="text-step-1 text-ual-medium">
-          Key services, building information, and how to get to campus
+          Key services, building information, and how to get to college
         </p>
       </header>
 
@@ -121,7 +121,7 @@ export function MapScreen() {
           id="campus-heading"
           className="text-step-2 font-bold tracking-ual-tight text-ual-dark dark:text-ual-light"
         >
-          Your campus
+          Your college
         </h2>
         <label className="flex flex-col gap-2xs">
           <span className="sr-only">Choose a college</span>
@@ -140,12 +140,12 @@ export function MapScreen() {
       </section>
 
       {/* ── FLOOR-PLAN GALLERY ───────────────────────────────────────── */}
-      <section className="flex flex-col gap-s" aria-label={`${building.name} campus map`}>
+      <section className="flex flex-col gap-s" aria-label={`${building.name} college map`}>
         {floorPlanPdf ? (
           <>
             <iframe
               src={floorPlanPdf}
-              title={`${building.name} campus map`}
+              title={`${building.name} college map`}
               className="aspect-4/3 w-full bg-ual-shade dark:bg-ual-dark-95"
             />
             <a
@@ -154,7 +154,7 @@ export function MapScreen() {
               rel="noreferrer"
               className="w-fit text-step-d1 font-bold text-ual-dark underline underline-offset-2 hover:text-ual-orange dark:text-ual-light"
             >
-              Open campus map (PDF)
+              Open college map (PDF)
               <span className="sr-only"> (opens in a new tab)</span>
             </a>
           </>
@@ -220,7 +220,7 @@ export function MapScreen() {
         <p className="text-step-1 font-bold text-ual-dark dark:text-ual-light">{building.name}</p>
         <p className="text-step-d1 text-ual-medium">{building.address}</p>
         <p className="mt-2xs text-step-d1 font-bold text-ual-dark dark:text-ual-light">
-          Get directions to campus
+          Get directions to college
         </p>
         <div className="flex flex-wrap gap-l">
           <DirectionLink href={citymapperUrl(building)} label="Citymapper" />
