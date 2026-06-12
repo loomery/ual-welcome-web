@@ -1,6 +1,7 @@
 'use client';
 
 import { useCallback } from 'react';
+import { asset } from '../../utils/asset';
 
 /**
  * Storage-key prefix for everything we persist on-device.
@@ -103,7 +104,11 @@ export function Footer() {
       /* swallow: private mode / disabled storage — nothing to clear */
     }
 
-    window.location.reload();
+    // Hard navigation (not router.push) so every in-memory copy of the
+    // cleared state is dropped too, landing on a fresh onboarding intro.
+    // asset() prefixes the deploy sub-path — window.location bypasses
+    // Next's basePath handling.
+    window.location.assign(asset('/onboarding'));
   }, []);
 
   return (

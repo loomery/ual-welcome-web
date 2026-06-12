@@ -278,22 +278,17 @@ export function MapScreen() {
       )}
 
       {/* ── LIGHTBOX ─────────────────────────────────────────────────── */}
+      {/* z-[400]: must sit above the sticky header and skip links (z-index
+          300 in globals.css) — at the old z-50 the header painted over the
+          dialog's close button, leaving touch users unable to close it. */}
       {!floorPlanPdf && lightboxOpen && (
         <div
           role="dialog"
           aria-modal="true"
           aria-label={`${building.name} — ${activeLabel} plan`}
-          className="fixed inset-0 z-50 flex items-center justify-center bg-ual-dark/90 p-m"
+          className="fixed inset-0 z-400 flex items-center justify-center bg-ual-dark/90 p-m"
           onClick={() => setLightboxOpen(false)}
         >
-          <button
-            type="button"
-            onClick={() => setLightboxOpen(false)}
-            aria-label="Close floor plan"
-            className="absolute top-m right-m flex size-11 items-center justify-center bg-ual-light text-ual-dark focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ual-orange"
-          >
-            <CloseIcon aria-hidden="true" width={22} height={22} />
-          </button>
           <div
             className="max-h-full w-full max-w-grid bg-white p-s"
             onClick={(e) => e.stopPropagation()}
@@ -305,6 +300,18 @@ export function MapScreen() {
               className="mx-auto max-h-[85vh] w-auto object-contain"
             />
           </div>
+          {/* After the plan panel in the DOM and explicitly stacked above it —
+              when a tall plan fills the viewport the panel otherwise paints
+              over the button, leaving touch users (no Escape key) with no way
+              to close the lightbox. */}
+          <button
+            type="button"
+            onClick={() => setLightboxOpen(false)}
+            aria-label="Close floor plan"
+            className="absolute top-m right-m z-10 flex size-11 items-center justify-center bg-ual-dark text-ual-light shadow-md focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ual-orange"
+          >
+            <CloseIcon aria-hidden="true" width={22} height={22} />
+          </button>
         </div>
       )}
     </article>
