@@ -191,6 +191,7 @@ export const BUILDINGS = [
     height: 0.72,
     description: 'Performance design, theatre and fine art.',
     geo: { lat: 51.4173, lng: -0.2075 },
+    floorPlan: '/floorplans/Digital-Maps-Wimbledon.pdf',
     transport: {
       stations: [
         { name: 'Wimbledon', walk: '15 min walk' },
