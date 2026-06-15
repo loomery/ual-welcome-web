@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { ArrowRightIcon, ExternalLinkIcon } from '../Icon/NavIcons';
+import { ArrowRightIcon, CaptionIcon, ExternalLinkIcon } from '../Icon/NavIcons';
 
 /**
  * UAL DDS Card pattern.
@@ -17,9 +17,10 @@ import { ArrowRightIcon, ExternalLinkIcon } from '../Icon/NavIcons';
  * Driven by the `.card` CSS, not inline classes — keeps the JSX clean.
  *
  * When an `image` is supplied the card becomes a *media card* (`.card--media`):
- * a 16:10 image sits at the top with a rounded surface, the directional icon
- * moves to the *end* of the card next to the body, and the whole tile reads as
- * a clickable picture-led promo (matches the home "All at UAL" grid in Figma).
+ * a square-cornered 16:9 image sits at the top with the DDS caption chip in
+ * its bottom-left corner, and the rest of the stack (title → icon → body)
+ * keeps the same order and rhythm as the text-only card (matches the DDS
+ * "Card" component, Figma node 414:9248 — Resources page grids).
  *
  * @param {Object} props
  * @param {string} props.title
@@ -45,21 +46,21 @@ export function Card({ title, body, to, external, eyebrow, image, imageAlt = '' 
               next/image optimisation here. */}
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src={image} alt={imageAlt} loading="lazy" />
+          {/* DDS caption chip — decorative here (no caption data yet); the
+              wrapping span is already aria-hidden. */}
+          <span className="card__caption">
+            <CaptionIcon />
+          </span>
         </span>
       )}
       {eyebrow && <p className="card__eyebrow">{eyebrow}</p>}
       <h3 className="card__title">{title}</h3>
-      {hasIcon && !hasMedia && (
+      {hasIcon && (
         <span className="card__icon" aria-hidden="true">
           <Icon />
         </span>
       )}
       {body && <div className="card__body">{body}</div>}
-      {hasIcon && hasMedia && (
-        <span className="card__icon card__icon--end" aria-hidden="true">
-          <Icon />
-        </span>
-      )}
       {isExternal && <span className="visually-hidden"> (opens in new tab)</span>}
     </>
   );

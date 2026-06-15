@@ -26,10 +26,15 @@
  * @property {string[]} [body]          Paragraphs (type: 'prose').
  * @property {boolean} [ordered]        Render an <ol> instead of <ul> (type: 'list').
  * @property {string[]} [items]         List items (type: 'list').
+ * @property {boolean} [accordion]      Render the list inside an expanded accordion (type: 'list').
+ * @property {string} [image]           public/ path of a photo shown beside the list (type: 'list').
+ * @property {string} [imageAlt]        Alt text for that photo.
  * @property {InfoLink[]} [links]       Link tiles (type: 'links').
  * @property {boolean} [media]          Render link tiles as media cards with the fallback image.
  * @property {InfoRow[]} [rows]         Two-column rows (type: 'table').
- * @property {{ label: string, href: string }} [cta]  Optional prominent button.
+ * @property {{ label: string, href: string, variant?: 'hyperlink' }} [cta]
+ *   Optional call to action — a prominent black button by default, or an
+ *   inline underlined link when `variant: 'hyperlink'`.
  *
  * @typedef {Object} InfoPage
  * @property {string} slug      URL slug under /info/<slug>.
@@ -141,6 +146,9 @@ export const INFO_PAGES = [
         type: 'list',
         heading: 'How to borrow a laptop',
         ordered: true,
+        accordion: true,
+        image: '/images/laptop-lockers.jpg',
+        imageAlt: 'A bank of green laptop lockers with a touch screen in the Learning Zone',
         items: [
           'Visit one of the laptop lockers.',
           'Swipe your UAL ID card on the card reader below the touch screen.',
@@ -156,6 +164,7 @@ export const INFO_PAGES = [
         type: 'list',
         heading: 'How to return a laptop',
         ordered: true,
+        accordion: true,
         items: [
           'Go to the laptop locker you originally borrowed the laptop from.',
           'Swipe your UAL ID card on the card reader below the touch screen.',
@@ -181,7 +190,8 @@ export const INFO_PAGES = [
         ],
         cta: {
           label: 'Read full terms and conditions',
-          href: 'https://www.arts.ac.uk/students/library-services',
+          href: 'https://www.arts.ac.uk/__data/assets/pdf_file/0031/358258/Library-Services-laptop-loan-terms-and-conditions-v1-20160915_accessible.pdf',
+          variant: 'hyperlink',
         },
       },
     ],

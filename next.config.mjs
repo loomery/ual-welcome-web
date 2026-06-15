@@ -88,8 +88,7 @@ const securityHeaders = [
     // Deny the lot — this app needs none of these. interest-cohort
     // disables FLoC. browsing-topics is the successor knob; harmless to
     // include even on browsers that ignore it.
-    value:
-      'camera=(), microphone=(), geolocation=(), interest-cohort=(), browsing-topics=()',
+    value: 'camera=(), microphone=(), geolocation=(), interest-cohort=(), browsing-topics=()',
   },
   {
     key: 'Strict-Transport-Security',
@@ -155,10 +154,7 @@ if (process.env.ENABLE_PWA === '1' && process.env.NODE_ENV === 'production') {
   } catch (err) {
     // Surface the failure but don't block the build — PWA is non-essential
     // for a beta and the rest of the app still ships.
-    console.warn(
-      '[next.config] @serwist/next unavailable, building without PWA:',
-      err?.message,
-    );
+    console.warn('[next.config] @serwist/next unavailable, building without PWA:', err?.message);
   }
 }
 

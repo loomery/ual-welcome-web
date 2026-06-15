@@ -2,7 +2,7 @@ import { Button } from '../../Button/Button';
 
 const BENEFITS = [
   'View what you need to do to prep for your first week',
-  'See upcoming social and creative events happening at the campuses',
+  'See upcoming social and creative events happening at your college',
   'Find key info, support and services for your college',
 ];
 

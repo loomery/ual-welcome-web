@@ -118,6 +118,12 @@ function sanitiseRedirect(value) {
   if (!value) return '/';
   if (!value.startsWith('/')) return '/';
   if (value.startsWith('//')) return '/';
+  // Never bounce back to the gate itself (a stale ?redirect=/login/?… from
+  // history would land the user straight back on the form, with the submit
+  // button stuck on "Signing in…" forever).
+  if (value === '/login' || value.startsWith('/login/') || value.startsWith('/login?')) {
+    return '/';
+  }
   return value;
 }
 
