@@ -11,6 +11,7 @@ import { visibleTasks } from '../../data/checklist';
 import { WELCOME_WEEK } from '../../data/welcomeWeek';
 import { USEFUL_INFO } from '../../data/usefulInfo';
 import { LONG_DATE_FMT } from '../../utils/dates';
+import { asset } from '../../utils/asset';
 import { useOnboardingProfile } from '../../hooks/useOnboardingProfile';
 import { usePersistedState } from '../../hooks/usePersistedState';
 
@@ -135,7 +136,9 @@ export function DashboardScreen() {
     if (typeof window === 'undefined') return;
     if (window.confirm('Reset your hub? This clears your answers from this device.')) {
       reset();
-      window.location.assign('/onboarding');
+      // asset() prefixes the deploy sub-path — window.location bypasses Next's
+      // basePath handling, so a bare '/onboarding' lands on the host root.
+      window.location.assign(asset('/onboarding'));
     }
   }
 
