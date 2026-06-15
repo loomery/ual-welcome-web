@@ -4,6 +4,7 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Button } from '../Button/Button';
 import { useOnboardingProfile } from '../../hooks/useOnboardingProfile';
+import { asset } from '../../utils/asset';
 import { IntroStep } from './steps/IntroStep';
 import { NameStep } from './steps/NameStep';
 import { CollegeStep } from './steps/CollegeStep';
@@ -88,13 +89,16 @@ export function OnboardingFlow() {
   // Trap the browser back gesture so a trackpad swipe can't escape the flow
   // mid-onboarding. We push a duplicate history entry on mount; popstate
   // fires when the user navigates back and we immediately re-push to keep
-  // the URL at /onboarding. The listener is removed on unmount (when the
-  // flow navigates away intentionally via replace).
+  // the URL at /onboarding. asset() prefixes the deploy sub-path — pushState
+  // bypasses Next's basePath handling, so a bare '/onboarding' would rewrite
+  // the URL to the host root on a sub-path deploy (e.g. /student-centre).
+  // The listener is removed on unmount (when the flow navigates away
+  // intentionally via replace).
   useEffect(() => {
-    window.history.pushState(null, '', '/onboarding');
+    window.history.pushState(null, '', asset('/onboarding'));
 
     function trapBack() {
-      window.history.pushState(null, '', '/onboarding');
+      window.history.pushState(null, '', asset('/onboarding'));
     }
 
     window.addEventListener('popstate', trapBack);

@@ -7,13 +7,35 @@ import { useOnboardingProfile } from '../../hooks/useOnboardingProfile';
 import { CloseIcon } from '../../components/Icon/NavIcons';
 import { asset } from '../../utils/asset';
 
-/** Placeholder floor plans shown for every college until real plans land. */
+/** Placeholder floor plans shown for colleges without real plans yet. */
 const FLOOR_PLAN = asset('/images/floorplan-placeholder.svg');
-const FLOOR_PLANS = [
+const PLACEHOLDER_PLANS = [
   { id: 'ground', label: 'Ground floor' },
   { id: 'first', label: 'First floor' },
   { id: 'second', label: 'Second floor' },
 ];
+
+/**
+ * A single floor-plan image. Real plans ship a portrait (mobile) and a landscape
+ * (desktop) variant, swapped via <picture>; colleges without plans fall back to
+ * the placeholder SVG. Plans are dark-on-white, so the container stays white in
+ * dark mode to keep them legible.
+ *
+ * @param {{ plan: object, hasImages: boolean, alt: string, className: string }} props
+ */
+function PlanGraphic({ plan, hasImages, alt, className }) {
+  if (!hasImages) {
+    // eslint-disable-next-line @next/next/no-img-element
+    return <img src={FLOOR_PLAN} alt={alt} className={className} />;
+  }
+  return (
+    <picture>
+      <source media="(min-width: 768px)" srcSet={asset(plan.desktop)} />
+      {}
+      <img src={asset(plan.mobile)} alt={alt} className={className} />
+    </picture>
+  );
+}
 
 /** @param {import('../../data/buildings').Building} b */
 function citymapperUrl(b) {
@@ -71,19 +93,25 @@ export function MapScreen() {
     return () => window.removeEventListener('keydown', onKey);
   }, [lightboxOpen]);
 
-  const activeLabel = FLOOR_PLANS[activePlan].label;
+  // A college either ships real per-floor plan images, or falls back to the
+  // generic placeholder gallery.
+  const hasImages = Array.isArray(building.floorPlans) && building.floorPlans.length > 0;
+  const plans = hasImages ? building.floorPlans : PLACEHOLDER_PLANS;
+  const safeActive = Math.min(activePlan, plans.length - 1);
+  const activePlanData = plans[safeActive];
+  const activeLabel = activePlanData.label;
   // Some campuses ship a real PDF map; when present we embed it instead of the
-  // placeholder per-floor gallery.
+  // per-floor gallery.
   const floorPlanPdf = building.floorPlan ? asset(building.floorPlan) : null;
 
   return (
     <article className="flex flex-col gap-l">
       <header className="flex flex-col gap-xs">
         <h1 className="text-step-4/ual-condensed font-bold tracking-ual-tight text-ual-dark dark:text-ual-light">
-          Find your campus
+          Find your college
         </h1>
         <p className="text-step-1 text-ual-medium">
-          Key services, building information, and how to get to campus
+          Key services, building information, and how to get to college
         </p>
       </header>
 
@@ -93,7 +121,7 @@ export function MapScreen() {
           id="campus-heading"
           className="text-step-2 font-bold tracking-ual-tight text-ual-dark dark:text-ual-light"
         >
-          Your campus
+          Your college
         </h2>
         <label className="flex flex-col gap-2xs">
           <span className="sr-only">Choose a college</span>
@@ -112,12 +140,12 @@ export function MapScreen() {
       </section>
 
       {/* ── FLOOR-PLAN GALLERY ───────────────────────────────────────── */}
-      <section className="flex flex-col gap-s" aria-label={`${building.name} campus map`}>
+      <section className="flex flex-col gap-s" aria-label={`${building.name} college map`}>
         {floorPlanPdf ? (
           <>
             <iframe
               src={floorPlanPdf}
-              title={`${building.name} campus map`}
+              title={`${building.name} college map`}
               className="aspect-4/3 w-full bg-ual-shade dark:bg-ual-dark-95"
             />
             <a
@@ -126,7 +154,7 @@ export function MapScreen() {
               rel="noreferrer"
               className="w-fit text-step-d1 font-bold text-ual-dark underline underline-offset-2 hover:text-ual-orange dark:text-ual-light"
             >
-              Open campus map (PDF)
+              Open college map (PDF)
               <span className="sr-only"> (opens in a new tab)</span>
             </a>
           </>
@@ -137,20 +165,19 @@ export function MapScreen() {
                 type="button"
                 onClick={() => setLightboxOpen(true)}
                 aria-label={`Expand ${activeLabel} plan`}
-                className="aspect-4/3 w-full grow cursor-zoom-in overflow-hidden bg-ual-shade focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ual-orange dark:bg-ual-dark-95"
+                className="aspect-3/4 w-full grow cursor-zoom-in overflow-hidden bg-white p-s focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ual-orange md:aspect-3/2"
               >
-                {/* Plain <img>: static export + dummy placeholder SVG — no next/image. */}
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
-                  src={FLOOR_PLAN}
+                <PlanGraphic
+                  plan={activePlanData}
+                  hasImages={hasImages}
                   alt={`${building.name} — ${activeLabel} plan`}
                   className="size-full object-contain"
                 />
               </button>
 
               <ul role="list" className="flex gap-2xs md:w-30 md:shrink-0 md:flex-col">
-                {FLOOR_PLANS.map((plan, i) => {
-                  const selected = i === activePlan;
+                {plans.map((plan, i) => {
+                  const selected = i === safeActive;
                   return (
                     <li key={plan.id} className="grow md:grow-0">
                       <button
@@ -159,14 +186,18 @@ export function MapScreen() {
                         aria-pressed={selected}
                         aria-label={`Show ${plan.label} plan`}
                         className={[
-                          'aspect-4/3 w-full cursor-pointer overflow-hidden bg-ual-shade focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ual-orange dark:bg-ual-dark-95',
+                          'aspect-4/3 w-full cursor-pointer overflow-hidden bg-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ual-orange',
                           selected
                             ? 'outline-2 outline-ual-dark dark:outline-ual-light'
                             : 'opacity-70 hover:opacity-100',
                         ].join(' ')}
                       >
-                        {/* eslint-disable-next-line @next/next/no-img-element */}
-                        <img src={FLOOR_PLAN} alt="" className="size-full object-contain" />
+                        <PlanGraphic
+                          plan={plan}
+                          hasImages={hasImages}
+                          alt=""
+                          className="size-full object-contain"
+                        />
                       </button>
                     </li>
                   );
@@ -189,7 +220,7 @@ export function MapScreen() {
         <p className="text-step-1 font-bold text-ual-dark dark:text-ual-light">{building.name}</p>
         <p className="text-step-d1 text-ual-medium">{building.address}</p>
         <p className="mt-2xs text-step-d1 font-bold text-ual-dark dark:text-ual-light">
-          Get directions to campus
+          Get directions to college
         </p>
         <div className="flex flex-wrap gap-l">
           <DirectionLink href={citymapperUrl(building)} label="Citymapper" />
@@ -263,12 +294,15 @@ export function MapScreen() {
           >
             <CloseIcon aria-hidden="true" width={22} height={22} />
           </button>
-          <div className="aspect-4/3 w-full max-w-grid" onClick={(e) => e.stopPropagation()}>
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src={FLOOR_PLAN}
+          <div
+            className="max-h-full w-full max-w-grid bg-white p-s"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <PlanGraphic
+              plan={activePlanData}
+              hasImages={hasImages}
               alt={`${building.name} — ${activeLabel} plan`}
-              className="size-full object-contain"
+              className="mx-auto max-h-[85vh] w-auto object-contain"
             />
           </div>
         </div>

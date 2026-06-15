@@ -396,6 +396,14 @@ h2 {
   font-weight: var(--font-weight-bold);
 }
 
+/* Escape hatch: the unlayered bold default above beats Tailwind's layered
+   `font-normal` utility, so re-declare it unlayered. Lets DDS "Roman"
+   subheadings (e.g. the info-page H3 style) opt out of the bold default. */
+h1.font-normal,
+h2.font-normal {
+  font-weight: var(--font-weight-normal);
+}
+
 h3,
 h4 {
   font-weight: var(--font-weight-normal);
@@ -897,20 +905,25 @@ main:focus {
   margin: 0;
 }
 
+/* DDS "Atoms / Icon": a 44px row with the 24px glyph vertically centred —
+   the extra breathing room around the arrow is part of the card rhythm. */
 .card__icon {
+  align-items: center;
   color: inherit;
   display: inline-flex;
+  inline-size: 2.75rem;
+  block-size: 2.75rem;
+}
+
+.card__icon > svg {
   inline-size: 1.5rem;
   block-size: 1.5rem;
 }
 
-.card__icon > svg {
-  inline-size: 100%;
-  block-size: 100%;
-}
-
 .card__body {
-  color: var(--color-copy-body);
+  /* DDS card body copy uses `Content/copy-headings` (#171717), same as the
+     title — not the darker copy-body token. */
+  color: var(--color-copy-headings);
   margin: 0;
 }
 
@@ -945,19 +958,16 @@ main:focus {
   outline-offset: 4px;
 }
 
-/* Media card — picture-led promo tile (home "All at UAL" grid).
-   Image on top, tighter gaps, icon pinned to the end of the stack. */
-.card--media {
-  gap: var(--space-xs);
-}
-
+/* Media card — picture-led promo tile (Resources "Study tools" grid,
+   DDS Card 414:9248). A 16:9 square-cornered image on top with a caption
+   chip in its bottom-left corner; the stack below (title → icon → body)
+   keeps the same 16px rhythm as the text-only card. */
 .card__media {
   display: block;
   overflow: hidden;
-  border-radius: var(--radius, 0.5rem);
+  position: relative;
   background: var(--color-shade);
-  aspect-ratio: 16 / 10;
-  margin-block-end: var(--space-2xs);
+  aspect-ratio: 16 / 9;
 }
 
 .card__media > img {
@@ -974,9 +984,26 @@ main:focus {
   transform: scale(1.03);
 }
 
-/* In a media card the directional icon trails the body copy. */
-.card__icon--end {
-  margin-block-start: auto;
+/* DDS caption chip — 44px square pinned to the image's bottom-left
+   (Figma "Buttons / caption", theme = dark: used on all media). Sits over
+   imagery, so it stays black/white in both themes — deliberately not the
+   themed --color-dark token. */
+.card__caption {
+  position: absolute;
+  inset-block-end: 0;
+  inset-inline-start: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  inline-size: 2.75rem;
+  block-size: 2.75rem;
+  background: #000;
+  color: #fff;
+}
+
+.card__caption > svg {
+  inline-size: 1.25rem;
+  block-size: 1.25rem;
 }
 
 /* ---------- Tag ---------- */
@@ -1259,8 +1286,14 @@ main:focus {
 }
 
 /* Active item: bold label only — matches the Figma design, which has no
-   visible accent rule on the active side-nav item. */
-.side-nav__link[data-active] {
+   visible accent rule on the active side-nav item.
+   The colour must be explicit here: the global `a:hover` / `a:focus`
+   orange rules otherwise win on the just-clicked item (a clicked link
+   keeps :focus after navigation), leaving it stuck orange. */
+.side-nav__link[data-active],
+.side-nav__link[data-active]:hover,
+.side-nav__link[data-active]:focus {
+  color: var(--color-dark);
   font-weight: var(--font-weight-bold);
 }
 

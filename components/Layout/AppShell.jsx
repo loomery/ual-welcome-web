@@ -39,7 +39,10 @@ const FULL_BLEED_PATHS = new Set(['/login']);
  */
 export function AppShell({ children }) {
   const pathname = usePathname();
-  if (FULL_BLEED_PATHS.has(pathname)) {
+  // trailingSlash: true canonicalises /login → /login/ — normalise before
+  // matching or the gate page renders inside the app chrome.
+  const path = pathname !== '/' && pathname.endsWith('/') ? pathname.slice(0, -1) : pathname;
+  if (FULL_BLEED_PATHS.has(path)) {
     return <>{children}</>;
   }
 
