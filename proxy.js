@@ -28,14 +28,9 @@ const COOKIE_VALUE = 'ok';
 export function proxy(request) {
   const { pathname, search } = request.nextUrl;
 
-  // `trailingSlash: true` canonicalises /login → /login/ with a 308 before
-  // this proxy sees it again — normalise before matching, or the allowlist
-  // below misses and the gate redirect-loops on its own login page.
-  const path = pathname !== '/' && pathname.endsWith('/') ? pathname.slice(0, -1) : pathname;
-
   // Allow the login page itself and its API route through, otherwise
   // we'd redirect-loop on the gate.
-  if (path === '/login' || path === '/api/login') {
+  if (pathname === '/login' || pathname === '/api/login') {
     return NextResponse.next();
   }
 
