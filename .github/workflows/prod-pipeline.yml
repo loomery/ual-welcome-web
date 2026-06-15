@@ -1,20 +1,22 @@
-name: Dev Pipeline
+name: Production Pipeline
+
 on:
-  push:
-    branches:
-      - main
-      - jackkelly/DPP-9015/task/dev-set-up-squiz-file-store-hosting-for-student-prototype-next
   workflow_dispatch:
+    inputs:
+      release_version:
+        description: 'Release version to deploy (e.g., v1.0.0)'
+        required: true
+        type: string
+
 jobs:
   build:
-    runs-on: self-hosted
+    runs-on: [self-hosted]
+    environment: prod
     env:
       DXP_ACCESS_KEY: ${{ secrets.DXP_ACCESS_KEY }}
       DXP_TENANT_ID: ${{ secrets.DXP_TENANT_ID }}
       DXP_SERVER_URL: ${{ secrets.DXP_SERVER_URL }}
       DXP_FS_DIRECTORY: ${{ vars.DXP_FS_DIRECTORY }}
-      DEPLOY_PATH: ${{ vars.DEPLOY_PATH }}
-    environment: dev
     steps:
       - uses: actions/checkout@v2
       - name: Use Node.js
