@@ -17,7 +17,7 @@ const DXP_URL = process.env.DXP_SERVER_URL; // Read from environment variable
 const FS_ENDPOINT = '__dxp/service/file-storage/api/v2'; // This is the LF endpoint
 
 // Define multiple files to upload
-const FS_DIRECTORY = process.env.DXP_FS_DIRECTORY ?? '/dev.arts.ac.uk/student-centre/';
+const FS_DIRECTORY = process.env.DXP_FS_DIRECTORY ?? '/dev.arts.ac.uk/';
 
 function getAllFiles(dir, fileList = []) {
   const files = fs.readdirSync(dir);

@@ -17,6 +17,7 @@ jobs:
       DXP_TENANT_ID: ${{ secrets.DXP_TENANT_ID }}
       DXP_SERVER_URL: ${{ secrets.DXP_SERVER_URL }}
       DXP_FS_DIRECTORY: ${{ vars.DXP_FS_DIRECTORY }}
+      DEPLOY_PATH: ${{ vars.DEPLOY_PATH }}
     steps:
       - uses: actions/checkout@v2
       - name: Use Node.js
