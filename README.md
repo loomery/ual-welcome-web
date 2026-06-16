@@ -81,8 +81,10 @@ For the architectural map, conventions, design tokens, accessibility
 commitments, and security model, read **[`AGENTS.md`](./AGENTS.md)** at the
 repo root. It is the project primer for both humans and AI agents.
 
-### Deployment
+## Deployment
 
 On pushing to `main`, there is a GitHub Action to deploy to [dev.arts.ac.uk/student-centre](https://dev.arts.ac.uk/student-centre)
 
-For deployments to production _TBC_ you must trigger the [Production Pipeline](https://git.arts.ac.uk/sss-team/student-prototype/actions/workflows/prod-pipeline.yml) specifying the release version
+On release creation, there is a GitHub Action to deploy to [test.arts.ac.uk/student-centre](https://test.arts.ac.uk/student-centre)
+
+For deployments to production [studentcentre.arts.ac.uk](https://student-centre.arts.ac.uk) you must trigger the [Production Pipeline](https://git.arts.ac.uk/sss-team/student-prototype/actions/workflows/prod-pipeline.yml) specifying the release version
