@@ -17,18 +17,18 @@
  * @property {string} description
  * @property {{ lat: number, lng: number }} geo  Real-world lat/lng — used to build map-directions links.
  * @property {BuildingTransport} [transport]
- * @property {string} [floorPlan]     Path to the campus map PDF (in /public). When set, the
- *                                    map screen embeds this instead of the placeholder gallery.
  *
  * @typedef {Object} FloorPlanImage
  * @property {string} id
  * @property {string} label            Floor name, e.g. 'Ground floor'.
- * @property {string} mobile           Portrait plan image (in /public), shown on narrow screens.
- * @property {string} desktop          Landscape plan image (in /public), shown from md up.
+ * @property {string} [image]          Single plan image (in /public) — used for PDF-derived
+ *                                     campus maps where one render serves every screen size.
+ * @property {string} [mobile]         Portrait plan image, shown on narrow screens (CSM-style).
+ * @property {string} [desktop]        Landscape plan image, shown from md up (CSM-style).
  *
- * @typedef {FloorPlanImage[]} [floorPlans]  Real per-floor plan images. When set, the map screen
- *                                    shows a gallery of these (responsive mobile/desktop) instead
- *                                    of the placeholder.
+ * @typedef {FloorPlanImage[]} [floorPlans]  Per-floor plan images. When set, the map screen
+ *                                    shows a gallery of these (thumbnails, or a dropdown when
+ *                                    there are many) instead of the placeholder.
  */
 
 /** @type {Building[]} */
@@ -94,6 +94,23 @@ export const BUILDINGS = [
     height: 1.9,
     description: 'New campus at East Bank, Queen Elizabeth Olympic Park.',
     geo: { lat: 51.5454, lng: -0.0102 },
+    floorPlans: [
+      { id: 'lcf-east-bank-00', label: 'Overview', image: '/floorplans/lcf-east-bank-00.png' },
+      { id: 'lcf-east-bank-01', label: 'Mezzanine', image: '/floorplans/lcf-east-bank-01.png' },
+      { id: 'lcf-east-bank-02', label: 'Ground', image: '/floorplans/lcf-east-bank-02.png' },
+      { id: 'lcf-east-bank-03', label: '1st floor', image: '/floorplans/lcf-east-bank-03.png' },
+      { id: 'lcf-east-bank-04', label: '2nd floor', image: '/floorplans/lcf-east-bank-04.png' },
+      { id: 'lcf-east-bank-05', label: '4th floor', image: '/floorplans/lcf-east-bank-05.png' },
+      { id: 'lcf-east-bank-06', label: '5th floor', image: '/floorplans/lcf-east-bank-06.png' },
+      { id: 'lcf-east-bank-07', label: '6th floor', image: '/floorplans/lcf-east-bank-07.png' },
+      { id: 'lcf-east-bank-08', label: '7th floor', image: '/floorplans/lcf-east-bank-08.png' },
+      { id: 'lcf-east-bank-09', label: '8th floor', image: '/floorplans/lcf-east-bank-09.png' },
+      { id: 'lcf-east-bank-10', label: '9th floor', image: '/floorplans/lcf-east-bank-10.png' },
+      { id: 'lcf-east-bank-11', label: '10th floor', image: '/floorplans/lcf-east-bank-11.png' },
+      { id: 'lcf-east-bank-12', label: '11th floor', image: '/floorplans/lcf-east-bank-12.png' },
+      { id: 'lcf-east-bank-13', label: '12th floor', image: '/floorplans/lcf-east-bank-13.png' },
+      { id: 'lcf-east-bank-14', label: '13th floor', image: '/floorplans/lcf-east-bank-14.png' },
+    ],
     transport: {
       stations: [
         { name: 'Stratford', walk: '5 min walk' },
@@ -141,7 +158,30 @@ export const BUILDINGS = [
     height: 0.95,
     description: 'Fine art, illustration, conservation and 3D design.',
     geo: { lat: 51.4738, lng: -0.0894 },
-    floorPlan: '/floorplans/Camberwell-Digital-Map2025.pdf',
+    floorPlans: [
+      { id: 'camberwell-00', label: 'Overview', image: '/floorplans/camberwell-00.png' },
+      { id: 'camberwell-01', label: 'Ground', image: '/floorplans/camberwell-01.png' },
+      { id: 'camberwell-02', label: 'Level 1', image: '/floorplans/camberwell-02.png' },
+      { id: 'camberwell-03', label: 'Level 2', image: '/floorplans/camberwell-03.png' },
+      { id: 'camberwell-04', label: 'Level 3', image: '/floorplans/camberwell-04.png' },
+      { id: 'camberwell-05', label: 'Level 4', image: '/floorplans/camberwell-05.png' },
+      { id: 'camberwell-06', label: 'Level 5', image: '/floorplans/camberwell-06.png' },
+      { id: 'camberwell-07', label: 'Basement', image: '/floorplans/camberwell-07.png' },
+      { id: 'camberwell-08', label: 'Courses & staff', image: '/floorplans/camberwell-08.png' },
+      { id: 'camberwell-09', label: 'Ground', image: '/floorplans/camberwell-09.png' },
+      { id: 'camberwell-10', label: 'Level 1', image: '/floorplans/camberwell-10.png' },
+      { id: 'camberwell-11', label: 'Level 2', image: '/floorplans/camberwell-11.png' },
+      { id: 'camberwell-12', label: 'Ground', image: '/floorplans/camberwell-12.png' },
+      { id: 'camberwell-13', label: 'Level 1', image: '/floorplans/camberwell-13.png' },
+      { id: 'camberwell-14', label: 'Level 2', image: '/floorplans/camberwell-14.png' },
+      { id: 'camberwell-15', label: 'Level 3', image: '/floorplans/camberwell-15.png' },
+      { id: 'camberwell-16', label: 'Basement', image: '/floorplans/camberwell-16.png' },
+      { id: 'camberwell-17', label: 'Courses & staff', image: '/floorplans/camberwell-17.png' },
+      { id: 'camberwell-18', label: 'Ground', image: '/floorplans/camberwell-18.png' },
+      { id: 'camberwell-19', label: 'Level 1', image: '/floorplans/camberwell-19.png' },
+      { id: 'camberwell-20', label: 'Level 1', image: '/floorplans/camberwell-20.png' },
+      { id: 'camberwell-21', label: 'Courses & staff', image: '/floorplans/camberwell-21.png' },
+    ],
     transport: {
       stations: [
         { name: 'Denmark Hill', walk: '15 min walk' },
@@ -166,7 +206,27 @@ export const BUILDINGS = [
     height: 0.8,
     description: 'Fine art, graphic design, interior and spatial design.',
     geo: { lat: 51.4906, lng: -0.1282 },
-    floorPlan: '/floorplans/Chelsea-Digital-Map2025.pdf',
+    floorPlans: [
+      { id: 'chelsea-00', label: 'Overview', image: '/floorplans/chelsea-00.png' },
+      { id: 'chelsea-01', label: 'A&B Block – Lower ground', image: '/floorplans/chelsea-01.png' },
+      { id: 'chelsea-02', label: 'A&B Block – Ground', image: '/floorplans/chelsea-02.png' },
+      { id: 'chelsea-03', label: 'A&B Block – Level 1', image: '/floorplans/chelsea-03.png' },
+      { id: 'chelsea-04', label: 'A&B Block – Level 2', image: '/floorplans/chelsea-04.png' },
+      { id: 'chelsea-05', label: 'A&B Block – Level 3', image: '/floorplans/chelsea-05.png' },
+      { id: 'chelsea-06', label: 'B Block – Courses & staff', image: '/floorplans/chelsea-06.png' },
+      { id: 'chelsea-07', label: 'B Block – Courses & staff', image: '/floorplans/chelsea-07.png' },
+      { id: 'chelsea-08', label: 'C Block – Lower ground', image: '/floorplans/chelsea-08.png' },
+      { id: 'chelsea-09', label: 'C Block – Ground', image: '/floorplans/chelsea-09.png' },
+      { id: 'chelsea-10', label: 'C Block – Level 1', image: '/floorplans/chelsea-10.png' },
+      { id: 'chelsea-11', label: 'C Block – Level 2', image: '/floorplans/chelsea-11.png' },
+      { id: 'chelsea-12', label: 'C Block – Level 3', image: '/floorplans/chelsea-12.png' },
+      { id: 'chelsea-13', label: 'C Block – Courses & staff', image: '/floorplans/chelsea-13.png' },
+      { id: 'chelsea-14', label: 'D Block – Ground', image: '/floorplans/chelsea-14.png' },
+      { id: 'chelsea-15', label: 'D Block – Level 1', image: '/floorplans/chelsea-15.png' },
+      { id: 'chelsea-16', label: 'D Block – Level 2', image: '/floorplans/chelsea-16.png' },
+      { id: 'chelsea-17', label: 'D Block – Level 3', image: '/floorplans/chelsea-17.png' },
+      { id: 'chelsea-18', label: 'D Block – Courses & staff', image: '/floorplans/chelsea-18.png' },
+    ],
     transport: {
       stations: [
         { name: 'Pimlico', walk: '10 min walk' },
