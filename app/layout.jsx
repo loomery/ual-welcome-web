@@ -1,6 +1,7 @@
 import './globals.css';
 import { AppShell } from '../components/Layout/AppShell';
 import { ThemeProvider } from '../components/Theme/ThemeProvider';
+import { GoogleTagManager } from '@next/third-parties/google';
 
 // Next does NOT prepend basePath to the `manifest` metadata field (unlike
 // icons), so under a sub-path deploy (/student-centre) a root-absolute value
@@ -38,6 +39,7 @@ export const viewport = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
+      <GoogleTagManager gtmId="GTM-TV73ZQ6K" />
       <body>
         <ThemeProvider>
           <AppShell>{children}</AppShell>
