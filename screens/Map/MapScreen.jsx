@@ -293,7 +293,7 @@ export function MapScreen() {
           role="dialog"
           aria-modal="true"
           aria-label={`${building.name} — ${activeLabel} plan`}
-          className="fixed inset-0 z-50 flex items-center justify-center bg-ual-dark/90 p-m"
+          className="fixed inset-0 z-400 flex items-center justify-center bg-ual-dark/90 p-m"
           onClick={() => setLightboxOpen(false)}
         >
           <button
