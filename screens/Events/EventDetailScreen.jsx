@@ -235,7 +235,6 @@ export function EventDetailScreen({ id }) {
           display: inline-flex;
         }
 
-        /* ── Related events section ────────────────────────────────────── */
         /* A hairline separator + extra block-start breathing room gives the
            section a clear visual break from the main article content. */
         .event-detail__related {

@@ -7,7 +7,6 @@ import { AppHero } from './AppHero';
 import { SideNav } from './SideNav';
 import { BottomNav } from './BottomNav';
 import { Footer } from './Footer';
-import { FeedbackButton } from '../Feedback/FeedbackButton';
 import { RouteAnnouncer } from './RouteAnnouncer';
 import { ScrollToTop } from './ScrollToTop';
 
@@ -48,7 +47,6 @@ export function AppShell({ children }) {
         </main>
       </div>
       <Footer />
-      {/* <FeedbackButton /> */}
       <BottomNav />
       <RouteAnnouncer />
       <ScrollToTop />

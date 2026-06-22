@@ -74,7 +74,6 @@ export function MfaScreen() {
         </p>
       </header>
 
-      {/* ── DEVICE-PATH SELECTOR ─────────────────────────────────────── */}
       <div
         role="radiogroup"
         aria-label="Choose how to set up MFA"
@@ -120,7 +119,6 @@ export function MfaScreen() {
         })}
       </div>
 
-      {/* ── STEPS ────────────────────────────────────────────────────── */}
       <section aria-labelledby="mfa-steps-heading" className="flex flex-col gap-s">
         <h2
           id="mfa-steps-heading"
@@ -162,7 +160,6 @@ export function MfaScreen() {
         </ol>
       </section>
 
-      {/* ── PROGRESS CONTROL ─────────────────────────────────────────── */}
       <section aria-labelledby="mfa-progress-heading" className="flex flex-col gap-2xs">
         <p
           id="mfa-progress-heading"
@@ -175,7 +172,6 @@ export function MfaScreen() {
         </button>
       </section>
 
-      {/* ── GET HELP ─────────────────────────────────────────────────── */}
       <section aria-labelledby="mfa-help-heading" className="flex flex-col gap-s">
         <h2
           id="mfa-help-heading"
@@ -209,7 +205,6 @@ export function MfaScreen() {
         </ul>
       </section>
 
-      {/* ── READ MORE BANNER ─────────────────────────────────────────── */}
       <a
         href={MFA_READ_MORE.href}
         target="_blank"

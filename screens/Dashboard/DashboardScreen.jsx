@@ -146,7 +146,6 @@ export function DashboardScreen() {
     <article className="dash flow" data-flow="l">
       {/* The greeting/college hero is rendered by the app shell (AppHero). */}
       <div className="dash-content flow" data-flow="l">
-        {/* ── KEY INFORMATION ────────────────────────────────────── */}
         <section className="flow" data-flow="s" aria-labelledby="dash-key-info">
           <h2 id="dash-key-info">Key information</h2>
           <div className="flex flex-col">
@@ -167,7 +166,6 @@ export function DashboardScreen() {
           </div>
         </section>
 
-        {/* ── GET SETUP ──────────────────────────────────────────── */}
         <section className="flow" data-flow="s" aria-labelledby="dash-get-setup">
           <div className="flex items-baseline justify-between gap-s">
             <h2 id="dash-get-setup">Get setup</h2>
@@ -217,7 +215,6 @@ export function DashboardScreen() {
           )}
         </section>
 
-        {/* ── VIEW TOGGLE ────────────────────────────────────────── */}
         <div className="flow" data-flow="3xs">
           <ViewToggle value={view} onChange={setView} options={VIEW_OPTIONS} />
           <p className="dash-toggle__caption">
@@ -225,7 +222,6 @@ export function DashboardScreen() {
           </p>
         </div>
 
-        {/* ── INTEREST SECTIONS ──────────────────────────────────── */}
         {visibleSections.map((section) => (
           <section
             key={section.id}
@@ -242,7 +238,6 @@ export function DashboardScreen() {
           </section>
         ))}
 
-        {/* ── NO-INTERESTS PROMPT ────────────────────────────────── */}
         {view === 'focus' && interests.length === 0 && (
           <section className="flow" data-flow="s" aria-labelledby="dash-empty">
             <h2 id="dash-empty">Nothing selected yet</h2>
@@ -256,7 +251,6 @@ export function DashboardScreen() {
           </section>
         )}
 
-        {/* ── PROFILE FOOTER ─────────────────────────────────────── */}
         <section className="flow" data-flow="2xs" aria-label="Profile">
           <p>
             <span className="step--1">Saved on this device. </span>
