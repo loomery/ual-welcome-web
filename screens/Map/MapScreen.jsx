@@ -123,7 +123,6 @@ export function MapScreen() {
         </p>
       </header>
 
-      {/* ── COLLEGE SELECTOR ─────────────────────────────────────────── */}
       <section className="flex flex-col gap-s" aria-labelledby="campus-heading">
         <h2
           id="campus-heading"
@@ -147,7 +146,6 @@ export function MapScreen() {
         </label>
       </section>
 
-      {/* ── FLOOR-PLAN GALLERY ───────────────────────────────────────── */}
       <section className="flex flex-col gap-s" aria-label={`${building.name} college map`}>
         {useFloorDropdown && (
           <label className="flex flex-col gap-2xs">
@@ -219,7 +217,6 @@ export function MapScreen() {
         {!useFloorDropdown && <p className="text-step-d1 text-ual-medium">{activeLabel}</p>}
       </section>
 
-      {/* ── ADDRESS ──────────────────────────────────────────────────── */}
       <section className="flex flex-col gap-2xs" aria-labelledby="address-heading">
         <h2
           id="address-heading"
@@ -239,7 +236,6 @@ export function MapScreen() {
         </div>
       </section>
 
-      {/* ── TRANSPORT ────────────────────────────────────────────────── */}
       {building.transport && (
         <section className="flex flex-col gap-s" aria-labelledby="transport-heading">
           <h2
@@ -263,7 +259,6 @@ export function MapScreen() {
         </section>
       )}
 
-      {/* ── ACCESSIBILITY ────────────────────────────────────────────── */}
       {building.transport?.accessibilityNote && (
         <section className="flex flex-col gap-2xs" aria-labelledby="accessibility-heading">
           <h2
@@ -287,7 +282,6 @@ export function MapScreen() {
         </section>
       )}
 
-      {/* ── LIGHTBOX ─────────────────────────────────────────────────── */}
       {lightboxOpen && (
         <div
           role="dialog"

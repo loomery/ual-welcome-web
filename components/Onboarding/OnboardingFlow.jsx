@@ -151,7 +151,6 @@ export function OnboardingFlow() {
         .filter(Boolean)
         .join(' ')}
     >
-      {/* ── TOP BAR — back button + progress bar + skip ────────────────── */}
       {stepId !== 'intro' && stepId !== 'finish' && (
         <div className="onboarding-flow__topbar">
           <button
@@ -192,7 +191,6 @@ export function OnboardingFlow() {
         </div>
       )}
 
-      {/* ── STEP CONTENT ───────────────────────────────────────────────── */}
       <div className="onboarding-flow__content">
         <div
           key={stepId}
@@ -259,7 +257,6 @@ export function OnboardingFlow() {
         </div>
       </div>
 
-      {/* ── ACTION BAR ─────────────────────────────────────────────────── */}
       <div className="onboarding-flow__actions">
         <Button onClick={goNext} disabled={!canAdvance}>
           {stepId === 'intro'
