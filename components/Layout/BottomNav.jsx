@@ -27,7 +27,7 @@ export function BottomNav() {
 
   return (
     <nav
-      className="fixed inset-x-0 bottom-0 z-10 border-t border-ual-dark bg-ual-light py-2xs pb-[max(var(--space-2xs),env(safe-area-inset-bottom))] min-[49.5rem]:hidden [body[data-onboarding]_&]:hidden"
+      className="fixed inset-x-0 bottom-0 z-10 border-t border-ual-dark bg-ual-light py-2xs pb-[max(var(--space-2xs),env(safe-area-inset-bottom))] nav:hidden [body[data-onboarding]_&]:hidden"
       aria-label="Primary mobile"
     >
       <ul className="m-0 flex list-none justify-around p-0" role="list">

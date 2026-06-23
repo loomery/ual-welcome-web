@@ -34,19 +34,19 @@ export function AppHero({ variant = 'full' }) {
   // from 49.5rem up. Onboarding hides the hero entirely in both variants.
   const wrapperClass = isFull
     ? '[body[data-onboarding]_&]:hidden'
-    : 'hidden min-[49.5rem]:block [body[data-onboarding]_&]:hidden';
+    : 'hidden nav:block [body[data-onboarding]_&]:hidden';
 
   const innerClass = isFull
     ? 'px-[var(--grid-gutter)] pt-l pb-2xl space-y-2xs'
-    : 'min-[49.5rem]:p-m space-y-2xs';
+    : 'nav:p-m space-y-2xs';
 
   const greetingClass = isFull
     ? 'm-0 text-step-0 text-ual-dark-90'
-    : 'm-0 text-ual-dark-90 min-[49.5rem]:text-step-d1';
+    : 'm-0 text-ual-dark-90 nav:text-step-d1';
 
   const titleClass = isFull
     ? 'text-step-4 tracking-ual-tight leading-ual-single text-ual-light dark:text-ual-dark max-w-[20ch]'
-    : 'tracking-ual-tight leading-ual-single text-ual-light dark:text-ual-dark min-[49.5rem]:text-step-2 min-[49.5rem]:max-w-[12ch]';
+    : 'tracking-ual-tight leading-ual-single text-ual-light dark:text-ual-dark nav:text-step-2 nav:max-w-[12ch]';
 
   return (
     <div className={wrapperClass}>

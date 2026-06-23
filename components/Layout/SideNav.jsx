@@ -31,7 +31,7 @@ export function SideNav() {
 
   return (
     <nav
-      className="hidden bg-ual-shade min-[49.5rem]:sticky min-[49.5rem]:top-[calc(var(--space-xs)*2+var(--space-m))] min-[49.5rem]:flex min-[49.5rem]:min-h-[calc(100dvh-(var(--space-xs)*2+var(--space-m)))] min-[49.5rem]:flex-col min-[49.5rem]:pt-l [body[data-onboarding]_&]:hidden"
+      className="hidden bg-ual-shade nav:sticky nav:top-[calc(var(--space-xs)*2+var(--space-m))] nav:flex nav:min-h-[calc(100dvh-(var(--space-xs)*2+var(--space-m)))] nav:flex-col nav:pt-l [body[data-onboarding]_&]:hidden"
       aria-label="Primary desktop"
     >
       <ul className="m-0 flex grow list-none flex-col gap-3xs px-0 py-m" role="list">

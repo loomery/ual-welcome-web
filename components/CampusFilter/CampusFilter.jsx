@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useId, useRef, useState } from 'react';
+import { buttonClasses } from '../Button/Button';
 
 /**
  * Multi-select campus dropdown — used on /events to narrow the list to
@@ -71,14 +72,7 @@ export function CampusFilter({ campuses, selected, onChange }) {
       <button
         ref={triggerRef}
         type="button"
-        className={[
-          'inline-flex min-h-11 cursor-pointer items-center gap-2xs border-2 border-ual-dark p-s font-main text-step-0 leading-ual-condensed font-ual-bold no-underline transition-colors',
-          'hover:border-ual-orange hover:bg-ual-orange hover:text-ual-dark',
-          'focus-visible:border-ual-orange focus-visible:bg-ual-orange focus-visible:text-ual-dark focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ual-orange',
-          'active:scale-[99%] active:border-[var(--color-orange-pressed)] active:bg-[var(--color-orange-pressed)] active:text-ual-dark',
-          '[&_svg]:size-[1.5em] [&_svg]:flex-none [&_svg]:transition-transform [&_svg]:duration-150',
-          isFilled ? 'bg-ual-dark text-ual-light' : 'bg-transparent text-ual-dark',
-        ].join(' ')}
+        className={`${buttonClasses(!isFilled)} [&>svg]:transition-transform [&>svg]:duration-150`}
         aria-haspopup="true"
         aria-expanded={open}
         aria-controls={panelId}
