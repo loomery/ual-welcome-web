@@ -4,6 +4,7 @@ import { useMemo, useState } from 'react';
 import { EVENTS } from '../../data/events';
 import { COLLEGE_OPTIONS } from '../../data/onboardingOptions';
 import { EventCard } from '../../components/EventCard/EventCard';
+import { buttonClasses } from '../../components/Button/Button';
 import { HeartIcon } from '../../components/Icon/NavIcons';
 import { CampusFilter } from '../../components/CampusFilter/CampusFilter';
 import { useEventFavourites } from '../../hooks/useEventFavourites';
@@ -92,10 +93,10 @@ export function EventsScreen() {
   }
 
   return (
-    <article className="prose has-lead flow" data-flow="l">
-      <div className="flow" data-flow="s">
+    <article>
+      <div className="space-y-s">
         <h1>Plan your events</h1>
-        <p className="standfirst">
+        <p className="text-step-1 text-ual-medium">
           {college
             ? `Welcome week events for ${college.name} and across UAL — tours, talks, workshops and socials.`
             : 'Welcome week events across all UAL colleges — tours, talks, workshops and socials.'}
@@ -103,12 +104,14 @@ export function EventsScreen() {
       </div>
 
       {/* "Saved" toggle — independent from the category row */}
-      <div>
+      <div className="mt-l">
         <button
           type="button"
-          className="events-saved-toggle"
+          className={[
+            'inline-flex min-h-11 cursor-pointer items-center gap-2xs border-2 border-ual-dark px-s py-2xs text-step-d1 font-ual-bold transition-[background,color] duration-[0.12s] hover:bg-ual-shade focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ual-orange',
+            savedOnly ? 'bg-ual-dark text-ual-light' : 'bg-ual-light text-ual-dark',
+          ].join(' ')}
           aria-pressed={savedOnly}
-          data-active={savedOnly || undefined}
           onClick={() => setSavedOnly((v) => !v)}
         >
           <HeartIcon
@@ -116,26 +119,35 @@ export function EventsScreen() {
             aria-hidden="true"
             width={16}
             height={16}
-            className="events-saved-toggle__icon"
+            className="shrink-0"
           />
           <span>Saved</span>
           {favHydrated && favourites.length > 0 && (
-            <span className="events-saved-toggle__count" aria-label={`${favourites.length} saved`}>
+            <span
+              className={[
+                'min-w-[1.4em] px-[0.4em] text-center text-step-d1 font-ual-bold text-ual-dark',
+                savedOnly ? 'bg-ual-light' : 'bg-ual-shade',
+              ].join(' ')}
+              aria-label={`${favourites.length} saved`}
+            >
               {favourites.length}
             </span>
           )}
         </button>
       </div>
 
-      <div className="cluster" role="group" aria-label="Filter events">
+      <div
+        className="mt-l flex flex-wrap items-center gap-s"
+        role="group"
+        aria-label="Filter events"
+      >
         {CATEGORIES.map((cat) => {
           const active = category === cat;
           return (
             <button
               key={cat}
               type="button"
-              className="button"
-              data-ghost-button={active ? undefined : ''}
+              className={buttonClasses(!active)}
               aria-pressed={active}
               onClick={() => setCategory(cat)}
             >
@@ -148,7 +160,7 @@ export function EventsScreen() {
       </div>
 
       {visible.length === 0 ? (
-        <div className="box" data-padding="l">
+        <div className="mt-l bg-ual-light p-l text-ual-dark">
           <p>
             {savedOnly
               ? 'No saved events yet. Tap the heart on any event to save it here.'
@@ -156,9 +168,9 @@ export function EventsScreen() {
           </p>
         </div>
       ) : (
-        <ul className="event-list" role="list">
+        <ul className="mt-xl flex w-full max-w-192 list-none flex-col gap-m p-0" role="list">
           {visible.map((event) => (
-            <li key={event.id}>
+            <li key={event.id} className="block">
               <EventCard event={event} />
             </li>
           ))}
@@ -167,8 +179,12 @@ export function EventsScreen() {
 
       {/* Bulk export — only shown in Saved view when there are saved events */}
       {savedOnly && savedEvents.length > 0 && (
-        <div className="events-bulk-export">
-          <button type="button" className="button events-bulk-export__cta" onClick={handleDownload}>
+        <div className="mt-l flex justify-stretch min-[600px]:justify-start">
+          <button
+            type="button"
+            className={`${buttonClasses(false)} w-full justify-center min-[600px]:w-auto`}
+            onClick={handleDownload}
+          >
             Add events to calendar
           </button>
         </div>

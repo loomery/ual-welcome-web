@@ -13,7 +13,7 @@ import { StepHeader } from '../StepHeader';
  */
 export function NameStep({ headingRef, value, onChange, onSubmit }) {
   return (
-    <div className="flow" data-flow="m">
+    <div className="space-y-m">
       <StepHeader
         headingRef={headingRef}
         title="What should we call you?"
@@ -26,7 +26,7 @@ export function NameStep({ headingRef, value, onChange, onSubmit }) {
           if (value.trim().length >= 1) onSubmit();
         }}
       >
-        <label className="visually-hidden" htmlFor="onboarding-name">
+        <label className="sr-only" htmlFor="onboarding-name">
           Your first name
         </label>
         <input
@@ -38,7 +38,7 @@ export function NameStep({ headingRef, value, onChange, onSubmit }) {
           autoFocus
           maxLength={40}
           placeholder="Your first name"
-          className="onboarding-input"
+          className="w-full border-2 border-ual-dark-90 bg-ual-light p-s text-step-1 font-ual-bold text-ual-dark placeholder:font-ual-normal placeholder:text-ual-dark-50 focus:border-ual-dark focus:outline-2 focus:outline-offset-2 focus:outline-ual-orange"
         />
       </form>
     </div>

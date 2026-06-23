@@ -143,31 +143,31 @@ export function FeedbackDialog({ open, onClose, currentPath }) {
   return (
     <dialog
       ref={dialogRef}
-      className="feedback-dialog"
+      className="inset-0 m-auto max-h-[calc(100dvh-var(--space-l))] w-[min(30rem,calc(100vw-var(--space-m)))] border-0 bg-transparent p-0 text-ual-dark backdrop:bg-black/50"
       aria-labelledby={titleId}
       aria-describedby={descId}
       onClick={handleBackdropClick}
     >
-      <div className="feedback-dialog__panel flow" data-flow="s">
+      <div className="relative space-y-s border border-ual-dark bg-ual-light p-m">
         <button
           type="button"
-          className="feedback-dialog__close"
+          className="absolute inset-e-2xs top-2xs inline-flex min-h-11 min-w-11 cursor-pointer items-center justify-center border border-transparent bg-transparent p-2xs text-ual-dark hover:bg-ual-dark-90 focus-visible:bg-ual-dark-90 focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-ual-orange"
           onClick={closeDialog}
           aria-label="Close feedback"
         >
           <CloseIcon aria-hidden="true" width={20} height={20} />
         </button>
-        <div className="flow feedback-dialog__header" data-flow="3xs">
-          <h2 id={titleId} className="feedback-dialog__title">
+        <div className="space-y-3xs pe-[calc(44px+var(--space-2xs))]">
+          <h2 id={titleId} className="m-0 text-step-1/ual-condensed">
             Send feedback
           </h2>
-          <p id={descId} className="feedback-dialog__lead">
+          <p id={descId} className="m-0 text-step-d1 text-ual-medium">
             Tell us what worked and what didn’t. This beta exists to be shaped by you.
           </p>
         </div>
 
         {status === 'sent' ? (
-          <div className="flow" data-flow="s" role="status" aria-live="polite">
+          <div className="space-y-s" role="status" aria-live="polite">
             <p>
               <strong>Thanks — your feedback is on its way.</strong>
             </p>
@@ -175,19 +175,19 @@ export function FeedbackDialog({ open, onClose, currentPath }) {
               Your email app should have opened with a pre-filled message. If nothing happened,
               email us at <a href={`mailto:${FEEDBACK_EMAIL}`}>{FEEDBACK_EMAIL}</a>.
             </p>
-            <div className="cluster" data-justify="end">
+            <div className="flex flex-wrap items-center gap-s">
               <Button onClick={closeDialog}>Close</Button>
             </div>
           </div>
         ) : (
-          <form onSubmit={handleSubmit} className="flow" data-flow="s" noValidate>
-            <fieldset className="feedback-rating" aria-labelledby={ratingGroupId}>
-              <legend id={ratingGroupId} className="label">
+          <form onSubmit={handleSubmit} className="space-y-s" noValidate>
+            <fieldset className="m-0 border-0 p-0" aria-labelledby={ratingGroupId}>
+              <legend id={ratingGroupId} className="mb-2xs block text-step-d1/ual-condensed">
                 How would you rate your experience?{' '}
-                <span className="feedback-rating__hint">Optional</span>
+                <span className="font-ual-normal text-ual-medium">Optional</span>
               </legend>
               <div
-                className="feedback-rating__options"
+                className="mt-2xs flex flex-wrap gap-2xs"
                 role="radiogroup"
                 aria-labelledby={ratingGroupId}
               >
@@ -196,8 +196,10 @@ export function FeedbackDialog({ open, onClose, currentPath }) {
                   return (
                     <label
                       key={n}
-                      className="feedback-rating__option"
-                      data-checked={checked ? '' : undefined}
+                      className={[
+                        'inline-flex min-h-11 min-w-11 cursor-pointer items-center justify-center border border-ual-dark p-2xs font-ual-bold transition-[background,color] duration-[120ms] hover:bg-ual-dark-90 has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-offset-[0.3ch] has-[:focus-visible]:outline-ual-orange motion-reduce:transition-none',
+                        checked ? 'bg-ual-dark text-ual-light' : 'bg-ual-light',
+                      ].join(' ')}
                     >
                       <input
                         type="radio"
@@ -205,12 +207,12 @@ export function FeedbackDialog({ open, onClose, currentPath }) {
                         value={n}
                         checked={checked}
                         onChange={() => setRating(n)}
-                        className="visually-hidden"
+                        className="sr-only"
                       />
-                      <span aria-hidden="true" className="feedback-rating__number">
+                      <span aria-hidden="true" className="text-step-0/ual-single">
                         {n}
                       </span>
-                      <span className="visually-hidden">
+                      <span className="sr-only">
                         {n} out of 5 — {RATING_LABELS[n]}
                       </span>
                     </label>
@@ -219,8 +221,8 @@ export function FeedbackDialog({ open, onClose, currentPath }) {
               </div>
             </fieldset>
 
-            <div className="flow" data-flow="3xs">
-              <label htmlFor={messageId} className="label">
+            <div className="space-y-3xs">
+              <label htmlFor={messageId} className="mb-2xs block text-step-d1/ual-condensed">
                 What would you like to tell us?
               </label>
               <textarea
@@ -230,26 +232,32 @@ export function FeedbackDialog({ open, onClose, currentPath }) {
                 rows={4}
                 value={message}
                 onChange={(e) => setMessage(e.target.value)}
-                className="feedback-dialog__textarea"
+                className="w-full resize-y border border-ual-dark bg-ual-light px-xs py-2xs font-main text-step-0/ual-default text-ual-dark focus-visible:outline-2 focus-visible:outline-offset-[0.3ch] focus-visible:outline-ual-orange"
                 placeholder="e.g. The map was slow to load on my phone…"
                 maxLength={MAX_MESSAGE_LENGTH}
                 aria-describedby={`${messageId}-counter`}
               />
               <p
                 id={`${messageId}-counter`}
-                className="feedback-dialog__counter"
-                data-near-limit={message.length > MAX_MESSAGE_LENGTH * 0.9 ? '' : undefined}
+                className={[
+                  'mt-3xs text-end text-step-d1',
+                  message.length > MAX_MESSAGE_LENGTH * 0.9
+                    ? 'font-ual-bold text-ual-orange'
+                    : 'text-ual-medium',
+                ].join(' ')}
                 aria-live="polite"
               >
-                <span className="visually-hidden">Characters used: </span>
+                <span className="sr-only">Characters used: </span>
                 {message.length} / {MAX_MESSAGE_LENGTH}
               </p>
             </div>
 
-            <div className="flow" data-flow="3xs">
-              <label htmlFor={emailId} className="label">
+            <div className="space-y-3xs">
+              <label htmlFor={emailId} className="mb-2xs block text-step-d1/ual-condensed">
                 Your email{' '}
-                <span className="feedback-rating__hint">Optional — if you’d like a reply</span>
+                <span className="font-ual-normal text-ual-medium">
+                  Optional — if you’d like a reply
+                </span>
               </label>
               <input
                 id={emailId}
@@ -258,12 +266,12 @@ export function FeedbackDialog({ open, onClose, currentPath }) {
                 autoComplete="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="feedback-dialog__input"
+                className="w-full border border-ual-dark bg-ual-light px-xs py-2xs font-main text-step-0/ual-default text-ual-dark focus-visible:outline-2 focus-visible:outline-offset-[0.3ch] focus-visible:outline-ual-orange"
                 placeholder="you@arts.ac.uk"
               />
             </div>
 
-            <div className="cluster" data-justify="end">
+            <div className="flex flex-wrap items-center gap-s">
               <Button ghost type="button" onClick={closeDialog}>
                 Cancel
               </Button>

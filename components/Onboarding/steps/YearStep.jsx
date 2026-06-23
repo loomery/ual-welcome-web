@@ -12,11 +12,11 @@ import { YEAR_OPTIONS } from '../../../data/onboardingOptions';
  */
 export function YearStep({ headingRef, value, onChange }) {
   return (
-    <div className="flow" data-flow="m">
+    <div className="space-y-m">
       <StepHeader headingRef={headingRef} title="What year are you in?" />
 
       <ul
-        className="onboarding-grid onboarding-grid--two"
+        className="grid list-none grid-cols-1 gap-xs p-0 min-[49.5rem]:grid-cols-2 [&>li]:flex"
         role="radiogroup"
         aria-label="Choose your year"
       >

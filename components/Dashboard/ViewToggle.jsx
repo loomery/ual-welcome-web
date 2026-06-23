@@ -1,5 +1,5 @@
 /**
- * ViewToggle — two-button pill (Figma "My focus / Everything").
+ * ViewToggle — two-button pill.
  *
  * Stateless; the parent owns the current value and the onChange handler.
  * Buttons are real `<button>`s with `aria-pressed`, so screen readers
@@ -15,15 +15,18 @@
  */
 export function ViewToggle({ value, onChange, options, ariaLabel = 'Dashboard view' }) {
   return (
-    <div className="dash-toggle" role="group" aria-label={ariaLabel}>
+    <div className="flex gap-l border-b border-ual-dark-90" role="group" aria-label={ariaLabel}>
       {options.map((opt) => {
         const active = opt.value === value;
         return (
           <button
             key={String(opt.value)}
             type="button"
-            className="dash-toggle__btn"
-            data-active={active || undefined}
+            className={`-mb-px cursor-pointer border-0 border-b-[3px] bg-none py-2xs pb-s font-main text-step-0 font-ual-bold transition-colors duration-[0.12s] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ual-orange ${
+              active
+                ? 'border-ual-dark text-ual-dark'
+                : 'border-transparent text-ual-dark-50 hover:text-ual-dark'
+            }`}
             onClick={() => onChange(opt.value)}
             aria-pressed={active}
           >

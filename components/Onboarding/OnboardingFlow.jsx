@@ -147,17 +147,19 @@ export function OnboardingFlow() {
 
   return (
     <div
-      className={['onboarding-flow', stepId === 'interests' && 'onboarding-flow--wide']
-        .filter(Boolean)
-        .join(' ')}
+      className={[
+        'mx-auto w-full py-s min-[49.5rem]:py-0 [&_h1]:text-step-3',
+        stepId === 'interests' ? 'max-w-[var(--content-max)]' : 'max-w-[42rem]',
+      ].join(' ')}
     >
+      {/* ── TOP BAR — back button + progress bar + skip ────────────────── */}
       {stepId !== 'intro' && stepId !== 'finish' && (
-        <div className="onboarding-flow__topbar">
+        <div className="mb-m flex items-center gap-s">
           <button
             type="button"
             onClick={goBack}
             aria-label="Go back to previous step"
-            className="onboarding-flow__back"
+            className="-ms-2xs inline-flex cursor-pointer items-center gap-3xs border-0 bg-transparent p-2xs text-step-d1 text-ual-dark hover:text-ual-orange focus-visible:text-ual-orange focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ual-orange"
           >
             <svg width="14" height="14" viewBox="0 0 18 18" fill="none" aria-hidden="true">
               <path
@@ -172,7 +174,7 @@ export function OnboardingFlow() {
           </button>
 
           <div
-            className="onboarding-flow__progress"
+            className="h-1 grow overflow-hidden bg-ual-dark-90"
             role="progressbar"
             aria-valuemin={0}
             aria-valuemax={progressTotal}
@@ -180,22 +182,26 @@ export function OnboardingFlow() {
             aria-label={`Step ${progressCurrent} of ${progressTotal}`}
           >
             <div
-              className="onboarding-flow__progress-bar"
+              className="h-full bg-ual-dark transition-[width] duration-400 ease-ual"
               style={{ width: `${(progressCurrent / progressTotal) * 100}%` }}
             />
           </div>
 
-          <button type="button" onClick={handleSkip} className="onboarding-flow__skip">
+          <button
+            type="button"
+            onClick={handleSkip}
+            className="cursor-pointer border-0 bg-transparent p-2xs text-step-d1 font-ual-bold text-ual-medium underline underline-offset-4 hover:text-ual-orange focus-visible:text-ual-orange focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ual-orange"
+          >
             Skip
           </button>
         </div>
       )}
 
-      <div className="onboarding-flow__content">
+      {/* ── STEP CONTENT ───────────────────────────────────────────────── */}
+      <div className="mb-l">
         <div
           key={stepId}
-          className="flow"
-          data-flow="m"
+          className="space-y-m"
           style={{
             animation: `${
               direction === 'forward' ? 'onboardSlideIn' : 'onboardSlideInBack'
@@ -257,8 +263,9 @@ export function OnboardingFlow() {
         </div>
       </div>
 
-      <div className="onboarding-flow__actions">
-        <Button onClick={goNext} disabled={!canAdvance}>
+      {/* ── ACTION BAR ─────────────────────────────────────────────────── */}
+      <div className="flex flex-col gap-2xs">
+        <Button className="self-start" onClick={goNext} disabled={!canAdvance}>
           {stepId === 'intro'
             ? 'Get started'
             : isLast
@@ -268,7 +275,7 @@ export function OnboardingFlow() {
                 : 'Continue'}
         </Button>
         {stepId === 'intro' && (
-          <Button ghost onClick={handleSkip}>
+          <Button className="self-start" ghost onClick={handleSkip}>
             Skip and show me everything
           </Button>
         )}

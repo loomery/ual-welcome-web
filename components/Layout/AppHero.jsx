@@ -7,7 +7,7 @@ import { useOnboardingProfile } from '../../hooks/useOnboardingProfile';
 
 /**
  * Welcome-week banner + greeting/college hero. Lives in the app shell so it
- * can appear on every page, in one of two layouts (per the Figma frames):
+ * can appear on every page, in one of two layouts:
  *
  *  - `full`    — a full-width band beneath the header (home page). The college
  *                name is the page `<h1>`.
@@ -27,15 +27,37 @@ export function AppHero({ variant = 'full' }) {
   );
 
   const firstName = (profile?.name ?? '').split(' ')[0] || 'there';
-  const Title = variant === 'full' ? 'h1' : 'p';
+  const isFull = variant === 'full';
+  const Title = isFull ? 'h1' : 'p';
+
+  // Compact variant is hidden on mobile (no sidebar column there) and shown
+  // from 49.5rem up. Onboarding hides the hero entirely in both variants.
+  const wrapperClass = isFull
+    ? '[body[data-onboarding]_&]:hidden'
+    : 'hidden min-[49.5rem]:block [body[data-onboarding]_&]:hidden';
+
+  const innerClass = isFull
+    ? 'px-[var(--grid-gutter)] pt-l pb-2xl space-y-2xs'
+    : 'min-[49.5rem]:p-m space-y-2xs';
+
+  const greetingClass = isFull
+    ? 'm-0 text-step-0 text-ual-dark-90'
+    : 'm-0 text-ual-dark-90 min-[49.5rem]:text-step-d1';
+
+  const titleClass = isFull
+    ? 'text-step-4 tracking-ual-tight leading-ual-single text-ual-light dark:text-ual-dark max-w-[20ch]'
+    : 'tracking-ual-tight leading-ual-single text-ual-light dark:text-ual-dark min-[49.5rem]:text-step-2 min-[49.5rem]:max-w-[12ch]';
 
   return (
-    <div className="app-hero" data-variant={variant}>
+    <div className={wrapperClass}>
       <Countdown />
-      <section className="app-hero__band" aria-labelledby="app-hero-title">
-        <div className="app-hero__inner flow" data-flow="2xs">
-          <p className="app-hero__greeting">Hi, {firstName}</p>
-          <Title id="app-hero-title" className="app-hero__title">
+      <section
+        className="bg-ual-dark text-ual-light dark:bg-ual-light dark:text-ual-dark"
+        aria-labelledby="app-hero-title"
+      >
+        <div className={innerClass}>
+          <p className={greetingClass}>Hi, {firstName}</p>
+          <Title id="app-hero-title" className={titleClass}>
             {college?.name ?? 'Welcome to UAL'}
           </Title>
         </div>

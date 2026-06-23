@@ -19,21 +19,18 @@ const BENEFITS = [
  */
 export function IntroStep({ headingRef, hasExistingProfile, onResume, onStartOver }) {
   return (
-    <div className="flow" data-flow="m">
+    <div className="space-y-m">
       <p className="text-step-d1 text-ual-medium">Takes 2 minutes</p>
 
-      <h1 ref={headingRef} tabIndex={-1} style={{ outline: 'none' }}>
+      <h1 ref={headingRef} tabIndex={-1} className="outline-none">
         Let&apos;s get you ready for term
       </h1>
 
-      <p className="standfirst">Everything you need to access before term in one place</p>
+      <p className="text-step-1 text-ual-medium">
+        Everything you need to access before term in one place
+      </p>
 
-      <ul
-        className="flow pt-xs"
-        data-flow="s"
-        style={{ listStyle: 'none', padding: 0 }}
-        aria-label="What you'll get"
-      >
+      <ul className="list-none space-y-s p-0" aria-label="What you'll get">
         {BENEFITS.map((item) => (
           <li key={item} className="flex items-start gap-s">
             {/* Orange check circle */}
@@ -41,12 +38,7 @@ export function IntroStep({ headingRef, hasExistingProfile, onResume, onStartOve
               viewBox="0 0 20 20"
               fill="none"
               aria-hidden="true"
-              style={{
-                flexShrink: 0,
-                marginBlockStart: '2px',
-                width: '1.25rem',
-                height: '1.25rem',
-              }}
+              className="mt-0.5 size-5 shrink-0"
             >
               <circle cx="10" cy="10" r="9" fill="var(--color-orange)" />
               <path
@@ -64,17 +56,9 @@ export function IntroStep({ headingRef, hasExistingProfile, onResume, onStartOve
 
       {/* Shown only when returning to onboarding after already completing it */}
       {hasExistingProfile && (
-        <div
-          className="flow"
-          data-flow="2xs"
-          style={{
-            background: 'var(--color-shade)',
-            borderInlineStart: '4px solid var(--color-orange)',
-            padding: 'var(--space-s)',
-          }}
-        >
+        <div className="space-y-2xs border-s-4 border-ual-orange bg-ual-shade p-s">
           <p className="text-step-d1 text-ual-medium">You&apos;ve already set up your hub.</p>
-          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 'var(--space-2xs)' }}>
+          <div className="flex flex-wrap gap-2xs">
             <Button onClick={onResume}>Open my hub</Button>
             <Button ghost onClick={onStartOver}>
               Start over

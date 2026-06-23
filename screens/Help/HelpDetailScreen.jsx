@@ -1,28 +1,35 @@
 import Link from 'next/link';
+import { buttonClasses } from '../../components/Button/Button';
 
 /**
  * @param {{ category: import('../../data/help').HelpCategory }} props
  */
 export function HelpDetailScreen({ category }) {
   return (
-    <article className="prose flow" data-flow="l">
-      <Link href="/help" className="back-link">
+    <article className="space-y-l">
+      <Link
+        href="/help"
+        className="inline-flex items-center gap-2xs text-step-d1 text-ual-dark no-underline hover:text-ual-orange focus-visible:text-ual-orange focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ual-orange"
+      >
         ← Back to help
       </Link>
 
-      <div className="flow" data-flow="s">
+      <div className="space-y-s">
         <h1>{category.title}</h1>
         <p>{category.description}</p>
       </div>
 
-      <section aria-labelledby="contact-heading" style={{ marginBlockStart: 'var(--space-m)' }}>
-        <h2 id="contact-heading" style={{ marginBlockEnd: 'var(--space-s)' }}>
+      <section aria-labelledby="contact-heading" className="mt-m">
+        <h2 id="contact-heading" className="mb-s">
           How to contact
         </h2>
 
-        <ul role="list" className="stacked-list">
+        <ul
+          role="list"
+          className="border-2 border-ual-dark-90 [&>li+li]:border-t [&>li+li]:border-ual-dark-90"
+        >
           {category.contacts.map((contact, i) => (
-            <li key={i} className="flex flex-col bg-ual-light px-s py-xs" style={{ gap: '2px' }}>
+            <li key={i} className="flex flex-col gap-0.5 bg-ual-light px-s py-xs">
               <span className="text-step-d1 text-ual-medium">{contact.label}</span>
 
               {contact.href ? (
@@ -48,8 +55,8 @@ export function HelpDetailScreen({ category }) {
         </ul>
       </section>
 
-      <a href={category.ctaHref} className="button" target="_blank" rel="noreferrer">
-        {category.ctaLabel} →<span className="visually-hidden"> (opens in a new tab)</span>
+      <a href={category.ctaHref} className={buttonClasses()} target="_blank" rel="noreferrer">
+        {category.ctaLabel} →<span className="sr-only"> (opens in a new tab)</span>
       </a>
     </article>
   );

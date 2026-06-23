@@ -4,7 +4,6 @@ import { INTEREST_OPTIONS } from '../../../data/onboardingOptions';
 /**
  * Step — choose topics to show on the personalised home page (optional,
  * multi-select). Selected topics drive the "My focus" view on the dashboard.
- * Copy and tiles match the Figma "Build your UAL guide your way" frame.
  *
  * @param {Object} props
  * @param {{ current: HTMLHeadingElement | null }} props.headingRef
@@ -20,7 +19,7 @@ export function InterestsStep({ headingRef, value, onChange, options = INTEREST_
   }
 
   return (
-    <div className="flow" data-flow="m">
+    <div className="space-y-m">
       <StepHeader
         headingRef={headingRef}
         title="Build your UAL guide your way"
@@ -28,7 +27,7 @@ export function InterestsStep({ headingRef, value, onChange, options = INTEREST_
       />
 
       <ul
-        className="onboarding-grid onboarding-grid--three"
+        className="grid list-none grid-cols-1 gap-xs p-0 min-[49.5rem]:grid-cols-3 [&>li]:flex"
         role="group"
         aria-label="Choose the topics to show on your home page (optional, multiple)"
       >
@@ -42,11 +41,22 @@ export function InterestsStep({ headingRef, value, onChange, options = INTEREST_
                 role="checkbox"
                 aria-checked={selected}
                 onClick={() => toggle(opt.id)}
-                data-selected={selected || undefined}
-                className="onboarding-interest"
+                className={[
+                  'flex h-full w-full cursor-pointer flex-col items-start gap-3xs border-2 px-s py-xs text-start transition-[border-color,background-color] duration-150 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ual-orange',
+                  selected
+                    ? 'border-ual-dark bg-ual-dark text-ual-light'
+                    : 'border-ual-dark-90 bg-ual-light text-ual-dark hover:border-ual-dark',
+                ].join(' ')}
               >
-                <span className="onboarding-interest__label">{opt.label}</span>
-                <span className="onboarding-interest__body">{opt.body}</span>
+                <span className="text-step-0 font-ual-bold">{opt.label}</span>
+                <span
+                  className={[
+                    'text-step-d1 leading-ual-condensed',
+                    selected ? 'text-ual-dark-90' : 'text-ual-dark-50',
+                  ].join(' ')}
+                >
+                  {opt.body}
+                </span>
               </button>
             </li>
           );

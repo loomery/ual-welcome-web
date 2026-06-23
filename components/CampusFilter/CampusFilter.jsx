@@ -67,19 +67,25 @@ export function CampusFilter({ campuses, selected, onChange }) {
   const isFilled = count > 0;
 
   return (
-    <div className="campus-filter" ref={wrapperRef}>
+    <div className="relative" ref={wrapperRef}>
       <button
         ref={triggerRef}
         type="button"
-        className="button campus-filter__trigger"
-        data-ghost-button={isFilled ? undefined : ''}
+        className={[
+          'inline-flex min-h-11 cursor-pointer items-center gap-2xs border-2 border-ual-dark p-s font-main text-step-0 leading-ual-condensed font-ual-bold no-underline transition-colors',
+          'hover:border-ual-orange hover:bg-ual-orange hover:text-ual-dark',
+          'focus-visible:border-ual-orange focus-visible:bg-ual-orange focus-visible:text-ual-dark focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ual-orange',
+          'active:scale-[99%] active:border-[var(--color-orange-pressed)] active:bg-[var(--color-orange-pressed)] active:text-ual-dark',
+          '[&_svg]:size-[1.5em] [&_svg]:flex-none [&_svg]:transition-transform [&_svg]:duration-150',
+          isFilled ? 'bg-ual-dark text-ual-light' : 'bg-transparent text-ual-dark',
+        ].join(' ')}
         aria-haspopup="true"
         aria-expanded={open}
         aria-controls={panelId}
         onClick={() => setOpen((v) => !v)}
       >
         {label}
-        <ChevronDownIcon aria-hidden="true" data-open={open || undefined} />
+        <ChevronDownIcon aria-hidden="true" className={open ? 'rotate-180' : undefined} />
       </button>
 
       {open && (
@@ -87,13 +93,16 @@ export function CampusFilter({ campuses, selected, onChange }) {
           id={panelId}
           role="group"
           aria-label="Filter events by campus"
-          className="campus-filter__panel"
+          className="absolute top-[calc(100%+var(--space-2xs))] left-0 z-20 flex min-w-72 flex-col gap-2xs border-2 border-ual-dark bg-ual-light p-s text-ual-dark max-[30rem]:right-0 max-[30rem]:left-auto"
         >
-          <div className="campus-filter__options">
+          <div className="flex flex-col gap-3xs">
             {campuses.map((c) => {
               const isChecked = selected.includes(c.name);
               return (
-                <label key={c.id} className="campus-filter__option">
+                <label
+                  key={c.id}
+                  className="flex cursor-pointer items-center gap-2xs py-3xs text-step-d1 hover:text-ual-orange"
+                >
                   <input
                     type="checkbox"
                     checked={isChecked}
@@ -107,15 +116,19 @@ export function CampusFilter({ campuses, selected, onChange }) {
                         toggleCampus(c.name);
                       }
                     }}
-                    className="campus-filter__checkbox"
+                    className="size-4 flex-none cursor-pointer accent-ual-dark"
                   />
-                  <span className="campus-filter__option-text">{c.name}</span>
+                  <span>{c.name}</span>
                 </label>
               );
             })}
           </div>
           {count > 0 && (
-            <button type="button" className="campus-filter__clear" onClick={() => onChange([])}>
+            <button
+              type="button"
+              className="mt-2xs cursor-pointer self-start border-0 bg-transparent p-0 font-main text-step-d1 font-ual-bold text-ual-dark underline underline-offset-4 hover:text-ual-orange focus-visible:text-ual-orange"
+              onClick={() => onChange([])}
+            >
               Clear all
             </button>
           )}

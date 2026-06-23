@@ -167,7 +167,11 @@ export function MfaScreen() {
         >
           Your progress
         </p>
-        <button type="button" className="button" onClick={toggleComplete}>
+        <button
+          type="button"
+          className="inline-flex min-h-11 cursor-pointer items-center gap-2xs border-2 border-ual-dark bg-ual-dark p-s font-main text-step-0/ual-condensed font-ual-bold text-ual-light no-underline transition-[background-color,border-color,color] duration-200 hover:border-ual-orange hover:bg-ual-orange hover:text-ual-dark focus-visible:border-ual-orange focus-visible:bg-ual-orange focus-visible:text-ual-dark focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ual-orange active:scale-[0.99] active:border-(--color-orange-pressed) active:bg-(--color-orange-pressed) active:text-ual-dark"
+          onClick={toggleComplete}
+        >
           {taskComplete ? 'Marked as complete' : 'Mark as complete'}
         </button>
       </section>

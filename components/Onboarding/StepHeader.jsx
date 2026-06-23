@@ -11,12 +11,16 @@
  */
 export function StepHeader({ headingRef, eyebrow, title, body }) {
   return (
-    <div className="flow py-s" data-flow="2xs">
-      {eyebrow && <p className="onboarding-eyebrow">{eyebrow}</p>}
-      <h1 ref={headingRef} tabIndex={-1} style={{ outline: 'none' }}>
+    <div className="space-y-2xs py-s">
+      {eyebrow && (
+        <p className="mb-2xs text-step-d1 font-ual-bold tracking-[0.06em] text-ual-orange uppercase">
+          {eyebrow}
+        </p>
+      )}
+      <h1 ref={headingRef} tabIndex={-1} className="outline-none">
         {title}
       </h1>
-      {body && <p className="standfirst">{body}</p>}
+      {body && <p className="text-step-1 text-ual-medium">{body}</p>}
     </div>
   );
 }

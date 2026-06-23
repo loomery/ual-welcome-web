@@ -34,19 +34,24 @@ export function Checkbox({ label, hint, id, onKeyDown, ...rest }) {
   };
 
   return (
-    <label className="checkbox" htmlFor={inputId}>
+    <label
+      htmlFor={inputId}
+      className="grid min-h-11 cursor-pointer grid-cols-[auto_1fr] items-start gap-s py-xs"
+    >
       <input
         id={inputId}
         type="checkbox"
-        className="checkbox__input"
+        className="peer m-0 grid size-6 shrink-0 cursor-pointer appearance-none place-content-center border-2 border-ual-dark bg-ual-light outline-offset-2 before:size-4 before:scale-0 before:bg-ual-light before:transition-transform before:duration-100 before:ease-in-out before:content-[''] before:[clip-path:polygon(14%_44%,0_65%,50%_100%,100%_16%,80%_0%,43%_62%)] checked:bg-ual-dark checked:before:scale-100 focus-visible:outline-2 focus-visible:outline-ual-orange"
         aria-describedby={hintId}
         onKeyDown={handleKeyDown}
         {...rest}
       />
-      <span className="flow" data-flow="3xs">
-        <span className="checkbox__label">{label}</span>
+      <span className="flex flex-col gap-3xs">
+        <span className="text-step-0/ual-default peer-checked:text-ual-medium peer-checked:line-through">
+          {label}
+        </span>
         {hint && (
-          <span id={hintId} className="event__meta">
+          <span id={hintId} className="text-step-d1 text-ual-medium">
             {hint}
           </span>
         )}

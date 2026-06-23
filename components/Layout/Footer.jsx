@@ -107,20 +107,31 @@ export function Footer() {
   }, []);
 
   return (
-    <footer className="ual-footer" role="contentinfo">
-      <div className="wrapper ual-footer__inner">
-        <p className="ual-footer__headline">
+    <footer
+      className="bg-ual-dark py-xl pb-[calc(var(--bottom-nav-height)+var(--space-l)+env(safe-area-inset-bottom,0))] text-ual-light min-[49.5rem]:pb-xl [body[data-onboarding]_&]:hidden"
+      role="contentinfo"
+    >
+      <div className="mx-auto grid max-w-grid gap-l px-(--grid-gutter)">
+        <p className="m-0 text-step-2/ual-condensed font-ual-bold tracking-ual-tight text-ual-light">
           Because the world
           <br />
           needs creativity
         </p>
 
-        <nav className="ual-footer__columns" aria-label="Footer">
+        <nav
+          className="grid grid-cols-1 gap-m min-[49.5rem]:max-w-5xl min-[49.5rem]:grid-cols-3"
+          aria-label="Footer"
+        >
           {FOOTER_COLUMNS.map((column, i) => (
-            <ul key={i} className="ual-footer__column" role="list">
+            <ul key={i} className="m-0 flex list-none flex-col gap-xs p-0" role="list">
               {column.map((link) => (
                 <li key={link.label}>
-                  <a href={link.href} className="ual-footer__link" target="_blank" rel="noreferrer">
+                  <a
+                    href={link.href}
+                    className="text-step-d1 text-ual-light underline underline-offset-[3px] hover:text-ual-orange focus-visible:text-ual-orange"
+                    target="_blank"
+                    rel="noreferrer"
+                  >
                     {link.label}
                   </a>
                 </li>
@@ -129,34 +140,38 @@ export function Footer() {
           ))}
         </nav>
 
-        <div className="ual-footer__base">
-          <ul className="ual-footer__socials" role="list">
+        <div className="flex flex-wrap items-center justify-between gap-m border-t border-ual-dark-50 pt-m">
+          <ul className="m-0 flex list-none gap-s p-0" role="list">
             {SOCIALS.map((s) => (
               <li key={s.label}>
                 <a
                   href={s.href}
-                  className="ual-footer__social"
+                  className="inline-flex text-ual-light hover:text-ual-orange focus-visible:text-ual-orange"
                   target="_blank"
                   rel="noreferrer"
                   aria-label={`${s.label} (opens in a new tab)`}
                 >
-                  <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                  <svg className="size-5" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                     <path d={s.path} fill="currentColor" />
                   </svg>
                 </a>
               </li>
             ))}
           </ul>
-          <p className="ual-footer__copyright">
+          <p className="m-0 text-step-d1 text-ual-dark-90">
             © {new Date().getFullYear()} University of the Arts London. All Rights Reserved.
           </p>
         </div>
 
-        <div className="ual-footer__device">
-          <p className="ual-footer__note">
+        <div className="flex flex-col items-start gap-2xs border-t border-ual-dark-50 pt-m min-[49.5rem]:flex-row min-[49.5rem]:items-center min-[49.5rem]:gap-l">
+          <p className="m-0 max-w-[60ch] text-step-d1 text-ual-dark-90">
             This app stores your progress on this device only — nothing is sent to a server.
           </p>
-          <button type="button" className="ual-footer__reset" onClick={handleReset}>
+          <button
+            type="button"
+            className="min-h-11 cursor-pointer border border-ual-light bg-transparent px-xs py-2xs text-step-d1 text-ual-light transition-[background,color] duration-120 hover:bg-ual-light hover:text-ual-dark focus-visible:outline-2 focus-visible:outline-offset-[0.3ch] focus-visible:outline-ual-orange motion-reduce:transition-none"
+            onClick={handleReset}
+          >
             Reset progress on this device
           </button>
         </div>

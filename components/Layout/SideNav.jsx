@@ -14,7 +14,7 @@ import { SIDE_NAV_ITEMS } from './navConfig';
  * theme toggle was retired with the single-theme redesign.
  *
  * Active state: bold text with a golden left rule that runs the full height
- * of the item — mirrors the Figma design.
+ * of the item.
  */
 export function SideNav() {
   const pathname = usePathname();
@@ -30,28 +30,33 @@ export function SideNav() {
   };
 
   return (
-    <nav className="side-nav" aria-label="Primary desktop">
-      <ul className="side-nav__list" role="list">
+    <nav
+      className="hidden bg-ual-shade min-[49.5rem]:sticky min-[49.5rem]:top-[calc(var(--space-xs)*2+var(--space-m))] min-[49.5rem]:flex min-[49.5rem]:min-h-[calc(100dvh-(var(--space-xs)*2+var(--space-m)))] min-[49.5rem]:flex-col min-[49.5rem]:pt-l [body[data-onboarding]_&]:hidden"
+      aria-label="Primary desktop"
+    >
+      <ul className="m-0 flex grow list-none flex-col gap-3xs px-0 py-m" role="list">
         {SIDE_NAV_ITEMS.map((item) => {
           const active = isActive(item.to);
           const isExternal = Boolean(item.href);
 
+          const linkClass =
+            'flex flex-1 items-center gap-xs min-h-15 px-m py-xs text-step-1 leading-ual-condensed font-ual-normal text-ual-dark no-underline transition-[color] duration-100 not-aria-[current=page]:hover:text-ual-orange aria-[current=page]:font-ual-bold aria-[current=page]:text-ual-dark aria-[current=page]:hover:text-ual-dark aria-[current=page]:focus:text-ual-dark focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-ual-orange';
+
           return (
-            <li key={item.href ?? item.to}>
+            <li className="flex" key={item.href ?? item.to}>
               {isExternal ? (
-                <a href={item.href} className="side-nav__link" target="_blank" rel="noreferrer">
+                <a href={item.href} className={linkClass} target="_blank" rel="noreferrer">
                   <span>{item.label}</span>
-                  <span className="visually-hidden"> (opens in a new tab)</span>
+                  <span className="sr-only"> (opens in a new tab)</span>
                 </a>
               ) : (
                 <Link
                   href={item.to}
-                  className="side-nav__link"
+                  className={linkClass}
                   aria-current={active ? 'page' : undefined}
-                  data-active={active || undefined}
                 >
                   <span>{item.label}</span>
-                  {active && <span className="visually-hidden">(current page)</span>}
+                  {active && <span className="sr-only">(current page)</span>}
                 </Link>
               )}
             </li>

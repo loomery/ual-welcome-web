@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { buttonClasses } from '../components/Button/Button';
 
 export const metadata = {
   title: 'Page not found | UAL Welcome Week',
@@ -6,13 +7,13 @@ export const metadata = {
 
 export default function NotFound() {
   return (
-    <article className="prose has-lead flow" data-flow="l">
-      <div className="flow" data-flow="s">
+    <article className="space-y-l">
+      <div className="space-y-s">
         <h1>Page not found</h1>
-        <p className="standfirst">We couldn’t find what you were looking for.</p>
+        <p className="text-step-1 text-ual-medium">We couldn’t find what you were looking for.</p>
       </div>
       <p>
-        <Link href="/" className="button" data-ghost-button="">
+        <Link href="/" className={buttonClasses(true)}>
           Back to home
         </Link>
       </p>

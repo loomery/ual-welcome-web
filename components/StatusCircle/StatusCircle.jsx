@@ -27,7 +27,7 @@ export function StatusCircle({ status = 'not-started', size = 16 }) {
       height={size}
       fill="none"
       aria-hidden="true"
-      style={{ flexShrink: 0, display: 'block' }}
+      className="block shrink-0"
     >
       {/* Circle */}
       <circle cx="8" cy="8" r="6.5" fill={circleFill} stroke={circleStroke} strokeWidth="1.5" />

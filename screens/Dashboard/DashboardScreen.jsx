@@ -20,10 +20,16 @@ const VIEW_OPTIONS = /** @type {const} */ ([
   { value: 'all', label: 'All at UAL' },
 ]);
 
+// Inline link-style button (was `.link-button`): looks like an underlined
+// link but carries a click handler. `text-ual-dark` auto-swaps to white in
+// dark mode via the token system, so no `dark:` override is needed.
+const LINK_BUTTON =
+  'cursor-pointer border-0 bg-transparent p-0 text-ual-dark underline underline-offset-4 hover:text-ual-orange focus-visible:text-ual-orange focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ual-orange';
+
 /**
  * Interest-driven home sections. The `id`s match INTEREST_OPTIONS so the
  * "My focus" view can filter on the student's selected topics. Order here
- * is the render order and mirrors the Figma personalised-home frame.
+ * is the render order.
  *
  * Cards use `to` for internal routes and `external` for off-site links;
  * a `to: '#'` placeholder marks a card whose real destination isn't built
@@ -90,7 +96,7 @@ const DASHBOARD_SECTIONS = [
 ];
 
 /**
- * Personalised dashboard (Figma "Central Saint Martins" home frame).
+ * Personalised dashboard.
  *
  *   1. Hero            — countdown + greeting + college name
  *   2. Key information — Welcome week + term date rows
@@ -143,10 +149,11 @@ export function DashboardScreen() {
   }
 
   return (
-    <article className="dash flow" data-flow="l">
+    <article className="space-y-l">
       {/* The greeting/college hero is rendered by the app shell (AppHero). */}
-      <div className="dash-content flow" data-flow="l">
-        <section className="flow" data-flow="s" aria-labelledby="dash-key-info">
+      <div className="mx-auto max-w-6xl space-y-l">
+        {/* ── KEY INFORMATION ────────────────────────────────────── */}
+        <section className="space-y-s" aria-labelledby="dash-key-info">
           <h2 id="dash-key-info">Key information</h2>
           <div className="flex flex-col">
             <KeyInfoRow
@@ -166,7 +173,8 @@ export function DashboardScreen() {
           </div>
         </section>
 
-        <section className="flow" data-flow="s" aria-labelledby="dash-get-setup">
+        {/* ── GET SETUP ──────────────────────────────────────────── */}
+        <section className="space-y-s" aria-labelledby="dash-get-setup">
           <div className="flex items-baseline justify-between gap-s">
             <h2 id="dash-get-setup">Get setup</h2>
             <Link
@@ -202,7 +210,7 @@ export function DashboardScreen() {
           )}
 
           {comingUp.length > 0 && (
-            <div className="flow" data-flow="2xs">
+            <div className="space-y-2xs">
               <p className="text-step-d1 font-bold text-ual-dark dark:text-ual-light">Coming up</p>
               <ol className="flex flex-col gap-3xs">
                 {comingUp.map((task, i) => (
@@ -215,22 +223,23 @@ export function DashboardScreen() {
           )}
         </section>
 
-        <div className="flow" data-flow="3xs">
+        {/* ── VIEW TOGGLE ────────────────────────────────────────── */}
+        <div className="space-y-3xs">
           <ViewToggle value={view} onChange={setView} options={VIEW_OPTIONS} />
-          <p className="dash-toggle__caption">
+          <p className="m-0 text-step-d1 text-ual-medium">
             {view === 'all' ? 'Showing everything at UAL' : 'Showing your selected interests'}
           </p>
         </div>
 
+        {/* ── INTEREST SECTIONS ──────────────────────────────────── */}
         {visibleSections.map((section) => (
           <section
             key={section.id}
-            className="flow"
-            data-flow="s"
+            className="space-y-s"
             aria-labelledby={`dash-section-${section.id}`}
           >
             <h2 id={`dash-section-${section.id}`}>{section.label}</h2>
-            <div className="grid">
+            <div className="grid grid-cols-[repeat(auto-fit,minmax(min(250px,100%),1fr))] gap-(--grid-gutter)">
               {section.cards.map((card) => (
                 <Card key={card.title} title={card.title} to={card.to} external={card.external} />
               ))}
@@ -238,12 +247,13 @@ export function DashboardScreen() {
           </section>
         ))}
 
+        {/* ── NO-INTERESTS PROMPT ────────────────────────────────── */}
         {view === 'focus' && interests.length === 0 && (
-          <section className="flow" data-flow="s" aria-labelledby="dash-empty">
+          <section className="space-y-s" aria-labelledby="dash-empty">
             <h2 id="dash-empty">Nothing selected yet</h2>
             <p>
               Switch to <strong>All at UAL</strong> to browse everything, or{' '}
-              <button type="button" onClick={handleReset} className="link-button">
+              <button type="button" onClick={handleReset} className={LINK_BUTTON}>
                 update your interests
               </button>{' '}
               to personalise this view.
@@ -251,10 +261,11 @@ export function DashboardScreen() {
           </section>
         )}
 
-        <section className="flow" data-flow="2xs" aria-label="Profile">
+        {/* ── PROFILE FOOTER ─────────────────────────────────────── */}
+        <section className="space-y-2xs" aria-label="Profile">
           <p>
-            <span className="step--1">Saved on this device. </span>
-            <button type="button" onClick={handleReset} className="link-button">
+            <span className="text-step-d1">Saved on this device. </span>
+            <button type="button" onClick={handleReset} className={LINK_BUTTON}>
               Edit your answers
             </button>
           </p>
@@ -300,8 +311,6 @@ function KeyInfoRow({ title, startsAt, endsAt, eyebrow, href }) {
         </span>
       )}
       {eyebrow && <p className="text-step-d1 font-bold text-ual-medium">{eyebrow}</p>}
-      {/* Start … End with a thin rule filling the gap between them (Figma
-          "Line 15"). The rule only shows on the ≥md row layout. */}
       <div className="flex flex-col gap-3xs text-step-d1 text-ual-medium md:flex-row md:items-center md:gap-s">
         <span className="md:shrink-0">Start: {start}</span>
         <span

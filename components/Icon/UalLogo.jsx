@@ -1,5 +1,5 @@
 /**
- * UAL wordmark — taken directly from UAL Design System.
+ * UAL wordmark.
  */
 export function UalLogo(props) {
   return (

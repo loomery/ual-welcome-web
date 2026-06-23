@@ -3,8 +3,8 @@ import { Card } from '../../components/Card/Card';
 import { ArrowRightIcon, ExternalLinkIcon } from '../../components/Icon/NavIcons';
 import { asset } from '../../utils/asset';
 
-// Shared fallback artwork for media cards (matches the placeholder imagery in
-// the Figma board until real photography is supplied).
+// Shared fallback artwork for media cards (placeholder until real
+// photography is supplied).
 const FALLBACK_IMAGE = asset('/images/card-fallback.png');
 
 /**
@@ -51,8 +51,8 @@ function InfoBlock({ block }) {
   return (
     <section className="flex flex-col gap-s" aria-label={block.heading}>
       {block.heading && !isAccordion && (
-        // DDS "H3 – Subheading" is 55 Roman — explicitly normal so the UA
-        // bold default doesn't apply.
+        // Subheadings are normal weight — set explicitly so the base
+        // bold default for headings doesn't apply.
         <h2 className="text-step-2 font-normal tracking-ual-tight text-ual-dark dark:text-ual-light">
           {block.heading}
         </h2>
@@ -89,7 +89,7 @@ function InfoBlock({ block }) {
 
       {block.type === 'links' &&
         (block.media ? (
-          <div className="grid">
+          <div className="grid grid-cols-[repeat(auto-fit,minmax(min(250px,100%),1fr))] gap-(--grid-gutter)">
             {block.links?.map((link) => {
               const isInternal = link.href.startsWith('/');
               return (
@@ -122,14 +122,11 @@ function InfoBlock({ block }) {
 }
 
 /**
- * Ordered/unordered list body, optionally alongside a photo (the Figma
- * "Borrowing a laptop" page shows the borrow how-to next to a picture of
- * the lockers on wider screens).
+ * Ordered/unordered list body, optionally alongside a photo shown next to
+ * the content on wider screens.
  *
- * No `role="list"` here: the unlayered `ol[role='list']` reset in
- * globals.css strips the markers (it beats the layered `list-decimal`
- * utility), and a list with visible markers keeps its AT semantics
- * without the role.
+ * No `role="list"` here: a list with visible markers keeps its assistive-tech
+ * semantics without the role (and `role="list"` would strip the markers).
  *
  * @param {{ block: import('../../data/infoPages').InfoBlock }} props
  */
@@ -259,20 +256,20 @@ function InfoTable({ rows }) {
 }
 
 /**
- * Prominent dark call-to-action button (matches the Figma "Find your nearest
- * doctor" / banner style). Internal hrefs render next/link.
+ * Prominent dark call-to-action button (banner style). Internal hrefs
+ * render next/link.
  *
  * @param {{ cta: { label: string, href: string } }} props
  */
 function CtaButton({ cta }) {
   const isInternal = cta.href.startsWith('/');
 
-  // DDS text hyperlink (Figma "CTA / hyperlink" with the 16px external-link
-  // icon) — used where the design calls for an inline underlined link rather
-  // than the black banner button, e.g. "Read full terms and conditions".
+  // Inline underlined text-link variant with a 16px external-link icon —
+  // used where an inline link is wanted rather than the black banner button,
+  // e.g. "Read full terms and conditions".
   if (cta.variant === 'hyperlink') {
-    // Colour (black, orange on hover) comes from the unlayered global `a`
-    // rules — no point fighting them with utilities here.
+    // Colour (black, orange on hover) comes from the global `a` base styles —
+    // left to apply rather than restating it with utilities here.
     const linkClass =
       'inline-flex w-fit items-center gap-3xs text-step-0 underline underline-offset-2 focus-visible:outline-2 focus-visible:outline-ual-dark dark:focus-visible:outline-ual-light';
     if (isInternal) {
@@ -291,9 +288,8 @@ function CtaButton({ cta }) {
     );
   }
 
-  // The text colour lives on the inner span/icon (not the anchor) so it beats
-  // the unlayered `a { color: var(--color-dark) }` base rule in globals.css —
-  // otherwise the white label renders black-on-black and disappears.
+  // The text colour lives on the inner span/icon so the white label stays
+  // visible on the dark button.
   const inner = (
     <>
       <span className="text-ual-light group-hover:text-ual-orange">
