@@ -275,7 +275,7 @@ export function OnboardingFlow() {
                 : 'Continue'}
         </Button>
         {stepId === 'intro' && (
-          <Button className="self-start" ghost onClick={handleSkip}>
+          <Button className="self-start" variant="ghost" onClick={handleSkip}>
             Skip and show me everything
           </Button>
         )}

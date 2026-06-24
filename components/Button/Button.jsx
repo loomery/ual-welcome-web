@@ -1,4 +1,3 @@
-import { forwardRef } from 'react';
 import Link from 'next/link';
 
 /**
@@ -27,10 +26,16 @@ const SIZE = { md: 'p-4 text-step-0/ual-condensed', sm: 'px-4 py-2 text-step-d1'
 const BASE =
   'inline-flex min-h-11 cursor-pointer items-center gap-2 border-2 font-ual-bold no-underline transition-colors duration-200 [&>svg]:size-[1.5em] [&>svg]:shrink-0 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ual-orange active:scale-[0.99] disabled:cursor-not-allowed disabled:opacity-50 aria-disabled:cursor-not-allowed aria-disabled:opacity-50';
 
-export const Button = forwardRef(function Button(
-  { children, variant = 'solid', size = 'md', href, className, type = 'button', ...rest },
+export function Button({
+  children,
+  variant = 'solid',
+  size = 'md',
+  href,
+  className,
+  type = 'button',
   ref,
-) {
+  ...rest
+}) {
   const cls = [BASE, SIZE[size], VARIANT[variant], className].filter(Boolean).join(' ');
 
   if (href && href.startsWith('/')) {
@@ -52,4 +57,4 @@ export const Button = forwardRef(function Button(
       {children}
     </button>
   );
-});
+}

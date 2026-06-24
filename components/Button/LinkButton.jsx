@@ -1,4 +1,3 @@
-import { forwardRef } from 'react';
 import Link from 'next/link';
 
 /**
@@ -14,10 +13,7 @@ import Link from 'next/link';
 const CLS =
   'cursor-pointer border-0 bg-transparent p-0 text-ual-dark underline underline-offset-4 hover:text-ual-orange focus-visible:text-ual-orange focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ual-orange';
 
-export const LinkButton = forwardRef(function LinkButton(
-  { children, href, className, type = 'button', ...rest },
-  ref,
-) {
+export function LinkButton({ children, href, className, type = 'button', ref, ...rest }) {
   const cls = [CLS, className].filter(Boolean).join(' ');
 
   if (href && href.startsWith('/')) {
@@ -39,4 +35,4 @@ export const LinkButton = forwardRef(function LinkButton(
       {children}
     </button>
   );
-});
+}
