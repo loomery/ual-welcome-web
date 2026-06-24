@@ -35,18 +35,17 @@ export function NextStepCard({ title, body, primary, secondary }) {
         <Button
           variant="accent"
           href={primary.href}
-          className='after:content-["_→"]'
           {...(primaryExternal && { target: '_blank', rel: 'noreferrer' })}
         >
-          {primary.label}
+          {primary.label} →
           {primaryExternal && <span className="sr-only"> (opens in a new tab)</span>}
         </Button>
         {secondary && (
           <Link
             href={secondary.href}
-            className="inline-flex items-center border border-ual-dark-50 px-4 py-2 text-step-d1 font-ual-bold text-ual-light no-underline after:ml-2 after:content-['_→'] hover:border-(--color-yellow) hover:text-(--color-yellow) focus-visible:border-(--color-yellow) focus-visible:text-(--color-yellow) dark:text-ual-dark"
+            className="inline-flex items-center border border-ual-dark-50 px-4 py-2 text-step-d1 font-ual-bold text-ual-light no-underline hover:border-(--color-yellow) hover:text-(--color-yellow) focus-visible:border-(--color-yellow) focus-visible:text-(--color-yellow) dark:text-ual-dark"
           >
-            {secondary.label}
+            {secondary.label} →
           </Link>
         )}
       </div>

@@ -14,25 +14,23 @@ const CLS =
   'cursor-pointer border-0 bg-transparent p-0 text-ual-dark underline underline-offset-4 hover:text-ual-orange focus-visible:text-ual-orange focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ual-orange';
 
 export function LinkButton({ children, href, className, type = 'button', ref, ...rest }) {
+  // Combine the class strings into one. `filter(Boolean)` drops any that are
+  // empty/undefined (e.g. when no `className` is passed) so we don't end up
+  // with a stray "undefined" or a double space; `join(' ')` space-separates them.
   const cls = [CLS, className].filter(Boolean).join(' ');
 
-  if (href && href.startsWith('/')) {
-    return (
-      <Link ref={ref} href={href} className={cls} {...rest}>
-        {children}
-      </Link>
-    );
-  }
+  // Plain <button> by default. With an `href` it becomes a link instead:
+  // a Next.js <Link> for internal paths ("/…"), or a normal <a> for external URLs.
+  let Tag = 'button';
+  let tagProps = { type };
   if (href) {
-    return (
-      <a ref={ref} href={href} className={cls} {...rest}>
-        {children}
-      </a>
-    );
+    Tag = href.startsWith('/') ? Link : 'a';
+    tagProps = { href };
   }
+
   return (
-    <button ref={ref} type={type} className={cls} {...rest}>
+    <Tag ref={ref} className={cls} {...tagProps} {...rest}>
       {children}
-    </button>
+    </Tag>
   );
 }

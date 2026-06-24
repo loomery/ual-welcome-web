@@ -36,25 +36,23 @@ export function Button({
   ref,
   ...rest
 }) {
+  // Combine the class strings into one. `filter(Boolean)` drops any that are
+  // empty/undefined (e.g. when no `className` is passed) so we don't end up
+  // with a stray "undefined" or a double space; `join(' ')` space-separates them.
   const cls = [BASE, SIZE[size], VARIANT[variant], className].filter(Boolean).join(' ');
 
-  if (href && href.startsWith('/')) {
-    return (
-      <Link ref={ref} href={href} className={cls} {...rest}>
-        {children}
-      </Link>
-    );
-  }
+  // Plain <button> by default. With an `href` it becomes a link instead:
+  // a Next.js <Link> for internal paths ("/…"), or a normal <a> for external URLs.
+  let Tag = 'button';
+  let tagProps = { type };
   if (href) {
-    return (
-      <a ref={ref} href={href} className={cls} {...rest}>
-        {children}
-      </a>
-    );
+    Tag = href.startsWith('/') ? Link : 'a';
+    tagProps = { href };
   }
+
   return (
-    <button ref={ref} type={type} className={cls} {...rest}>
+    <Tag ref={ref} className={cls} {...tagProps} {...rest}>
       {children}
-    </button>
+    </Tag>
   );
 }
