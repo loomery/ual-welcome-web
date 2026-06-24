@@ -108,7 +108,7 @@ export function Footer() {
 
   return (
     <footer
-      className="bg-ual-dark py-xl pb-[calc(var(--bottom-nav-height)+var(--space-l)+env(safe-area-inset-bottom,0))] text-ual-light nav:pb-xl [body[data-onboarding]_&]:hidden"
+      className="bg-ual-dark py-xl pb-[calc(var(--bottom-nav-height)+var(--space-l)+env(safe-area-inset-bottom,0))] text-ual-light md:pb-xl [body[data-onboarding]_&]:hidden"
       role="contentinfo"
     >
       <div className="mx-auto grid max-w-grid gap-l px-(--grid-gutter)">
@@ -118,7 +118,7 @@ export function Footer() {
           needs creativity
         </p>
 
-        <nav className="grid grid-cols-1 gap-m nav:max-w-5xl nav:grid-cols-3" aria-label="Footer">
+        <nav className="grid grid-cols-1 gap-m md:max-w-5xl md:grid-cols-3" aria-label="Footer">
           {FOOTER_COLUMNS.map((column, i) => (
             <ul key={i} className="m-0 flex list-none flex-col gap-xs p-0" role="list">
               {column.map((link) => (
@@ -160,7 +160,7 @@ export function Footer() {
           </p>
         </div>
 
-        <div className="flex flex-col items-start gap-2xs border-t border-ual-dark-50 pt-m nav:flex-row nav:items-center nav:gap-l">
+        <div className="flex flex-col items-start gap-2xs border-t border-ual-dark-50 pt-m md:flex-row md:items-center md:gap-l">
           <p className="m-0 max-w-[60ch] text-step-d1 text-ual-dark-90">
             This app stores your progress on this device only — nothing is sent to a server.
           </p>

@@ -148,7 +148,7 @@ export function OnboardingFlow() {
   return (
     <div
       className={[
-        'mx-auto w-full py-s nav:py-0 [&_h1]:text-step-3',
+        'mx-auto w-full py-s md:py-0 [&_h1]:text-step-3',
         stepId === 'interests' ? 'max-w-[var(--content-max)]' : 'max-w-[42rem]',
       ].join(' ')}
     >

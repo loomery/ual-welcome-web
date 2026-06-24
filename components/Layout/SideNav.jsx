@@ -4,18 +4,6 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { SIDE_NAV_ITEMS } from './navConfig';
 
-/**
- * Desktop side navigation. Visible only at ≥49.5rem (the same breakpoint at
- * which the mobile bottom nav hides). It sits in the left column of the app
- * body on a grey panel, beneath the black top bar, and lists the product nav
- * (Home / Tasks / Events / Map / Settings / Help).
- *
- * Branding lives in the top bar now, so the sidebar carries no logo; the
- * theme toggle was retired with the single-theme redesign.
- *
- * Active state: bold text with a golden left rule that runs the full height
- * of the item.
- */
 export function SideNav() {
   const pathname = usePathname();
 
@@ -31,7 +19,7 @@ export function SideNav() {
 
   return (
     <nav
-      className="hidden bg-ual-shade nav:sticky nav:top-[calc(var(--space-xs)*2+var(--space-m))] nav:flex nav:min-h-[calc(100dvh-(var(--space-xs)*2+var(--space-m)))] nav:flex-col nav:pt-l [body[data-onboarding]_&]:hidden"
+      className="hidden bg-ual-shade md:sticky md:top-[calc(var(--space-xs)*2+var(--space-m))] md:flex md:min-h-[calc(100dvh-(var(--space-xs)*2+var(--space-m)))] md:flex-col md:pt-l [body[data-onboarding]_&]:hidden"
       aria-label="Primary desktop"
     >
       <ul className="m-0 flex grow list-none flex-col gap-3xs px-0 py-m" role="list">

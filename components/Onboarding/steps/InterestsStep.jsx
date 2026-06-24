@@ -27,7 +27,7 @@ export function InterestsStep({ headingRef, value, onChange, options = INTEREST_
       />
 
       <ul
-        className="grid list-none grid-cols-1 gap-xs p-0 nav:grid-cols-3 [&>li]:flex"
+        className="grid list-none grid-cols-1 gap-xs p-0 md:grid-cols-3 [&>li]:flex"
         role="group"
         aria-label="Choose the topics to show on your home page (optional, multiple)"
       >

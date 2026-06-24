@@ -100,11 +100,6 @@
 
   /* Easing: ease-ual */
   --ease-ual: cubic-bezier(0.4, 0, 0.2, 1);
-
-  /* Breakpoint: nav — where the layout switches to the two-column
-     sidebar + main grid and the bottom tab bar gives way to the side nav.
-     Enables the `nav:` responsive variant (min-width: 49.5rem / 792px). */
-  --breakpoint-nav: 49.5rem;
 }
 
 /* ==========================================================================

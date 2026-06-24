@@ -16,7 +16,7 @@ export function YearStep({ headingRef, value, onChange }) {
       <StepHeader headingRef={headingRef} title="What year are you in?" />
 
       <ul
-        className="grid list-none grid-cols-1 gap-xs p-0 nav:grid-cols-2 [&>li]:flex"
+        className="grid list-none grid-cols-1 gap-xs p-0 md:grid-cols-2 [&>li]:flex"
         role="radiogroup"
         aria-label="Choose your year"
       >

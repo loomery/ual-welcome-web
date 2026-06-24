@@ -37,14 +37,14 @@ export function AppShell({ children }) {
       <SkipLinks />
       <Header />
       {isHome && <AppHero variant="full" />}
-      <div className="nav:grid nav:grid-cols-[18rem_minmax(0,1fr)] nav:items-start [body[data-onboarding]_&]:block">
-        <div className="nav:flex nav:flex-col nav:self-stretch">
+      <div className="md:grid md:grid-cols-[18rem_minmax(0,1fr)] md:items-start [body[data-onboarding]_&]:block">
+        <div className="md:flex md:flex-col md:self-stretch">
           {!isHome && <AppHero variant="compact" />}
           <SideNav />
         </div>
         <main
           id="main-content"
-          className="mx-auto max-w-grid min-w-0 px-(--grid-gutter) py-l nav:mx-0 nav:w-full nav:max-w-none nav:bg-white nav:py-xl min-[75rem]:px-xl [body[data-onboarding]_&]:flex [body[data-onboarding]_&]:min-h-dvh [body[data-onboarding]_&]:items-start [body[data-onboarding]_&]:justify-center [body[data-onboarding]_&]:py-m nav:[body[data-onboarding]_&]:mx-0 nav:[body[data-onboarding]_&]:w-auto nav:[body[data-onboarding]_&]:max-w-[100vw] nav:[body[data-onboarding]_&]:items-center"
+          className="mx-auto max-w-grid min-w-0 px-(--grid-gutter) py-l md:mx-0 md:w-full md:max-w-none md:bg-white md:py-xl min-[75rem]:px-xl [body[data-onboarding]_&]:flex [body[data-onboarding]_&]:min-h-dvh [body[data-onboarding]_&]:items-start [body[data-onboarding]_&]:justify-center [body[data-onboarding]_&]:py-m md:[body[data-onboarding]_&]:mx-0 md:[body[data-onboarding]_&]:w-auto md:[body[data-onboarding]_&]:max-w-[100vw] md:[body[data-onboarding]_&]:items-center"
           tabIndex={-1}
         >
           {children}

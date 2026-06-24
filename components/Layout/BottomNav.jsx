@@ -4,14 +4,6 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { NAV_ITEMS } from './navConfig';
 
-/**
- * Mobile primary navigation — fixed bottom tab bar.
- * Hidden on >=49.5rem (same breakpoint as the desktop SideNav appears).
- * Each link meets WCAG 2.5.8 Target Size (44x44 min).
- *
- * Handles both internal routes (item.to) and external links (item.href).
- * External items are never marked active.
- */
 export function BottomNav() {
   const pathname = usePathname();
 
@@ -27,7 +19,7 @@ export function BottomNav() {
 
   return (
     <nav
-      className="fixed inset-x-0 bottom-0 z-10 border-t border-ual-dark bg-ual-light py-2xs pb-[max(var(--space-2xs),env(safe-area-inset-bottom))] nav:hidden [body[data-onboarding]_&]:hidden"
+      className="fixed inset-x-0 bottom-0 z-10 border-t border-ual-dark bg-ual-light py-2xs pb-[max(var(--space-2xs),env(safe-area-inset-bottom))] md:hidden [body[data-onboarding]_&]:hidden"
       aria-label="Primary mobile"
     >
       <ul className="m-0 flex list-none justify-around p-0" role="list">
