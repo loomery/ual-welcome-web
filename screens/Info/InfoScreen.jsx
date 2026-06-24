@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { Card } from '../../components/Card/Card';
+import { LinkButton } from '../../components/Button/LinkButton';
 import { ArrowRightIcon, ExternalLinkIcon } from '../../components/Icon/NavIcons';
 import { asset } from '../../utils/asset';
 
@@ -268,23 +269,25 @@ function CtaButton({ cta }) {
   // used where an inline link is wanted rather than the black banner button,
   // e.g. "Read full terms and conditions".
   if (cta.variant === 'hyperlink') {
-    // Colour (black, orange on hover) comes from the global `a` base styles —
-    // left to apply rather than restating it with utilities here.
-    const linkClass =
-      'inline-flex w-fit items-center gap-1 text-step-0 underline underline-offset-2 focus-visible:outline-2 focus-visible:outline-ual-dark dark:focus-visible:outline-ual-light';
-    if (isInternal) {
-      return (
-        <Link href={cta.href} className={linkClass}>
-          {cta.label}
-        </Link>
-      );
-    }
     return (
-      <a href={cta.href} target="_blank" rel="noreferrer" className={linkClass}>
+      <LinkButton
+        href={cta.href}
+        className="w-fit text-step-0"
+        {...(isInternal ? {} : { target: '_blank', rel: 'noreferrer' })}
+      >
         {cta.label}
-        <span className="sr-only"> (opens in a new tab)</span>
-        <ExternalLinkIcon width={16} height={16} aria-hidden="true" className="shrink-0" />
-      </a>
+        {!isInternal && (
+          <>
+            <span className="sr-only"> (opens in a new tab)</span>
+            <ExternalLinkIcon
+              width={16}
+              height={16}
+              aria-hidden="true"
+              className="ml-1 inline shrink-0"
+            />
+          </>
+        )}
+      </LinkButton>
     );
   }
 

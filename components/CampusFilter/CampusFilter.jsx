@@ -1,7 +1,8 @@
 'use client';
 
 import { useEffect, useId, useRef, useState } from 'react';
-import { buttonClasses } from '../Button/Button';
+import { Button } from '../Button/Button';
+import { LinkButton } from '../Button/LinkButton';
 
 /**
  * Multi-select campus dropdown — used on /events to narrow the list to
@@ -69,10 +70,10 @@ export function CampusFilter({ campuses, selected, onChange }) {
 
   return (
     <div className="relative" ref={wrapperRef}>
-      <button
+      <Button
         ref={triggerRef}
-        type="button"
-        className={`${buttonClasses(!isFilled)} [&>svg]:transition-transform [&>svg]:duration-150`}
+        variant={isFilled ? 'solid' : 'ghost'}
+        className="[&>svg]:transition-transform [&>svg]:duration-150"
         aria-haspopup="true"
         aria-expanded={open}
         aria-controls={panelId}
@@ -80,7 +81,7 @@ export function CampusFilter({ campuses, selected, onChange }) {
       >
         {label}
         <ChevronDownIcon aria-hidden="true" className={open ? 'rotate-180' : undefined} />
-      </button>
+      </Button>
 
       {open && (
         <div
@@ -118,13 +119,12 @@ export function CampusFilter({ campuses, selected, onChange }) {
             })}
           </div>
           {count > 0 && (
-            <button
-              type="button"
-              className="mt-2 cursor-pointer self-start border-0 bg-transparent p-0 font-main text-step-d1 font-ual-bold text-ual-dark underline underline-offset-4 hover:text-ual-orange focus-visible:text-ual-orange"
+            <LinkButton
+              className="mt-2 self-start text-step-d1 font-ual-bold"
               onClick={() => onChange([])}
             >
               Clear all
-            </button>
+            </LinkButton>
           )}
         </div>
       )}

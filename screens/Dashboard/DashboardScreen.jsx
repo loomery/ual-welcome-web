@@ -6,6 +6,7 @@ import { Card } from '../../components/Card/Card';
 import { NextStepCard } from '../../components/Dashboard/NextStepCard';
 import { ViewToggle } from '../../components/Dashboard/ViewToggle';
 import { Progress } from '../../components/Progress/Progress';
+import { LinkButton } from '../../components/Button/LinkButton';
 import { ArrowRightIcon } from '../../components/Icon/NavIcons';
 import { visibleTasks } from '../../data/checklist';
 import { WELCOME_WEEK } from '../../data/welcomeWeek';
@@ -19,12 +20,6 @@ const VIEW_OPTIONS = /** @type {const} */ ([
   { value: 'focus', label: 'My selected interests' },
   { value: 'all', label: 'All at UAL' },
 ]);
-
-// Inline link-style button (was `.link-button`): looks like an underlined
-// link but carries a click handler. `text-ual-dark` auto-swaps to white in
-// dark mode via the token system, so no `dark:` override is needed.
-const LINK_BUTTON =
-  'cursor-pointer border-0 bg-transparent p-0 text-ual-dark underline underline-offset-4 hover:text-ual-orange focus-visible:text-ual-orange focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ual-orange';
 
 /**
  * Interest-driven home sections. The `id`s match INTEREST_OPTIONS so the
@@ -253,10 +248,8 @@ export function DashboardScreen() {
             <h2 id="dash-empty">Nothing selected yet</h2>
             <p>
               Switch to <strong>All at UAL</strong> to browse everything, or{' '}
-              <button type="button" onClick={handleReset} className={LINK_BUTTON}>
-                update your interests
-              </button>{' '}
-              to personalise this view.
+              <LinkButton onClick={handleReset}>update your interests</LinkButton> to personalise
+              this view.
             </p>
           </section>
         )}
@@ -265,9 +258,7 @@ export function DashboardScreen() {
         <section className="space-y-2" aria-label="Profile">
           <p>
             <span className="text-step-d1">Saved on this device. </span>
-            <button type="button" onClick={handleReset} className={LINK_BUTTON}>
-              Edit your answers
-            </button>
+            <LinkButton onClick={handleReset}>Edit your answers</LinkButton>
           </p>
         </section>
       </div>

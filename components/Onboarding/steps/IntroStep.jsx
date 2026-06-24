@@ -60,7 +60,7 @@ export function IntroStep({ headingRef, hasExistingProfile, onResume, onStartOve
           <p className="text-step-d1 text-ual-medium">You&apos;ve already set up your hub.</p>
           <div className="flex flex-wrap gap-2">
             <Button onClick={onResume}>Open my hub</Button>
-            <Button ghost onClick={onStartOver}>
+            <Button variant="ghost" onClick={onStartOver}>
               Start over
             </Button>
           </div>

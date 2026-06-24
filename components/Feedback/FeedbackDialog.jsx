@@ -272,7 +272,7 @@ export function FeedbackDialog({ open, onClose, currentPath }) {
             </div>
 
             <div className="flex flex-wrap items-center gap-4">
-              <Button ghost type="button" onClick={closeDialog}>
+              <Button variant="ghost" type="button" onClick={closeDialog}>
                 Cancel
               </Button>
               <Button type="submit" disabled={message.trim().length === 0}>

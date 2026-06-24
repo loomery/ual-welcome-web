@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { buttonClasses } from '../../components/Button/Button';
+import { Button } from '../../components/Button/Button';
 
 /**
  * @param {{ category: import('../../data/help').HelpCategory }} props
@@ -55,9 +55,9 @@ export function HelpDetailScreen({ category }) {
         </ul>
       </section>
 
-      <a href={category.ctaHref} className={buttonClasses()} target="_blank" rel="noreferrer">
+      <Button href={category.ctaHref} target="_blank" rel="noreferrer">
         {category.ctaLabel} →<span className="sr-only"> (opens in a new tab)</span>
-      </a>
+      </Button>
     </article>
   );
 }

@@ -4,7 +4,7 @@ import { useMemo, useState } from 'react';
 import { EVENTS } from '../../data/events';
 import { COLLEGE_OPTIONS } from '../../data/onboardingOptions';
 import { EventCard } from '../../components/EventCard/EventCard';
-import { buttonClasses } from '../../components/Button/Button';
+import { Button } from '../../components/Button/Button';
 import { HeartIcon } from '../../components/Icon/NavIcons';
 import { CampusFilter } from '../../components/CampusFilter/CampusFilter';
 import { useEventFavourites } from '../../hooks/useEventFavourites';
@@ -144,15 +144,14 @@ export function EventsScreen() {
         {CATEGORIES.map((cat) => {
           const active = category === cat;
           return (
-            <button
+            <Button
               key={cat}
-              type="button"
-              className={buttonClasses(!active)}
+              variant={active ? 'solid' : 'ghost'}
               aria-pressed={active}
               onClick={() => setCategory(cat)}
             >
               {cat}
-            </button>
+            </Button>
           );
         })}
 
@@ -180,13 +179,9 @@ export function EventsScreen() {
       {/* Bulk export — only shown in Saved view when there are saved events */}
       {savedOnly && savedEvents.length > 0 && (
         <div className="mt-8 flex justify-stretch min-[600px]:justify-start">
-          <button
-            type="button"
-            className={`${buttonClasses(false)} w-full justify-center min-[600px]:w-auto`}
-            onClick={handleDownload}
-          >
+          <Button className="w-full justify-center min-[600px]:w-auto" onClick={handleDownload}>
             Add events to calendar
-          </button>
+          </Button>
         </div>
       )}
     </article>

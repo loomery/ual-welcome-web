@@ -1,5 +1,4 @@
-import Link from 'next/link';
-import { buttonClasses } from '../components/Button/Button';
+import { Button } from '../components/Button/Button';
 
 export const metadata = {
   title: 'Page not found | UAL Welcome Week',
@@ -13,9 +12,9 @@ export default function NotFound() {
         <p className="text-step-1 text-ual-medium">We couldn’t find what you were looking for.</p>
       </div>
       <p>
-        <Link href="/" className={buttonClasses(true)}>
+        <Button href="/" variant="ghost">
           Back to home
-        </Link>
+        </Button>
       </p>
     </article>
   );

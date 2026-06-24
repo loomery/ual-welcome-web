@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { EVENTS } from '../../data/events';
 import { BUILDINGS } from '../../data/buildings';
 import { VENUES } from '../../data/venues';
-import { Button, buttonClasses } from '../../components/Button/Button';
+import { Button } from '../../components/Button/Button';
 import { EventCard } from '../../components/EventCard/EventCard';
 import { downloadIcs } from '../../utils/ics';
 import { LONG_DATE_FMT, TIME_FMT } from '../../utils/dates';
@@ -44,9 +44,9 @@ export function EventDetailScreen({ id }) {
     return (
       <article>
         <h1>Event not found</h1>
-        <Link href="/events" className={`mt-8 ${buttonClasses(true)}`}>
+        <Button href="/events" variant="ghost" className="mt-8">
           ← Back to events
-        </Link>
+        </Button>
       </article>
     );
   }
@@ -122,30 +122,15 @@ export function EventDetailScreen({ id }) {
       <section className="mt-8 space-y-2" aria-labelledby="directions-heading">
         <h2 id="directions-heading">Get directions</h2>
         <div className="flex flex-wrap items-center gap-4">
-          <a
-            href={citymapperUrl}
-            target="_blank"
-            rel="noreferrer"
-            className={`${buttonClasses(false)} px-4 py-2 text-step-d1`}
-          >
+          <Button href={citymapperUrl} target="_blank" rel="noreferrer" size="sm">
             Citymapper
-          </a>
-          <a
-            href={googleUrl}
-            target="_blank"
-            rel="noreferrer"
-            className={`${buttonClasses(false)} px-4 py-2 text-step-d1`}
-          >
+          </Button>
+          <Button href={googleUrl} target="_blank" rel="noreferrer" size="sm">
             Google Maps
-          </a>
-          <a
-            href={appleUrl}
-            target="_blank"
-            rel="noreferrer"
-            className={`${buttonClasses(false)} px-4 py-2 text-step-d1`}
-          >
+          </Button>
+          <Button href={appleUrl} target="_blank" rel="noreferrer" size="sm">
             Apple Maps
-          </a>
+          </Button>
         </div>
       </section>
 
@@ -166,16 +151,11 @@ export function EventDetailScreen({ id }) {
       {/* CTAs */}
       <div className="mt-8 space-y-2">
         {event.externalUrl && (
-          <a
-            href={event.externalUrl}
-            target="_blank"
-            rel="noreferrer"
-            className={buttonClasses(false)}
-          >
+          <Button href={event.externalUrl} target="_blank" rel="noreferrer">
             View more about this event →<span className="sr-only"> (opens in a new tab)</span>
-          </a>
+          </Button>
         )}
-        <Button ghost onClick={() => downloadIcs(event)}>
+        <Button variant="ghost" onClick={() => downloadIcs(event)}>
           Add to calendar
         </Button>
       </div>
