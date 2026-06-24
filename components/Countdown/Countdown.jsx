@@ -41,7 +41,7 @@ export function Countdown() {
 
   return (
     <div className="bg-(--color-yellow) text-ual-dark" role="status">
-      <p className="px-(--grid-gutter) py-2xs text-step-d1 font-ual-bold tracking-[0.01em]">
+      <p className="px-(--grid-gutter) py-2 text-step-d1 font-ual-bold tracking-[0.01em]">
         {label}
       </p>
     </div>

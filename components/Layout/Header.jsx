@@ -15,14 +15,14 @@ import { UalLogo } from '../Icon/UalLogo';
  */
 export function Header() {
   return (
-    <header className="sticky top-0 z-300 bg-ual-dark py-xs text-ual-light">
+    <header className="sticky top-0 z-300 bg-ual-dark py-3 text-ual-light">
       <div className="px-(--grid-gutter)">
         <Link
           href="/"
           className="inline-flex items-center text-ual-light no-underline"
           aria-label="UAL — home"
         >
-          <UalLogo className="h-m w-auto" />
+          <UalLogo className="h-6 w-auto" />
         </Link>
       </div>
     </header>

@@ -14,11 +14,11 @@ import { VISA_STATUS_OPTIONS } from '../../../data/onboardingOptions';
  */
 export function VisaStatusStep({ headingRef, value, onChange }) {
   return (
-    <div className="space-y-m">
+    <div className="space-y-6">
       <StepHeader headingRef={headingRef} title="Have you set up your student visa?" />
 
       <ul
-        className="grid list-none grid-cols-1 gap-xs p-0 md:grid-cols-2 [&>li]:flex"
+        className="grid list-none grid-cols-1 gap-3 p-0 md:grid-cols-2 [&>li]:flex"
         role="radiogroup"
         aria-label="Choose your visa status"
       >

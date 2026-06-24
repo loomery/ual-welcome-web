@@ -19,7 +19,7 @@ const TAG_TINTS = {
 };
 function eventTagClasses(category) {
   const tint = TAG_TINTS[category] ?? 'bg-ual-dark-90';
-  return `w-fit ${tint} px-2xs py-3xs text-step-d1/ual-single font-ual-bold uppercase tracking-[0.06em] text-ual-dark`;
+  return `w-fit ${tint} px-2 py-1 text-step-d1/ual-single font-ual-bold uppercase tracking-[0.06em] text-ual-dark`;
 }
 
 /**
@@ -44,7 +44,7 @@ export function EventDetailScreen({ id }) {
     return (
       <article>
         <h1>Event not found</h1>
-        <Link href="/events" className={`mt-l ${buttonClasses(true)}`}>
+        <Link href="/events" className={`mt-8 ${buttonClasses(true)}`}>
           ← Back to events
         </Link>
       </article>
@@ -93,25 +93,25 @@ export function EventDetailScreen({ id }) {
       </Link>
 
       {/* Category + title */}
-      <div className="mt-l space-y-s">
+      <div className="mt-8 space-y-4">
         <span className={eventTagClasses(event.category.toLowerCase())}>{event.category}</span>
         <h1>{event.title}</h1>
       </div>
 
       {/* Date / Time / Location */}
-      <section className="mt-l space-y-s" aria-label="Event details">
-        <dl className="flex flex-col gap-s">
-          <div className="grid grid-cols-[6rem_1fr] gap-xs">
+      <section className="mt-8 space-y-4" aria-label="Event details">
+        <dl className="flex flex-col gap-4">
+          <div className="grid grid-cols-[6rem_1fr] gap-3">
             <dt className="text-step-0 font-ual-bold">Date</dt>
             <dd className="m-0 text-step-0">
               <time dateTime={event.startsAt}>{dateStr}</time>
             </dd>
           </div>
-          <div className="grid grid-cols-[6rem_1fr] gap-xs">
+          <div className="grid grid-cols-[6rem_1fr] gap-3">
             <dt className="text-step-0 font-ual-bold">Time</dt>
             <dd className="m-0 text-step-0">{timeStr}</dd>
           </div>
-          <div className="grid grid-cols-[6rem_1fr] gap-xs">
+          <div className="grid grid-cols-[6rem_1fr] gap-3">
             <dt className="text-step-0 font-ual-bold">Location</dt>
             <dd className="m-0 text-step-0">{event.location}</dd>
           </div>
@@ -119,14 +119,14 @@ export function EventDetailScreen({ id }) {
       </section>
 
       {/* Get directions */}
-      <section className="mt-l space-y-2xs" aria-labelledby="directions-heading">
+      <section className="mt-8 space-y-2" aria-labelledby="directions-heading">
         <h2 id="directions-heading">Get directions</h2>
-        <div className="flex flex-wrap items-center gap-s">
+        <div className="flex flex-wrap items-center gap-4">
           <a
             href={citymapperUrl}
             target="_blank"
             rel="noreferrer"
-            className={`${buttonClasses(false)} px-s py-2xs text-step-d1`}
+            className={`${buttonClasses(false)} px-4 py-2 text-step-d1`}
           >
             Citymapper
           </a>
@@ -134,7 +134,7 @@ export function EventDetailScreen({ id }) {
             href={googleUrl}
             target="_blank"
             rel="noreferrer"
-            className={`${buttonClasses(false)} px-s py-2xs text-step-d1`}
+            className={`${buttonClasses(false)} px-4 py-2 text-step-d1`}
           >
             Google Maps
           </a>
@@ -142,7 +142,7 @@ export function EventDetailScreen({ id }) {
             href={appleUrl}
             target="_blank"
             rel="noreferrer"
-            className={`${buttonClasses(false)} px-s py-2xs text-step-d1`}
+            className={`${buttonClasses(false)} px-4 py-2 text-step-d1`}
           >
             Apple Maps
           </a>
@@ -150,21 +150,21 @@ export function EventDetailScreen({ id }) {
       </section>
 
       {/* About event */}
-      <section className="mt-l space-y-2xs" aria-labelledby="about-heading">
+      <section className="mt-8 space-y-2" aria-labelledby="about-heading">
         <h2 id="about-heading">About event</h2>
         <p>{event.description}</p>
       </section>
 
       {/* What do I need to bring? */}
       {event.whatToBring && (
-        <section className="mt-l space-y-2xs" aria-labelledby="bring-heading">
+        <section className="mt-8 space-y-2" aria-labelledby="bring-heading">
           <h2 id="bring-heading">What do I need to bring?</h2>
           <p>{event.whatToBring}</p>
         </section>
       )}
 
       {/* CTAs */}
-      <div className="mt-l space-y-2xs">
+      <div className="mt-8 space-y-2">
         {event.externalUrl && (
           <a
             href={event.externalUrl}
@@ -187,10 +187,10 @@ export function EventDetailScreen({ id }) {
           section a clear visual break from the main article content. */}
       {related.length > 0 && (
         <section
-          className="mt-l space-y-s border-t border-ual-dark-90 pt-l"
+          className="mt-8 space-y-4 border-t border-ual-dark-90 pt-8"
           aria-labelledby="related-heading"
         >
-          <div className="flex flex-wrap items-center justify-between gap-s">
+          <div className="flex flex-wrap items-center justify-between gap-4">
             {/* Scaled one step down from the default h2 — supplementary content. */}
             <h2 id="related-heading" className="text-step-1">
               More from {event.college}

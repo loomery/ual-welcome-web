@@ -19,7 +19,7 @@ export function InterestsStep({ headingRef, value, onChange, options = INTEREST_
   }
 
   return (
-    <div className="space-y-m">
+    <div className="space-y-6">
       <StepHeader
         headingRef={headingRef}
         title="Build your UAL guide your way"
@@ -27,7 +27,7 @@ export function InterestsStep({ headingRef, value, onChange, options = INTEREST_
       />
 
       <ul
-        className="grid list-none grid-cols-1 gap-xs p-0 md:grid-cols-3 [&>li]:flex"
+        className="grid list-none grid-cols-1 gap-3 p-0 md:grid-cols-3 [&>li]:flex"
         role="group"
         aria-label="Choose the topics to show on your home page (optional, multiple)"
       >
@@ -42,7 +42,7 @@ export function InterestsStep({ headingRef, value, onChange, options = INTEREST_
                 aria-checked={selected}
                 onClick={() => toggle(opt.id)}
                 className={[
-                  'flex h-full w-full cursor-pointer flex-col items-start gap-3xs border-2 px-s py-xs text-start transition-[border-color,background-color] duration-150 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ual-orange',
+                  'flex h-full w-full cursor-pointer flex-col items-start gap-1 border-2 px-4 py-3 text-start transition-[border-color,background-color] duration-150 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ual-orange',
                   selected
                     ? 'border-ual-dark bg-ual-dark text-ual-light'
                     : 'border-ual-dark-90 bg-ual-light text-ual-dark hover:border-ual-dark',

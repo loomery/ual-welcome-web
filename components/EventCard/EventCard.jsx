@@ -71,13 +71,13 @@ export function EventCard({ event, compact }) {
       <Link
         href={`/events/${event.id}`}
         className={[
-          'group/link flex h-full flex-col space-y-m text-inherit no-underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ual-orange',
-          compact ? 'p-s' : 'p-m',
+          'group/link flex h-full flex-col space-y-6 text-inherit no-underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ual-orange',
+          compact ? 'p-4' : 'p-6',
         ].join(' ')}
       >
-        <header className="grid grid-cols-[auto_1fr] items-start gap-s max-[22rem]:grid-cols-[1fr]">
+        <header className="grid grid-cols-[auto_1fr] items-start gap-4 max-[22rem]:grid-cols-[1fr]">
           <time
-            className="inline-flex min-w-14 flex-col items-center justify-center bg-ual-dark px-xs py-2xs leading-ual-single text-ual-light transition-[background,color] duration-150 ease-[ease] group-hover:bg-ual-orange group-hover:text-ual-dark group-focus-visible/link:bg-ual-orange group-focus-visible/link:text-ual-dark motion-reduce:transition-none max-[22rem]:flex-row max-[22rem]:gap-3xs max-[22rem]:px-2xs max-[22rem]:py-3xs"
+            className="inline-flex min-w-14 flex-col items-center justify-center bg-ual-dark px-3 py-2 leading-ual-single text-ual-light transition-[background,color] duration-150 ease-[ease] group-hover:bg-ual-orange group-hover:text-ual-dark group-focus-visible/link:bg-ual-orange group-focus-visible/link:text-ual-dark motion-reduce:transition-none max-[22rem]:flex-row max-[22rem]:gap-1 max-[22rem]:px-2 max-[22rem]:py-1"
             dateTime={event.startsAt}
             aria-label={accessibleDate}
           >
@@ -95,10 +95,10 @@ export function EventCard({ event, compact }) {
             </span>
           </time>
 
-          <div className="space-y-2xs">
-            <p className="m-0 flex flex-wrap items-center gap-2xs">
+          <div className="space-y-2">
+            <p className="m-0 flex flex-wrap items-center gap-2">
               <span
-                className={`w-fit ${tagTint} px-2xs py-3xs text-step-d1/ual-single font-ual-bold tracking-[0.06em] text-ual-dark uppercase`}
+                className={`w-fit ${tagTint} px-2 py-1 text-step-d1/ual-single font-ual-bold tracking-[0.06em] text-ual-dark uppercase`}
               >
                 {event.category}
               </span>
@@ -116,12 +116,12 @@ export function EventCard({ event, compact }) {
         </header>
 
         {!compact && (
-          <p className="m-0 line-clamp-2 border-t border-ual-dark-90 py-s text-step-d1/ual-default text-ual-medium">
+          <p className="m-0 line-clamp-2 border-t border-ual-dark-90 py-4 text-step-d1/ual-default text-ual-medium">
             {event.description}
           </p>
         )}
 
-        <p className="m-0 mt-auto flex items-center gap-3xs border-t border-ual-dark-90 pt-s text-step-d1/ual-condensed text-ual-medium">
+        <p className="m-0 mt-auto flex items-center gap-1 border-t border-ual-dark-90 pt-4 text-step-d1/ual-condensed text-ual-medium">
           <PinIcon aria-hidden="true" width={16} height={16} className="shrink-0" />
           <span className="line-clamp-1 min-w-0">{event.location}</span>
         </p>
@@ -130,7 +130,7 @@ export function EventCard({ event, compact }) {
       {!compact && (
         <button
           type="button"
-          className="absolute top-2xs right-2xs z-1 inline-flex min-h-9 min-w-9 items-center justify-center p-3xs text-ual-dark hover:text-ual-orange focus-visible:text-ual-orange focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ual-orange"
+          className="absolute top-2 right-2 z-1 inline-flex min-h-9 min-w-9 items-center justify-center p-1 text-ual-dark hover:text-ual-orange focus-visible:text-ual-orange focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ual-orange"
           onClick={() => toggle(event.id)}
           aria-pressed={saved}
           aria-label={saved ? `Remove ${event.title} from saved events` : `Save ${event.title}`}

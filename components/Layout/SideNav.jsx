@@ -19,16 +19,16 @@ export function SideNav() {
 
   return (
     <nav
-      className="hidden bg-ual-shade md:sticky md:top-[calc(var(--space-xs)*2+var(--space-m))] md:flex md:min-h-[calc(100dvh-(var(--space-xs)*2+var(--space-m)))] md:flex-col md:pt-l [body[data-onboarding]_&]:hidden"
+      className="hidden bg-ual-shade md:sticky md:top-[calc(var(--space-xs)*2+var(--space-m))] md:flex md:min-h-[calc(100dvh-(var(--space-xs)*2+var(--space-m)))] md:flex-col md:pt-8 [body[data-onboarding]_&]:hidden"
       aria-label="Primary desktop"
     >
-      <ul className="m-0 flex grow list-none flex-col gap-3xs px-0 py-m" role="list">
+      <ul className="m-0 flex grow list-none flex-col gap-1 px-0 py-6" role="list">
         {SIDE_NAV_ITEMS.map((item) => {
           const active = isActive(item.to);
           const isExternal = Boolean(item.href);
 
           const linkClass =
-            'flex flex-1 items-center gap-xs min-h-15 px-m py-xs text-step-1 leading-ual-condensed font-ual-normal text-ual-dark no-underline transition-[color] duration-100 not-aria-[current=page]:hover:text-ual-orange aria-[current=page]:font-ual-bold aria-[current=page]:text-ual-dark aria-[current=page]:hover:text-ual-dark aria-[current=page]:focus:text-ual-dark focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-ual-orange';
+            'flex flex-1 items-center gap-3 min-h-15 px-6 py-3 text-step-1 leading-ual-condensed font-ual-normal text-ual-dark no-underline transition-[color] duration-100 not-aria-[current=page]:hover:text-ual-orange aria-[current=page]:font-ual-bold aria-[current=page]:text-ual-dark aria-[current=page]:hover:text-ual-dark aria-[current=page]:focus:text-ual-dark focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-ual-orange';
 
           return (
             <li className="flex" key={item.href ?? item.to}>

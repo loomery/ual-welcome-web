@@ -6,21 +6,21 @@ import { buttonClasses } from '../../components/Button/Button';
  */
 export function HelpDetailScreen({ category }) {
   return (
-    <article className="space-y-l">
+    <article className="space-y-8">
       <Link
         href="/help"
-        className="inline-flex items-center gap-2xs text-step-d1 text-ual-dark no-underline hover:text-ual-orange focus-visible:text-ual-orange focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ual-orange"
+        className="inline-flex items-center gap-2 text-step-d1 text-ual-dark no-underline hover:text-ual-orange focus-visible:text-ual-orange focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ual-orange"
       >
         ← Back to help
       </Link>
 
-      <div className="space-y-s">
+      <div className="space-y-4">
         <h1>{category.title}</h1>
         <p>{category.description}</p>
       </div>
 
-      <section aria-labelledby="contact-heading" className="mt-m">
-        <h2 id="contact-heading" className="mb-s">
+      <section aria-labelledby="contact-heading" className="mt-6">
+        <h2 id="contact-heading" className="mb-4">
           How to contact
         </h2>
 
@@ -29,7 +29,7 @@ export function HelpDetailScreen({ category }) {
           className="border-2 border-ual-dark-90 [&>li+li]:border-t [&>li+li]:border-ual-dark-90"
         >
           {category.contacts.map((contact, i) => (
-            <li key={i} className="flex flex-col gap-0.5 bg-ual-light px-s py-xs">
+            <li key={i} className="flex flex-col gap-0.5 bg-ual-light px-4 py-3">
               <span className="text-step-d1 text-ual-medium">{contact.label}</span>
 
               {contact.href ? (

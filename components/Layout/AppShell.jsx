@@ -44,7 +44,7 @@ export function AppShell({ children }) {
         </div>
         <main
           id="main-content"
-          className="mx-auto max-w-grid min-w-0 px-(--grid-gutter) py-l md:mx-0 md:w-full md:max-w-none md:bg-white md:py-xl min-[75rem]:px-xl [body[data-onboarding]_&]:flex [body[data-onboarding]_&]:min-h-dvh [body[data-onboarding]_&]:items-start [body[data-onboarding]_&]:justify-center [body[data-onboarding]_&]:py-m md:[body[data-onboarding]_&]:mx-0 md:[body[data-onboarding]_&]:w-auto md:[body[data-onboarding]_&]:max-w-[100vw] md:[body[data-onboarding]_&]:items-center"
+          className="mx-auto max-w-grid min-w-0 px-(--grid-gutter) py-8 md:mx-0 md:w-full md:max-w-none md:bg-white md:py-12 min-[75rem]:px-12 [body[data-onboarding]_&]:flex [body[data-onboarding]_&]:min-h-dvh [body[data-onboarding]_&]:items-start [body[data-onboarding]_&]:justify-center [body[data-onboarding]_&]:py-6 md:[body[data-onboarding]_&]:mx-0 md:[body[data-onboarding]_&]:w-auto md:[body[data-onboarding]_&]:max-w-[100vw] md:[body[data-onboarding]_&]:items-center"
           tabIndex={-1}
         >
           {children}

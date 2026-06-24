@@ -82,18 +82,6 @@
      stock tracking-tight to avoid name collision). */
   --tracking-ual-tight: var(--letter-spacing-tight);
 
-  /* Fluid spacing scale: p-3xs / m-3xs / gap-3xs … p-3xl etc. */
-  --spacing-3xs: var(--space-3xs);
-  --spacing-2xs: var(--space-2xs);
-  --spacing-xs: var(--space-xs);
-  --spacing-s: var(--space-s);
-  --spacing-m: var(--space-m);
-  --spacing-l: var(--space-l);
-  --spacing-xl: var(--space-xl);
-  --spacing-2xl: var(--space-2xl);
-  --spacing-3xl: var(--space-x3xl);
-  --spacing-bottom-nav: var(--bottom-nav-height);
-
   /* Containers: max-w-grid, max-w-prose-ual */
   --container-grid: var(--grid-max-width);
   --container-prose-ual: 57.5rem;

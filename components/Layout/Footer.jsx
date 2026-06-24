@@ -108,19 +108,19 @@ export function Footer() {
 
   return (
     <footer
-      className="bg-ual-dark py-xl pb-[calc(var(--bottom-nav-height)+var(--space-l)+env(safe-area-inset-bottom,0))] text-ual-light md:pb-xl [body[data-onboarding]_&]:hidden"
+      className="bg-ual-dark py-12 pb-[calc(var(--bottom-nav-height)+var(--space-l)+env(safe-area-inset-bottom,0))] text-ual-light md:pb-12 [body[data-onboarding]_&]:hidden"
       role="contentinfo"
     >
-      <div className="mx-auto grid max-w-grid gap-l px-(--grid-gutter)">
+      <div className="mx-auto grid max-w-grid gap-8 px-(--grid-gutter)">
         <p className="m-0 text-step-2/ual-condensed font-ual-bold tracking-ual-tight text-ual-light">
           Because the world
           <br />
           needs creativity
         </p>
 
-        <nav className="grid grid-cols-1 gap-m md:max-w-5xl md:grid-cols-3" aria-label="Footer">
+        <nav className="grid grid-cols-1 gap-6 md:max-w-5xl md:grid-cols-3" aria-label="Footer">
           {FOOTER_COLUMNS.map((column, i) => (
-            <ul key={i} className="m-0 flex list-none flex-col gap-xs p-0" role="list">
+            <ul key={i} className="m-0 flex list-none flex-col gap-3 p-0" role="list">
               {column.map((link) => (
                 <li key={link.label}>
                   <a
@@ -137,8 +137,8 @@ export function Footer() {
           ))}
         </nav>
 
-        <div className="flex flex-wrap items-center justify-between gap-m border-t border-ual-dark-50 pt-m">
-          <ul className="m-0 flex list-none gap-s p-0" role="list">
+        <div className="flex flex-wrap items-center justify-between gap-6 border-t border-ual-dark-50 pt-6">
+          <ul className="m-0 flex list-none gap-4 p-0" role="list">
             {SOCIALS.map((s) => (
               <li key={s.label}>
                 <a
@@ -160,13 +160,13 @@ export function Footer() {
           </p>
         </div>
 
-        <div className="flex flex-col items-start gap-2xs border-t border-ual-dark-50 pt-m md:flex-row md:items-center md:gap-l">
+        <div className="flex flex-col items-start gap-2 border-t border-ual-dark-50 pt-6 md:flex-row md:items-center md:gap-8">
           <p className="m-0 max-w-[60ch] text-step-d1 text-ual-dark-90">
             This app stores your progress on this device only — nothing is sent to a server.
           </p>
           <button
             type="button"
-            className="min-h-11 cursor-pointer border border-ual-light bg-transparent px-xs py-2xs text-step-d1 text-ual-light transition-[background,color] duration-120 hover:bg-ual-light hover:text-ual-dark focus-visible:outline-2 focus-visible:outline-offset-[0.3ch] focus-visible:outline-ual-orange motion-reduce:transition-none"
+            className="min-h-11 cursor-pointer border border-ual-light bg-transparent px-3 py-2 text-step-d1 text-ual-light transition-[background,color] duration-120 hover:bg-ual-light hover:text-ual-dark focus-visible:outline-2 focus-visible:outline-offset-[0.3ch] focus-visible:outline-ual-orange motion-reduce:transition-none"
             onClick={handleReset}
           >
             Reset progress on this device

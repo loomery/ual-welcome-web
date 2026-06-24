@@ -148,16 +148,16 @@ export function FeedbackDialog({ open, onClose, currentPath }) {
       aria-describedby={descId}
       onClick={handleBackdropClick}
     >
-      <div className="relative space-y-s border border-ual-dark bg-ual-light p-m">
+      <div className="relative space-y-4 border border-ual-dark bg-ual-light p-6">
         <button
           type="button"
-          className="absolute inset-e-2xs top-2xs inline-flex min-h-11 min-w-11 cursor-pointer items-center justify-center border border-transparent bg-transparent p-2xs text-ual-dark hover:bg-ual-dark-90 focus-visible:bg-ual-dark-90 focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-ual-orange"
+          className="absolute inset-e-2 top-2 inline-flex min-h-11 min-w-11 cursor-pointer items-center justify-center border border-transparent bg-transparent p-2 text-ual-dark hover:bg-ual-dark-90 focus-visible:bg-ual-dark-90 focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-ual-orange"
           onClick={closeDialog}
           aria-label="Close feedback"
         >
           <CloseIcon aria-hidden="true" width={20} height={20} />
         </button>
-        <div className="space-y-3xs pe-[calc(44px+var(--space-2xs))]">
+        <div className="space-y-1 pe-[calc(44px+var(--space-2xs))]">
           <h2 id={titleId} className="m-0 text-step-1/ual-condensed">
             Send feedback
           </h2>
@@ -167,7 +167,7 @@ export function FeedbackDialog({ open, onClose, currentPath }) {
         </div>
 
         {status === 'sent' ? (
-          <div className="space-y-s" role="status" aria-live="polite">
+          <div className="space-y-4" role="status" aria-live="polite">
             <p>
               <strong>Thanks — your feedback is on its way.</strong>
             </p>
@@ -175,19 +175,19 @@ export function FeedbackDialog({ open, onClose, currentPath }) {
               Your email app should have opened with a pre-filled message. If nothing happened,
               email us at <a href={`mailto:${FEEDBACK_EMAIL}`}>{FEEDBACK_EMAIL}</a>.
             </p>
-            <div className="flex flex-wrap items-center gap-s">
+            <div className="flex flex-wrap items-center gap-4">
               <Button onClick={closeDialog}>Close</Button>
             </div>
           </div>
         ) : (
-          <form onSubmit={handleSubmit} className="space-y-s" noValidate>
+          <form onSubmit={handleSubmit} className="space-y-4" noValidate>
             <fieldset className="m-0 border-0 p-0" aria-labelledby={ratingGroupId}>
-              <legend id={ratingGroupId} className="mb-2xs block text-step-d1/ual-condensed">
+              <legend id={ratingGroupId} className="mb-2 block text-step-d1/ual-condensed">
                 How would you rate your experience?{' '}
                 <span className="font-ual-normal text-ual-medium">Optional</span>
               </legend>
               <div
-                className="mt-2xs flex flex-wrap gap-2xs"
+                className="mt-2 flex flex-wrap gap-2"
                 role="radiogroup"
                 aria-labelledby={ratingGroupId}
               >
@@ -197,7 +197,7 @@ export function FeedbackDialog({ open, onClose, currentPath }) {
                     <label
                       key={n}
                       className={[
-                        'inline-flex min-h-11 min-w-11 cursor-pointer items-center justify-center border border-ual-dark p-2xs font-ual-bold transition-[background,color] duration-[120ms] hover:bg-ual-dark-90 has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-offset-[0.3ch] has-[:focus-visible]:outline-ual-orange motion-reduce:transition-none',
+                        'inline-flex min-h-11 min-w-11 cursor-pointer items-center justify-center border border-ual-dark p-2 font-ual-bold transition-[background,color] duration-[120ms] hover:bg-ual-dark-90 has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-offset-[0.3ch] has-[:focus-visible]:outline-ual-orange motion-reduce:transition-none',
                         checked ? 'bg-ual-dark text-ual-light' : 'bg-ual-light',
                       ].join(' ')}
                     >
@@ -221,8 +221,8 @@ export function FeedbackDialog({ open, onClose, currentPath }) {
               </div>
             </fieldset>
 
-            <div className="space-y-3xs">
-              <label htmlFor={messageId} className="mb-2xs block text-step-d1/ual-condensed">
+            <div className="space-y-1">
+              <label htmlFor={messageId} className="mb-2 block text-step-d1/ual-condensed">
                 What would you like to tell us?
               </label>
               <textarea
@@ -232,7 +232,7 @@ export function FeedbackDialog({ open, onClose, currentPath }) {
                 rows={4}
                 value={message}
                 onChange={(e) => setMessage(e.target.value)}
-                className="w-full resize-y border border-ual-dark bg-ual-light px-xs py-2xs font-main text-step-0/ual-default text-ual-dark focus-visible:outline-2 focus-visible:outline-offset-[0.3ch] focus-visible:outline-ual-orange"
+                className="w-full resize-y border border-ual-dark bg-ual-light px-3 py-2 font-main text-step-0/ual-default text-ual-dark focus-visible:outline-2 focus-visible:outline-offset-[0.3ch] focus-visible:outline-ual-orange"
                 placeholder="e.g. The map was slow to load on my phone…"
                 maxLength={MAX_MESSAGE_LENGTH}
                 aria-describedby={`${messageId}-counter`}
@@ -240,7 +240,7 @@ export function FeedbackDialog({ open, onClose, currentPath }) {
               <p
                 id={`${messageId}-counter`}
                 className={[
-                  'mt-3xs text-end text-step-d1',
+                  'mt-1 text-end text-step-d1',
                   message.length > MAX_MESSAGE_LENGTH * 0.9
                     ? 'font-ual-bold text-ual-orange'
                     : 'text-ual-medium',
@@ -252,8 +252,8 @@ export function FeedbackDialog({ open, onClose, currentPath }) {
               </p>
             </div>
 
-            <div className="space-y-3xs">
-              <label htmlFor={emailId} className="mb-2xs block text-step-d1/ual-condensed">
+            <div className="space-y-1">
+              <label htmlFor={emailId} className="mb-2 block text-step-d1/ual-condensed">
                 Your email{' '}
                 <span className="font-ual-normal text-ual-medium">
                   Optional — if you’d like a reply
@@ -266,12 +266,12 @@ export function FeedbackDialog({ open, onClose, currentPath }) {
                 autoComplete="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="w-full border border-ual-dark bg-ual-light px-xs py-2xs font-main text-step-0/ual-default text-ual-dark focus-visible:outline-2 focus-visible:outline-offset-[0.3ch] focus-visible:outline-ual-orange"
+                className="w-full border border-ual-dark bg-ual-light px-3 py-2 font-main text-step-0/ual-default text-ual-dark focus-visible:outline-2 focus-visible:outline-offset-[0.3ch] focus-visible:outline-ual-orange"
                 placeholder="you@arts.ac.uk"
               />
             </div>
 
-            <div className="flex flex-wrap items-center gap-s">
+            <div className="flex flex-wrap items-center gap-4">
               <Button ghost type="button" onClick={closeDialog}>
                 Cancel
               </Button>

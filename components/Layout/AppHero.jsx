@@ -36,9 +36,7 @@ export function AppHero({ variant = 'full' }) {
     ? '[body[data-onboarding]_&]:hidden'
     : 'hidden md:block [body[data-onboarding]_&]:hidden';
 
-  const innerClass = isFull
-    ? 'px-[var(--grid-gutter)] pt-l pb-2xl space-y-2xs'
-    : 'md:p-m space-y-2xs';
+  const innerClass = isFull ? 'px-[var(--grid-gutter)] pt-8 pb-16 space-y-2' : 'md:p-6 space-y-2';
 
   const greetingClass = isFull
     ? 'm-0 text-step-0 text-ual-dark-90'

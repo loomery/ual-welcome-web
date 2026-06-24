@@ -87,15 +87,15 @@ export function CampusFilter({ campuses, selected, onChange }) {
           id={panelId}
           role="group"
           aria-label="Filter events by campus"
-          className="absolute top-[calc(100%+var(--space-2xs))] left-0 z-20 flex min-w-72 flex-col gap-2xs border-2 border-ual-dark bg-ual-light p-s text-ual-dark max-[30rem]:right-0 max-[30rem]:left-auto"
+          className="absolute top-[calc(100%+var(--space-2xs))] left-0 z-20 flex min-w-72 flex-col gap-2 border-2 border-ual-dark bg-ual-light p-4 text-ual-dark max-[30rem]:right-0 max-[30rem]:left-auto"
         >
-          <div className="flex flex-col gap-3xs">
+          <div className="flex flex-col gap-1">
             {campuses.map((c) => {
               const isChecked = selected.includes(c.name);
               return (
                 <label
                   key={c.id}
-                  className="flex cursor-pointer items-center gap-2xs py-3xs text-step-d1 hover:text-ual-orange"
+                  className="flex cursor-pointer items-center gap-2 py-1 text-step-d1 hover:text-ual-orange"
                 >
                   <input
                     type="checkbox"
@@ -120,7 +120,7 @@ export function CampusFilter({ campuses, selected, onChange }) {
           {count > 0 && (
             <button
               type="button"
-              className="mt-2xs cursor-pointer self-start border-0 bg-transparent p-0 font-main text-step-d1 font-ual-bold text-ual-dark underline underline-offset-4 hover:text-ual-orange focus-visible:text-ual-orange"
+              className="mt-2 cursor-pointer self-start border-0 bg-transparent p-0 font-main text-step-d1 font-ual-bold text-ual-dark underline underline-offset-4 hover:text-ual-orange focus-visible:text-ual-orange"
               onClick={() => onChange([])}
             >
               Clear all

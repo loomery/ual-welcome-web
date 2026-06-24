@@ -94,7 +94,7 @@ export function EventsScreen() {
 
   return (
     <article>
-      <div className="space-y-s">
+      <div className="space-y-4">
         <h1>Plan your events</h1>
         <p className="text-step-1 text-ual-medium">
           {college
@@ -104,11 +104,11 @@ export function EventsScreen() {
       </div>
 
       {/* "Saved" toggle — independent from the category row */}
-      <div className="mt-l">
+      <div className="mt-8">
         <button
           type="button"
           className={[
-            'inline-flex min-h-11 cursor-pointer items-center gap-2xs border-2 border-ual-dark px-s py-2xs text-step-d1 font-ual-bold transition-[background,color] duration-[0.12s] hover:bg-ual-shade focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ual-orange',
+            'inline-flex min-h-11 cursor-pointer items-center gap-2 border-2 border-ual-dark px-4 py-2 text-step-d1 font-ual-bold transition-[background,color] duration-[0.12s] hover:bg-ual-shade focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ual-orange',
             savedOnly ? 'bg-ual-dark text-ual-light' : 'bg-ual-light text-ual-dark',
           ].join(' ')}
           aria-pressed={savedOnly}
@@ -137,7 +137,7 @@ export function EventsScreen() {
       </div>
 
       <div
-        className="mt-l flex flex-wrap items-center gap-s"
+        className="mt-8 flex flex-wrap items-center gap-4"
         role="group"
         aria-label="Filter events"
       >
@@ -160,7 +160,7 @@ export function EventsScreen() {
       </div>
 
       {visible.length === 0 ? (
-        <div className="mt-l bg-ual-light p-l text-ual-dark">
+        <div className="mt-8 bg-ual-light p-8 text-ual-dark">
           <p>
             {savedOnly
               ? 'No saved events yet. Tap the heart on any event to save it here.'
@@ -168,7 +168,7 @@ export function EventsScreen() {
           </p>
         </div>
       ) : (
-        <ul className="mt-xl flex w-full max-w-192 list-none flex-col gap-m p-0" role="list">
+        <ul className="mt-12 flex w-full max-w-3xl list-none flex-col gap-6 p-0" role="list">
           {visible.map((event) => (
             <li key={event.id} className="block">
               <EventCard event={event} />
@@ -179,7 +179,7 @@ export function EventsScreen() {
 
       {/* Bulk export — only shown in Saved view when there are saved events */}
       {savedOnly && savedEvents.length > 0 && (
-        <div className="mt-l flex justify-stretch min-[600px]:justify-start">
+        <div className="mt-8 flex justify-stretch min-[600px]:justify-start">
           <button
             type="button"
             className={`${buttonClasses(false)} w-full justify-center min-[600px]:w-auto`}

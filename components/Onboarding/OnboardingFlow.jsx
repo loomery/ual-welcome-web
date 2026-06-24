@@ -148,18 +148,18 @@ export function OnboardingFlow() {
   return (
     <div
       className={[
-        'mx-auto w-full py-s md:py-0 [&_h1]:text-step-3',
+        'mx-auto w-full py-4 md:py-0 [&_h1]:text-step-3',
         stepId === 'interests' ? 'max-w-[var(--content-max)]' : 'max-w-[42rem]',
       ].join(' ')}
     >
       {/* ── TOP BAR — back button + progress bar + skip ────────────────── */}
       {stepId !== 'intro' && stepId !== 'finish' && (
-        <div className="mb-m flex items-center gap-s">
+        <div className="mb-6 flex items-center gap-4">
           <button
             type="button"
             onClick={goBack}
             aria-label="Go back to previous step"
-            className="-ms-2xs inline-flex cursor-pointer items-center gap-3xs border-0 bg-transparent p-2xs text-step-d1 text-ual-dark hover:text-ual-orange focus-visible:text-ual-orange focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ual-orange"
+            className="-ms-2 inline-flex cursor-pointer items-center gap-1 border-0 bg-transparent p-2 text-step-d1 text-ual-dark hover:text-ual-orange focus-visible:text-ual-orange focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ual-orange"
           >
             <svg width="14" height="14" viewBox="0 0 18 18" fill="none" aria-hidden="true">
               <path
@@ -190,7 +190,7 @@ export function OnboardingFlow() {
           <button
             type="button"
             onClick={handleSkip}
-            className="cursor-pointer border-0 bg-transparent p-2xs text-step-d1 font-ual-bold text-ual-medium underline underline-offset-4 hover:text-ual-orange focus-visible:text-ual-orange focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ual-orange"
+            className="cursor-pointer border-0 bg-transparent p-2 text-step-d1 font-ual-bold text-ual-medium underline underline-offset-4 hover:text-ual-orange focus-visible:text-ual-orange focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ual-orange"
           >
             Skip
           </button>
@@ -198,10 +198,10 @@ export function OnboardingFlow() {
       )}
 
       {/* ── STEP CONTENT ───────────────────────────────────────────────── */}
-      <div className="mb-l">
+      <div className="mb-8">
         <div
           key={stepId}
-          className="space-y-m"
+          className="space-y-6"
           style={{
             animation: `${
               direction === 'forward' ? 'onboardSlideIn' : 'onboardSlideInBack'
@@ -264,7 +264,7 @@ export function OnboardingFlow() {
       </div>
 
       {/* ── ACTION BAR ─────────────────────────────────────────────────── */}
-      <div className="flex flex-col gap-2xs">
+      <div className="flex flex-col gap-2">
         <Button className="self-start" onClick={goNext} disabled={!canAdvance}>
           {stepId === 'intro'
             ? 'Get started'

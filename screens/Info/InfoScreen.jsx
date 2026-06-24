@@ -19,15 +19,15 @@ const FALLBACK_IMAGE = asset('/images/card-fallback.png');
  */
 export function InfoScreen({ page }) {
   return (
-    <article className="flex flex-col gap-l">
+    <article className="flex flex-col gap-8">
       <Link
         href="/"
-        className="inline-flex w-fit items-center gap-3xs text-step-d1 text-ual-medium underline underline-offset-2 hover:text-ual-orange focus-visible:outline-2 focus-visible:outline-ual-dark dark:focus-visible:outline-ual-light"
+        className="inline-flex w-fit items-center gap-1 text-step-d1 text-ual-medium underline underline-offset-2 hover:text-ual-orange focus-visible:outline-2 focus-visible:outline-ual-dark dark:focus-visible:outline-ual-light"
       >
         &larr; Back to home
       </Link>
 
-      <header className="flex flex-col gap-xs">
+      <header className="flex flex-col gap-3">
         <h1 className="text-step-4/ual-condensed font-bold tracking-ual-tight text-ual-dark dark:text-ual-light">
           {page.title}
         </h1>
@@ -49,7 +49,7 @@ function InfoBlock({ block }) {
   const isAccordion = block.type === 'list' && block.accordion;
 
   return (
-    <section className="flex flex-col gap-s" aria-label={block.heading}>
+    <section className="flex flex-col gap-4" aria-label={block.heading}>
       {block.heading && !isAccordion && (
         // Subheadings are normal weight — set explicitly so the base
         // bold default for headings doesn't apply.
@@ -67,8 +67,8 @@ function InfoBlock({ block }) {
 
       {block.type === 'list' &&
         (isAccordion ? (
-          <details open className="group border-b border-ual-dark/10 pb-s dark:border-ual-light/15">
-            <summary className="flex cursor-pointer list-none items-baseline justify-between gap-s [&::-webkit-details-marker]:hidden">
+          <details open className="group border-b border-ual-dark/10 pb-4 dark:border-ual-light/15">
+            <summary className="flex cursor-pointer list-none items-baseline justify-between gap-4 [&::-webkit-details-marker]:hidden">
               <h2 className="text-step-2 font-normal tracking-ual-tight text-ual-dark dark:text-ual-light">
                 {block.heading}
               </h2>
@@ -79,7 +79,7 @@ function InfoBlock({ block }) {
                 className="shrink-0 self-center text-ual-dark transition-transform group-open:rotate-180 dark:text-ual-light"
               />
             </summary>
-            <div className="pt-s">
+            <div className="pt-4">
               <ListBody block={block} />
             </div>
           </details>
@@ -105,7 +105,7 @@ function InfoBlock({ block }) {
             })}
           </div>
         ) : (
-          <ul role="list" className="grid gap-m md:grid-cols-3">
+          <ul role="list" className="grid gap-6 md:grid-cols-3">
             {block.links?.map((link) => (
               <li key={link.title}>
                 <InfoLinkTile link={link} />
@@ -134,12 +134,12 @@ function ListBody({ block }) {
   const list = (
     <ol
       className={[
-        'flex flex-col gap-2xs pl-m text-step-0/ual-default text-ual-dark dark:text-ual-light',
+        'flex flex-col gap-2 pl-6 text-step-0/ual-default text-ual-dark dark:text-ual-light',
         block.ordered ? 'list-decimal' : 'list-disc',
       ].join(' ')}
     >
       {block.items?.map((item, i) => (
-        <li key={i} className="pl-2xs">
+        <li key={i} className="pl-2">
           {item}
         </li>
       ))}
@@ -151,7 +151,7 @@ function ListBody({ block }) {
   }
 
   return (
-    <div className="grid items-start gap-s md:grid-cols-2">
+    <div className="grid items-start gap-4 md:grid-cols-2">
       {list}
       {/* Plain <img>: static export, local photo — same rationale as Card. */}
       {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -204,7 +204,7 @@ function InfoLinkTile({ link }) {
   );
 
   const className =
-    'group flex flex-col gap-2xs focus-visible:outline-2 focus-visible:outline-ual-dark dark:focus-visible:outline-ual-light';
+    'group flex flex-col gap-2 focus-visible:outline-2 focus-visible:outline-ual-dark dark:focus-visible:outline-ual-light';
 
   if (isInternal) {
     return (
@@ -234,7 +234,7 @@ function InfoTable({ rows }) {
   }, /** @type {Record<string, import('../../data/infoPages').InfoRow[]>} */ ({}));
 
   return (
-    <div className="grid gap-m md:grid-cols-2">
+    <div className="grid gap-6 md:grid-cols-2">
       {Object.entries(groups).map(([group, groupRows]) => (
         <div key={group} className="flex flex-col">
           {group && (
@@ -243,7 +243,7 @@ function InfoTable({ rows }) {
           {groupRows.map((row, i) => (
             <div
               key={i}
-              className="flex items-center justify-between gap-s border-t border-ual-dark/10 py-2xs text-step-d1 text-ual-medium dark:border-ual-light/15"
+              className="flex items-center justify-between gap-4 border-t border-ual-dark/10 py-2 text-step-d1 text-ual-medium dark:border-ual-light/15"
             >
               <span>{row.label}</span>
               <span>{row.value}</span>
@@ -271,7 +271,7 @@ function CtaButton({ cta }) {
     // Colour (black, orange on hover) comes from the global `a` base styles —
     // left to apply rather than restating it with utilities here.
     const linkClass =
-      'inline-flex w-fit items-center gap-3xs text-step-0 underline underline-offset-2 focus-visible:outline-2 focus-visible:outline-ual-dark dark:focus-visible:outline-ual-light';
+      'inline-flex w-fit items-center gap-1 text-step-0 underline underline-offset-2 focus-visible:outline-2 focus-visible:outline-ual-dark dark:focus-visible:outline-ual-light';
     if (isInternal) {
       return (
         <Link href={cta.href} className={linkClass}>
@@ -306,7 +306,7 @@ function CtaButton({ cta }) {
   );
 
   const className =
-    'group flex w-full max-w-prose-ual items-center justify-between gap-m bg-ual-dark px-l py-m text-step-1 font-bold tracking-ual-tight focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ual-dark dark:bg-ual-dark-95 dark:focus-visible:outline-ual-light';
+    'group flex w-full max-w-prose-ual items-center justify-between gap-6 bg-ual-dark px-8 py-6 text-step-1 font-bold tracking-ual-tight focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ual-dark dark:bg-ual-dark-95 dark:focus-visible:outline-ual-light';
 
   if (isInternal) {
     return (

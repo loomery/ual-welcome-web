@@ -36,7 +36,7 @@ export function Checkbox({ label, hint, id, onKeyDown, ...rest }) {
   return (
     <label
       htmlFor={inputId}
-      className="grid min-h-11 cursor-pointer grid-cols-[auto_1fr] items-start gap-s py-xs"
+      className="grid min-h-11 cursor-pointer grid-cols-[auto_1fr] items-start gap-4 py-3"
     >
       <input
         id={inputId}
@@ -46,7 +46,7 @@ export function Checkbox({ label, hint, id, onKeyDown, ...rest }) {
         onKeyDown={handleKeyDown}
         {...rest}
       />
-      <span className="flex flex-col gap-3xs">
+      <span className="flex flex-col gap-1">
         <span className="text-step-0/ual-default peer-checked:text-ual-medium peer-checked:line-through">
           {label}
         </span>

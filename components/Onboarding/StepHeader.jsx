@@ -11,9 +11,9 @@
  */
 export function StepHeader({ headingRef, eyebrow, title, body }) {
   return (
-    <div className="space-y-2xs py-s">
+    <div className="space-y-2 py-4">
       {eyebrow && (
-        <p className="mb-2xs text-step-d1 font-ual-bold tracking-[0.06em] text-ual-orange uppercase">
+        <p className="mb-2 text-step-d1 font-ual-bold tracking-[0.06em] text-ual-orange uppercase">
           {eyebrow}
         </p>
       )}

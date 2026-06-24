@@ -13,7 +13,7 @@ import { StepHeader } from '../StepHeader';
  */
 export function NameStep({ headingRef, value, onChange, onSubmit }) {
   return (
-    <div className="space-y-m">
+    <div className="space-y-6">
       <StepHeader
         headingRef={headingRef}
         title="What should we call you?"
@@ -38,7 +38,7 @@ export function NameStep({ headingRef, value, onChange, onSubmit }) {
           autoFocus
           maxLength={40}
           placeholder="Your first name"
-          className="w-full border-2 border-ual-dark-90 bg-ual-light p-s text-step-1 font-ual-bold text-ual-dark placeholder:font-ual-normal placeholder:text-ual-dark-50 focus:border-ual-dark focus:outline-2 focus:outline-offset-2 focus:outline-ual-orange"
+          className="w-full border-2 border-ual-dark-90 bg-ual-light p-4 text-step-1 font-ual-bold text-ual-dark placeholder:font-ual-normal placeholder:text-ual-dark-50 focus:border-ual-dark focus:outline-2 focus:outline-offset-2 focus:outline-ual-orange"
         />
       </form>
     </div>

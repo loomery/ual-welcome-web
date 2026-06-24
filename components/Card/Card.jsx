@@ -87,15 +87,13 @@ export function Card({ title, body, to, external, eyebrow, image, imageAlt = '' 
           <Icon />
         </span>
       )}
-      {body && (
-        <div className={`text-(--color-copy-headings) [&>p+p]:mt-2xs${bodyFlip}`}>{body}</div>
-      )}
+      {body && <div className={`text-(--color-copy-headings) [&>p+p]:mt-2${bodyFlip}`}>{body}</div>}
       {isExternal && <span className="sr-only"> (opens in new tab)</span>}
     </>
   );
 
   const baseClass =
-    'flex flex-col gap-s text-[var(--color-copy-headings)] no-underline transition-colors duration-150';
+    'flex flex-col gap-4 text-[var(--color-copy-headings)] no-underline transition-colors duration-150';
   // Anchor's own colour drives the icon (text-current); orange on hover/focus,
   // pressed-orange on active, plus the 2px orange focus ring at offset 4.
   const linkClass = `group ${baseClass} hover:text-ual-orange focus-visible:text-ual-orange active:text-[var(--color-orange-pressed)] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-ual-orange`;

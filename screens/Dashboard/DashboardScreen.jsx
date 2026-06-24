@@ -149,11 +149,11 @@ export function DashboardScreen() {
   }
 
   return (
-    <article className="space-y-l">
+    <article className="space-y-8">
       {/* The greeting/college hero is rendered by the app shell (AppHero). */}
-      <div className="mx-auto max-w-6xl space-y-l">
+      <div className="mx-auto max-w-6xl space-y-8">
         {/* ── KEY INFORMATION ────────────────────────────────────── */}
-        <section className="space-y-s" aria-labelledby="dash-key-info">
+        <section className="space-y-4" aria-labelledby="dash-key-info">
           <h2 id="dash-key-info">Key information</h2>
           <div className="flex flex-col">
             <KeyInfoRow
@@ -174,8 +174,8 @@ export function DashboardScreen() {
         </section>
 
         {/* ── GET SETUP ──────────────────────────────────────────── */}
-        <section className="space-y-s" aria-labelledby="dash-get-setup">
-          <div className="flex items-baseline justify-between gap-s">
+        <section className="space-y-4" aria-labelledby="dash-get-setup">
+          <div className="flex items-baseline justify-between gap-4">
             <h2 id="dash-get-setup">Get setup</h2>
             <Link
               href="/checklist"
@@ -210,9 +210,9 @@ export function DashboardScreen() {
           )}
 
           {comingUp.length > 0 && (
-            <div className="space-y-2xs">
+            <div className="space-y-2">
               <p className="text-step-d1 font-bold text-ual-dark dark:text-ual-light">Coming up</p>
-              <ol className="flex flex-col gap-3xs">
+              <ol className="flex flex-col gap-1">
                 {comingUp.map((task, i) => (
                   <li key={task.id} className="text-step-d1 text-ual-medium">
                     {i + 1}. {task.title}
@@ -224,7 +224,7 @@ export function DashboardScreen() {
         </section>
 
         {/* ── VIEW TOGGLE ────────────────────────────────────────── */}
-        <div className="space-y-3xs">
+        <div className="space-y-1">
           <ViewToggle value={view} onChange={setView} options={VIEW_OPTIONS} />
           <p className="m-0 text-step-d1 text-ual-medium">
             {view === 'all' ? 'Showing everything at UAL' : 'Showing your selected interests'}
@@ -235,7 +235,7 @@ export function DashboardScreen() {
         {visibleSections.map((section) => (
           <section
             key={section.id}
-            className="space-y-s"
+            className="space-y-4"
             aria-labelledby={`dash-section-${section.id}`}
           >
             <h2 id={`dash-section-${section.id}`}>{section.label}</h2>
@@ -249,7 +249,7 @@ export function DashboardScreen() {
 
         {/* ── NO-INTERESTS PROMPT ────────────────────────────────── */}
         {view === 'focus' && interests.length === 0 && (
-          <section className="space-y-s" aria-labelledby="dash-empty">
+          <section className="space-y-4" aria-labelledby="dash-empty">
             <h2 id="dash-empty">Nothing selected yet</h2>
             <p>
               Switch to <strong>All at UAL</strong> to browse everything, or{' '}
@@ -262,7 +262,7 @@ export function DashboardScreen() {
         )}
 
         {/* ── PROFILE FOOTER ─────────────────────────────────────── */}
-        <section className="space-y-2xs" aria-label="Profile">
+        <section className="space-y-2" aria-label="Profile">
           <p>
             <span className="text-step-d1">Saved on this device. </span>
             <button type="button" onClick={handleReset} className={LINK_BUTTON}>
@@ -291,13 +291,13 @@ function KeyInfoRow({ title, startsAt, endsAt, eyebrow, href }) {
   const end = LONG_DATE_FMT.format(new Date(endsAt));
 
   return (
-    <div className="flex flex-col gap-2xs py-m">
+    <div className="flex flex-col gap-2 py-6">
       {href ? (
         <a
           href={href}
           target="_blank"
           rel="noreferrer"
-          className="flex items-center justify-between gap-s text-step-1 font-bold tracking-ual-tight text-ual-dark hover:text-ual-orange dark:text-ual-light"
+          className="flex items-center justify-between gap-4 text-step-1 font-bold tracking-ual-tight text-ual-dark hover:text-ual-orange dark:text-ual-light"
         >
           <span>
             {title}
@@ -311,7 +311,7 @@ function KeyInfoRow({ title, startsAt, endsAt, eyebrow, href }) {
         </span>
       )}
       {eyebrow && <p className="text-step-d1 font-bold text-ual-medium">{eyebrow}</p>}
-      <div className="flex flex-col gap-3xs text-step-d1 text-ual-medium md:flex-row md:items-center md:gap-s">
+      <div className="flex flex-col gap-1 text-step-d1 text-ual-medium md:flex-row md:items-center md:gap-4">
         <span className="md:shrink-0">Start: {start}</span>
         <span
           aria-hidden="true"

@@ -19,7 +19,7 @@ export function BottomNav() {
 
   return (
     <nav
-      className="fixed inset-x-0 bottom-0 z-10 border-t border-ual-dark bg-ual-light py-2xs pb-[max(var(--space-2xs),env(safe-area-inset-bottom))] md:hidden [body[data-onboarding]_&]:hidden"
+      className="fixed inset-x-0 bottom-0 z-10 border-t border-ual-dark bg-ual-light py-2 pb-[max(var(--space-2xs),env(safe-area-inset-bottom))] md:hidden [body[data-onboarding]_&]:hidden"
       aria-label="Primary mobile"
     >
       <ul className="m-0 flex list-none justify-around p-0" role="list">
@@ -29,7 +29,7 @@ export function BottomNav() {
           const key = item.href ?? item.to;
 
           const linkClass =
-            'flex min-h-11 min-w-11 flex-col items-center justify-center gap-3xs p-2xs text-step-d1 text-ual-medium no-underline aria-[current=page]:font-ual-bold aria-[current=page]:text-ual-dark focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-ual-orange';
+            'flex min-h-11 min-w-11 flex-col items-center justify-center gap-1 p-2 text-step-d1 text-ual-medium no-underline aria-[current=page]:font-ual-bold aria-[current=page]:text-ual-dark focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-ual-orange';
 
           return (
             <li key={key}>

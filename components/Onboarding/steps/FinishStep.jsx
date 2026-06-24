@@ -12,8 +12,8 @@ export function FinishStep({ headingRef, draft }) {
   const college = COLLEGE_OPTIONS.find((c) => c.id === draft.collegeId);
 
   return (
-    <div className="space-y-m">
-      <p className="mb-2xs text-step-d1 font-ual-bold tracking-[0.06em] text-ual-orange uppercase">
+    <div className="space-y-6">
+      <p className="mb-2 text-step-d1 font-ual-bold tracking-[0.06em] text-ual-orange uppercase">
         All set
       </p>
 

@@ -18,7 +18,7 @@ export function OnboardingTile({ selected, onClick, role, title, hint, ...rest }
       onClick={onClick}
       aria-checked={role === 'radio' ? selected : undefined}
       className={[
-        'flex h-full w-full cursor-pointer items-center gap-s border-2 px-s py-xs text-start transition-[border-color,background-color] duration-150 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ual-orange',
+        'flex h-full w-full cursor-pointer items-center gap-4 border-2 px-4 py-3 text-start transition-[border-color,background-color] duration-150 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ual-orange',
         selected
           ? 'border-ual-dark bg-ual-dark text-ual-light'
           : 'border-ual-dark-90 bg-ual-light text-ual-dark hover:border-ual-dark',
@@ -30,7 +30,7 @@ export function OnboardingTile({ selected, onClick, role, title, hint, ...rest }
         {hint && (
           <span
             className={[
-              'mt-3xs block text-step-d1',
+              'mt-1 block text-step-d1',
               selected ? 'text-ual-dark-90' : 'text-ual-dark-50',
             ].join(' ')}
           >

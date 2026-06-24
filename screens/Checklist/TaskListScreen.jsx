@@ -48,8 +48,8 @@ export function TaskListScreen() {
   }
 
   return (
-    <article className="flex flex-col gap-l">
-      <header className="flex flex-col gap-xs">
+    <article className="flex flex-col gap-8">
+      <header className="flex flex-col gap-3">
         <h1 className="text-step-4/ual-condensed font-bold tracking-ual-tight text-ual-dark dark:text-ual-light">
           Get set up for term
         </h1>
@@ -58,7 +58,7 @@ export function TaskListScreen() {
         </p>
       </header>
 
-      <section aria-labelledby="essential-heading" className="flex flex-col gap-s">
+      <section aria-labelledby="essential-heading" className="flex flex-col gap-4">
         <h2
           id="essential-heading"
           className="text-step-2 font-bold tracking-ual-tight text-ual-dark dark:text-ual-light"
@@ -76,7 +76,7 @@ export function TaskListScreen() {
             return (
               <li
                 key={task.id}
-                className="flex gap-s border-t border-ual-dark/10 py-m dark:border-ual-light/15"
+                className="flex gap-4 border-t border-ual-dark/10 py-6 dark:border-ual-light/15"
               >
                 <button
                   type="button"
@@ -87,12 +87,12 @@ export function TaskListScreen() {
                       ? `${task.title} — complete, click to undo`
                       : `Mark "${task.title}" as complete`
                   }
-                  className="mt-3xs shrink-0 cursor-pointer rounded-full border-0 bg-transparent p-0 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ual-orange"
+                  className="mt-1 shrink-0 cursor-pointer rounded-full border-0 bg-transparent p-0 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ual-orange"
                 >
                   <StatusCircle status={done ? 'complete' : 'not-started'} size={22} />
                 </button>
 
-                <div className="flex min-w-0 grow flex-col gap-2xs">
+                <div className="flex min-w-0 grow flex-col gap-2">
                   <h3 className="text-step-1 font-bold tracking-ual-tight text-ual-dark dark:text-ual-light">
                     {task.title}
                   </h3>
@@ -101,7 +101,7 @@ export function TaskListScreen() {
                   </p>
 
                   {task.note && (
-                    <p className="inline-flex w-fit items-center gap-3xs bg-ual-shade px-xs py-2xs text-step-d1 text-ual-medium dark:bg-ual-dark-95">
+                    <p className="inline-flex w-fit items-center gap-1 bg-ual-shade px-3 py-2 text-step-d1 text-ual-medium dark:bg-ual-dark-95">
                       <span aria-hidden="true">&#9432;</span> {task.note}
                     </p>
                   )}

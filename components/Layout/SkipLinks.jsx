@@ -4,7 +4,7 @@
  */
 export function SkipLinks() {
   const skipLinkClass =
-    'sr-only focus:not-sr-only focus:fixed focus:left-s focus:top-s focus:z-[300] inline-block bg-ual-dark px-s py-xs font-ual-bold text-ual-light no-underline focus:outline-2 focus:outline-offset-2 focus:outline-ual-orange';
+    'sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[300] inline-block bg-ual-dark px-4 py-3 font-ual-bold text-ual-light no-underline focus:outline-2 focus:outline-offset-2 focus:outline-ual-orange';
 
   return (
     <>

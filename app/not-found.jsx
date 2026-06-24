@@ -7,8 +7,8 @@ export const metadata = {
 
 export default function NotFound() {
   return (
-    <article className="space-y-l">
-      <div className="space-y-s">
+    <article className="space-y-8">
+      <div className="space-y-4">
         <h1>Page not found</h1>
         <p className="text-step-1 text-ual-medium">We couldn’t find what you were looking for.</p>
       </div>

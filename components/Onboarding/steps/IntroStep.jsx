@@ -19,7 +19,7 @@ const BENEFITS = [
  */
 export function IntroStep({ headingRef, hasExistingProfile, onResume, onStartOver }) {
   return (
-    <div className="space-y-m">
+    <div className="space-y-6">
       <p className="text-step-d1 text-ual-medium">Takes 2 minutes</p>
 
       <h1 ref={headingRef} tabIndex={-1} className="outline-none">
@@ -30,9 +30,9 @@ export function IntroStep({ headingRef, hasExistingProfile, onResume, onStartOve
         Everything you need to access before term in one place
       </p>
 
-      <ul className="list-none space-y-s p-0" aria-label="What you'll get">
+      <ul className="list-none space-y-4 p-0" aria-label="What you'll get">
         {BENEFITS.map((item) => (
-          <li key={item} className="flex items-start gap-s">
+          <li key={item} className="flex items-start gap-4">
             {/* Orange check circle */}
             <svg
               viewBox="0 0 20 20"
@@ -56,9 +56,9 @@ export function IntroStep({ headingRef, hasExistingProfile, onResume, onStartOve
 
       {/* Shown only when returning to onboarding after already completing it */}
       {hasExistingProfile && (
-        <div className="space-y-2xs border-s-4 border-ual-orange bg-ual-shade p-s">
+        <div className="space-y-2 border-s-4 border-ual-orange bg-ual-shade p-4">
           <p className="text-step-d1 text-ual-medium">You&apos;ve already set up your hub.</p>
-          <div className="flex flex-wrap gap-2xs">
+          <div className="flex flex-wrap gap-2">
             <Button onClick={onResume}>Open my hub</Button>
             <Button ghost onClick={onStartOver}>
               Start over

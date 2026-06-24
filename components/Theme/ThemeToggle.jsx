@@ -15,7 +15,7 @@ export function ThemeToggle() {
     <button
       onClick={toggleTheme}
       aria-label={`Attiva modalità ${theme === 'light' ? 'scura' : 'chiara'}`}
-      className="inline-flex cursor-pointer items-center justify-center rounded-md border-none bg-none p-s text-ual-medium transition-all duration-150 ease-ual hover:bg-ual-shade focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ual-orange [&_svg]:size-6 [&_svg]:stroke-current"
+      className="inline-flex cursor-pointer items-center justify-center rounded-md border-none bg-none p-4 text-ual-medium transition-all duration-150 ease-ual hover:bg-ual-shade focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ual-orange [&_svg]:size-6 [&_svg]:stroke-current"
       title={`Modalità ${theme === 'light' ? 'scura' : 'chiara'}`}
     >
       {theme === 'light' ? (
