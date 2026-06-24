@@ -41,18 +41,26 @@ export function Button({
   // with a stray "undefined" or a double space; `join(' ')` space-separates them.
   const cls = [BASE, SIZE[size], VARIANT[variant], className].filter(Boolean).join(' ');
 
-  // Plain <button> by default. With an `href` it becomes a link instead:
-  // a Next.js <Link> for internal paths ("/…"), or a normal <a> for external URLs.
-  let Tag = 'button';
-  let tagProps = { type };
-  if (href) {
-    Tag = href.startsWith('/') ? Link : 'a';
-    tagProps = { href };
+  // Internal link (e.g. "/events") → Next.js <Link>.
+  if (href && href.startsWith('/')) {
+    return (
+      <Link ref={ref} href={href} className={cls} {...rest}>
+        {children}
+      </Link>
+    );
   }
-
+  // External link (e.g. "https://…") → a normal <a>.
+  if (href) {
+    return (
+      <a ref={ref} href={href} className={cls} {...rest}>
+        {children}
+      </a>
+    );
+  }
+  // No href → a real <button>.
   return (
-    <Tag ref={ref} className={cls} {...tagProps} {...rest}>
+    <button ref={ref} type={type} className={cls} {...rest}>
       {children}
-    </Tag>
+    </button>
   );
 }
