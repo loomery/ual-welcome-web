@@ -9,8 +9,21 @@ import { EventCard } from '../../components/EventCard/EventCard';
 import { downloadIcs } from '../../utils/ics';
 import { LONG_DATE_FMT, TIME_FMT } from '../../utils/dates';
 
+/** Shared category-tag chip classes — mirrors `.event-tag` + per-category
+ *  tint so the label reads identically to EventCard. */
+const TAG_TINTS = {
+  talk: 'bg-[#d6e7d0]',
+  tour: 'bg-[#cfe0ec]',
+  social: 'bg-[#f5d6c3]',
+  workshop: 'bg-[#f0e2b6]',
+};
+function eventTagClasses(category) {
+  const tint = TAG_TINTS[category] ?? 'bg-ual-dark-90';
+  return `w-fit ${tint} px-2 py-1 text-step-d1/ual-single font-ual-bold uppercase tracking-[0.06em] text-ual-dark`;
+}
+
 /**
- * Event detail page — matches the Figma "15 Event Detail" frame.
+ * Event detail page.
  *
  * Layout:
  *  - Back link
@@ -29,11 +42,11 @@ export function EventDetailScreen({ id }) {
 
   if (!event) {
     return (
-      <article className="prose has-lead flow" data-flow="l">
+      <article>
         <h1>Event not found</h1>
-        <Link href="/events" className="button" data-ghost-button="">
+        <Button href="/events" variant="ghost" className="mt-8">
           ← Back to events
-        </Link>
+        </Button>
       </article>
     );
   }
@@ -71,186 +84,111 @@ export function EventDetailScreen({ id }) {
     : `https://maps.apple.com/?q=${encodedLocation}`;
 
   return (
-    <article className="flow event-detail-page" data-flow="l">
-      <Link href="/events" className="event-detail__back">
+    <article>
+      <Link
+        href="/events"
+        className="text-step-d1 text-ual-dark no-underline hover:text-ual-orange focus-visible:text-ual-orange focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ual-orange"
+      >
         ← Back to events
       </Link>
 
       {/* Category + title */}
-      <div className="flow" data-flow="s">
-        <span className="event-tag" data-category={event.category.toLowerCase()}>
-          {event.category}
-        </span>
+      <div className="mt-8 space-y-4">
+        <span className={eventTagClasses(event.category.toLowerCase())}>{event.category}</span>
         <h1>{event.title}</h1>
       </div>
 
       {/* Date / Time / Location */}
-      <section className="flow" data-flow="s" aria-label="Event details">
-        <dl className="event-detail__dl">
-          <div className="event-detail__dl-row">
-            <dt>Date</dt>
-            <dd>
+      <section className="mt-8 space-y-4" aria-label="Event details">
+        <dl className="flex flex-col gap-4">
+          <div className="grid grid-cols-[6rem_1fr] gap-3">
+            <dt className="text-step-0 font-ual-bold">Date</dt>
+            <dd className="m-0 text-step-0">
               <time dateTime={event.startsAt}>{dateStr}</time>
             </dd>
           </div>
-          <div className="event-detail__dl-row">
-            <dt>Time</dt>
-            <dd>{timeStr}</dd>
+          <div className="grid grid-cols-[6rem_1fr] gap-3">
+            <dt className="text-step-0 font-ual-bold">Time</dt>
+            <dd className="m-0 text-step-0">{timeStr}</dd>
           </div>
-          <div className="event-detail__dl-row">
-            <dt>Location</dt>
-            <dd>{event.location}</dd>
+          <div className="grid grid-cols-[6rem_1fr] gap-3">
+            <dt className="text-step-0 font-ual-bold">Location</dt>
+            <dd className="m-0 text-step-0">{event.location}</dd>
           </div>
         </dl>
       </section>
 
       {/* Get directions */}
-      <section className="flow" data-flow="2xs" aria-labelledby="directions-heading">
+      <section className="mt-8 space-y-2" aria-labelledby="directions-heading">
         <h2 id="directions-heading">Get directions</h2>
-        <div className="cluster" data-justify="flex-start">
-          <a
-            href={citymapperUrl}
-            target="_blank"
-            rel="noreferrer"
-            className="button event-detail__dir-btn"
-          >
+        <div className="flex flex-wrap items-center gap-4">
+          <Button href={citymapperUrl} target="_blank" rel="noreferrer" size="sm">
             Citymapper
-          </a>
-          <a
-            href={googleUrl}
-            target="_blank"
-            rel="noreferrer"
-            className="button event-detail__dir-btn"
-          >
+          </Button>
+          <Button href={googleUrl} target="_blank" rel="noreferrer" size="sm">
             Google Maps
-          </a>
-          <a
-            href={appleUrl}
-            target="_blank"
-            rel="noreferrer"
-            className="button event-detail__dir-btn"
-          >
+          </Button>
+          <Button href={appleUrl} target="_blank" rel="noreferrer" size="sm">
             Apple Maps
-          </a>
+          </Button>
         </div>
       </section>
 
       {/* About event */}
-      <section className="flow" data-flow="2xs" aria-labelledby="about-heading">
+      <section className="mt-8 space-y-2" aria-labelledby="about-heading">
         <h2 id="about-heading">About event</h2>
         <p>{event.description}</p>
       </section>
 
       {/* What do I need to bring? */}
       {event.whatToBring && (
-        <section className="flow" data-flow="2xs" aria-labelledby="bring-heading">
+        <section className="mt-8 space-y-2" aria-labelledby="bring-heading">
           <h2 id="bring-heading">What do I need to bring?</h2>
           <p>{event.whatToBring}</p>
         </section>
       )}
 
       {/* CTAs */}
-      <div className="flow" data-flow="2xs">
+      <div className="mt-8 space-y-2">
         {event.externalUrl && (
-          <a
-            href={event.externalUrl}
-            target="_blank"
-            rel="noreferrer"
-            className="button event-detail__cta"
-          >
-            View more about this event →
-            <span className="visually-hidden"> (opens in a new tab)</span>
-          </a>
+          <Button href={event.externalUrl} target="_blank" rel="noreferrer">
+            View more about this event →<span className="sr-only"> (opens in a new tab)</span>
+          </Button>
         )}
-        <Button ghost onClick={() => downloadIcs(event)}>
+        <Button variant="ghost" onClick={() => downloadIcs(event)}>
           Add to calendar
         </Button>
       </div>
 
       {/* Related events — full cards so the description helps users decide
           whether to attend. The compact variant is designed for horizontal
-          reels (fixed 18 rem width); in a grid it leaves awkward whitespace. */}
+          reels (fixed 18 rem width); in a grid it leaves awkward whitespace.
+          A hairline separator + extra block-start breathing room gives the
+          section a clear visual break from the main article content. */}
       {related.length > 0 && (
         <section
-          className="flow event-detail__related"
-          data-flow="s"
+          className="mt-8 space-y-4 border-t border-ual-dark-90 pt-8"
           aria-labelledby="related-heading"
         >
-          <div className="cluster" data-justify="space-between">
-            <h2 id="related-heading" className="event-detail__related-heading">
+          <div className="flex flex-wrap items-center justify-between gap-4">
+            {/* Scaled one step down from the default h2 — supplementary content. */}
+            <h2 id="related-heading" className="text-step-1">
               More from {event.college}
             </h2>
-            <Link className="home-section__cta" href="/events">
+            <Link
+              className="text-step-d1 font-ual-bold no-underline hover:underline focus-visible:underline"
+              href="/events"
+            >
               See all →
             </Link>
           </div>
-          <div className="grid">
+          <div className="grid grid-cols-[repeat(auto-fit,minmax(min(250px,100%),1fr))] gap-(--grid-gutter)">
             {related.map((e) => (
               <EventCard key={e.id} event={e} />
             ))}
           </div>
         </section>
       )}
-
-      <style>{`
-        .event-detail__back {
-          color: var(--color-dark);
-          font-size: var(--step--1);
-          text-decoration: none;
-        }
-        .event-detail__back:hover,
-        .event-detail__back:focus-visible {
-          color: var(--color-orange);
-        }
-        .event-detail__back:focus-visible {
-          outline: 2px solid var(--color-orange);
-          outline-offset: 2px;
-        }
-
-        .event-detail__dl {
-          display: flex;
-          flex-direction: column;
-          gap: var(--space-s);
-        }
-        .event-detail__dl-row {
-          display: grid;
-          grid-template-columns: 6rem 1fr;
-          gap: var(--space-xs);
-        }
-        .event-detail__dl-row dt {
-          font-weight: var(--font-weight-bold);
-          font-size: var(--step-0);
-        }
-        .event-detail__dl-row dd {
-          margin: 0;
-          font-size: var(--step-0);
-        }
-
-        .event-detail__dir-btn {
-          font-size: var(--step--1);
-          padding: var(--space-2xs) var(--space-s);
-        }
-
-        .event-detail__cta {
-          display: inline-flex;
-        }
-
-        /* A hairline separator + extra block-start breathing room gives the
-           section a clear visual break from the main article content. */
-        .event-detail__related {
-          border-block-start: 1px solid var(--color-dark--tint-90);
-          padding-block-start: var(--space-l);
-          /* Negative margin pulls the border flush with the article's own
-             top padding so the divider feels intentional, not accidental. */
-          margin-block-start: var(--space-l);
-        }
-
-        /* Scale the heading down one step from the default h2 — the section
-           is supplementary content, not a primary page landmark. */
-        .event-detail__related-heading {
-          font-size: var(--step-1);
-        }
-      `}</style>
     </article>
   );
 }

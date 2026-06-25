@@ -1,15 +1,16 @@
 import Link from 'next/link';
+import { Button } from '../Button/Button';
 
 /**
  * NextStepCard — the dark "Your next step" CTA card.
  *
- * Mirrors the Figma "Your next step" frame inside the personalised home's
- * Get setup section: eyebrow + bigger task title + short description +
+ * Shown in the personalised home's Get setup section: eyebrow + bigger
+ * task title + short description +
  * primary "Go to …" CTA and an underlined "View all tasks" secondary.
  *
- * The visual styling lives in app/globals.css (`.next-step-card`,
- * `.next-step-card__*`) so dark-mode swaps and surface tokens follow the
- * rest of the UAL DS rather than being hand-rolled per-screen.
+ * Styled inline with Tailwind utilities mapped to the UAL DS tokens; the
+ * `dark:` variants invert it to dark-on-light so it always reads as the
+ * strongest CTA on the page.
  *
  * @param {Object} props
  * @param {string} props.title              Task title — bigger headline.
@@ -22,30 +23,29 @@ import Link from 'next/link';
  * @param {string} props.secondary.href
  */
 export function NextStepCard({ title, body, primary, secondary }) {
+  const primaryExternal = !primary.href.startsWith('/');
   return (
-    <article className="next-step-card flow" data-flow="s">
-      <p className="next-step-card__eyebrow">Your next step</p>
-      <h3 className="next-step-card__title">{title}</h3>
-      <p className="next-step-card__body">{body}</p>
-      <div className="cluster next-step-card__ctas" data-justify="flex-start">
-        {primary.href.startsWith('/') ? (
-          <Link href={primary.href} className="button next-step-card__primary">
-            {primary.label}
-          </Link>
-        ) : (
-          <a
-            href={primary.href}
-            target="_blank"
-            rel="noreferrer"
-            className="button next-step-card__primary"
-          >
-            {primary.label}
-            <span className="visually-hidden"> (opens in a new tab)</span>
-          </a>
-        )}
+    <article className="space-y-4 border-2 border-ual-dark bg-ual-dark p-6 text-ual-light dark:border-ual-light dark:bg-ual-light dark:text-ual-dark">
+      <p className="text-step-d1 font-ual-bold text-ual-light dark:text-ual-dark">Your next step</p>
+      <h3 className="text-step-1/ual-condensed tracking-ual-tight text-ual-light dark:text-ual-dark">
+        {title}
+      </h3>
+      <p className="text-ual-dark-90 dark:text-ual-medium">{body}</p>
+      <div className="mt-3 flex flex-wrap items-center gap-4">
+        <Button
+          variant="accent"
+          href={primary.href}
+          {...(primaryExternal && { target: '_blank', rel: 'noreferrer' })}
+        >
+          {primary.label} →
+          {primaryExternal && <span className="sr-only"> (opens in a new tab)</span>}
+        </Button>
         {secondary && (
-          <Link href={secondary.href} className="next-step-card__secondary">
-            {secondary.label}
+          <Link
+            href={secondary.href}
+            className="inline-flex items-center border border-ual-dark-50 px-4 py-2 text-step-d1 font-ual-bold text-ual-light no-underline hover:border-(--color-yellow) hover:text-(--color-yellow) focus-visible:border-(--color-yellow) focus-visible:text-(--color-yellow) dark:text-ual-dark"
+          >
+            {secondary.label} →
           </Link>
         )}
       </div>

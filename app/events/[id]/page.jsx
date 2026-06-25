@@ -2,10 +2,6 @@ import { notFound } from 'next/navigation';
 import { EVENTS } from '../../../data/events';
 import { EventDetailScreen } from '../../../screens/Events/EventDetailScreen';
 
-/**
- * Pre-render every event detail page at build time. Pure-static and
- * predictable — no client-side data fetching needed.
- */
 export function generateStaticParams() {
   return EVENTS.map((e) => ({ id: e.id }));
 }

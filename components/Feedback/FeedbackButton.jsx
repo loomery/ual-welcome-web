@@ -28,13 +28,13 @@ export function FeedbackButton() {
       <button
         ref={triggerRef}
         type="button"
-        className="feedback-fab"
+        className="fixed inset-e-4 bottom-[calc(var(--bottom-nav-height)+var(--space-2xs)+env(safe-area-inset-bottom,0))] z-11 inline-flex min-h-11 cursor-pointer items-center gap-2 rounded-full border border-ual-dark bg-ual-dark px-4 py-3 font-main text-step-d1/ual-single font-ual-bold text-ual-light shadow-[0_6px_18px_rgba(0,0,0,0.18)] transition-[background,transform] duration-150 hover:border-ual-orange hover:bg-ual-orange hover:text-ual-dark focus-visible:border-ual-orange focus-visible:bg-ual-orange focus-visible:text-ual-dark focus-visible:outline-2 focus-visible:outline-offset-[0.3ch] focus-visible:outline-ual-orange active:translate-y-px motion-reduce:transition-none md:inset-e-6 md:bottom-6 [body[data-onboarding]_&]:hidden"
         onClick={() => setOpen(true)}
         aria-haspopup="dialog"
         aria-expanded={open}
       >
-        <FeedbackIcon className="feedback-fab__icon" aria-hidden="true" width={20} height={20} />
-        <span className="feedback-fab__label">Feedback</span>
+        <FeedbackIcon className="flex-none" aria-hidden="true" width={20} height={20} />
+        <span>Feedback</span>
       </button>
       <FeedbackDialog open={open} onClose={() => setOpen(false)} currentPath={pathname} />
     </>

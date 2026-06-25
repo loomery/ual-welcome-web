@@ -2,10 +2,6 @@ import { notFound } from 'next/navigation';
 import { INFO_PAGES, INFO_PAGES_BY_SLUG } from '../../../data/infoPages';
 import { InfoScreen } from '../../../screens/Info/InfoScreen';
 
-/**
- * Pre-render every info page at build time — pure-static content, no
- * client-side data fetching needed.
- */
 export function generateStaticParams() {
   return INFO_PAGES.map((p) => ({ slug: p.slug }));
 }
