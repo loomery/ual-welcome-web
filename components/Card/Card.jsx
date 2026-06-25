@@ -94,8 +94,7 @@ export function Card({ title, body, to, external, eyebrow, image, imageAlt = '' 
 
   const baseClass =
     'flex flex-col gap-4 text-[var(--color-copy-headings)] no-underline transition-colors duration-150';
-  // Anchor's own colour drives the icon (text-current); orange on hover/focus,
-  // pressed-orange on active, plus the 2px orange focus ring at offset 4.
+
   const linkClass = `group ${baseClass} hover:text-ual-orange focus-visible:text-ual-orange active:text-[var(--color-orange-pressed)] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-ual-orange`;
 
   if (isInternal) {
