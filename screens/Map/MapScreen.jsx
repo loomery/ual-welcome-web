@@ -113,8 +113,8 @@ export function MapScreen() {
   const activeLabel = activePlanData.label;
 
   return (
-    <article className="flex flex-col gap-l">
-      <header className="flex flex-col gap-xs">
+    <article className="flex flex-col gap-8">
+      <header className="flex flex-col gap-3">
         <h1 className="text-step-4/ual-condensed font-bold tracking-ual-tight text-ual-dark dark:text-ual-light">
           Find your college
         </h1>
@@ -123,19 +123,19 @@ export function MapScreen() {
         </p>
       </header>
 
-      <section className="flex flex-col gap-s" aria-labelledby="campus-heading">
+      <section className="flex flex-col gap-4" aria-labelledby="campus-heading">
         <h2
           id="campus-heading"
           className="text-step-2 font-bold tracking-ual-tight text-ual-dark dark:text-ual-light"
         >
           Your college
         </h2>
-        <label className="flex flex-col gap-2xs">
+        <label className="flex flex-col gap-2">
           <span className="sr-only">Choose a college</span>
           <select
             value={collegeId}
             onChange={(e) => handleSelectCollege(e.target.value)}
-            className="w-full appearance-none bg-ual-dark px-m py-s text-step-1 font-bold text-ual-light focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ual-orange dark:bg-ual-light dark:text-ual-dark"
+            className="w-full appearance-none bg-ual-dark px-6 py-4 text-step-1 font-bold text-ual-light focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ual-orange dark:bg-ual-light dark:text-ual-dark"
           >
             {BUILDINGS.map((b) => (
               <option key={b.id} value={b.id}>
@@ -146,14 +146,14 @@ export function MapScreen() {
         </label>
       </section>
 
-      <section className="flex flex-col gap-s" aria-label={`${building.name} college map`}>
+      <section className="flex flex-col gap-4" aria-label={`${building.name} college map`}>
         {useFloorDropdown && (
-          <label className="flex flex-col gap-2xs">
+          <label className="flex flex-col gap-2">
             <span className="text-step-d1 font-bold text-ual-dark dark:text-ual-light">Floor</span>
             <select
               value={safeActive}
               onChange={(e) => setActivePlan(Number(e.target.value))}
-              className="w-full appearance-none bg-ual-dark px-m py-s text-step-1 font-bold text-ual-light focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ual-orange dark:bg-ual-light dark:text-ual-dark"
+              className="w-full appearance-none bg-ual-dark px-6 py-4 text-step-1 font-bold text-ual-light focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ual-orange dark:bg-ual-light dark:text-ual-dark"
             >
               {plans.map((plan, i) => (
                 <option key={plan.id} value={i}>
@@ -166,14 +166,14 @@ export function MapScreen() {
 
         <div
           className={
-            useFloorDropdown ? '' : 'flex flex-col gap-s md:flex-row-reverse md:items-start'
+            useFloorDropdown ? '' : 'flex flex-col gap-4 md:flex-row-reverse md:items-start'
           }
         >
           <button
             type="button"
             onClick={() => setLightboxOpen(true)}
             aria-label={`Expand ${activeLabel} plan`}
-            className="aspect-3/4 w-full grow cursor-zoom-in overflow-hidden bg-white p-s focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ual-orange md:aspect-3/2"
+            className="aspect-3/4 w-full grow cursor-zoom-in overflow-hidden bg-white p-4 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ual-orange md:aspect-3/2"
           >
             <PlanGraphic
               plan={activePlanData}
@@ -184,7 +184,7 @@ export function MapScreen() {
           </button>
 
           {!useFloorDropdown && (
-            <ul role="list" className="flex gap-2xs md:w-30 md:shrink-0 md:flex-col">
+            <ul role="list" className="flex gap-2 md:w-30 md:shrink-0 md:flex-col">
               {plans.map((plan, i) => {
                 const selected = i === safeActive;
                 return (
@@ -217,7 +217,7 @@ export function MapScreen() {
         {!useFloorDropdown && <p className="text-step-d1 text-ual-medium">{activeLabel}</p>}
       </section>
 
-      <section className="flex flex-col gap-2xs" aria-labelledby="address-heading">
+      <section className="flex flex-col gap-2" aria-labelledby="address-heading">
         <h2
           id="address-heading"
           className="text-step-2 font-bold tracking-ual-tight text-ual-dark dark:text-ual-light"
@@ -226,10 +226,10 @@ export function MapScreen() {
         </h2>
         <p className="text-step-1 font-bold text-ual-dark dark:text-ual-light">{building.name}</p>
         <p className="text-step-d1 text-ual-medium">{building.address}</p>
-        <p className="mt-2xs text-step-d1 font-bold text-ual-dark dark:text-ual-light">
+        <p className="mt-2 text-step-d1 font-bold text-ual-dark dark:text-ual-light">
           Get directions to college
         </p>
-        <div className="flex flex-wrap gap-l">
+        <div className="flex flex-wrap gap-8">
           <DirectionLink href={citymapperUrl(building)} label="Citymapper" />
           <DirectionLink href={appleMapsUrl(building)} label="Apple maps" />
           <DirectionLink href={directionsUrl(building)} label="Google maps" />
@@ -237,14 +237,14 @@ export function MapScreen() {
       </section>
 
       {building.transport && (
-        <section className="flex flex-col gap-s" aria-labelledby="transport-heading">
+        <section className="flex flex-col gap-4" aria-labelledby="transport-heading">
           <h2
             id="transport-heading"
             className="text-step-2 font-bold tracking-ual-tight text-ual-dark dark:text-ual-light"
           >
             Transport
           </h2>
-          <div className="grid gap-m md:grid-cols-2">
+          <div className="grid gap-6 md:grid-cols-2">
             <TransportTable
               caption="Closest stations"
               distanceHeader="Distance to uni"
@@ -260,7 +260,7 @@ export function MapScreen() {
       )}
 
       {building.transport?.accessibilityNote && (
-        <section className="flex flex-col gap-2xs" aria-labelledby="accessibility-heading">
+        <section className="flex flex-col gap-2" aria-labelledby="accessibility-heading">
           <h2
             id="accessibility-heading"
             className="text-step-2 font-bold tracking-ual-tight text-ual-dark dark:text-ual-light"
@@ -287,19 +287,19 @@ export function MapScreen() {
           role="dialog"
           aria-modal="true"
           aria-label={`${building.name} — ${activeLabel} plan`}
-          className="fixed inset-0 z-400 flex items-center justify-center bg-ual-dark/90 p-m"
+          className="fixed inset-0 z-400 flex items-center justify-center bg-ual-dark/90 p-6"
           onClick={() => setLightboxOpen(false)}
         >
           <button
             type="button"
             onClick={() => setLightboxOpen(false)}
             aria-label="Close floor plan"
-            className="absolute top-m right-m flex size-11 items-center justify-center bg-ual-light text-ual-dark focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ual-orange"
+            className="absolute top-6 right-6 flex size-11 items-center justify-center bg-ual-light text-ual-dark focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ual-orange"
           >
             <CloseIcon aria-hidden="true" width={22} height={22} />
           </button>
           <div
-            className="max-h-full w-full max-w-grid bg-white p-s"
+            className="max-h-full w-full max-w-grid bg-white p-4"
             onClick={(e) => e.stopPropagation()}
           >
             <PlanGraphic
@@ -338,7 +338,7 @@ function DirectionLink({ href, label }) {
 function TransportTable({ caption, distanceHeader, stops }) {
   return (
     <table className="w-full border-collapse text-step-d1">
-      <caption className="mb-2xs text-left font-bold text-ual-dark dark:text-ual-light">
+      <caption className="mb-2 text-left font-bold text-ual-dark dark:text-ual-light">
         {caption}
       </caption>
       <thead className="sr-only">
@@ -350,8 +350,8 @@ function TransportTable({ caption, distanceHeader, stops }) {
       <tbody>
         {stops.map((stop) => (
           <tr key={stop.name} className="border-b border-ual-dark/10 dark:border-ual-light/15">
-            <td className="py-2xs text-ual-dark dark:text-ual-light">{stop.name}</td>
-            <td className="py-2xs text-right text-ual-medium">{stop.walk}</td>
+            <td className="py-2 text-ual-dark dark:text-ual-light">{stop.name}</td>
+            <td className="py-2 text-right text-ual-medium">{stop.walk}</td>
           </tr>
         ))}
       </tbody>

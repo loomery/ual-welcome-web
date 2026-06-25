@@ -134,9 +134,8 @@ export function ArrowRightIcon(props) {
 }
 
 /**
- * DDS "icon / information / caption" — the glyph inside the black chip
- * pinned to the bottom-left of every media-card image. Path lifted
- * verbatim from the UAL DDS Figma (20×20 grid).
+ * The glyph inside the black caption chip pinned to the bottom-left of
+ * every media-card image. Drawn on a 20×20 grid.
  */
 export function CaptionIcon(props) {
   return (

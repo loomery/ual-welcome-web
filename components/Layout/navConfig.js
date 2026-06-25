@@ -18,7 +18,7 @@ export const NAV_ITEMS = [
 ];
 
 /**
- * Desktop side-nav order + labels, matching the Figma home design
+ * Desktop side-nav order + labels
  * (Home / Tasks / Events / Map / Help). The side nav is text-only, so
  * these items carry no icon.
  *

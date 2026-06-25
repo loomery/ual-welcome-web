@@ -11,7 +11,7 @@ import { RouteAnnouncer } from './RouteAnnouncer';
 import { ScrollToTop } from './ScrollToTop';
 
 /**
- * App shell — matches the new UAL home design:
+ * App shell:
  *  - Skip links (WCAG 2.4.1 Bypass Blocks)
  *  - Full-width black top bar (logo only) — every breakpoint
  *  - The greeting/college hero (`AppHero`) appears on every page in one of two
@@ -33,16 +33,20 @@ export function AppShell({ children }) {
   const isHome = pathname === '/';
 
   return (
-    <div className="app-shell">
+    <div>
       <SkipLinks />
       <Header />
       {isHome && <AppHero variant="full" />}
-      <div className="app-shell__body" data-home={isHome || undefined}>
-        <div className="app-shell__rail">
+      <div className="md:grid md:grid-cols-[18rem_minmax(0,1fr)] md:items-start [body[data-onboarding]_&]:block">
+        <div className="md:flex md:flex-col md:self-stretch">
           {!isHome && <AppHero variant="compact" />}
           <SideNav />
         </div>
-        <main id="main-content" className="app-shell__main wrapper" tabIndex={-1}>
+        <main
+          id="main-content"
+          className="mx-auto max-w-grid min-w-0 px-(--grid-gutter) py-8 md:mx-0 md:w-full md:max-w-none md:bg-white md:py-12 min-[75rem]:px-12 [body[data-onboarding]_&]:mb-0 [body[data-onboarding]_&]:flex [body[data-onboarding]_&]:min-h-dvh [body[data-onboarding]_&]:items-start [body[data-onboarding]_&]:justify-center [body[data-onboarding]_&]:py-6 md:[body[data-onboarding]_&]:mx-0 md:[body[data-onboarding]_&]:w-auto md:[body[data-onboarding]_&]:max-w-[100vw] md:[body[data-onboarding]_&]:items-center"
+          tabIndex={-1}
+        >
           {children}
         </main>
       </div>
