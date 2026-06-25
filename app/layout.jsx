@@ -2,6 +2,7 @@ import './globals.css';
 import { AppShell } from '../components/Layout/AppShell';
 import { ThemeProvider } from '../components/Theme/ThemeProvider';
 import { GoogleTagManager } from '@next/third-parties/google';
+import GTMRouteTracker from '@/components/Analytics/GTMRouteTracker';
 import Script from 'next/script';
 
 // Next does NOT prepend basePath to the `manifest` metadata field (unlike
@@ -56,6 +57,7 @@ export default function RootLayout({ children }) {
       </head>
       <body>
         <ThemeProvider>
+          <GTMRouteTracker />
           <AppShell>{children}</AppShell>
         </ThemeProvider>
       </body>
