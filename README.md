@@ -245,24 +245,8 @@ ual-theme                 theme (older key, no ual: prefix)
 
 ## Deployment
 
-GitHub Actions deploys from a self-hosted runner. Each pipeline runs:
-`npm install` → `npm run build` (with `DEPLOY_PATH` set) → `npm run compress`
-(makes `student-centre.tar.gz`) → `node scripts/file-store.js` (uploads the
-archive to UAL's DXP file storage).
+On pushing to `main`, there is a GitHub Action to deploy to [dev.arts.ac.uk/student-centre](https://dev.arts.ac.uk/student-centre)
 
-| Trigger                        | Workflow            | Goes to                                                                  |
-| ------------------------------ | ------------------- | ------------------------------------------------------------------------ |
-| Push to `main`                 | `dev-pipeline.yml`  | [dev.arts.ac.uk/student-centre](https://dev.arts.ac.uk/student-centre)   |
-| A GitHub release is published  | `test-pipeline.yml` | [test.arts.ac.uk/student-centre](https://test.arts.ac.uk/student-centre) |
-| Run manually (enter a version) | `prod-pipeline.yml` | [studentcentre.arts.ac.uk](https://student-centre.arts.ac.uk)            |
+On release creation, there is a GitHub Action to deploy to [test.arts.ac.uk/student-centre](https://test.arts.ac.uk/student-centre)
 
-The deploy step needs these (Actions secrets/vars, or a local `.env` copied from
-`.env.example` to run `scripts/file-store.js` yourself):
-
-```
-DXP_ACCESS_KEY    DXP file-store API key
-DXP_TENANT_ID     DXP tenant id
-DXP_SERVER_URL    DXP server URL
-DXP_FS_DIRECTORY  target folder on the file store
-DEPLOY_PATH       sub-path, e.g. student-centre (sets basePath)
-```
+For deployments to production [studentcentre.arts.ac.uk](https://student-centre.arts.ac.uk) you must trigger the [Production Pipeline](https://git.arts.ac.uk/sss-team/student-prototype/actions/workflows/prod-pipeline.yml) specifying the release version
