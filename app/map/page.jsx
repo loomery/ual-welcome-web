@@ -1,7 +1,7 @@
 import { MapScreen } from '../../screens/Map/MapScreen';
 
 export const metadata = {
-  title: 'College map | UAL Welcome Week',
+  title: 'College map',
 };
 
 export default function MapPage() {

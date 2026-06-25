@@ -9,8 +9,8 @@ export function generateStaticParams() {
 export async function generateMetadata({ params }) {
   const { id } = await params;
   const category = HELP_BY_ID[id];
-  if (!category) return { title: 'Not found' };
-  return { title: `${category.title} | UAL Help` };
+  if (!category) return { title: 'Page not found' };
+  return { title: category.title };
 }
 
 export default async function HelpDetailPage({ params }) {

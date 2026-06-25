@@ -1,7 +1,7 @@
 import { EventsScreen } from '../../screens/Events/EventsScreen';
 
 export const metadata = {
-  title: 'Events | UAL Welcome Week',
+  title: 'Events',
 };
 
 export default function EventsPage() {

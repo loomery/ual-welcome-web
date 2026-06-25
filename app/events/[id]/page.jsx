@@ -13,9 +13,9 @@ export function generateStaticParams() {
 export async function generateMetadata({ params }) {
   const { id } = await params;
   const event = EVENTS.find((e) => e.id === id);
-  if (!event) return { title: 'Event not found | UAL Welcome Week' };
+  if (!event) return { title: 'Event not found' };
   return {
-    title: `${event.title} | UAL Welcome Week`,
+    title: event.title,
     description: event.description,
   };
 }

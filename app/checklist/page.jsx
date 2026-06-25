@@ -1,7 +1,7 @@
 import { TaskListScreen } from '../../screens/Checklist/TaskListScreen';
 
 export const metadata = {
-  title: 'Get set up for term | UAL Welcome Week',
+  title: 'Get set up for term',
 };
 
 export default function ChecklistPage() {
