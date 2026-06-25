@@ -10,15 +10,22 @@ import Script from 'next/script';
 const basePath = process.env.DEPLOY_PATH ? `/${process.env.DEPLOY_PATH}` : '';
 
 export const metadata = {
-  title: 'UAL Welcome Week',
+  // `default` is used when a route declares no title (and is the home/root
+  // title); `template` wraps every page-level `title` so the product brand
+  // lives in exactly one place. Pages set only their short title, e.g.
+  // `title: 'College map'` → "College map | UAL Student Centre".
+  title: {
+    default: 'UAL Student Centre',
+    template: '%s | UAL Student Centre',
+  },
   description:
-    'Your first week at the University of the Arts London — induction checklist, explorable campus map, and Welcome Week events.',
-  applicationName: 'UAL Welcome Week',
+    'The University of the Arts London Student Centre — your induction checklist, explorable campus map, and events.',
+  applicationName: 'UAL Student Centre',
   manifest: `${basePath}/manifest.webmanifest`,
   appleWebApp: {
     capable: true,
     statusBarStyle: 'default',
-    title: 'UAL Welcome',
+    title: 'UAL Student Centre',
   },
   icons: {
     icon: `${basePath}/icon.svg`,

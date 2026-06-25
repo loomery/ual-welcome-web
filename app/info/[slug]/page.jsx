@@ -13,9 +13,9 @@ export function generateStaticParams() {
 export async function generateMetadata({ params }) {
   const { slug } = await params;
   const page = INFO_PAGES_BY_SLUG[slug];
-  if (!page) return { title: 'Page not found | UAL Welcome Week' };
+  if (!page) return { title: 'Page not found' };
   return {
-    title: `${page.title} | UAL Welcome Week`,
+    title: page.title,
     description: page.lead,
   };
 }

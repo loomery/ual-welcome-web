@@ -1,7 +1,7 @@
 import { HelpCategoriesScreen } from '../../screens/Help/HelpCategoriesScreen';
 
 export const metadata = {
-  title: 'Help & support | UAL Welcome Week',
+  title: 'Help & support',
 };
 
 export default function HelpPage() {

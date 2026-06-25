@@ -1,7 +1,7 @@
 import { Button } from '../components/Button/Button';
 
 export const metadata = {
-  title: 'Page not found | UAL Welcome Week',
+  title: 'Page not found',
 };
 
 export default function NotFound() {
