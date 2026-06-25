@@ -29,8 +29,8 @@ export const metadata = {
     title: 'UAL Student Centre',
   },
   icons: {
-    icon: `${basePath}/icon.svg`,
-    apple: `${basePath}/icon.svg`,
+    icon: `https://ual-media-res.cloudinary.com/image/upload/v1648052990/favicon_pxfjol.ico`,
+    apple: `https://ual-media-res.cloudinary.com/image/upload/v1648052990/favicon_pxfjol.ico`,
   },
 };
 
