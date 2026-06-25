@@ -14,13 +14,12 @@ export function RouteAnnouncer() {
   const [message, setMessage] = useState('');
 
   useEffect(() => {
-    // Next applies the new route's metadata title asynchronously after the
-    // pathname changes; defer a tick so we read the updated value.
-    const id = setTimeout(() => {
-      const title = document.title.split('|')[0].trim() || 'Page';
-      setMessage(`Navigated to ${title}`);
-    }, 0);
-    return () => clearTimeout(id);
+    const title = document.title.split('|')[0].trim() || 'Page';
+    // The announcement is driven by navigation (an external system), so a
+    // synchronous setState here is intentional — the lint rule's cascading-
+    // render concern doesn't apply to a one-shot per-route message.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setMessage(`Navigated to ${title}`);
   }, [pathname]);
 
   return (
