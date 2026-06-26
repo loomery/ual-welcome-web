@@ -31,8 +31,8 @@ function PlanGraphic({ plan, hasImages, alt, className }) {
     // eslint-disable-next-line @next/next/no-img-element
     return <img src={FLOOR_PLAN} alt={alt} className={className} />;
   }
-  // PDF-derived campus maps ship a single image (one render fits every screen);
-  // CSM-style plans ship separate portrait/landscape crops swapped via <picture>.
+  // Single-image plans use one PNG for all screen sizes; multi-image plans
+  // ship separate portrait/landscape crops swapped via <picture>.
   if (plan.image) {
     // eslint-disable-next-line @next/next/no-img-element
     return <img src={asset(plan.image)} alt={alt} className={className} />;
