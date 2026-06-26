@@ -240,12 +240,11 @@ export const HELP_CATEGORIES = [
         type: 'online',
         label: 'Online',
         value: 'Wellbeing Hub',
-        href: 'https://www.arts.ac.uk/students/student-services/health-wellbeing-and-support-for-students',
+        href: 'https://www.arts.ac.uk/students/wellbeing',
       },
     ],
     ctaLabel: 'Visit Wellbeing Hub',
-    ctaHref:
-      'https://www.arts.ac.uk/students/student-services/health-wellbeing-and-support-for-students',
+    ctaHref: 'https://www.arts.ac.uk/students/wellbeing',
   },
   {
     id: 'disability',
