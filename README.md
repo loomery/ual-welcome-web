@@ -13,7 +13,6 @@ the bundle, and everything the user saves lives in their browser's
 - **Next.js 16** (App Router) + **React 19**
 - **JavaScript / JSX** with JSDoc types (no TypeScript)
 - **Tailwind CSS v4** — design tokens in `app/globals.css`
-- **Serwist** — optional PWA service worker
 - **Google Tag Manager** — via `@next/third-parties`, set up in `app/layout.jsx`
 
 `next.config.mjs` sets `output: 'export'`, so `npm run build` produces a fully
@@ -43,12 +42,6 @@ npm run dev        # http://localhost:3000
 | `npm run audit:full` | `npm audit`, moderate severity, all deps.     |
 | `npm run verify`     | Lint + audit + build. **Run before pushing.** |
 | `npm run compress`   | Tar `out/` for deployment.                    |
-
-To build with the PWA service worker (compiled by Serwist from `app/sw.js`):
-
-```bash
-ENABLE_PWA=1 npm run build
-```
 
 A Husky pre-commit hook runs ESLint + Prettier on staged files.
 
