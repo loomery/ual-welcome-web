@@ -3,10 +3,6 @@
 import { useThemeContext } from './ThemeProvider';
 import { SunIcon, MoonIcon } from '../Icon/NavIcons';
 
-/**
- * Toggle button per dark/light mode
- * Mostra l'icona solare (light) o lunare (dark) a seconda del tema corrente
- */
 export function ThemeToggle() {
   const { theme, toggleTheme, isLoading } = useThemeContext();
 

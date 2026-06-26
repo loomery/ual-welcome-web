@@ -91,7 +91,6 @@ export function MapScreen() {
     setLightboxOpen(false);
   }
 
-  // Close the lightbox on Escape.
   useEffect(() => {
     if (!lightboxOpen) return;
     const onKey = (e) => {
@@ -101,8 +100,6 @@ export function MapScreen() {
     return () => window.removeEventListener('keydown', onKey);
   }, [lightboxOpen]);
 
-  // A college either ships real per-floor plan images, or falls back to the
-  // generic placeholder gallery.
   const hasImages = Array.isArray(building.floorPlans) && building.floorPlans.length > 0;
   const plans = hasImages ? building.floorPlans : PLACEHOLDER_PLANS;
   const safeActive = Math.min(activePlan, plans.length - 1);

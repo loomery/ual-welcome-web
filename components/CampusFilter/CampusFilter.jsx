@@ -37,7 +37,6 @@ export function CampusFilter({ campuses, selected, onChange }) {
   const triggerRef = useRef(/** @type {HTMLButtonElement|null} */ (null));
   const panelId = useId();
 
-  // Close on outside click.
   useEffect(() => {
     if (!open) return;
     function onPointerDown(e) {

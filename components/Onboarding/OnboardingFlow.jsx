@@ -55,7 +55,6 @@ export function OnboardingFlow() {
 
   const activeSteps = useMemo(() => {
     let steps = ALL_STEPS;
-    // VisaStatus is only shown to international students.
     if (draft.studentType !== 'international') {
       steps = steps.filter((s) => s !== 'visaStatus');
     }

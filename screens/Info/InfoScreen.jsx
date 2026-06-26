@@ -4,8 +4,6 @@ import { LinkButton } from '../../components/Button/LinkButton';
 import { ArrowRightIcon, ChevronDownIcon, ExternalLinkIcon } from '../../components/Icon/NavIcons';
 import { asset } from '../../utils/asset';
 
-// Shared fallback artwork for media cards (placeholder until real
-// photography is supplied).
 const FALLBACK_IMAGE = asset('/images/card-fallback.png');
 
 /**
@@ -46,14 +44,11 @@ export function InfoScreen({ page }) {
  * @param {{ block: import('../../data/infoPages').InfoBlock }} props
  */
 function InfoBlock({ block }) {
-  // Accordion list blocks carry their heading inside the <summary> instead.
   const isAccordion = block.type === 'list' && block.accordion;
 
   return (
     <section className="flex flex-col gap-4" aria-label={block.heading}>
       {block.heading && !isAccordion && (
-        // Subheadings are normal weight — set explicitly so the base
-        // bold default for headings doesn't apply.
         <h2 className="text-step-2 font-normal tracking-ual-tight text-ual-dark dark:text-ual-light">
           {block.heading}
         </h2>
@@ -247,9 +242,6 @@ function InfoTable({ rows }) {
 function CtaButton({ cta }) {
   const isInternal = cta.href.startsWith('/');
 
-  // Inline underlined text-link variant with a 16px external-link icon —
-  // used where an inline link is wanted rather than the black banner button,
-  // e.g. "Read full terms and conditions".
   if (cta.variant === 'hyperlink') {
     return (
       <LinkButton
@@ -273,8 +265,6 @@ function CtaButton({ cta }) {
     );
   }
 
-  // The text colour lives on the inner span/icon so the white label stays
-  // visible on the dark button.
   const inner = (
     <>
       <span className="text-ual-light group-hover:text-ual-orange">

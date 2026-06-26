@@ -131,8 +131,7 @@ export const VISA_STATUS_OPTIONS = [
 /**
  * Topics a student can choose to show on their personalised home page.
  * Mirrors the dashboard's optional sections — the `id`s here must match
- * the section ids in DashboardScreen. Copy matches the Figma onboarding
- * "Build your UAL guide your way" frame.
+ * the section ids in DashboardScreen.
  *
  * @type {InterestOption[]}
  */

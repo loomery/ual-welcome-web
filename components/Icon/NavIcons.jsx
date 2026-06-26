@@ -1,61 +1,3 @@
-// Simple icons using currentColor; no decorative colour.
-// Each icon is aria-hidden by default at usage site.
-
-export function HomeIcon(props) {
-  return (
-    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
-      <path
-        d="M3 11.5 12 4l9 7.5V20a1 1 0 0 1-1 1h-5v-6h-6v6H4a1 1 0 0 1-1-1v-8.5Z"
-        stroke="currentColor"
-        strokeWidth={1.6}
-        strokeLinejoin="round"
-      />
-    </svg>
-  );
-}
-
-export function ChecklistIcon(props) {
-  return (
-    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
-      <rect x="4" y="4" width="16" height="16" stroke="currentColor" strokeWidth={1.6} />
-      <path
-        d="m8 12 3 3 5-6"
-        stroke="currentColor"
-        strokeWidth={1.6}
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-    </svg>
-  );
-}
-
-export function MapIcon(props) {
-  return (
-    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
-      <path
-        d="M9 4 3 6v14l6-2 6 2 6-2V4l-6 2-6-2Zm0 0v14m6-12v14"
-        stroke="currentColor"
-        strokeWidth={1.6}
-        strokeLinejoin="round"
-      />
-    </svg>
-  );
-}
-
-export function CalendarIcon(props) {
-  return (
-    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
-      <rect x="3" y="5" width="18" height="16" stroke="currentColor" strokeWidth={1.6} />
-      <path
-        d="M3 10h18M8 3v4M16 3v4"
-        stroke="currentColor"
-        strokeWidth={1.6}
-        strokeLinecap="round"
-      />
-    </svg>
-  );
-}
-
 export function FeedbackIcon(props) {
   return (
     <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
@@ -133,10 +75,6 @@ export function ArrowRightIcon(props) {
   );
 }
 
-/**
- * The glyph inside the black caption chip pinned to the bottom-left of
- * every media-card image. Drawn on a 20×20 grid.
- */
 export function CaptionIcon(props) {
   return (
     <svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
@@ -148,10 +86,6 @@ export function CaptionIcon(props) {
   );
 }
 
-/**
- * "Opens in a new tab" affordance. Stroke-based to match the rest of
- * the icon family. Combine with visually-hidden text for AT users.
- */
 export function ExternalLinkIcon(props) {
   return (
     <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
@@ -170,21 +104,6 @@ export function ExternalLinkIcon(props) {
         strokeLinecap="round"
         strokeLinejoin="round"
       />
-    </svg>
-  );
-}
-
-export function SupportIcon(props) {
-  return (
-    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
-      <circle cx="12" cy="12" r="9" stroke="currentColor" strokeWidth={1.6} />
-      <path
-        d="M12 8a2.5 2.5 0 0 1 1 4.8c-.6.3-1 .9-1 1.5V15"
-        stroke="currentColor"
-        strokeWidth={1.6}
-        strokeLinecap="round"
-      />
-      <circle cx="12" cy="18" r="0.75" fill="currentColor" />
     </svg>
   );
 }

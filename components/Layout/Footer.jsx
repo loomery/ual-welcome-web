@@ -12,16 +12,9 @@ import { asset } from '../../utils/asset';
 const STORAGE_PREFIX = 'ual:';
 
 /**
- * UAL corporate footer.
- *
- * Mirrors the arts.ac.uk footer used in the new design: a black band with
- * the "Because the world needs creativity" line-up, three columns of
- * informational links, a social row and the copyright line.
- *
- * Links are external UAL pages; some point at the site root as
- * placeholders for this prototype. The on-device privacy note + reset
- * affordance (important for shared/kiosk machines) is preserved as a slim
- * row at the very bottom so we don't lose that capability in the reskin.
+ * UAL corporate footer. The on-device privacy note + reset affordance
+ * (important for shared/kiosk machines) is preserved as a slim row at the
+ * very bottom.
  */
 
 /** @type {Array<Array<{ label: string, href: string }>>} */

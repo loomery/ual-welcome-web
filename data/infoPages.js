@@ -4,12 +4,6 @@
  * screens/Info/InfoScreen renders generically, so adding or editing a page is
  * a pure-data change.
  *
- * The pages mirror the Figma "personalised home → linked pages" board
- * (node 421-11884): Resources, Library service, Borrowing a laptop, Get set
- * up with a local doctor, Safety at UAL, and Find your campus. Cards on the
- * dashboard whose destination is not yet designed in Figma keep their `#`
- * placeholder and are intentionally absent here.
- *
  * @typedef {Object} InfoLink
  * @property {string} title
  * @property {string} [body]   Short supporting line shown under the title.

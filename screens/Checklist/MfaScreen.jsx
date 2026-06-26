@@ -8,8 +8,7 @@ import { usePersistedState } from '../../hooks/usePersistedState';
 import { useOnboardingProfile } from '../../hooks/useOnboardingProfile';
 import { StatusCircle } from '../../components/StatusCircle/StatusCircle';
 import { TaskAction } from '../../components/Checklist/TaskAction';
-import { CheckCircleIcon } from '../../components/Icon/NavIcons';
-import { ArrowRightIcon } from '../../components/Icon/NavIcons';
+import { ArrowRightIcon, CheckCircleIcon } from '../../components/Icon/NavIcons';
 
 const STATUS_KEY = 'ual:task:status:v1';
 const STEPS_KEY = 'ual:task:steps:v1';
