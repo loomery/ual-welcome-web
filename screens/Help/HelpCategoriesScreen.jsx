@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { HELP_CATEGORIES, SECTIONS } from '../../data/help';
+import { ChevronRightIcon } from '../../components/Icon/NavIcons';
 
 export function HelpCategoriesScreen() {
   return (
@@ -39,22 +40,12 @@ export function HelpCategoriesScreen() {
                     </span>
 
                     {/* Chevron */}
-                    <svg
-                      viewBox="0 0 24 24"
-                      fill="none"
+                    <ChevronRightIcon
                       aria-hidden="true"
-                      className="shrink-0 text-ual-medium"
                       width="16"
                       height="16"
-                    >
-                      <path
-                        d="M9 6l6 6-6 6"
-                        stroke="currentColor"
-                        strokeWidth="1.6"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      />
-                    </svg>
+                      className="shrink-0 text-ual-medium"
+                    />
                   </Link>
                 </li>
               ))}

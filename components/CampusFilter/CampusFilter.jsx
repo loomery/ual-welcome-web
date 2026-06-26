@@ -3,6 +3,7 @@
 import { useEffect, useId, useRef, useState } from 'react';
 import { Button } from '../Button/Button';
 import { LinkButton } from '../Button/LinkButton';
+import { ChevronDownIcon } from '../Icon/NavIcons';
 
 /**
  * Multi-select campus dropdown — used on /events to narrow the list to
@@ -129,30 +130,5 @@ export function CampusFilter({ campuses, selected, onChange }) {
         </div>
       )}
     </div>
-  );
-}
-
-/**
- * Inline chevron — `data-open` rotates 180° via CSS so the trigger
- * gives a clear "open/closed" affordance.
- */
-function ChevronDownIcon(props) {
-  return (
-    <svg
-      viewBox="0 0 24 24"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-      width={16}
-      height={16}
-      {...props}
-    >
-      <path
-        d="M6 9l6 6 6-6"
-        stroke="currentColor"
-        strokeWidth={1.6}
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-    </svg>
   );
 }
