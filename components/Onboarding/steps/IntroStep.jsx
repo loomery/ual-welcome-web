@@ -1,4 +1,5 @@
 import { Button } from '../../Button/Button';
+import { CheckCircleIcon } from '../../Icon/NavIcons';
 
 const BENEFITS = [
   'View what you need to do to prep for your first week',
@@ -33,22 +34,10 @@ export function IntroStep({ headingRef, hasExistingProfile, onResume, onStartOve
       <ul className="list-none space-y-4 p-0" aria-label="What you'll get">
         {BENEFITS.map((item) => (
           <li key={item} className="flex items-start gap-4">
-            {/* Orange check circle */}
-            <svg
-              viewBox="0 0 20 20"
-              fill="none"
+            <CheckCircleIcon
               aria-hidden="true"
-              className="mt-0.5 size-5 shrink-0"
-            >
-              <circle cx="10" cy="10" r="9" fill="var(--color-orange)" />
-              <path
-                d="M6 10l3 3 5-5"
-                stroke="#fff"
-                strokeWidth="1.6"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>
+              className="mt-0.5 size-5 shrink-0 text-ual-orange"
+            />
             <span className="text-step-0">{item}</span>
           </li>
         ))}

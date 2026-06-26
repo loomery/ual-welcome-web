@@ -1,20 +1,24 @@
-import { HomeIcon, ChecklistIcon, MapIcon, CalendarIcon, SupportIcon } from '../Icon/NavIcons';
+import HomeOutlinedIcon from '@mui/icons-material/HomeOutlined';
+import ChecklistOutlinedIcon from '@mui/icons-material/ChecklistOutlined';
+import CalendarMonthOutlinedIcon from '@mui/icons-material/CalendarMonthOutlined';
+import MapOutlinedIcon from '@mui/icons-material/MapOutlined';
+import HelpOutlinedIcon from '@mui/icons-material/HelpOutlined';
 
 /**
  * @typedef {Object} NavItem
  * @property {string} to          Internal route (use this OR href, not both)
  * @property {string} [href]      External URL — renders as <a> with target=_blank
  * @property {string} label
- * @property {import('react').ComponentType<import('react').SVGProps<SVGSVGElement>>} Icon
+ * @property {import('react').ComponentType} Icon
  */
 
 /** @type {NavItem[]} */
 export const NAV_ITEMS = [
-  { to: '/', label: 'Home', Icon: HomeIcon },
-  { to: '/checklist', label: 'Get set up', Icon: ChecklistIcon },
-  { to: '/events', label: 'Events', Icon: CalendarIcon },
-  { to: '/map', label: 'Map', Icon: MapIcon },
-  { to: '/help', label: 'Get help', Icon: SupportIcon },
+  { to: '/', label: 'Home', Icon: HomeOutlinedIcon },
+  { to: '/checklist', label: 'Get set up', Icon: ChecklistOutlinedIcon },
+  { to: '/events', label: 'Events', Icon: CalendarMonthOutlinedIcon },
+  { to: '/map', label: 'Map', Icon: MapOutlinedIcon },
+  { to: '/help', label: 'Get help', Icon: HelpOutlinedIcon },
 ];
 
 /**

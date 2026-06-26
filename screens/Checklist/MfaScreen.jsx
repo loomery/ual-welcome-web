@@ -8,6 +8,7 @@ import { usePersistedState } from '../../hooks/usePersistedState';
 import { useOnboardingProfile } from '../../hooks/useOnboardingProfile';
 import { StatusCircle } from '../../components/StatusCircle/StatusCircle';
 import { TaskAction } from '../../components/Checklist/TaskAction';
+import { CheckCircleIcon } from '../../components/Icon/NavIcons';
 import { ArrowRightIcon } from '../../components/Icon/NavIcons';
 
 const STATUS_KEY = 'ual:task:status:v1';
@@ -227,20 +228,5 @@ export function MfaScreen() {
         <span className="sr-only"> (opens in a new tab)</span>
       </a>
     </article>
-  );
-}
-
-function CheckCircleIcon() {
-  return (
-    <svg viewBox="0 0 24 24" width={24} height={24} fill="none" aria-hidden="true">
-      <circle cx="12" cy="12" r="11" fill="currentColor" />
-      <path
-        d="M7 12.5l3 3 7-7"
-        stroke="white"
-        strokeWidth="1.8"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-    </svg>
   );
 }

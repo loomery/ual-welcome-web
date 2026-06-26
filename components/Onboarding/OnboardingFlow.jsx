@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Button } from '../Button/Button';
+import { ChevronLeftIcon } from '../Icon/NavIcons';
 import { useOnboardingProfile } from '../../hooks/useOnboardingProfile';
 import { asset } from '../../utils/asset';
 import { IntroStep } from './steps/IntroStep';
@@ -161,15 +162,7 @@ export function OnboardingFlow() {
             aria-label="Go back to previous step"
             className="-ms-2 inline-flex cursor-pointer items-center gap-1 border-0 bg-transparent p-2 text-step-d1 text-ual-dark hover:text-ual-orange focus-visible:text-ual-orange focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ual-orange"
           >
-            <svg width="14" height="14" viewBox="0 0 18 18" fill="none" aria-hidden="true">
-              <path
-                d="M11 3L5 9L11 15"
-                stroke="currentColor"
-                strokeWidth="1.6"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>
+            <ChevronLeftIcon width="14" height="14" aria-hidden="true" />
             <span>Back</span>
           </button>
 

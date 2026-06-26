@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { Card } from '../../components/Card/Card';
 import { LinkButton } from '../../components/Button/LinkButton';
-import { ArrowRightIcon, ExternalLinkIcon } from '../../components/Icon/NavIcons';
+import { ArrowRightIcon, ChevronDownIcon, ExternalLinkIcon } from '../../components/Icon/NavIcons';
 import { asset } from '../../utils/asset';
 
 // Shared fallback artwork for media cards (placeholder until real
@@ -165,24 +165,6 @@ function ListBody({ block }) {
         className="w-full bg-ual-shade object-cover"
       />
     </div>
-  );
-}
-
-/**
- * Inline chevron for the accordion summaries — rotates 180° while the
- * <details> is open (via `group-open`).
- */
-function ChevronDownIcon(props) {
-  return (
-    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
-      <path
-        d="M6 9l6 6 6-6"
-        stroke="currentColor"
-        strokeWidth={1.6}
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-    </svg>
   );
 }
 
