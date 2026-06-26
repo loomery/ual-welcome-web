@@ -1,6 +1,7 @@
 'use client';
 
 import { useCallback } from 'react';
+import { asset } from '../../utils/asset';
 
 /**
  * Storage-key prefix for everything we persist on-device.
@@ -103,7 +104,7 @@ export function Footer() {
       /* swallow: private mode / disabled storage — nothing to clear */
     }
 
-    window.location.reload();
+    window.location.assign(asset('/onboarding'));
   }, []);
 
   return (
