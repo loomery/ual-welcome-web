@@ -67,7 +67,7 @@ function appleMapsUrl(b) {
  * its address, transport and accessibility info. Replaces the old 3D scene.
  */
 export function MapScreen() {
-  const { profile } = useOnboardingProfile();
+  const { profile, hydrated } = useOnboardingProfile();
   // `override` is set only when the student picks a college from the dropdown;
   // otherwise we follow their profile college (or the first building). Deriving
   // the active id this way avoids syncing profile → state inside an effect.
@@ -132,17 +132,19 @@ export function MapScreen() {
         </h2>
         <label className="flex flex-col gap-2">
           <span className="sr-only">Choose a college</span>
-          <select
-            value={collegeId}
-            onChange={(e) => handleSelectCollege(e.target.value)}
-            className="w-full appearance-none bg-ual-dark px-6 py-4 text-step-1 font-bold text-ual-light focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ual-orange dark:bg-ual-light dark:text-ual-dark"
-          >
-            {BUILDINGS.map((b) => (
-              <option key={b.id} value={b.id}>
-                {b.name}
-              </option>
-            ))}
-          </select>
+          {hydrated && (
+            <select
+              value={collegeId}
+              onChange={(e) => handleSelectCollege(e.target.value)}
+              className="w-full appearance-none bg-ual-dark px-6 py-4 text-step-1 font-bold text-ual-light focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ual-orange dark:bg-ual-light dark:text-ual-dark"
+            >
+              {BUILDINGS.map((b) => (
+                <option key={b.id} value={b.id}>
+                  {b.name}
+                </option>
+              ))}
+            </select>
+          )}
         </label>
       </section>
 

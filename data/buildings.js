@@ -284,4 +284,73 @@ export const BUILDINGS = [
       accessibilityUrl: 'https://www.accessable.co.uk/university-of-the-arts-london',
     },
   },
+  {
+    id: 'cci',
+    name: 'Creative Computing Institute',
+    college: 'CCI',
+    address: 'Arthouse, Barbican, London EC2Y 8RH',
+    size: [0.8, 0.8],
+    height: 1.0,
+    description: 'Creative computing, AI and digital technologies.',
+    geo: { lat: 51.5196, lng: -0.0963 },
+    transport: {
+      stations: [
+        { name: 'Barbican', walk: '5 min walk' },
+        { name: 'Farringdon', walk: '8 min walk' },
+      ],
+      buses: [
+        { name: '4', walk: '3 min walk' },
+        { name: '56', walk: '5 min walk' },
+      ],
+      accessibilityNote:
+        'Full access and route guides to Creative Computing Institute are available on AccessAble.',
+      accessibilityUrl: 'https://www.accessable.co.uk/university-of-the-arts-london',
+    },
+  },
+  {
+    id: 'ftti',
+    name: 'Fashion Textiles and Technology Institute',
+    college: 'FTTI',
+    address: 'East Bank, Stratford, London E20',
+    size: [0.8, 0.8],
+    height: 1.0,
+    description: 'Fashion, textiles and technology at East Bank, Queen Elizabeth Olympic Park.',
+    geo: { lat: 51.5454, lng: -0.0102 },
+    transport: {
+      stations: [
+        { name: 'Stratford', walk: '5 min walk' },
+        { name: 'Stratford International', walk: '8 min walk' },
+      ],
+      buses: [
+        { name: '25', walk: '5 min walk' },
+        { name: '97', walk: '5 min walk' },
+      ],
+      accessibilityNote:
+        'Full access and route guides to Fashion Textiles and Technology Institute are available on AccessAble.',
+      accessibilityUrl: 'https://www.accessable.co.uk/university-of-the-arts-london',
+    },
+  },
+  {
+    id: 'dai',
+    name: 'UAL School of Pre-degree Studies',
+    college: 'Pre-degree',
+    address: '272 High Holborn, London WC1V 7EY',
+    size: [0.8, 0.8],
+    height: 1.0,
+    description: 'Pre-degree and foundation courses across UAL.',
+    geo: { lat: 51.5178, lng: -0.1183 },
+    transport: {
+      stations: [
+        { name: 'Holborn', walk: '3 min walk' },
+        { name: 'Chancery Lane', walk: '5 min walk' },
+      ],
+      buses: [
+        { name: '1', walk: '2 min walk' },
+        { name: '59', walk: '2 min walk' },
+      ],
+      accessibilityNote:
+        'Full access and route guides to UAL School of Pre-degree Studies are available on AccessAble.',
+      accessibilityUrl: 'https://www.accessable.co.uk/university-of-the-arts-london',
+    },
+  },
 ];
