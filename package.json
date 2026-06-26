@@ -28,16 +28,16 @@
   "dependencies": {
     "@next/third-parties": "^16.2.9",
     "@serwist/next": "^9.5.9",
-    "next": "^16.2.4",
-    "react": "^19.2.5",
-    "react-dom": "^19.2.5",
+    "next": "^16.2.9",
+    "react": "^19.2.7",
+    "react-dom": "^19.2.7",
     "serwist": "^9.5.9"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4.2.4",
     "dotenv": "^17.4.2",
     "eslint": "^9.0.0",
-    "eslint-config-next": "^16.2.4",
+    "eslint-config-next": "^16.2.9",
     "eslint-plugin-better-tailwindcss": "^4.6.0",
     "husky": "^9.1.7",
     "lint-staged": "^16.4.0",
