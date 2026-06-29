@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Button } from '../Button/Button';
-import { ChevronLeftIcon } from '../Icon/NavIcons';
+import { ChevronLeftIcon, ArrowRightIcon } from '../Icon/NavIcons';
 import { useOnboardingProfile } from '../../hooks/useOnboardingProfile';
 import { asset } from '../../utils/asset';
 import { IntroStep } from './steps/IntroStep';
@@ -62,6 +62,7 @@ export function OnboardingFlow() {
   }, [draft.studentType]);
 
   const stepId = activeSteps[stepIndex];
+  const nextStepId = activeSteps[stepIndex + 1];
   const isLast = stepIndex === activeSteps.length - 1;
 
   // Move keyboard focus to the step heading whenever the step changes
@@ -148,8 +149,8 @@ export function OnboardingFlow() {
   return (
     <div
       className={[
-        'mx-auto w-full py-4 md:py-0 [&_h1]:text-step-3',
-        stepId === 'interests' ? 'max-w-[var(--content-max)]' : 'max-w-[42rem]',
+        'mx-auto w-full py-4 md:py-0',
+        stepId === 'intro' ? 'max-w-grid' : 'max-w-[57.6rem]',
       ].join(' ')}
     >
       {/* ── TOP BAR — back button + progress bar + skip ────────────────── */}
@@ -166,7 +167,7 @@ export function OnboardingFlow() {
           </button>
 
           <div
-            className="h-1 grow overflow-hidden bg-ual-dark-90"
+            className="h-2 grow overflow-hidden bg-ual-dark-90"
             role="progressbar"
             aria-valuemin={0}
             aria-valuemax={progressTotal}
@@ -206,6 +207,8 @@ export function OnboardingFlow() {
               hasExistingProfile={Boolean(profile?.completedAt)}
               onResume={() => router.push('/')}
               onStartOver={handleStartOver}
+              onNewStudent={goNext}
+              onReturningStudent={handleSkip}
             />
           )}
           {stepId === 'name' && (
@@ -255,25 +258,45 @@ export function OnboardingFlow() {
         </div>
       </div>
 
-      {/* ── ACTION BAR ─────────────────────────────────────────────────── */}
-      <div className="flex flex-col gap-2">
-        <Button className="self-start" onClick={goNext} disabled={!canAdvance}>
-          {stepId === 'intro'
-            ? 'Get started'
-            : isLast
-              ? 'Open my hub'
-              : stepId === 'interests'
-                ? "Let's go"
-                : 'Continue'}
-        </Button>
-        {stepId === 'intro' && (
-          <Button className="self-start" variant="ghost" onClick={handleSkip}>
-            Skip and show me everything
+      {stepId !== 'intro' && (
+        <div className="flex flex-col gap-2">
+          <Button
+            className="min-w-[18rem] justify-between self-start"
+            onClick={goNext}
+            disabled={!canAdvance}
+          >
+            {isLast ? 'Open my hub' : ctaLabel(nextStepId)}
+            <ArrowRightIcon aria-hidden="true" />
           </Button>
-        )}
-      </div>
+        </div>
+      )}
     </div>
   );
+}
+
+/**
+ * Descriptive "next" button label, named after the step it leads to —
+ * mirrors the Figma onboarding ("Next, select college/institute", …).
+ *
+ * @param {string} [nextStepId]
+ */
+function ctaLabel(nextStepId) {
+  switch (nextStepId) {
+    case 'college':
+      return 'Next, select college/institute';
+    case 'year':
+      return 'Next, select year of study';
+    case 'studentType':
+      return 'Next, select student type';
+    case 'visaStatus':
+      return 'Next, confirm visa status';
+    case 'interests':
+      return 'Next, select your interests';
+    case 'finish':
+      return 'Next, view summary';
+    default:
+      return 'Continue';
+  }
 }
 
 /**

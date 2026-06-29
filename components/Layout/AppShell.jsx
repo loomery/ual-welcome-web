@@ -3,6 +3,7 @@
 import { usePathname } from 'next/navigation';
 import { SkipLinks } from './SkipLinks';
 import { Header } from './Header';
+import { BetaNotice } from './BetaNotice';
 import { AppHero } from './AppHero';
 import { SideNav } from './SideNav';
 import { BottomNav } from './BottomNav';
@@ -14,6 +15,7 @@ import { ScrollToTop } from './ScrollToTop';
  * App shell:
  *  - Skip links (WCAG 2.4.1 Bypass Blocks)
  *  - Full-width black top bar (logo only) — every breakpoint
+ *  - Site-wide beta notice strip beneath the header
  *  - The greeting/college hero (`AppHero`) appears on every page in one of two
  *    layouts: a full-width band beneath the header on the home page, or a
  *    compact box at the top of the left sidebar column on every other page.
@@ -36,6 +38,7 @@ export function AppShell({ children }) {
     <div>
       <SkipLinks />
       <Header />
+      <BetaNotice />
       {isHome && <AppHero variant="full" />}
       <div className="md:grid md:grid-cols-[18rem_minmax(0,1fr)] md:items-start [body[data-onboarding]_&]:block">
         <div className="md:flex md:flex-col md:self-stretch">
@@ -44,7 +47,7 @@ export function AppShell({ children }) {
         </div>
         <main
           id="main-content"
-          className="mx-auto max-w-grid min-w-0 px-(--grid-gutter) py-8 md:mx-0 md:w-full md:max-w-none md:bg-white md:py-12 min-[75rem]:px-12 [body[data-onboarding]_&]:mb-0 [body[data-onboarding]_&]:flex [body[data-onboarding]_&]:min-h-dvh [body[data-onboarding]_&]:items-start [body[data-onboarding]_&]:justify-center [body[data-onboarding]_&]:py-6 md:[body[data-onboarding]_&]:mx-0 md:[body[data-onboarding]_&]:w-auto md:[body[data-onboarding]_&]:max-w-[100vw] md:[body[data-onboarding]_&]:items-center"
+          className="mx-auto max-w-grid min-w-0 px-(--grid-gutter) py-8 md:mx-0 md:w-full md:max-w-none md:bg-white md:py-12 min-[75rem]:px-12 md:[body[data-onboarding]_&]:bg-transparent md:[body[data-onboarding]_&]:py-10"
           tabIndex={-1}
         >
           {children}

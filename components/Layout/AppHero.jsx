@@ -1,7 +1,6 @@
 'use client';
 
 import { useMemo } from 'react';
-import { Countdown } from '../Countdown/Countdown';
 import { COLLEGE_OPTIONS } from '../../data/onboardingOptions';
 import { useOnboardingProfile } from '../../hooks/useOnboardingProfile';
 
@@ -48,7 +47,6 @@ export function AppHero({ variant = 'full' }) {
 
   return (
     <div className={wrapperClass}>
-      <Countdown />
       <section className="bg-ual-dark text-ual-light" aria-labelledby="app-hero-title">
         <div className={innerClass}>
           <p className={greetingClass}>Hi, {firstName}</p>

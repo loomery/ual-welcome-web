@@ -16,7 +16,7 @@ export function CollegeStep({ headingRef, value, onChange }) {
       <StepHeader headingRef={headingRef} title="Which college/institute are you joining?" />
 
       <ul
-        className="grid list-none grid-cols-1 gap-3 p-0 md:grid-cols-2 [&>li]:flex"
+        className="grid list-none grid-cols-1 gap-3 p-0 md:grid-cols-3 [&>li]:flex"
         role="radiogroup"
         aria-label="Choose your college"
       >
