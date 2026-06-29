@@ -18,16 +18,3 @@ export const MONTH_FMT = new Intl.DateTimeFormat('en-GB', { month: 'short' });
 
 /** "Mon" — abbreviated weekday, used for the event-card meta line. */
 export const WEEKDAY_FMT = new Intl.DateTimeFormat('en-GB', { weekday: 'short' });
-
-/**
- * Days between now and target date. Rounded. Negative if target is in the past.
- *
- * @param {string} targetIso
- * @param {Date} [now]
- * @returns {number}
- */
-export function daysUntil(targetIso, now = new Date()) {
-  const target = new Date(targetIso);
-  const ms = target.getTime() - now.getTime();
-  return Math.ceil(ms / (1000 * 60 * 60 * 24));
-}

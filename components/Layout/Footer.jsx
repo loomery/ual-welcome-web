@@ -102,7 +102,7 @@ export function Footer() {
 
   return (
     <footer
-      className="bg-ual-dark py-12 pb-[calc(var(--bottom-nav-height)+var(--space-l)+env(safe-area-inset-bottom,0))] text-ual-light md:pb-12 [body[data-onboarding]_&]:hidden"
+      className="bg-ual-dark py-12 pb-[calc(var(--bottom-nav-height)+var(--space-l)+env(safe-area-inset-bottom,0))] text-ual-light md:pb-12 [body[data-onboarding]_&]:pb-12"
       role="contentinfo"
     >
       <div className="mx-auto grid max-w-grid gap-8 px-(--grid-gutter)">

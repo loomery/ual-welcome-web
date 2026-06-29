@@ -15,7 +15,7 @@ import { UalLogo } from '../Icon/UalLogo';
  */
 export function Header() {
   return (
-    <header className="sticky top-0 z-300 bg-ual-dark py-3 text-ual-light [body[data-onboarding]_&]:hidden">
+    <header className="sticky top-0 z-300 bg-ual-dark py-3 text-ual-light">
       <div className="px-(--grid-gutter)">
         <Link
           href="/"
