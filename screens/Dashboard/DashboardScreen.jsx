@@ -174,7 +174,7 @@ export function DashboardScreen() {
             <h2 id="dash-get-setup">Get setup</h2>
             <Link
               href="/checklist"
-              className="text-step-d1 font-bold text-ual-dark underline underline-offset-2 hover:text-ual-orange dark:text-ual-light"
+              className="text-step-d1 font-bold text-ual-dark underline underline-offset-2 hover:text-ual-orange"
             >
               View all tasks
             </Link>
@@ -206,7 +206,7 @@ export function DashboardScreen() {
 
           {comingUp.length > 0 && (
             <div className="space-y-2">
-              <p className="text-step-d1 font-bold text-ual-dark dark:text-ual-light">Coming up</p>
+              <p className="text-step-d1 font-bold text-ual-dark">Coming up</p>
               <ol className="flex flex-col gap-1">
                 {comingUp.map((task, i) => (
                   <li key={task.id} className="text-step-d1 text-ual-medium">
@@ -288,7 +288,7 @@ function KeyInfoRow({ title, startsAt, endsAt, eyebrow, href }) {
           href={href}
           target="_blank"
           rel="noreferrer"
-          className="flex items-center justify-between gap-4 text-step-1 font-bold tracking-ual-tight text-ual-dark hover:text-ual-orange dark:text-ual-light"
+          className="flex items-center justify-between gap-4 text-step-1 font-bold tracking-ual-tight text-ual-dark hover:text-ual-orange"
         >
           <span>
             {title}
@@ -297,17 +297,12 @@ function KeyInfoRow({ title, startsAt, endsAt, eyebrow, href }) {
           <ArrowRightIcon width={28} height={28} aria-hidden="true" className="shrink-0" />
         </a>
       ) : (
-        <span className="text-step-1 font-bold tracking-ual-tight text-ual-dark dark:text-ual-light">
-          {title}
-        </span>
+        <span className="text-step-1 font-bold tracking-ual-tight text-ual-dark">{title}</span>
       )}
       {eyebrow && <p className="text-step-d1 font-bold text-ual-medium">{eyebrow}</p>}
       <div className="flex flex-col gap-1 text-step-d1 text-ual-medium md:flex-row md:items-center md:gap-4">
         <span className="md:shrink-0">Start: {start}</span>
-        <span
-          aria-hidden="true"
-          className="hidden h-px grow bg-ual-dark/15 md:block dark:bg-ual-light/20"
-        />
+        <span aria-hidden="true" className="hidden h-px grow bg-ual-dark/15 md:block" />
         <span className="md:shrink-0">End: {end}</span>
       </div>
     </div>

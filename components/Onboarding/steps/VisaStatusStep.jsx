@@ -35,7 +35,7 @@ export function VisaStatusStep({ headingRef, value, onChange }) {
         ))}
       </ul>
 
-      <p className="text-step-d1 text-ual-medium dark:text-ual-medium">
+      <p className="text-step-d1 text-ual-medium">
         Student Advice Service responds within 4 working days (5 in peak periods).
       </p>
     </div>

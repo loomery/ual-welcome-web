@@ -18,7 +18,7 @@ const VARIANT = {
   ghost:
     'border-ual-dark bg-transparent text-ual-dark hover:border-ual-orange hover:bg-ual-orange hover:text-ual-dark focus-visible:border-ual-orange focus-visible:bg-ual-orange focus-visible:text-ual-dark active:border-[var(--color-orange-pressed)] active:bg-[var(--color-orange-pressed)] active:text-ual-dark',
   accent:
-    'border-[var(--color-yellow)] bg-[var(--color-yellow)] text-ual-dark hover:border-[var(--color-yellow-pressed)] hover:bg-[var(--color-yellow-pressed)] focus-visible:border-[var(--color-yellow-pressed)] focus-visible:bg-[var(--color-yellow-pressed)] active:border-[var(--color-orange-pressed)] active:bg-[var(--color-orange-pressed)] dark:border-ual-dark dark:bg-ual-dark dark:text-ual-light',
+    'border-[var(--color-yellow)] bg-[var(--color-yellow)] text-ual-dark hover:border-[var(--color-yellow-pressed)] hover:bg-[var(--color-yellow-pressed)] focus-visible:border-[var(--color-yellow-pressed)] focus-visible:bg-[var(--color-yellow-pressed)] active:border-[var(--color-orange-pressed)] active:bg-[var(--color-orange-pressed)]',
 };
 
 const SIZE = { md: 'p-4 text-step-0/ual-condensed', sm: 'px-4 py-2 text-step-d1' };

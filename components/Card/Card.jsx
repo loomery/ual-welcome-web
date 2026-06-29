@@ -56,8 +56,6 @@ export function Card({ title, body, to, external, eyebrow, image, imageAlt = '' 
           className="relative block aspect-video overflow-hidden bg-ual-shade"
           aria-hidden="true"
         >
-          {/* Plain <img>: static export, dummy placeholder art — no need for
-              next/image optimisation here. */}
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src={image}

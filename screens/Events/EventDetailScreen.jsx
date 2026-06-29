@@ -92,13 +92,11 @@ export function EventDetailScreen({ id }) {
         ← Back to events
       </Link>
 
-      {/* Category + title */}
       <div className="mt-8 space-y-4">
         <span className={eventTagClasses(event.category.toLowerCase())}>{event.category}</span>
         <h1>{event.title}</h1>
       </div>
 
-      {/* Date / Time / Location */}
       <section className="mt-8 space-y-4" aria-label="Event details">
         <dl className="flex flex-col gap-4">
           <div className="grid grid-cols-[6rem_1fr] gap-3">
@@ -118,7 +116,6 @@ export function EventDetailScreen({ id }) {
         </dl>
       </section>
 
-      {/* Get directions */}
       <section className="mt-8 space-y-2" aria-labelledby="directions-heading">
         <h2 id="directions-heading">Get directions</h2>
         <div className="flex flex-wrap items-center gap-4">
@@ -134,13 +131,11 @@ export function EventDetailScreen({ id }) {
         </div>
       </section>
 
-      {/* About event */}
       <section className="mt-8 space-y-2" aria-labelledby="about-heading">
         <h2 id="about-heading">About event</h2>
         <p>{event.description}</p>
       </section>
 
-      {/* What do I need to bring? */}
       {event.whatToBring && (
         <section className="mt-8 space-y-2" aria-labelledby="bring-heading">
           <h2 id="bring-heading">What do I need to bring?</h2>
@@ -148,7 +143,6 @@ export function EventDetailScreen({ id }) {
         </section>
       )}
 
-      {/* CTAs */}
       <div className="mt-8 space-y-2">
         {event.externalUrl && (
           <Button href={event.externalUrl} target="_blank" rel="noreferrer">
@@ -160,18 +154,12 @@ export function EventDetailScreen({ id }) {
         </Button>
       </div>
 
-      {/* Related events — full cards so the description helps users decide
-          whether to attend. The compact variant is designed for horizontal
-          reels (fixed 18 rem width); in a grid it leaves awkward whitespace.
-          A hairline separator + extra block-start breathing room gives the
-          section a clear visual break from the main article content. */}
       {related.length > 0 && (
         <section
           className="mt-8 space-y-4 border-t border-ual-dark-90 pt-8"
           aria-labelledby="related-heading"
         >
           <div className="flex flex-wrap items-center justify-between gap-4">
-            {/* Scaled one step down from the default h2 — supplementary content. */}
             <h2 id="related-heading" className="text-step-1">
               More from {event.college}
             </h2>

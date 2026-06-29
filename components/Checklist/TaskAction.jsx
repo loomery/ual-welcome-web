@@ -18,9 +18,7 @@ export function TaskAction({ cta, apps }) {
     <div className="flex flex-col gap-2">
       {apps && (
         <div className="flex flex-wrap items-center gap-x-8 gap-y-2">
-          <span className="text-step-d1 font-bold text-ual-dark dark:text-ual-light">
-            Download the app
-          </span>
+          <span className="text-step-d1 font-bold text-ual-dark">Download the app</span>
           {apps.apple && <ExternalLink href={apps.apple} label="iOS" />}
           {apps.android && <ExternalLink href={apps.android} label="Android" />}
         </div>
@@ -40,7 +38,7 @@ function CtaLink({ cta }) {
     return (
       <Link
         href={cta.href}
-        className="inline-flex w-fit items-center gap-1 text-step-d1 font-bold text-ual-dark underline underline-offset-2 hover:text-ual-orange focus-visible:outline-2 focus-visible:outline-ual-dark dark:text-ual-light dark:focus-visible:outline-ual-light"
+        className="inline-flex w-fit items-center gap-1 text-step-d1 font-bold text-ual-dark underline underline-offset-2 hover:text-ual-orange focus-visible:outline-2 focus-visible:outline-ual-dark"
       >
         {cta.label}
         <ArrowRightIcon width={14} height={14} aria-hidden="true" />
@@ -60,7 +58,7 @@ function ExternalLink({ href, label }) {
       href={href}
       target="_blank"
       rel="noreferrer"
-      className="inline-flex w-fit items-center gap-1 text-step-d1 font-bold text-ual-dark underline underline-offset-2 hover:text-ual-orange focus-visible:outline-2 focus-visible:outline-ual-dark dark:text-ual-light dark:focus-visible:outline-ual-light"
+      className="inline-flex w-fit items-center gap-1 text-step-d1 font-bold text-ual-dark underline underline-offset-2 hover:text-ual-orange focus-visible:outline-2 focus-visible:outline-ual-dark"
     >
       {label}
       <ExternalLinkIcon width={12} height={12} aria-hidden="true" />
