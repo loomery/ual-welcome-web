@@ -259,27 +259,21 @@ export function OnboardingFlow() {
       </div>
 
       {stepId !== 'intro' && (
-        <div className="flex flex-col gap-2">
-          <Button
-            className="min-w-[18rem] justify-between self-start"
-            onClick={goNext}
-            disabled={!canAdvance}
-          >
-            {isLast ? 'Open my hub' : ctaLabel(nextStepId)}
-            <ArrowRightIcon aria-hidden="true" />
-          </Button>
-        </div>
+        <Button
+          weight="normal"
+          className="w-full justify-between whitespace-nowrap md:w-auto md:min-w-[18rem]"
+          onClick={goNext}
+          disabled={!canAdvance}
+        >
+          {isLast ? 'Open my hub' : ctaLabel(nextStepId)}
+          <ArrowRightIcon aria-hidden="true" />
+        </Button>
       )}
     </div>
   );
 }
 
-/**
- * Descriptive "next" button label, named after the step it leads to —
- * mirrors the Figma onboarding ("Next, select college/institute", …).
- *
- * @param {string} [nextStepId]
- */
+/** @param {string} [nextStepId] */
 function ctaLabel(nextStepId) {
   switch (nextStepId) {
     case 'college':

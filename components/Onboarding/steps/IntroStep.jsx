@@ -9,14 +9,13 @@ const BENEFITS = [
 ];
 
 /**
- *
  * @param {Object} props
  * @param {{ current: HTMLHeadingElement | null }} props.headingRef
  * @param {boolean} props.hasExistingProfile
- * @param {() => void} props.onResume            Open the hub (already set up).
- * @param {() => void} props.onStartOver         Wipe the draft and restart.
- * @param {() => void} props.onNewStudent        Begin the questionnaire.
- * @param {() => void} props.onReturningStudent  Skip setup, go to the hub.
+ * @param {() => void} props.onResume
+ * @param {() => void} props.onStartOver
+ * @param {() => void} props.onNewStudent
+ * @param {() => void} props.onReturningStudent
  */
 export function IntroStep({
   headingRef,
@@ -39,21 +38,21 @@ export function IntroStep({
         />
       </div>
 
-      <div className="space-y-6 md:order-2">
-        <div className="space-y-2">
+      <div className="flex flex-col gap-8 md:order-2 md:gap-14.5">
+        <div className="flex flex-col gap-3 md:gap-7">
           <h1 ref={headingRef} tabIndex={-1} className="outline-none">
             Let&apos;s get you ready for term
           </h1>
-          <p className="text-step-1 text-ual-medium">
+          <p className="text-step-1/ual-condensed text-(--color-copy-headings)">
             Everything you need to access before term in one place
           </p>
         </div>
 
-        <div className="space-y-3">
-          <p className="text-step-0 text-ual-dark">
+        <div className="flex flex-col gap-4">
+          <p className="text-base/ual-default font-ual-bold text-(--color-copy-headings)">
             Answer a few questions to see content you&apos;re interested in
           </p>
-          <ul className="list-disc space-y-2 ps-5 text-step-0 text-ual-dark">
+          <ul className="list-disc space-y-2 ps-6 text-base/ual-default text-(--color-copy-headings)">
             {BENEFITS.map((item) => (
               <li key={item}>{item}</li>
             ))}
@@ -71,14 +70,19 @@ export function IntroStep({
             </div>
           </div>
         ) : (
-          <div className="flex flex-col gap-3 md:flex-row">
-            <Button className="min-w-[18rem] justify-between" onClick={onNewStudent}>
+          <div className="flex flex-col gap-4 md:flex-row md:gap-14.5">
+            <Button
+              weight="normal"
+              className="w-full justify-between whitespace-nowrap md:w-auto md:min-w-[18rem]"
+              onClick={onNewStudent}
+            >
               I&apos;m a new student
               <ArrowRightIcon aria-hidden="true" />
             </Button>
             <Button
-              variant="ghost"
-              className="min-w-[18rem] justify-between"
+              variant="outline"
+              weight="normal"
+              className="w-full justify-between whitespace-nowrap md:w-auto md:min-w-[18rem]"
               onClick={onReturningStudent}
             >
               I&apos;m a returning student
