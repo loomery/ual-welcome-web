@@ -60,13 +60,13 @@ export function MfaScreen() {
     <article className="flex flex-col gap-8">
       <Link
         href="/checklist"
-        className="inline-flex w-fit items-center gap-1 text-step-d1 text-ual-medium underline underline-offset-2 hover:text-ual-orange focus-visible:outline-2 focus-visible:outline-ual-dark dark:focus-visible:outline-ual-light"
+        className="inline-flex w-fit items-center gap-1 text-step-d1 text-ual-medium underline underline-offset-2 hover:text-ual-orange focus-visible:outline-2 focus-visible:outline-ual-dark"
       >
         &larr; Back to setup list
       </Link>
 
       <header className="flex flex-col gap-3">
-        <h1 className="text-step-4/ual-condensed font-bold tracking-ual-tight text-ual-dark dark:text-ual-light">
+        <h1 className="text-step-4/ual-condensed font-bold tracking-ual-tight text-ual-dark">
           Multi-factor authentication (MFA)
         </h1>
         <p className="text-step-1 text-ual-medium">
@@ -90,18 +90,14 @@ export function MfaScreen() {
               onClick={() => setPathId(p.id)}
               className={[
                 'flex cursor-pointer flex-col gap-2 p-6 text-left transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ual-orange',
-                selected
-                  ? 'bg-ual-dark text-ual-light dark:bg-ual-light dark:text-ual-dark'
-                  : 'bg-ual-shade text-ual-dark dark:bg-ual-dark-95 dark:text-ual-light',
+                selected ? 'bg-ual-dark text-ual-light' : 'bg-ual-shade text-ual-dark',
               ].join(' ')}
             >
               <span className="flex items-start justify-between gap-3">
                 <span
                   className={[
                     'inline-block w-fit px-2 py-1 text-step-d1 font-bold',
-                    selected
-                      ? 'bg-ual-light text-ual-dark dark:bg-ual-dark dark:text-ual-light'
-                      : 'bg-ual-dark text-ual-light dark:bg-ual-light dark:text-ual-dark',
+                    selected ? 'bg-ual-light text-ual-dark' : 'bg-ual-dark text-ual-light',
                   ].join(' ')}
                 >
                   {p.badge}
@@ -122,7 +118,7 @@ export function MfaScreen() {
       <section aria-labelledby="mfa-steps-heading" className="flex flex-col gap-4">
         <h2
           id="mfa-steps-heading"
-          className="text-step-2 font-bold tracking-ual-tight text-ual-dark dark:text-ual-light"
+          className="text-step-2 font-bold tracking-ual-tight text-ual-dark"
         >
           Steps to complete
         </h2>
@@ -134,10 +130,7 @@ export function MfaScreen() {
           {path.steps.map((step) => {
             const done = Boolean(stepState[step.id]);
             return (
-              <li
-                key={step.id}
-                className="flex gap-4 border-t border-ual-dark/10 py-6 dark:border-ual-light/15"
-              >
+              <li key={step.id} className="flex gap-4 border-t border-ual-dark/10 py-6">
                 <button
                   type="button"
                   onClick={() => toggleStep(step.id)}
@@ -149,9 +142,7 @@ export function MfaScreen() {
                 </button>
 
                 <div className="flex min-w-0 grow flex-col gap-2">
-                  <p className="text-step-0/ual-default text-ual-dark dark:text-ual-light">
-                    {step.text}
-                  </p>
+                  <p className="text-step-0/ual-default text-ual-dark">{step.text}</p>
                   <TaskAction cta={step.cta} apps={step.apps} />
                 </div>
               </li>
@@ -161,10 +152,7 @@ export function MfaScreen() {
       </section>
 
       <section aria-labelledby="mfa-progress-heading" className="flex flex-col gap-2">
-        <p
-          id="mfa-progress-heading"
-          className="text-step-d1 font-bold text-ual-dark dark:text-ual-light"
-        >
+        <p id="mfa-progress-heading" className="text-step-d1 font-bold text-ual-dark">
           Your progress
         </p>
         <button
@@ -179,7 +167,7 @@ export function MfaScreen() {
       <section aria-labelledby="mfa-help-heading" className="flex flex-col gap-4">
         <h2
           id="mfa-help-heading"
-          className="text-step-2 font-bold tracking-ual-tight text-ual-dark dark:text-ual-light"
+          className="text-step-2 font-bold tracking-ual-tight text-ual-dark"
         >
           Get help
         </h2>
@@ -191,12 +179,12 @@ export function MfaScreen() {
                 href={channel.href}
                 target={channel.href.startsWith('http') ? '_blank' : undefined}
                 rel={channel.href.startsWith('http') ? 'noreferrer' : undefined}
-                className="group flex flex-col gap-2 focus-visible:outline-2 focus-visible:outline-ual-dark dark:focus-visible:outline-ual-light"
+                className="group flex flex-col gap-2 focus-visible:outline-2 focus-visible:outline-ual-dark"
               >
-                <span className="text-step-1 font-bold text-ual-dark group-hover:text-ual-orange dark:text-ual-light">
+                <span className="text-step-1 font-bold text-ual-dark group-hover:text-ual-orange">
                   {channel.label}
                 </span>
-                <span className="text-ual-dark group-hover:text-ual-orange dark:text-ual-light">
+                <span className="text-ual-dark group-hover:text-ual-orange">
                   <ArrowRightIcon width={20} height={20} aria-hidden="true" />
                 </span>
                 <span className="text-step-d1 text-ual-medium">{channel.value}</span>
@@ -213,7 +201,7 @@ export function MfaScreen() {
         href={MFA_READ_MORE.href}
         target="_blank"
         rel="noreferrer"
-        className="group flex items-center justify-between gap-6 bg-ual-dark p-8 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ual-light dark:bg-ual-dark-95"
+        className="group flex items-center justify-between gap-6 bg-ual-dark p-8 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ual-light"
       >
         <span className="text-step-2 font-bold tracking-ual-tight text-ual-light group-hover:text-ual-orange">
           {MFA_READ_MORE.label}

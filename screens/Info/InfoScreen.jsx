@@ -21,13 +21,13 @@ export function InfoScreen({ page }) {
     <article className="flex flex-col gap-8">
       <Link
         href="/"
-        className="inline-flex w-fit items-center gap-1 text-step-d1 text-ual-medium underline underline-offset-2 hover:text-ual-orange focus-visible:outline-2 focus-visible:outline-ual-dark dark:focus-visible:outline-ual-light"
+        className="inline-flex w-fit items-center gap-1 text-step-d1 text-ual-medium underline underline-offset-2 hover:text-ual-orange focus-visible:outline-2 focus-visible:outline-ual-dark"
       >
         &larr; Back to home
       </Link>
 
       <header className="flex flex-col gap-3">
-        <h1 className="text-step-4/ual-condensed font-bold tracking-ual-tight text-ual-dark dark:text-ual-light">
+        <h1 className="text-step-4/ual-condensed font-bold tracking-ual-tight text-ual-dark">
           {page.title}
         </h1>
         {page.lead && <p className="text-step-1 text-ual-medium">{page.lead}</p>}
@@ -49,30 +49,32 @@ function InfoBlock({ block }) {
   return (
     <section className="flex flex-col gap-4" aria-label={block.heading}>
       {block.heading && !isAccordion && (
-        <h2 className="text-step-2 font-normal tracking-ual-tight text-ual-dark dark:text-ual-light">
+        // Subheadings are normal weight — set explicitly so the base
+        // bold default for headings doesn't apply.
+        <h2 className="text-step-2 font-normal tracking-ual-tight text-ual-dark">
           {block.heading}
         </h2>
       )}
 
       {block.type === 'prose' &&
         block.body?.map((paragraph, i) => (
-          <p key={i} className="text-step-0/ual-default text-ual-dark dark:text-ual-light">
+          <p key={i} className="text-step-0/ual-default text-ual-dark">
             {paragraph}
           </p>
         ))}
 
       {block.type === 'list' &&
         (isAccordion ? (
-          <details open className="group border-b border-ual-dark/10 pb-4 dark:border-ual-light/15">
+          <details open className="group border-b border-ual-dark/10 pb-4">
             <summary className="flex cursor-pointer list-none items-baseline justify-between gap-4 [&::-webkit-details-marker]:hidden">
-              <h2 className="text-step-2 font-normal tracking-ual-tight text-ual-dark dark:text-ual-light">
+              <h2 className="text-step-2 font-normal tracking-ual-tight text-ual-dark">
                 {block.heading}
               </h2>
               <ChevronDownIcon
                 width={24}
                 height={24}
                 aria-hidden="true"
-                className="shrink-0 self-center text-ual-dark transition-transform group-open:rotate-180 dark:text-ual-light"
+                className="shrink-0 self-center text-ual-dark transition-transform group-open:rotate-180"
               />
             </summary>
             <div className="pt-4">
@@ -130,7 +132,7 @@ function ListBody({ block }) {
   const list = (
     <ol
       className={[
-        'flex flex-col gap-2 pl-6 text-step-0/ual-default text-ual-dark dark:text-ual-light',
+        'flex flex-col gap-2 pl-6 text-step-0/ual-default text-ual-dark',
         block.ordered ? 'list-decimal' : 'list-disc',
       ].join(' ')}
     >
@@ -170,11 +172,11 @@ function InfoLinkTile({ link }) {
   const isInternal = link.href.startsWith('/');
   const inner = (
     <>
-      <span className="text-step-1 font-bold text-ual-dark group-hover:text-ual-orange dark:text-ual-light">
+      <span className="text-step-1 font-bold text-ual-dark group-hover:text-ual-orange">
         {link.title}
         {!isInternal && <span className="sr-only"> (opens in a new tab)</span>}
       </span>
-      <span className="text-ual-dark group-hover:text-ual-orange dark:text-ual-light">
+      <span className="text-ual-dark group-hover:text-ual-orange">
         <ArrowRightIcon width={20} height={20} aria-hidden="true" />
       </span>
       {link.body && <span className="text-step-d1 text-ual-medium">{link.body}</span>}
@@ -182,7 +184,7 @@ function InfoLinkTile({ link }) {
   );
 
   const className =
-    'group flex flex-col gap-2 focus-visible:outline-2 focus-visible:outline-ual-dark dark:focus-visible:outline-ual-light';
+    'group flex flex-col gap-2 focus-visible:outline-2 focus-visible:outline-ual-dark';
 
   if (isInternal) {
     return (
@@ -215,13 +217,11 @@ function InfoTable({ rows }) {
     <div className="grid gap-6 md:grid-cols-2">
       {Object.entries(groups).map(([group, groupRows]) => (
         <div key={group} className="flex flex-col">
-          {group && (
-            <p className="text-step-d1 font-bold text-ual-dark dark:text-ual-light">{group}</p>
-          )}
+          {group && <p className="text-step-d1 font-bold text-ual-dark">{group}</p>}
           {groupRows.map((row, i) => (
             <div
               key={i}
-              className="flex items-center justify-between gap-4 border-t border-ual-dark/10 py-2 text-step-d1 text-ual-medium dark:border-ual-light/15"
+              className="flex items-center justify-between gap-4 border-t border-ual-dark/10 py-2 text-step-d1 text-ual-medium"
             >
               <span>{row.label}</span>
               <span>{row.value}</span>
@@ -281,7 +281,7 @@ function CtaButton({ cta }) {
   );
 
   const className =
-    'group flex w-full max-w-prose-ual items-center justify-between gap-6 bg-ual-dark px-8 py-6 text-step-1 font-bold tracking-ual-tight focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ual-dark dark:bg-ual-dark-95 dark:focus-visible:outline-ual-light';
+    'group flex w-full max-w-prose-ual items-center justify-between gap-6 bg-ual-dark px-8 py-6 text-step-1 font-bold tracking-ual-tight focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ual-dark';
 
   if (isInternal) {
     return (

@@ -4,29 +4,14 @@
    Components style entirely with Tailwind utilities; this file holds only
    the Tailwind config and design tokens. Structure (do not reorder):
      1. `@import "tailwindcss"`      — preflight + utilities.
-     2. `@custom-variant dark`       — maps the `dark:` prefix to the
-                                        [data-theme="dark"] attribute.
-     3. `@theme inline { … }`        — token bridge (CSS vars → utilities).
-     4. `:root` / `[data-theme=dark]`— token values (light + dark).
-     5. `@layer base`                — element resets + base typography, so
+     2. `@theme inline { … }`        — token bridge (CSS vars → utilities).
+     3. `:root`                      — token values (single light theme).
+     4. `@layer base`                — element resets + base typography, so
                                         utilities reliably override them.
-     6. `@keyframes`                 — referenced by inline animation styles.
+     5. `@keyframes`                 — referenced by inline animation styles.
    ========================================================================== */
 
 @import 'tailwindcss';
-
-/* ==========================================================================
-   Tailwind v4 — dark mode variant
-   --------------------------------------------------------------------------
-   The codebase still toggles dark mode via `data-theme="dark"` on
-   <html> (see ThemeProvider/useTheme). Tailwind 4's default `dark:`
-   variant looks for the `.dark` class instead, so we redefine it
-   here to read our existing attribute. Result: `dark:bg-x` /
-   `dark:focus:text-orange-700` patterns work alongside the existing
-   toggle without rewiring the theme provider.
-   ========================================================================== */
-
-@custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
 
 /* ==========================================================================
    Tailwind v4 — theme bridge
@@ -35,8 +20,7 @@
    utility (e.g. `--color-ual-orange` → `bg-ual-orange`, `--spacing-s` →
    `p-s`/`m-s`/`gap-s`, `--text-step-0` → `text-step-0`). The `inline`
    modifier tells Tailwind not to emit a redundant declaration on :root
-   and to reference our existing UAL tokens via `var()` at use-sites,
-   so the dark-mode swaps on the `:root` block below keep working.
+   and to reference our existing UAL tokens via `var()` at use-sites.
    ========================================================================== */
 
 @theme inline {
@@ -91,11 +75,11 @@
 }
 
 /* ==========================================================================
-   UAL Design System — design tokens (light + dark)
+   UAL Design System — design tokens
    ========================================================================== */
 
 :root {
-  /* ---- Brand colours (light mode) ---- */
+  /* ---- Brand colours ---- */
   --color-light: #fff;
   --color-medium: #3b3b3b;
   --color-shade: #f6f6f6;
@@ -185,29 +169,6 @@
 
   /* ---- Mobile navigation ---- */
   --bottom-nav-height: 4rem;
-}
-
-/* ---- Dark mode overrides ---- */
-[data-theme='dark'] {
-  --color-light: #1a1a1a;
-  --color-medium: #e0e0e0;
-  --color-shade: #2d2d2d;
-  --color-dark: #fff;
-  --color-dark--tint-50: #888;
-  --color-dark--tint-90: #333;
-  --color-dark--tint-95: #1f1f1f;
-  --color-orange: #ff7030;
-  --color-grey-18: #2d2d2d;
-
-  /* Content tokens inverted for dark mode (light-on-dark). */
-  --color-copy-headings: #f6f6f6;
-  --color-copy-body: #ffffff;
-
-  /* Utility colours stay visible in dark mode */
-  --color-utility-blue: #4fa3ff;
-  --color-utility-green: #2ddb52;
-  --color-utility-orange: #ffaa44;
-  --color-utility-red: #ff7b8c;
 }
 
 /* ==========================================================================
@@ -320,8 +281,7 @@
 
   body {
     background: var(--color-shade);
-    /* Body ink — explicit semantic token (same value as --color-dark in
-       light mode). */
+    /* Body ink — explicit semantic token (same value as --color-dark). */
     color: var(--color-copy-body);
     font-family: var(--font-main);
     font-size: var(--step-0);

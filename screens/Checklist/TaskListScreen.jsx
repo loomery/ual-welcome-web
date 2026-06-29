@@ -50,7 +50,7 @@ export function TaskListScreen() {
   return (
     <article className="flex flex-col gap-8">
       <header className="flex flex-col gap-3">
-        <h1 className="text-step-4/ual-condensed font-bold tracking-ual-tight text-ual-dark dark:text-ual-light">
+        <h1 className="text-step-4/ual-condensed font-bold tracking-ual-tight text-ual-dark">
           Get set up for term
         </h1>
         <p className="text-step-1 text-ual-medium">
@@ -61,7 +61,7 @@ export function TaskListScreen() {
       <section aria-labelledby="essential-heading" className="flex flex-col gap-4">
         <h2
           id="essential-heading"
-          className="text-step-2 font-bold tracking-ual-tight text-ual-dark dark:text-ual-light"
+          className="text-step-2 font-bold tracking-ual-tight text-ual-dark"
         >
           Essential tasks
         </h2>
@@ -74,10 +74,7 @@ export function TaskListScreen() {
             const done = statuses[task.id] === 'complete';
 
             return (
-              <li
-                key={task.id}
-                className="flex gap-4 border-t border-ual-dark/10 py-6 dark:border-ual-light/15"
-              >
+              <li key={task.id} className="flex gap-4 border-t border-ual-dark/10 py-6">
                 <button
                   type="button"
                   onClick={() => toggle(task.id)}
@@ -93,7 +90,7 @@ export function TaskListScreen() {
                 </button>
 
                 <div className="flex min-w-0 grow flex-col gap-2">
-                  <h3 className="text-step-1 font-bold tracking-ual-tight text-ual-dark dark:text-ual-light">
+                  <h3 className="text-step-1 font-bold tracking-ual-tight text-ual-dark">
                     {task.title}
                   </h3>
                   <p className="text-step-d1/ual-default text-ual-medium">
@@ -101,7 +98,7 @@ export function TaskListScreen() {
                   </p>
 
                   {task.note && (
-                    <p className="inline-flex w-fit items-center gap-1 bg-ual-shade px-3 py-2 text-step-d1 text-ual-medium dark:bg-ual-dark-95">
+                    <p className="inline-flex w-fit items-center gap-1 bg-ual-shade px-3 py-2 text-step-d1 text-ual-medium">
                       <span aria-hidden="true">&#9432;</span> {task.note}
                     </p>
                   )}

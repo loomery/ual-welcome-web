@@ -112,7 +112,7 @@ export function MapScreen() {
   return (
     <article className="flex flex-col gap-8">
       <header className="flex flex-col gap-3">
-        <h1 className="text-step-4/ual-condensed font-bold tracking-ual-tight text-ual-dark dark:text-ual-light">
+        <h1 className="text-step-4/ual-condensed font-bold tracking-ual-tight text-ual-dark">
           Find your college
         </h1>
         <p className="text-step-1 text-ual-medium">
@@ -121,10 +121,7 @@ export function MapScreen() {
       </header>
 
       <section className="flex flex-col gap-4" aria-labelledby="campus-heading">
-        <h2
-          id="campus-heading"
-          className="text-step-2 font-bold tracking-ual-tight text-ual-dark dark:text-ual-light"
-        >
+        <h2 id="campus-heading" className="text-step-2 font-bold tracking-ual-tight text-ual-dark">
           Your college
         </h2>
         <label className="flex flex-col gap-2">
@@ -133,7 +130,7 @@ export function MapScreen() {
             <select
               value={collegeId}
               onChange={(e) => handleSelectCollege(e.target.value)}
-              className="w-full appearance-none bg-ual-dark px-6 py-4 text-step-1 font-bold text-ual-light focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ual-orange dark:bg-ual-light dark:text-ual-dark"
+              className="w-full appearance-none bg-ual-dark px-6 py-4 text-step-1 font-bold text-ual-light focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ual-orange"
             >
               {BUILDINGS.map((b) => (
                 <option key={b.id} value={b.id}>
@@ -148,11 +145,11 @@ export function MapScreen() {
       <section className="flex flex-col gap-4" aria-label={`${building.name} college map`}>
         {useFloorDropdown && (
           <label className="flex flex-col gap-2">
-            <span className="text-step-d1 font-bold text-ual-dark dark:text-ual-light">Floor</span>
+            <span className="text-step-d1 font-bold text-ual-dark">Floor</span>
             <select
               value={safeActive}
               onChange={(e) => setActivePlan(Number(e.target.value))}
-              className="w-full appearance-none bg-ual-dark px-6 py-4 text-step-1 font-bold text-ual-light focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ual-orange dark:bg-ual-light dark:text-ual-dark"
+              className="w-full appearance-none bg-ual-dark px-6 py-4 text-step-1 font-bold text-ual-light focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ual-orange"
             >
               {plans.map((plan, i) => (
                 <option key={plan.id} value={i}>
@@ -195,9 +192,7 @@ export function MapScreen() {
                       aria-label={`Show ${plan.label} plan`}
                       className={[
                         'aspect-4/3 w-full cursor-pointer overflow-hidden bg-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ual-orange',
-                        selected
-                          ? 'outline-2 outline-ual-dark dark:outline-ual-light'
-                          : 'opacity-70 hover:opacity-100',
+                        selected ? 'outline-2 outline-ual-dark' : 'opacity-70 hover:opacity-100',
                       ].join(' ')}
                     >
                       <PlanGraphic
@@ -217,17 +212,12 @@ export function MapScreen() {
       </section>
 
       <section className="flex flex-col gap-2" aria-labelledby="address-heading">
-        <h2
-          id="address-heading"
-          className="text-step-2 font-bold tracking-ual-tight text-ual-dark dark:text-ual-light"
-        >
+        <h2 id="address-heading" className="text-step-2 font-bold tracking-ual-tight text-ual-dark">
           Address
         </h2>
-        <p className="text-step-1 font-bold text-ual-dark dark:text-ual-light">{building.name}</p>
+        <p className="text-step-1 font-bold text-ual-dark">{building.name}</p>
         <p className="text-step-d1 text-ual-medium">{building.address}</p>
-        <p className="mt-2 text-step-d1 font-bold text-ual-dark dark:text-ual-light">
-          Get directions to college
-        </p>
+        <p className="mt-2 text-step-d1 font-bold text-ual-dark">Get directions to college</p>
         <div className="flex flex-wrap gap-8">
           <DirectionLink href={citymapperUrl(building)} label="Citymapper" />
           <DirectionLink href={appleMapsUrl(building)} label="Apple maps" />
@@ -239,7 +229,7 @@ export function MapScreen() {
         <section className="flex flex-col gap-4" aria-labelledby="transport-heading">
           <h2
             id="transport-heading"
-            className="text-step-2 font-bold tracking-ual-tight text-ual-dark dark:text-ual-light"
+            className="text-step-2 font-bold tracking-ual-tight text-ual-dark"
           >
             Transport
           </h2>
@@ -262,7 +252,7 @@ export function MapScreen() {
         <section className="flex flex-col gap-2" aria-labelledby="accessibility-heading">
           <h2
             id="accessibility-heading"
-            className="text-step-2 font-bold tracking-ual-tight text-ual-dark dark:text-ual-light"
+            className="text-step-2 font-bold tracking-ual-tight text-ual-dark"
           >
             Accessibility
           </h2>
@@ -272,7 +262,7 @@ export function MapScreen() {
               href={building.transport.accessibilityUrl}
               target="_blank"
               rel="noreferrer"
-              className="font-bold text-ual-dark underline underline-offset-2 hover:text-ual-orange dark:text-ual-light"
+              className="font-bold text-ual-dark underline underline-offset-2 hover:text-ual-orange"
             >
               AccessAble
             </a>
@@ -323,7 +313,7 @@ function DirectionLink({ href, label }) {
       href={href}
       target="_blank"
       rel="noreferrer"
-      className="text-step-d1 font-bold text-ual-dark underline underline-offset-2 hover:text-ual-orange dark:text-ual-light"
+      className="text-step-d1 font-bold text-ual-dark underline underline-offset-2 hover:text-ual-orange"
     >
       {label}
       <span className="sr-only"> (opens in a new tab)</span>
@@ -337,9 +327,7 @@ function DirectionLink({ href, label }) {
 function TransportTable({ caption, distanceHeader, stops }) {
   return (
     <table className="w-full border-collapse text-step-d1">
-      <caption className="mb-2 text-left font-bold text-ual-dark dark:text-ual-light">
-        {caption}
-      </caption>
+      <caption className="mb-2 text-left font-bold text-ual-dark">{caption}</caption>
       <thead className="sr-only">
         <tr>
           <th scope="col">{caption}</th>
@@ -348,8 +336,8 @@ function TransportTable({ caption, distanceHeader, stops }) {
       </thead>
       <tbody>
         {stops.map((stop) => (
-          <tr key={stop.name} className="border-b border-ual-dark/10 dark:border-ual-light/15">
-            <td className="py-2 text-ual-dark dark:text-ual-light">{stop.name}</td>
+          <tr key={stop.name} className="border-b border-ual-dark/10">
+            <td className="py-2 text-ual-dark">{stop.name}</td>
             <td className="py-2 text-right text-ual-medium">{stop.walk}</td>
           </tr>
         ))}

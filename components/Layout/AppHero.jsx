@@ -43,16 +43,13 @@ export function AppHero({ variant = 'full' }) {
     : 'm-0 text-ual-dark-90 md:text-step-d1';
 
   const titleClass = isFull
-    ? 'text-step-4 tracking-ual-tight leading-ual-single text-ual-light dark:text-ual-dark max-w-[20ch]'
-    : 'tracking-ual-tight leading-ual-single text-ual-light dark:text-ual-dark md:text-step-2 md:max-w-[12ch]';
+    ? 'text-step-4 tracking-ual-tight leading-ual-single text-ual-light max-w-[20ch]'
+    : 'tracking-ual-tight leading-ual-single text-ual-light md:text-step-2 md:max-w-[12ch]';
 
   return (
     <div className={wrapperClass}>
       <Countdown />
-      <section
-        className="bg-ual-dark text-ual-light dark:bg-ual-light dark:text-ual-dark"
-        aria-labelledby="app-hero-title"
-      >
+      <section className="bg-ual-dark text-ual-light" aria-labelledby="app-hero-title">
         <div className={innerClass}>
           <p className={greetingClass}>Hi, {firstName}</p>
           <Title id="app-hero-title" className={titleClass}>

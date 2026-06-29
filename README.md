@@ -196,7 +196,6 @@ Hooks built on top:
 - `useOnboardingProfile` — the student profile (`patch`, `commit`, `reset`, `isComplete`).
 - `useEventFavourites` — saved events, shared across all components and browser
   tabs (uses `useSyncExternalStore`).
-- `useTheme` — see Styling below.
 
 Name keys `ual:<feature>:<thing>:v1`. Keys in use today:
 
@@ -207,7 +206,6 @@ ual:task:steps:v1         checklist sub-step progress
 ual:events:favourites:v1  saved event ids
 ual:dash:view:v1          dashboard view toggle
 ual:feedback:log:v1       feedback submissions
-ual-theme                 theme (older key, no ual: prefix)
 ```
 
 ## Static-site notes
@@ -235,9 +233,8 @@ ual-theme                 theme (older key, no ual: prefix)
   `@theme inline`) and used as utilities like `text-step-3`, `text-ual-orange`,
   `gap-l`. Some base styles in `globals.css` are unlayered, so if a utility
   class isn't taking effect, check that file.
-- **Single theme (light).** Dark mode was removed. `useTheme` always sets
-  `data-theme="light"`. `dark:` classes still exist in some components but are
-  inactive.
+- **Single light theme.** The app renders one theme straight from the `:root`
+  tokens in `globals.css`.
 - **Accessibility.** Skip links, semantic landmarks, focus handling, and a
   route-change announcement for screen readers
   (`components/Layout/RouteAnnouncer.jsx`). Page titles come from Next metadata —
