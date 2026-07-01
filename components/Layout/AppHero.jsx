@@ -1,8 +1,10 @@
 'use client';
 
 import { useMemo } from 'react';
+import { usePathname } from 'next/navigation';
 import { COLLEGE_OPTIONS } from '../../data/onboardingOptions';
 import { useOnboardingProfile } from '../../hooks/useOnboardingProfile';
+import { isOnboardingRoute } from '../../utils/isOnboardingRoute';
 
 /**
  * Welcome-week banner + greeting/college hero. Lives in the app shell so it
@@ -18,7 +20,9 @@ import { useOnboardingProfile } from '../../hooks/useOnboardingProfile';
  * @param {'full' | 'compact'} [props.variant]
  */
 export function AppHero({ variant = 'full' }) {
-  const { profile } = useOnboardingProfile();
+  const pathname = usePathname();
+  const isOnboarding = isOnboardingRoute(pathname);
+  const { profile, hydrated } = useOnboardingProfile();
 
   const college = useMemo(
     () => COLLEGE_OPTIONS.find((c) => c.id === profile?.collegeId),
@@ -31,9 +35,7 @@ export function AppHero({ variant = 'full' }) {
 
   // Compact variant is hidden on mobile (no sidebar column there) and shown
   // from 49.5rem up. Onboarding hides the hero entirely in both variants.
-  const wrapperClass = isFull
-    ? '[body[data-onboarding]_&]:hidden'
-    : 'hidden md:block [body[data-onboarding]_&]:hidden';
+  const wrapperClass = isOnboarding ? 'hidden' : isFull ? '' : 'hidden md:block';
 
   const innerClass = isFull ? 'px-[var(--grid-gutter)] pt-8 pb-16 space-y-2' : 'md:p-6 space-y-2';
 
@@ -49,9 +51,9 @@ export function AppHero({ variant = 'full' }) {
     <div className={wrapperClass}>
       <section className="bg-ual-dark text-ual-light" aria-labelledby="app-hero-title">
         <div className={innerClass}>
-          <p className={greetingClass}>Hi, {firstName}</p>
+          <p className={greetingClass}>{hydrated ? `Hi, ${firstName}` : ' '}</p>
           <Title id="app-hero-title" className={titleClass}>
-            {college?.name ?? 'Welcome to UAL'}
+            {hydrated ? (college?.name ?? 'Welcome to UAL') : ' '}
           </Title>
         </div>
       </section>

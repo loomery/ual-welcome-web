@@ -1,17 +1,3 @@
-export function FeedbackIcon(props) {
-  return (
-    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
-      <path
-        d="M4 5h16v11H9l-5 4V5Z"
-        stroke="currentColor"
-        strokeWidth={1.6}
-        strokeLinejoin="round"
-      />
-      <path d="M8 10h8M8 13h5" stroke="currentColor" strokeWidth={1.6} strokeLinecap="round" />
-    </svg>
-  );
-}
-
 export function CloseIcon(props) {
   return (
     <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>

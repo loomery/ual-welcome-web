@@ -2,10 +2,12 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { isOnboardingRoute } from '../../utils/isOnboardingRoute';
 import { NAV_ITEMS } from './navConfig';
 
 export function BottomNav() {
   const pathname = usePathname();
+  const isOnboarding = isOnboardingRoute(pathname);
 
   /**
    * @param {string | undefined} to
@@ -19,7 +21,11 @@ export function BottomNav() {
 
   return (
     <nav
-      className="fixed inset-x-0 bottom-0 z-10 border-t border-ual-dark bg-ual-light py-2 pb-[max(var(--space-2xs),env(safe-area-inset-bottom))] md:hidden [body[data-onboarding]_&]:hidden"
+      className={
+        isOnboarding
+          ? 'hidden'
+          : 'fixed inset-x-0 bottom-0 z-10 border-t border-ual-dark bg-ual-light py-2 pb-[max(var(--space-2xs),env(safe-area-inset-bottom))] md:hidden'
+      }
       aria-label="Primary mobile"
     >
       <ul className="m-0 flex list-none justify-around p-0" role="list">
