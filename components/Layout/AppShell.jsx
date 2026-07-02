@@ -1,6 +1,7 @@
 'use client';
 
 import { usePathname } from 'next/navigation';
+import { isOnboardingRoute } from '../../utils/isOnboardingRoute';
 import { SkipLinks } from './SkipLinks';
 import { Header } from './Header';
 import { BetaNotice } from './BetaNotice';
@@ -33,6 +34,7 @@ import { ScrollToTop } from './ScrollToTop';
 export function AppShell({ children }) {
   const pathname = usePathname();
   const isHome = pathname === '/';
+  const isOnboarding = isOnboardingRoute(pathname);
 
   return (
     <div>
@@ -40,14 +42,22 @@ export function AppShell({ children }) {
       <Header />
       <BetaNotice />
       {isHome && <AppHero variant="full" />}
-      <div className="md:grid md:grid-cols-[18rem_minmax(0,1fr)] md:items-start [body[data-onboarding]_&]:block">
+      <div
+        className={
+          isOnboarding ? 'md:block' : 'md:grid md:grid-cols-[18rem_minmax(0,1fr)] md:items-start'
+        }
+      >
         <div className="md:flex md:flex-col md:self-stretch">
           {!isHome && <AppHero variant="compact" />}
           <SideNav />
         </div>
         <main
           id="main-content"
-          className="mx-auto max-w-grid min-w-0 px-(--grid-gutter) py-8 md:mx-0 md:w-full md:max-w-none md:bg-white md:py-12 min-[75rem]:px-12 md:[body[data-onboarding]_&]:bg-transparent md:[body[data-onboarding]_&]:py-10"
+          className={
+            isOnboarding
+              ? 'mx-auto max-w-grid min-w-0 px-(--grid-gutter) py-8 md:mx-0 md:w-full md:max-w-none md:bg-transparent md:py-10 min-[75rem]:px-12'
+              : 'mx-auto max-w-grid min-w-0 px-(--grid-gutter) py-8 md:mx-0 md:w-full md:max-w-none md:bg-white md:py-12 min-[75rem]:px-12'
+          }
           tabIndex={-1}
         >
           {children}

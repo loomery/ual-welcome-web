@@ -2,10 +2,12 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { isOnboardingRoute } from '../../utils/isOnboardingRoute';
 import { SIDE_NAV_ITEMS } from './navConfig';
 
 export function SideNav() {
   const pathname = usePathname();
+  const isOnboarding = isOnboardingRoute(pathname);
 
   /**
    * @param {string | undefined} to
@@ -19,7 +21,11 @@ export function SideNav() {
 
   return (
     <nav
-      className="hidden bg-ual-shade md:sticky md:top-[calc(var(--space-xs)*2+var(--space-m))] md:flex md:min-h-[calc(100dvh-(var(--space-xs)*2+var(--space-m)))] md:flex-col md:pt-8 [body[data-onboarding]_&]:hidden"
+      className={
+        isOnboarding
+          ? 'hidden'
+          : 'hidden bg-ual-shade md:sticky md:top-[calc(var(--space-xs)*2+var(--space-m))] md:flex md:min-h-[calc(100dvh-(var(--space-xs)*2+var(--space-m)))] md:flex-col md:pt-8'
+      }
       aria-label="Primary desktop"
     >
       <ul className="m-0 flex grow list-none flex-col gap-1 px-0 py-6" role="list">
