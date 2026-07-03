@@ -113,11 +113,12 @@ export function DashboardScreen() {
 
   const interests = useMemo(() => profile?.interests ?? [], [profile?.interests]);
 
+  const effectiveView = interests.length === 0 ? 'all' : view;
+
   const visibleSections = useMemo(() => {
-    if (view === 'all') return DASHBOARD_SECTIONS;
-    if (interests.length === 0) return [];
+    if (effectiveView === 'all') return DASHBOARD_SECTIONS;
     return DASHBOARD_SECTIONS.filter((s) => interests.includes(s.id));
-  }, [view, interests]);
+  }, [effectiveView, interests]);
 
   const tasks = useMemo(() => visibleTasks(profile?.studentType), [profile?.studentType]);
   const completeCount = useMemo(
@@ -220,9 +221,11 @@ export function DashboardScreen() {
 
         {/* ── VIEW TOGGLE ────────────────────────────────────────── */}
         <div className="space-y-1">
-          <ViewToggle value={view} onChange={setView} options={VIEW_OPTIONS} />
+          <ViewToggle value={effectiveView} onChange={setView} options={VIEW_OPTIONS} />
           <p className="m-0 text-step-d1 text-ual-medium">
-            {view === 'all' ? 'Showing everything at UAL' : 'Showing your selected interests'}
+            {effectiveView === 'all'
+              ? 'Showing everything at UAL'
+              : 'Showing your selected interests'}
           </p>
         </div>
 
@@ -241,18 +244,6 @@ export function DashboardScreen() {
             </div>
           </section>
         ))}
-
-        {/* ── NO-INTERESTS PROMPT ────────────────────────────────── */}
-        {view === 'focus' && interests.length === 0 && (
-          <section className="space-y-4" aria-labelledby="dash-empty">
-            <h2 id="dash-empty">Nothing selected yet</h2>
-            <p>
-              Switch to <strong>All at UAL</strong> to browse everything, or{' '}
-              <LinkButton onClick={handleReset}>update your interests</LinkButton> to personalise
-              this view.
-            </p>
-          </section>
-        )}
 
         {/* ── PROFILE FOOTER ─────────────────────────────────────── */}
         <section className="space-y-2" aria-label="Profile">

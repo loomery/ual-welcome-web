@@ -29,7 +29,8 @@ export function AppHero({ variant = 'full' }) {
     [profile?.collegeId],
   );
 
-  const firstName = (profile?.name ?? '').split(' ')[0] || 'there';
+  const firstName = (profile?.name ?? '').split(' ')[0];
+  const greeting = firstName ? `Hi, ${firstName}` : 'Hi';
   const isFull = variant === 'full';
   const Title = isFull ? 'h1' : 'p';
 
@@ -51,7 +52,7 @@ export function AppHero({ variant = 'full' }) {
     <div className={wrapperClass}>
       <section className="bg-ual-dark text-ual-light" aria-labelledby="app-hero-title">
         <div className={innerClass}>
-          <p className={greetingClass}>{hydrated ? `Hi, ${firstName}` : ' '}</p>
+          <p className={greetingClass}>{hydrated ? greeting : ' '}</p>
           <Title id="app-hero-title" className={titleClass}>
             {hydrated ? (college?.name ?? 'Welcome to UAL') : ' '}
           </Title>
