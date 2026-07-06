@@ -1,6 +1,5 @@
 'use client';
 
-import Link from 'next/link';
 import { useEffect, useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { MFA_PATHS, MFA_HELP, MFA_READ_MORE } from '../../data/checklist';
@@ -58,13 +57,6 @@ export function MfaScreen() {
 
   return (
     <article className="flex flex-col gap-8">
-      <Link
-        href="/checklist"
-        className="inline-flex w-fit items-center gap-1 text-step-d1 text-ual-medium underline underline-offset-2 hover:text-ual-orange focus-visible:outline-2 focus-visible:outline-ual-dark"
-      >
-        &larr; Back to setup list
-      </Link>
-
       <header className="flex flex-col gap-3">
         <h1 className="text-step-4/ual-condensed font-bold tracking-ual-tight text-ual-dark">
           Multi-factor authentication (MFA)

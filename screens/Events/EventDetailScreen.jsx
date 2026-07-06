@@ -85,14 +85,7 @@ export function EventDetailScreen({ id }) {
 
   return (
     <article>
-      <Link
-        href="/events"
-        className="text-step-d1 text-ual-dark no-underline hover:text-ual-orange focus-visible:text-ual-orange focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ual-orange"
-      >
-        ← Back to events
-      </Link>
-
-      <div className="mt-8 space-y-4">
+      <div className="space-y-4">
         <span className={eventTagClasses(event.category.toLowerCase())}>{event.category}</span>
         <h1>{event.title}</h1>
       </div>

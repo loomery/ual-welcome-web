@@ -1,4 +1,3 @@
-import Link from 'next/link';
 import { Button } from '../../components/Button/Button';
 
 /**
@@ -7,13 +6,6 @@ import { Button } from '../../components/Button/Button';
 export function HelpDetailScreen({ category }) {
   return (
     <article className="space-y-8">
-      <Link
-        href="/help"
-        className="inline-flex items-center gap-2 text-step-d1 text-ual-dark no-underline hover:text-ual-orange focus-visible:text-ual-orange focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ual-orange"
-      >
-        ← Back to help
-      </Link>
-
       <div className="space-y-4">
         <h1>{category.title}</h1>
         <p>{category.description}</p>
