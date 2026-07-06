@@ -11,6 +11,7 @@ import { BottomNav } from './BottomNav';
 import { Footer } from './Footer';
 import { RouteAnnouncer } from './RouteAnnouncer';
 import { ScrollToTop } from './ScrollToTop';
+import { Breadcrumbs } from '../Breadcrumbs/Breadcrumbs';
 
 /**
  * App shell:
@@ -60,6 +61,7 @@ export function AppShell({ children }) {
           }
           tabIndex={-1}
         >
+          {!isOnboarding && <Breadcrumbs className="mb-8" />}
           {children}
         </main>
       </div>

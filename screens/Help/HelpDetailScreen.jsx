@@ -1,5 +1,4 @@
 import { Button } from '../../components/Button/Button';
-import { Breadcrumbs } from '../../components/Breadcrumbs/Breadcrumbs';
 
 /**
  * @param {{ category: import('../../data/help').HelpCategory }} props
@@ -7,14 +6,6 @@ import { Breadcrumbs } from '../../components/Breadcrumbs/Breadcrumbs';
 export function HelpDetailScreen({ category }) {
   return (
     <article className="space-y-8">
-      <Breadcrumbs
-        items={[
-          { label: 'Home', href: '/' },
-          { label: 'Get help', href: '/help' },
-          { label: category.title, href: `/help/${category.id}` },
-        ]}
-      />
-
       <div className="space-y-4">
         <h1>{category.title}</h1>
         <p>{category.description}</p>

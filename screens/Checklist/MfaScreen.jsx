@@ -8,7 +8,6 @@ import { useOnboardingProfile } from '../../hooks/useOnboardingProfile';
 import { StatusCircle } from '../../components/StatusCircle/StatusCircle';
 import { TaskAction } from '../../components/Checklist/TaskAction';
 import { ArrowRightIcon, CheckCircleIcon } from '../../components/Icon/NavIcons';
-import { Breadcrumbs } from '../../components/Breadcrumbs/Breadcrumbs';
 
 const STATUS_KEY = 'ual:task:status:v1';
 const STEPS_KEY = 'ual:task:steps:v1';
@@ -58,14 +57,6 @@ export function MfaScreen() {
 
   return (
     <article className="flex flex-col gap-8">
-      <Breadcrumbs
-        items={[
-          { label: 'Home', href: '/' },
-          { label: 'Tasks', href: '/checklist' },
-          { label: 'Multi-factor authentication (MFA)', href: '/checklist/mfa' },
-        ]}
-      />
-
       <header className="flex flex-col gap-3">
         <h1 className="text-step-4/ual-condensed font-bold tracking-ual-tight text-ual-dark">
           Multi-factor authentication (MFA)

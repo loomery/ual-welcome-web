@@ -7,7 +7,6 @@ import { VENUES } from '../../data/venues';
 import { Button } from '../../components/Button/Button';
 import { EventCard } from '../../components/EventCard/EventCard';
 import { downloadIcs } from '../../utils/ics';
-import { Breadcrumbs } from '../../components/Breadcrumbs/Breadcrumbs';
 import { LONG_DATE_FMT, TIME_FMT } from '../../utils/dates';
 
 /** Shared category-tag chip classes — mirrors `.event-tag` + per-category
@@ -86,15 +85,7 @@ export function EventDetailScreen({ id }) {
 
   return (
     <article>
-      <Breadcrumbs
-        items={[
-          { label: 'Home', href: '/' },
-          { label: 'Events', href: '/events' },
-          { label: event.title, href: `/events/${event.id}` },
-        ]}
-      />
-
-      <div className="mt-8 space-y-4">
+      <div className="space-y-4">
         <span className={eventTagClasses(event.category.toLowerCase())}>{event.category}</span>
         <h1>{event.title}</h1>
       </div>
