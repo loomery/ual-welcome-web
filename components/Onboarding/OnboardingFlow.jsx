@@ -124,6 +124,12 @@ export function OnboardingFlow() {
     setStepIndex((i) => Math.max(i - 1, 0));
   }
 
+  function skipStep() {
+    patch(stepSlice(stepId, draft));
+    setDirection('forward');
+    setStepIndex((i) => Math.min(i + 1, activeSteps.length - 1));
+  }
+
   function handleSkip() {
     patch(stepSlice(stepId, draft));
     commit();
@@ -182,7 +188,7 @@ export function OnboardingFlow() {
 
           <button
             type="button"
-            onClick={handleSkip}
+            onClick={skipStep}
             className="cursor-pointer border-0 bg-transparent p-2 text-step-d1 font-ual-bold text-ual-medium underline underline-offset-4 hover:text-ual-orange focus-visible:text-ual-orange focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ual-orange"
           >
             Skip
