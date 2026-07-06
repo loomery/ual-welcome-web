@@ -1,6 +1,5 @@
 'use client';
 
-import Link from 'next/link';
 import { useEffect, useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { MFA_PATHS, MFA_HELP, MFA_READ_MORE } from '../../data/checklist';
@@ -9,6 +8,7 @@ import { useOnboardingProfile } from '../../hooks/useOnboardingProfile';
 import { StatusCircle } from '../../components/StatusCircle/StatusCircle';
 import { TaskAction } from '../../components/Checklist/TaskAction';
 import { ArrowRightIcon, CheckCircleIcon } from '../../components/Icon/NavIcons';
+import { Breadcrumbs } from '../../components/Breadcrumbs/Breadcrumbs';
 
 const STATUS_KEY = 'ual:task:status:v1';
 const STEPS_KEY = 'ual:task:steps:v1';
@@ -58,12 +58,13 @@ export function MfaScreen() {
 
   return (
     <article className="flex flex-col gap-8">
-      <Link
-        href="/checklist"
-        className="inline-flex w-fit items-center gap-1 text-step-d1 text-ual-medium underline underline-offset-2 hover:text-ual-orange focus-visible:outline-2 focus-visible:outline-ual-dark"
-      >
-        &larr; Back to setup list
-      </Link>
+      <Breadcrumbs
+        items={[
+          { label: 'Home', href: '/' },
+          { label: 'Tasks', href: '/checklist' },
+          { label: 'Multi-factor authentication (MFA)', href: '/checklist/mfa' },
+        ]}
+      />
 
       <header className="flex flex-col gap-3">
         <h1 className="text-step-4/ual-condensed font-bold tracking-ual-tight text-ual-dark">

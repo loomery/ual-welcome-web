@@ -1,10 +1,17 @@
 import Link from 'next/link';
 import { HELP_CATEGORIES, SECTIONS } from '../../data/help';
 import { ChevronRightIcon } from '../../components/Icon/NavIcons';
+import { Breadcrumbs } from '../../components/Breadcrumbs/Breadcrumbs';
 
 export function HelpCategoriesScreen() {
   return (
     <article className="space-y-8">
+      <Breadcrumbs
+        items={[
+          { label: 'Home', href: '/' },
+          { label: 'Get help', href: '/help' },
+        ]}
+      />
       <div className="space-y-4">
         <h1>Get help and support</h1>
         <p className="text-step-1 text-ual-medium">

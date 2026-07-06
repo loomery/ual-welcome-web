@@ -10,6 +10,7 @@ import { CampusFilter } from '../../components/CampusFilter/CampusFilter';
 import { useEventFavourites } from '../../hooks/useEventFavourites';
 import { useOnboardingProfile } from '../../hooks/useOnboardingProfile';
 import { downloadIcsBulk } from '../../utils/ics';
+import { Breadcrumbs } from '../../components/Breadcrumbs/Breadcrumbs';
 
 /** @type {Array<import('../../data/events').EventCategory | 'All'>} */
 const CATEGORIES = ['All', 'Talk', 'Tour', 'Social', 'Workshop'];
@@ -94,7 +95,13 @@ export function EventsScreen() {
 
   return (
     <article>
-      <div className="space-y-4">
+      <Breadcrumbs
+        items={[
+          { label: 'Home', href: '/' },
+          { label: 'Events', href: '/events' },
+        ]}
+      />
+      <div className="mt-8 space-y-4">
         <h1>Plan your events</h1>
         <p className="text-step-1 text-ual-medium">
           {college

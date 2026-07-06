@@ -7,6 +7,7 @@ import { usePersistedState } from '../../hooks/usePersistedState';
 import { useOnboardingProfile } from '../../hooks/useOnboardingProfile';
 import { StatusCircle } from '../../components/StatusCircle/StatusCircle';
 import { TaskAction } from '../../components/Checklist/TaskAction';
+import { Breadcrumbs } from '../../components/Breadcrumbs/Breadcrumbs';
 
 const STATUS_KEY = 'ual:task:status:v1';
 
@@ -49,6 +50,12 @@ export function TaskListScreen() {
 
   return (
     <article className="flex flex-col gap-8">
+      <Breadcrumbs
+        items={[
+          { label: 'Home', href: '/' },
+          { label: 'Tasks', href: '/checklist' },
+        ]}
+      />
       <header className="flex flex-col gap-3">
         <h1 className="text-step-4/ual-condensed font-bold tracking-ual-tight text-ual-dark">
           Get set up for term

@@ -3,6 +3,7 @@ import { Card } from '../../components/Card/Card';
 import { LinkButton } from '../../components/Button/LinkButton';
 import { ArrowRightIcon, ChevronDownIcon, ExternalLinkIcon } from '../../components/Icon/NavIcons';
 import { asset } from '../../utils/asset';
+import { Breadcrumbs } from '../../components/Breadcrumbs/Breadcrumbs';
 
 const FALLBACK_IMAGE = asset('/images/card-fallback.png');
 
@@ -19,12 +20,12 @@ const FALLBACK_IMAGE = asset('/images/card-fallback.png');
 export function InfoScreen({ page }) {
   return (
     <article className="flex flex-col gap-8">
-      <Link
-        href="/"
-        className="inline-flex w-fit items-center gap-1 text-step-d1 text-ual-medium underline underline-offset-2 hover:text-ual-orange focus-visible:outline-2 focus-visible:outline-ual-dark"
-      >
-        &larr; Back to home
-      </Link>
+      <Breadcrumbs
+        items={[
+          { label: 'Home', href: '/' },
+          { label: page.title, href: `/info/${page.slug}` },
+        ]}
+      />
 
       <header className="flex flex-col gap-3">
         <h1 className="text-step-4/ual-condensed font-bold tracking-ual-tight text-ual-dark">

@@ -6,6 +6,7 @@ import { directionsUrl } from '../../utils/directions';
 import { useOnboardingProfile } from '../../hooks/useOnboardingProfile';
 import { CloseIcon } from '../../components/Icon/NavIcons';
 import { asset } from '../../utils/asset';
+import { Breadcrumbs } from '../../components/Breadcrumbs/Breadcrumbs';
 
 /** Placeholder floor plans shown for colleges without real plans yet. */
 const FLOOR_PLAN = asset('/images/floorplan-placeholder.svg');
@@ -111,6 +112,12 @@ export function MapScreen() {
 
   return (
     <article className="flex flex-col gap-8">
+      <Breadcrumbs
+        items={[
+          { label: 'Home', href: '/' },
+          { label: 'Map', href: '/map' },
+        ]}
+      />
       <header className="flex flex-col gap-3">
         <h1 className="text-step-4/ual-condensed font-bold tracking-ual-tight text-ual-dark">
           Find your college
