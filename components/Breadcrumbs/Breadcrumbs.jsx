@@ -1,26 +1,39 @@
 'use client';
 
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
-import { buildBreadcrumbs } from '../../utils/breadcrumbs';
+import { useSelectedLayoutSegments } from 'next/navigation';
+
+/** "library-service" → "Library service" */
+function toLabel(segment) {
+  const words = decodeURIComponent(segment).replace(/-/g, ' ');
+  return words.charAt(0).toUpperCase() + words.slice(1);
+}
 
 /**
  * Breadcrumbs — UAL DS "Navigation / Breadcrumbs". Rendered once at the layout
- * level; the trail is derived from the current pathname (see
- * `utils/breadcrumbs`), so pages never declare their own crumbs.
+ * level; the trail comes straight from the router via
+ * `useSelectedLayoutSegments()` (the Next.js hook made for breadcrumbs), so it
+ * follows whatever route is active with no per-page or per-route config.
  *
  * Underlined links separated by ">", wrapping on narrow viewports, orange on
- * hover/focus. The last item is the current page and carries
- * `aria-current="page"`. Renders nothing when there is no trail (e.g. home).
+ * hover/focus. The last item is the current page (`aria-current="page"`).
+ * Renders nothing at the root (no segments).
  *
  * @param {Object} props
  * @param {string} [props.className]  Extra classes on the <nav> wrapper.
  */
 export function Breadcrumbs({ className = '' }) {
-  const pathname = usePathname();
-  const items = buildBreadcrumbs(pathname);
+  const segments = useSelectedLayoutSegments();
 
-  if (items.length === 0) return null;
+  if (segments.length === 0) return null;
+
+  const items = [
+    { label: 'Home', href: '/' },
+    ...segments.map((segment, index) => ({
+      label: toLabel(segment),
+      href: `/${segments.slice(0, index + 1).join('/')}`,
+    })),
+  ];
 
   return (
     <nav aria-label="Breadcrumb" className={className}>
