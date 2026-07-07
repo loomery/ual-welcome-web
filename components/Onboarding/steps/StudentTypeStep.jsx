@@ -13,10 +13,14 @@ import { STUDENT_TYPE_OPTIONS } from '../../../data/onboardingOptions';
 export function StudentTypeStep({ headingRef, value, onChange }) {
   return (
     <div className="space-y-6">
-      <StepHeader headingRef={headingRef} title="Where are you studying from?" />
+      <StepHeader
+        headingRef={headingRef}
+        title="What type of student are you?"
+        body="This helps us show you the right arrival information."
+      />
 
       <ul
-        className="grid list-none grid-cols-1 gap-3 p-0 md:grid-cols-2 [&>li]:flex"
+        className="grid list-none grid-cols-1 gap-4 p-0 md:grid-cols-2 [&>li]:flex"
         role="radiogroup"
         aria-label="Choose your student type"
       >

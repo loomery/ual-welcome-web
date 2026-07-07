@@ -24,6 +24,31 @@ export function MenuIcon(props) {
   );
 }
 
+export function SuccessIcon(props) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
+      <circle cx="12" cy="12" r="11" fill="currentColor" />
+      <path
+        d="m7 12.5 3.2 3.2L17 8.5"
+        stroke="#fff"
+        strokeWidth={2}
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
+export function InfoIcon(props) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
+      <circle cx="12" cy="12" r="9" stroke="currentColor" strokeWidth={1.6} />
+      <path d="M12 11v5" stroke="currentColor" strokeWidth={1.6} strokeLinecap="round" />
+      <circle cx="12" cy="7.75" r="1" fill="currentColor" />
+    </svg>
+  );
+}
+
 export function PinIcon(props) {
   return (
     <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>

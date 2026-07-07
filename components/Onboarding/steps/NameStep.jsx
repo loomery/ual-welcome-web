@@ -26,7 +26,10 @@ export function NameStep({ headingRef, value, onChange, onSubmit }) {
           if (value.trim().length >= 1) onSubmit();
         }}
       >
-        <label className="sr-only" htmlFor="onboarding-name">
+        <label
+          className="mb-2 block text-step-d1 text-ual-medium"
+          htmlFor="onboarding-name"
+        >
           Your first name
         </label>
         <input

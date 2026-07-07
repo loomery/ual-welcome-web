@@ -2,12 +2,12 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { isOnboardingRoute } from '../../utils/isOnboardingRoute';
+import { isFocusedRoute } from '../../utils/isFocusedRoute';
 import { NAV_ITEMS } from './navConfig';
 
 export function SideNav() {
   const pathname = usePathname();
-  const isOnboarding = isOnboardingRoute(pathname);
+  const isOnboarding = isFocusedRoute(pathname);
 
   /**
    * @param {string | undefined} to

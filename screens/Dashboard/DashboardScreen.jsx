@@ -53,7 +53,7 @@ const DASHBOARD_SECTIONS = [
   },
   {
     id: 'life',
-    label: 'Life at UAL',
+    label: 'Student life',
     cards: [
       { title: 'Socials and events', to: '/events' },
       { title: 'Student union (SU)', external: 'https://www.arts.ac.uk/students/student-union' },
@@ -62,30 +62,28 @@ const DASHBOARD_SECTIONS = [
   },
   {
     id: 'health',
-    label: 'Health, wellbeing and safety',
+    label: 'Health and wellbeing',
     cards: [
       { title: 'Set up with a local doctor', to: '/info/local-doctor' },
       { title: 'Disability service', to: '#' },
+    ],
+  },
+  {
+    id: 'safety',
+    label: 'Safety',
+    cards: [
       { title: 'Safety at UAL', to: '/info/safety-at-ual' },
       { title: 'Campus safety', to: '#' },
     ],
   },
   {
     id: 'finances',
-    label: 'Finance',
+    label: 'Finances',
     cards: [
       { title: 'Setting up a bank account', to: '#' },
       { title: 'Resources', to: '#' },
       { title: 'About your tuition fees', to: '#' },
       { title: 'Discounts', to: '#' },
-    ],
-  },
-  {
-    id: 'careers',
-    label: 'Careers',
-    cards: [
-      { title: 'Job opportunities', to: '#' },
-      { title: 'Career advice', to: '#' },
     ],
   },
 ];

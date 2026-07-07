@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Button } from '../Button/Button';
 import { ChevronLeftIcon, ArrowRightIcon } from '../Icon/NavIcons';
@@ -9,32 +9,19 @@ import { asset } from '../../utils/asset';
 import { IntroStep } from './steps/IntroStep';
 import { NameStep } from './steps/NameStep';
 import { CollegeStep } from './steps/CollegeStep';
-import { YearStep } from './steps/YearStep';
 import { StudentTypeStep } from './steps/StudentTypeStep';
-import { VisaStatusStep } from './steps/VisaStatusStep';
 import { InterestsStep } from './steps/InterestsStep';
 import { FinishStep } from './steps/FinishStep';
 
-const ALL_STEPS = [
-  'intro',
-  'name',
-  'college',
-  'year',
-  'studentType',
-  'visaStatus',
-  'interests',
-  'finish',
-];
+const STEPS = ['intro', 'name', 'college', 'studentType', 'interests', 'finish'];
 
 /**
  * Multi-step onboarding flow.
  *
- * This component owns the navigation state (step index, direction, draft)
- * and delegates all rendering to the per-step components in ./steps/.
- *
- * Local-first state: the draft is patched to localStorage on every "next"
- * so a mid-flow refresh doesn't lose progress. `commit()` stamps
- * `completedAt` and unlocks the dashboard gate.
+ * Owns the navigation state (step index, direction, draft) and delegates
+ * rendering to the per-step components in ./steps/. The draft is patched to
+ * localStorage on every "next" so a mid-flow refresh keeps progress; the
+ * finish step commits (stamps `completedAt`) and opens the hub or profile.
  */
 export function OnboardingFlow() {
   const router = useRouter();
@@ -46,62 +33,40 @@ export function OnboardingFlow() {
 
   const [draft, setDraft] = useState(() => ({
     name: profile?.name ?? '',
+    studentStatus: profile?.studentStatus ?? '',
     collegeId: profile?.collegeId ?? '',
-    year: profile?.year ?? '',
     studentType: profile?.studentType ?? '',
-    visaStatus: profile?.visaStatus ?? '',
     interests: profile?.interests ?? [],
   }));
 
-  const activeSteps = useMemo(() => {
-    let steps = ALL_STEPS;
-    if (draft.studentType !== 'international') {
-      steps = steps.filter((s) => s !== 'visaStatus');
-    }
-    return steps;
-  }, [draft.studentType]);
+  const stepId = STEPS[stepIndex];
+  const nextStepId = STEPS[stepIndex + 1];
 
-  const stepId = activeSteps[stepIndex];
-  const nextStepId = activeSteps[stepIndex + 1];
-  const isLast = stepIndex === activeSteps.length - 1;
-
-  // Move keyboard focus to the step heading whenever the step changes
+  // Move keyboard focus to the step heading whenever the step changes.
   useEffect(() => {
     headingRef.current?.focus();
   }, [stepIndex]);
 
-  const canAdvance = useMemo(() => {
+  const canAdvance = (() => {
     switch (stepId) {
       case 'name':
         return draft.name.trim().length >= 1;
       case 'college':
         return Boolean(draft.collegeId);
-      case 'year':
-        return Boolean(draft.year);
       case 'studentType':
         return Boolean(draft.studentType);
-      case 'visaStatus':
-        return Boolean(draft.visaStatus);
       default:
         return true;
     }
-  }, [stepId, draft]);
+  })();
 
-  // Trap the browser back gesture so a trackpad swipe can't escape the flow
-  // mid-onboarding. We push a duplicate history entry on mount; popstate
-  // fires when the user navigates back and we immediately re-push to keep
-  // the URL at /onboarding. asset() prefixes the deploy sub-path — pushState
-  // bypasses Next's basePath handling, so a bare '/onboarding' would rewrite
-  // the URL to the host root on a sub-path deploy (e.g. /student-centre).
-  // The listener is removed on unmount (when the flow navigates away
-  // intentionally via replace).
+  // Trap the browser back gesture so a swipe can't escape mid-onboarding.
+  // asset() prefixes the deploy sub-path — pushState bypasses Next's basePath.
   useEffect(() => {
     window.history.pushState(null, '', asset('/onboarding'));
-
     function trapBack() {
       window.history.pushState(null, '', asset('/onboarding'));
     }
-
     window.addEventListener('popstate', trapBack);
     return () => window.removeEventListener('popstate', trapBack);
   }, []);
@@ -109,13 +74,8 @@ export function OnboardingFlow() {
   function goNext() {
     if (!canAdvance) return;
     patch(stepSlice(stepId, draft));
-    if (isLast) {
-      commit();
-      router.replace('/');
-      return;
-    }
     setDirection('forward');
-    setStepIndex((i) => Math.min(i + 1, activeSteps.length - 1));
+    setStepIndex((i) => Math.min(i + 1, STEPS.length - 1));
   }
 
   function goBack() {
@@ -127,30 +87,38 @@ export function OnboardingFlow() {
   function skipStep() {
     patch(stepSlice(stepId, draft));
     setDirection('forward');
-    setStepIndex((i) => Math.min(i + 1, activeSteps.length - 1));
+    setStepIndex((i) => Math.min(i + 1, STEPS.length - 1));
   }
 
-  function handleSkip() {
-    patch(stepSlice(stepId, draft));
-    commit();
-    router.replace('/');
+  /** Landing → record new/returning and enter the flow. */
+  function chooseStatus(studentStatus) {
+    setDraft((d) => ({ ...d, studentStatus }));
+    patch({ studentStatus });
+    setDirection('forward');
+    setStepIndex((i) => Math.min(i + 1, STEPS.length - 1));
   }
 
   function handleStartOver() {
     reset();
-    setDraft({
-      name: '',
-      collegeId: '',
-      year: '',
-      studentType: '',
-      visaStatus: '',
-      interests: [],
-    });
+    setDraft({ name: '', studentStatus: '', collegeId: '', studentType: '', interests: [] });
     setStepIndex(0);
   }
 
-  const progressTotal = activeSteps.length - 2;
+  function finishToHome() {
+    commit();
+    router.replace('/');
+  }
+
+  function finishToProfile() {
+    commit();
+    router.push('/profile');
+  }
+
+  // Progress spans the question steps only (exclude intro and finish).
+  const progressTotal = STEPS.length - 2;
   const progressCurrent = Math.max(0, Math.min(stepIndex, progressTotal));
+
+  const showChrome = stepId !== 'intro' && stepId !== 'finish';
 
   return (
     <div
@@ -159,8 +127,8 @@ export function OnboardingFlow() {
         stepId === 'intro' ? 'max-w-grid' : 'max-w-[57.6rem]',
       ].join(' ')}
     >
-      {/* ── TOP BAR — back button + progress bar + skip ────────────────── */}
-      {stepId !== 'intro' && stepId !== 'finish' && (
+      {/* ── TOP BAR — back + progress + skip ───────────────────────────── */}
+      {showChrome && (
         <div className="mb-6 flex items-center gap-4">
           <button
             type="button"
@@ -213,8 +181,8 @@ export function OnboardingFlow() {
               hasExistingProfile={Boolean(profile?.completedAt)}
               onResume={() => router.push('/')}
               onStartOver={handleStartOver}
-              onNewStudent={goNext}
-              onReturningStudent={handleSkip}
+              onNewStudent={() => chooseStatus('new')}
+              onReturningStudent={() => chooseStatus('returning')}
             />
           )}
           {stepId === 'name' && (
@@ -232,25 +200,11 @@ export function OnboardingFlow() {
               onChange={(v) => setDraft((d) => ({ ...d, collegeId: v }))}
             />
           )}
-          {stepId === 'year' && (
-            <YearStep
-              headingRef={headingRef}
-              value={draft.year}
-              onChange={(v) => setDraft((d) => ({ ...d, year: v }))}
-            />
-          )}
           {stepId === 'studentType' && (
             <StudentTypeStep
               headingRef={headingRef}
               value={draft.studentType}
               onChange={(v) => setDraft((d) => ({ ...d, studentType: v }))}
-            />
-          )}
-          {stepId === 'visaStatus' && (
-            <VisaStatusStep
-              headingRef={headingRef}
-              value={draft.visaStatus}
-              onChange={(v) => setDraft((d) => ({ ...d, visaStatus: v }))}
             />
           )}
           {stepId === 'interests' && (
@@ -260,18 +214,24 @@ export function OnboardingFlow() {
               onChange={(v) => setDraft((d) => ({ ...d, interests: v }))}
             />
           )}
-          {stepId === 'finish' && <FinishStep headingRef={headingRef} draft={draft} />}
+          {stepId === 'finish' && (
+            <FinishStep
+              headingRef={headingRef}
+              onHome={finishToHome}
+              onEditProfile={finishToProfile}
+            />
+          )}
         </div>
       </div>
 
-      {stepId !== 'intro' && (
+      {showChrome && (
         <Button
           weight="normal"
           className="w-full justify-between whitespace-nowrap md:w-auto md:min-w-[18rem]"
           onClick={goNext}
           disabled={!canAdvance}
         >
-          {isLast ? 'Open my hub' : ctaLabel(nextStepId)}
+          {ctaLabel(nextStepId)}
           <ArrowRightIcon aria-hidden="true" />
         </Button>
       )}
@@ -283,15 +243,11 @@ export function OnboardingFlow() {
 function ctaLabel(nextStepId) {
   switch (nextStepId) {
     case 'college':
-      return 'Next, select college/institute';
-    case 'year':
-      return 'Next, select year of study';
+      return 'Select college/institute';
     case 'studentType':
-      return 'Next, select student type';
-    case 'visaStatus':
-      return 'Next, confirm visa status';
+      return 'Select student type';
     case 'interests':
-      return 'Next, select your interests';
+      return 'Next, select uni interests';
     case 'finish':
       return 'Next, view summary';
     default:
@@ -300,8 +256,8 @@ function ctaLabel(nextStepId) {
 }
 
 /**
- * Returns the draft slice relevant to the given step so only that
- * step's data is patched to the persisted profile on "next".
+ * Returns the draft slice for the given step so only that step's data is
+ * patched to the persisted profile on "next".
  *
  * @param {string} stepId
  * @param {Object} draft
@@ -312,12 +268,8 @@ function stepSlice(stepId, draft) {
       return { name: draft.name.trim() };
     case 'college':
       return { collegeId: draft.collegeId };
-    case 'year':
-      return { year: draft.year };
     case 'studentType':
       return { studentType: draft.studentType };
-    case 'visaStatus':
-      return { visaStatus: draft.visaStatus };
     case 'interests':
       return { interests: draft.interests };
     default:
