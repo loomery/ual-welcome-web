@@ -7,7 +7,6 @@ import { Header } from './Header';
 import { BetaNotice } from './BetaNotice';
 import { AppHero } from './AppHero';
 import { SideNav } from './SideNav';
-import { BottomNav } from './BottomNav';
 import { Footer } from './Footer';
 import { RouteAnnouncer } from './RouteAnnouncer';
 import { ScrollToTop } from './ScrollToTop';
@@ -66,7 +65,6 @@ export function AppShell({ children }) {
         </main>
       </div>
       <Footer />
-      <BottomNav />
       <RouteAnnouncer />
       <ScrollToTop />
     </div>

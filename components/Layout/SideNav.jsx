@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { isOnboardingRoute } from '../../utils/isOnboardingRoute';
-import { SIDE_NAV_ITEMS } from './navConfig';
+import { NAV_ITEMS } from './navConfig';
 
 export function SideNav() {
   const pathname = usePathname();
@@ -29,7 +29,7 @@ export function SideNav() {
       aria-label="Primary desktop"
     >
       <ul className="m-0 flex grow list-none flex-col gap-1 px-0 py-6" role="list">
-        {SIDE_NAV_ITEMS.map((item) => {
+        {NAV_ITEMS.map((item) => {
           const active = isActive(item.to);
           const isExternal = Boolean(item.href);
 

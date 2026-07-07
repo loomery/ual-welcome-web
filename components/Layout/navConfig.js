@@ -1,37 +1,31 @@
-import HomeOutlinedIcon from '@mui/icons-material/HomeOutlined';
-import ChecklistOutlinedIcon from '@mui/icons-material/ChecklistOutlined';
-import CalendarMonthOutlinedIcon from '@mui/icons-material/CalendarMonthOutlined';
-import MapOutlinedIcon from '@mui/icons-material/MapOutlined';
-import HelpOutlinedIcon from '@mui/icons-material/HelpOutlined';
-
 /**
  * @typedef {Object} NavItem
- * @property {string} to          Internal route (use this OR href, not both)
- * @property {string} [href]      External URL — renders as <a> with target=_blank
+ * @property {string} [to]     Internal route (use this OR href, not both)
+ * @property {string} [href]   External URL — renders as <a> with target=_blank
  * @property {string} label
- * @property {import('react').ComponentType} Icon
  */
 
-/** @type {NavItem[]} */
+/**
+ * Primary navigation — the single source of truth for both the desktop side nav
+ * and the mobile hamburger menu. Order and labels come from the Figma design.
+ *
+ * @type {NavItem[]}
+ */
 export const NAV_ITEMS = [
-  { to: '/', label: 'Home', Icon: HomeOutlinedIcon },
-  { to: '/checklist', label: 'Get set up', Icon: ChecklistOutlinedIcon },
-  { to: '/events', label: 'Events', Icon: CalendarMonthOutlinedIcon },
-  { to: '/map', label: 'Map', Icon: MapOutlinedIcon },
-  { to: '/help', label: 'Get help', Icon: HelpOutlinedIcon },
+  { to: '/', label: 'Home' },
+  { to: '/checklist', label: 'Essentials' },
+  { to: '/studying', label: 'Studying' },
+  { to: '/map', label: 'Explore' },
+  { to: '/help', label: 'Get help' },
 ];
 
 /**
- * Desktop side-nav order + labels
- * (Home / Tasks / Events / Map / Help). The side nav is text-only, so
- * these items carry no icon.
+ * Secondary links shown beneath the divider in the mobile menu only.
+ * "About the beta" has no page yet, so it is an inert placeholder.
  *
- * @type {Array<{ to: string, label: string }>}
+ * @type {NavItem[]}
  */
-export const SIDE_NAV_ITEMS = [
-  { to: '/', label: 'Home' },
-  { to: '/checklist', label: 'Tasks' },
-  { to: '/events', label: 'Events' },
-  { to: '/map', label: 'Map' },
-  { to: '/help', label: 'Help' },
+export const MENU_SECONDARY = [
+  { href: '#', label: 'About the beta' },
+  { href: 'https://www.arts.ac.uk/', label: 'Main UAL site' },
 ];
