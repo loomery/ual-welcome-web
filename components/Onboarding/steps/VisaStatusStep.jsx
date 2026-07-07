@@ -14,11 +14,11 @@ import { VISA_STATUS_OPTIONS } from '../../../data/onboardingOptions';
  */
 export function VisaStatusStep({ headingRef, value, onChange }) {
   return (
-    <div className="flow" data-flow="m">
+    <div className="space-y-6">
       <StepHeader headingRef={headingRef} title="Have you set up your student visa?" />
 
       <ul
-        className="onboarding-grid onboarding-grid--two"
+        className="grid list-none grid-cols-1 gap-3 p-0 md:grid-cols-2 [&>li]:flex"
         role="radiogroup"
         aria-label="Choose your visa status"
       >
@@ -35,7 +35,7 @@ export function VisaStatusStep({ headingRef, value, onChange }) {
         ))}
       </ul>
 
-      <p className="text-step-d1 text-ual-medium dark:text-ual-medium">
+      <p className="text-step-d1 text-ual-medium">
         Student Advice Service responds within 4 working days (5 in peak periods).
       </p>
     </div>

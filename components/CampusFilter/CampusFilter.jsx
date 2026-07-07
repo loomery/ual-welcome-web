@@ -1,6 +1,9 @@
 'use client';
 
 import { useEffect, useId, useRef, useState } from 'react';
+import { Button } from '../Button/Button';
+import { LinkButton } from '../Button/LinkButton';
+import { ChevronDownIcon } from '../Icon/NavIcons';
 
 /**
  * Multi-select campus dropdown — used on /events to narrow the list to
@@ -34,7 +37,6 @@ export function CampusFilter({ campuses, selected, onChange }) {
   const triggerRef = useRef(/** @type {HTMLButtonElement|null} */ (null));
   const panelId = useId();
 
-  // Close on outside click.
   useEffect(() => {
     if (!open) return;
     function onPointerDown(e) {
@@ -67,33 +69,35 @@ export function CampusFilter({ campuses, selected, onChange }) {
   const isFilled = count > 0;
 
   return (
-    <div className="campus-filter" ref={wrapperRef}>
-      <button
+    <div className="relative" ref={wrapperRef}>
+      <Button
         ref={triggerRef}
-        type="button"
-        className="button campus-filter__trigger"
-        data-ghost-button={isFilled ? undefined : ''}
+        variant={isFilled ? 'solid' : 'ghost'}
+        className="[&>svg]:transition-transform [&>svg]:duration-150"
         aria-haspopup="true"
         aria-expanded={open}
         aria-controls={panelId}
         onClick={() => setOpen((v) => !v)}
       >
         {label}
-        <ChevronDownIcon aria-hidden="true" data-open={open || undefined} />
-      </button>
+        <ChevronDownIcon aria-hidden="true" className={open ? 'rotate-180' : undefined} />
+      </Button>
 
       {open && (
         <div
           id={panelId}
           role="group"
           aria-label="Filter events by campus"
-          className="campus-filter__panel"
+          className="absolute top-[calc(100%+var(--space-2xs))] left-0 z-20 flex min-w-72 flex-col gap-2 border-2 border-ual-dark bg-ual-light p-4 text-ual-dark max-[30rem]:right-0 max-[30rem]:left-auto"
         >
-          <div className="campus-filter__options">
+          <div className="flex flex-col gap-1">
             {campuses.map((c) => {
               const isChecked = selected.includes(c.name);
               return (
-                <label key={c.id} className="campus-filter__option">
+                <label
+                  key={c.id}
+                  className="flex cursor-pointer items-center gap-2 py-1 text-step-d1 hover:text-ual-orange"
+                >
                   <input
                     type="checkbox"
                     checked={isChecked}
@@ -107,45 +111,23 @@ export function CampusFilter({ campuses, selected, onChange }) {
                         toggleCampus(c.name);
                       }
                     }}
-                    className="campus-filter__checkbox"
+                    className="size-4 flex-none cursor-pointer accent-ual-dark"
                   />
-                  <span className="campus-filter__option-text">{c.name}</span>
+                  <span>{c.name}</span>
                 </label>
               );
             })}
           </div>
           {count > 0 && (
-            <button type="button" className="campus-filter__clear" onClick={() => onChange([])}>
+            <LinkButton
+              className="mt-2 self-start text-step-d1 font-ual-bold"
+              onClick={() => onChange([])}
+            >
               Clear all
-            </button>
+            </LinkButton>
           )}
         </div>
       )}
     </div>
-  );
-}
-
-/**
- * Inline chevron — `data-open` rotates 180° via CSS so the trigger
- * gives a clear "open/closed" affordance.
- */
-function ChevronDownIcon(props) {
-  return (
-    <svg
-      viewBox="0 0 24 24"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-      width={16}
-      height={16}
-      {...props}
-    >
-      <path
-        d="M6 9l6 6 6-6"
-        stroke="currentColor"
-        strokeWidth={1.6}
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-    </svg>
   );
 }

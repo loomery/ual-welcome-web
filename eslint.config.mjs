@@ -66,19 +66,13 @@ const config = [
       'better-tailwindcss/no-conflicting-classes': 'warn',
       // Remove leading/trailing spaces inside class strings.
       'better-tailwindcss/no-unnecessary-whitespace': 'warn',
-      // OFF for now — would flag every legacy custom class. Re-enable
-      // as `error` once the Tailwind-only migration is complete.
-      'better-tailwindcss/no-unknown-classes': 'off',
+      // Gate that proves no custom CSS classes survive in JSX. Enabled
+      // as `error` for the Tailwind-only refactor.
+      'better-tailwindcss/no-unknown-classes': 'error',
     },
   },
   {
-    ignores: [
-      '.next/**',
-      'node_modules/**',
-      'public/sw.js',
-      'public/workbox-*.js',
-      'next-env.d.ts',
-    ],
+    ignores: ['.next/**', 'node_modules/**', 'next-env.d.ts'],
   },
 ];
 

@@ -1,7 +1,7 @@
 {
-  "name": "UAL Welcome Week",
-  "short_name": "UAL Welcome",
-  "description": "Your first week at the University of the Arts London — induction checklist, campus map, and events.",
+  "name": "UAL Student Centre",
+  "short_name": "Student Centre",
+  "description": "The University of the Arts London Student Centre — induction checklist, campus map, and events.",
   "start_url": "/",
   "scope": "/",
   "display": "standalone",

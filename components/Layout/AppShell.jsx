@@ -1,28 +1,23 @@
 'use client';
 
 import { usePathname } from 'next/navigation';
+import { isOnboardingRoute } from '../../utils/isOnboardingRoute';
 import { SkipLinks } from './SkipLinks';
 import { Header } from './Header';
+import { BetaNotice } from './BetaNotice';
 import { AppHero } from './AppHero';
 import { SideNav } from './SideNav';
 import { BottomNav } from './BottomNav';
 import { Footer } from './Footer';
-import { FeedbackButton } from '../Feedback/FeedbackButton';
 import { RouteAnnouncer } from './RouteAnnouncer';
 import { ScrollToTop } from './ScrollToTop';
+import { Breadcrumbs } from '../Breadcrumbs/Breadcrumbs';
 
 /**
- * Routes that render full-bleed without the standard app chrome
- * (header, side nav, bottom nav, footer, feedback FAB). The password
- * gate is the only one for now; add others here if they need to
- * escape the shell.
- */
-const FULL_BLEED_PATHS = new Set(['/login']);
-
-/**
- * App shell — matches the new UAL home design:
+ * App shell:
  *  - Skip links (WCAG 2.4.1 Bypass Blocks)
  *  - Full-width black top bar (logo only) — every breakpoint
+ *  - Site-wide beta notice strip beneath the header
  *  - The greeting/college hero (`AppHero`) appears on every page in one of two
  *    layouts: a full-width band beneath the header on the home page, or a
  *    compact box at the top of the left sidebar column on every other page.
@@ -31,39 +26,46 @@ const FULL_BLEED_PATHS = new Set(['/login']);
  *  - Full-width footer beneath the row (privacy note + on-device reset)
  *  - Live region announcing route changes
  *
- * `'use client'` so it can read `usePathname()` and drop the chrome on auth
- * screens (e.g. /login). Children keep their own server/client boundaries.
+ * `'use client'` so it can read `usePathname()` to switch the hero layout
+ * on the home page. Children keep their own server/client boundaries.
  *
  * @param {Object} props
  * @param {import('react').ReactNode} props.children
  */
 export function AppShell({ children }) {
   const pathname = usePathname();
-  // trailingSlash: true canonicalises /login → /login/ — normalise before
-  // matching or the gate page renders inside the app chrome.
-  const path = pathname !== '/' && pathname.endsWith('/') ? pathname.slice(0, -1) : pathname;
-  if (FULL_BLEED_PATHS.has(path)) {
-    return <>{children}</>;
-  }
-
   const isHome = pathname === '/';
+  const isOnboarding = isOnboardingRoute(pathname);
 
   return (
-    <div className="app-shell">
+    <div>
       <SkipLinks />
       <Header />
+      <BetaNotice />
       {isHome && <AppHero variant="full" />}
-      <div className="app-shell__body" data-home={isHome || undefined}>
-        <div className="app-shell__rail">
+      <div
+        className={
+          isOnboarding ? 'md:block' : 'md:grid md:grid-cols-[18rem_minmax(0,1fr)] md:items-start'
+        }
+      >
+        <div className="md:flex md:flex-col md:self-stretch">
           {!isHome && <AppHero variant="compact" />}
           <SideNav />
         </div>
-        <main id="main-content" className="app-shell__main wrapper" tabIndex={-1}>
+        <main
+          id="main-content"
+          className={
+            isOnboarding
+              ? 'mx-auto max-w-grid min-w-0 px-(--grid-gutter) py-8 md:mx-0 md:w-full md:max-w-none md:bg-transparent md:py-10 min-[75rem]:px-12'
+              : 'mx-auto max-w-grid min-w-0 px-(--grid-gutter) py-8 md:mx-0 md:w-full md:max-w-none md:bg-white md:py-12 min-[75rem]:px-12'
+          }
+          tabIndex={-1}
+        >
+          {!isOnboarding && <Breadcrumbs className="mb-8" />}
           {children}
         </main>
       </div>
       <Footer />
-      {/* <FeedbackButton /> */}
       <BottomNav />
       <RouteAnnouncer />
       <ScrollToTop />

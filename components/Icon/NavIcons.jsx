@@ -1,75 +1,3 @@
-// Simple icons using currentColor; no decorative colour.
-// Each icon is aria-hidden by default at usage site.
-
-export function HomeIcon(props) {
-  return (
-    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
-      <path
-        d="M3 11.5 12 4l9 7.5V20a1 1 0 0 1-1 1h-5v-6h-6v6H4a1 1 0 0 1-1-1v-8.5Z"
-        stroke="currentColor"
-        strokeWidth={1.6}
-        strokeLinejoin="round"
-      />
-    </svg>
-  );
-}
-
-export function ChecklistIcon(props) {
-  return (
-    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
-      <rect x="4" y="4" width="16" height="16" stroke="currentColor" strokeWidth={1.6} />
-      <path
-        d="m8 12 3 3 5-6"
-        stroke="currentColor"
-        strokeWidth={1.6}
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-    </svg>
-  );
-}
-
-export function MapIcon(props) {
-  return (
-    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
-      <path
-        d="M9 4 3 6v14l6-2 6 2 6-2V4l-6 2-6-2Zm0 0v14m6-12v14"
-        stroke="currentColor"
-        strokeWidth={1.6}
-        strokeLinejoin="round"
-      />
-    </svg>
-  );
-}
-
-export function CalendarIcon(props) {
-  return (
-    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
-      <rect x="3" y="5" width="18" height="16" stroke="currentColor" strokeWidth={1.6} />
-      <path
-        d="M3 10h18M8 3v4M16 3v4"
-        stroke="currentColor"
-        strokeWidth={1.6}
-        strokeLinecap="round"
-      />
-    </svg>
-  );
-}
-
-export function FeedbackIcon(props) {
-  return (
-    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
-      <path
-        d="M4 5h16v11H9l-5 4V5Z"
-        stroke="currentColor"
-        strokeWidth={1.6}
-        strokeLinejoin="round"
-      />
-      <path d="M8 10h8M8 13h5" stroke="currentColor" strokeWidth={1.6} strokeLinecap="round" />
-    </svg>
-  );
-}
-
 export function CloseIcon(props) {
   return (
     <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
@@ -133,11 +61,6 @@ export function ArrowRightIcon(props) {
   );
 }
 
-/**
- * DDS "icon / information / caption" — the glyph inside the black chip
- * pinned to the bottom-left of every media-card image. Path lifted
- * verbatim from the UAL DDS Figma (20×20 grid).
- */
 export function CaptionIcon(props) {
   return (
     <svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
@@ -149,10 +72,6 @@ export function CaptionIcon(props) {
   );
 }
 
-/**
- * "Opens in a new tab" affordance. Stroke-based to match the rest of
- * the icon family. Combine with visually-hidden text for AT users.
- */
 export function ExternalLinkIcon(props) {
   return (
     <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
@@ -175,17 +94,63 @@ export function ExternalLinkIcon(props) {
   );
 }
 
-export function SupportIcon(props) {
+export function ChevronRightIcon(props) {
   return (
     <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
-      <circle cx="12" cy="12" r="9" stroke="currentColor" strokeWidth={1.6} />
       <path
-        d="M12 8a2.5 2.5 0 0 1 1 4.8c-.6.3-1 .9-1 1.5V15"
+        d="M9 6l6 6-6 6"
         stroke="currentColor"
         strokeWidth={1.6}
         strokeLinecap="round"
+        strokeLinejoin="round"
       />
-      <circle cx="12" cy="18" r="0.75" fill="currentColor" />
+    </svg>
+  );
+}
+
+export function ChevronDownIcon(props) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
+      <path
+        d="M6 9l6 6 6-6"
+        stroke="currentColor"
+        strokeWidth={1.6}
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
+export function ChevronLeftIcon(props) {
+  return (
+    <svg viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
+      <path
+        d="M11 3L5 9L11 15"
+        stroke="currentColor"
+        strokeWidth={1.6}
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
+/**
+ * Filled circle with a white checkmark. Apply `text-ual-orange` (or any
+ * colour class) at the call site to tint the circle; the checkmark stays white.
+ */
+export function CheckCircleIcon(props) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
+      <circle cx="12" cy="12" r="11" fill="currentColor" />
+      <path
+        d="M7 12.5l3 3 7-7"
+        stroke="white"
+        strokeWidth={1.8}
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
     </svg>
   );
 }

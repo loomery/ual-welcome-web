@@ -1,10 +1,9 @@
 import Link from 'next/link';
 import { Card } from '../../components/Card/Card';
-import { ArrowRightIcon, ExternalLinkIcon } from '../../components/Icon/NavIcons';
+import { LinkButton } from '../../components/Button/LinkButton';
+import { ArrowRightIcon, ChevronDownIcon, ExternalLinkIcon } from '../../components/Icon/NavIcons';
 import { asset } from '../../utils/asset';
 
-// Shared fallback artwork for media cards (matches the placeholder imagery in
-// the Figma board until real photography is supplied).
 const FALLBACK_IMAGE = asset('/images/card-fallback.png');
 
 /**
@@ -19,16 +18,9 @@ const FALLBACK_IMAGE = asset('/images/card-fallback.png');
  */
 export function InfoScreen({ page }) {
   return (
-    <article className="flex flex-col gap-l">
-      <Link
-        href="/"
-        className="inline-flex w-fit items-center gap-3xs text-step-d1 text-ual-medium underline underline-offset-2 hover:text-ual-orange focus-visible:outline-2 focus-visible:outline-ual-dark dark:focus-visible:outline-ual-light"
-      >
-        &larr; Back to home
-      </Link>
-
-      <header className="flex flex-col gap-xs">
-        <h1 className="text-step-4/ual-condensed font-bold tracking-ual-tight text-ual-dark dark:text-ual-light">
+    <article className="flex flex-col gap-8">
+      <header className="flex flex-col gap-3">
+        <h1 className="text-step-4/ual-condensed font-bold tracking-ual-tight text-ual-dark">
           {page.title}
         </h1>
         {page.lead && <p className="text-step-1 text-ual-medium">{page.lead}</p>}
@@ -45,41 +37,40 @@ export function InfoScreen({ page }) {
  * @param {{ block: import('../../data/infoPages').InfoBlock }} props
  */
 function InfoBlock({ block }) {
-  // Accordion list blocks carry their heading inside the <summary> instead.
   const isAccordion = block.type === 'list' && block.accordion;
 
   return (
-    <section className="flex flex-col gap-s" aria-label={block.heading}>
+    <section className="flex flex-col gap-4" aria-label={block.heading}>
       {block.heading && !isAccordion && (
-        // DDS "H3 – Subheading" is 55 Roman — explicitly normal so the UA
-        // bold default doesn't apply.
-        <h2 className="text-step-2 font-normal tracking-ual-tight text-ual-dark dark:text-ual-light">
+        // Subheadings are normal weight — set explicitly so the base
+        // bold default for headings doesn't apply.
+        <h2 className="text-step-2 font-normal tracking-ual-tight text-ual-dark">
           {block.heading}
         </h2>
       )}
 
       {block.type === 'prose' &&
         block.body?.map((paragraph, i) => (
-          <p key={i} className="text-step-0/ual-default text-ual-dark dark:text-ual-light">
+          <p key={i} className="text-step-0/ual-default text-ual-dark">
             {paragraph}
           </p>
         ))}
 
       {block.type === 'list' &&
         (isAccordion ? (
-          <details open className="group border-b border-ual-dark/10 pb-s dark:border-ual-light/15">
-            <summary className="flex cursor-pointer list-none items-baseline justify-between gap-s [&::-webkit-details-marker]:hidden">
-              <h2 className="text-step-2 font-normal tracking-ual-tight text-ual-dark dark:text-ual-light">
+          <details open className="group border-b border-ual-dark/10 pb-4">
+            <summary className="flex cursor-pointer list-none items-baseline justify-between gap-4 [&::-webkit-details-marker]:hidden">
+              <h2 className="text-step-2 font-normal tracking-ual-tight text-ual-dark">
                 {block.heading}
               </h2>
               <ChevronDownIcon
                 width={24}
                 height={24}
                 aria-hidden="true"
-                className="shrink-0 self-center text-ual-dark transition-transform group-open:rotate-180 dark:text-ual-light"
+                className="shrink-0 self-center text-ual-dark transition-transform group-open:rotate-180"
               />
             </summary>
-            <div className="pt-s">
+            <div className="pt-4">
               <ListBody block={block} />
             </div>
           </details>
@@ -89,7 +80,7 @@ function InfoBlock({ block }) {
 
       {block.type === 'links' &&
         (block.media ? (
-          <div className="grid">
+          <div className="grid grid-cols-[repeat(auto-fit,minmax(min(250px,100%),1fr))] gap-(--grid-gutter)">
             {block.links?.map((link) => {
               const isInternal = link.href.startsWith('/');
               return (
@@ -105,7 +96,7 @@ function InfoBlock({ block }) {
             })}
           </div>
         ) : (
-          <ul role="list" className="grid gap-m md:grid-cols-3">
+          <ul role="list" className="grid gap-6 md:grid-cols-3">
             {block.links?.map((link) => (
               <li key={link.title}>
                 <InfoLinkTile link={link} />
@@ -122,14 +113,11 @@ function InfoBlock({ block }) {
 }
 
 /**
- * Ordered/unordered list body, optionally alongside a photo (the Figma
- * "Borrowing a laptop" page shows the borrow how-to next to a picture of
- * the lockers on wider screens).
+ * Ordered/unordered list body, optionally alongside a photo shown next to
+ * the content on wider screens.
  *
- * No `role="list"` here: the unlayered `ol[role='list']` reset in
- * globals.css strips the markers (it beats the layered `list-decimal`
- * utility), and a list with visible markers keeps its AT semantics
- * without the role.
+ * No `role="list"` here: a list with visible markers keeps its assistive-tech
+ * semantics without the role (and `role="list"` would strip the markers).
  *
  * @param {{ block: import('../../data/infoPages').InfoBlock }} props
  */
@@ -137,12 +125,12 @@ function ListBody({ block }) {
   const list = (
     <ol
       className={[
-        'flex flex-col gap-2xs pl-m text-step-0/ual-default text-ual-dark dark:text-ual-light',
+        'flex flex-col gap-2 pl-6 text-step-0/ual-default text-ual-dark',
         block.ordered ? 'list-decimal' : 'list-disc',
       ].join(' ')}
     >
       {block.items?.map((item, i) => (
-        <li key={i} className="pl-2xs">
+        <li key={i} className="pl-2">
           {item}
         </li>
       ))}
@@ -154,7 +142,7 @@ function ListBody({ block }) {
   }
 
   return (
-    <div className="grid items-start gap-s md:grid-cols-2">
+    <div className="grid items-start gap-4 md:grid-cols-2">
       {list}
       {/* Plain <img>: static export, local photo — same rationale as Card. */}
       {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -171,35 +159,17 @@ function ListBody({ block }) {
 }
 
 /**
- * Inline chevron for the accordion summaries — rotates 180° while the
- * <details> is open (via `group-open`).
- */
-function ChevronDownIcon(props) {
-  return (
-    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
-      <path
-        d="M6 9l6 6 6-6"
-        stroke="currentColor"
-        strokeWidth={1.6}
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-    </svg>
-  );
-}
-
-/**
  * @param {{ link: import('../../data/infoPages').InfoLink }} props
  */
 function InfoLinkTile({ link }) {
   const isInternal = link.href.startsWith('/');
   const inner = (
     <>
-      <span className="text-step-1 font-bold text-ual-dark group-hover:text-ual-orange dark:text-ual-light">
+      <span className="text-step-1 font-bold text-ual-dark group-hover:text-ual-orange">
         {link.title}
         {!isInternal && <span className="sr-only"> (opens in a new tab)</span>}
       </span>
-      <span className="text-ual-dark group-hover:text-ual-orange dark:text-ual-light">
+      <span className="text-ual-dark group-hover:text-ual-orange">
         <ArrowRightIcon width={20} height={20} aria-hidden="true" />
       </span>
       {link.body && <span className="text-step-d1 text-ual-medium">{link.body}</span>}
@@ -207,7 +177,7 @@ function InfoLinkTile({ link }) {
   );
 
   const className =
-    'group flex flex-col gap-2xs focus-visible:outline-2 focus-visible:outline-ual-dark dark:focus-visible:outline-ual-light';
+    'group flex flex-col gap-2 focus-visible:outline-2 focus-visible:outline-ual-dark';
 
   if (isInternal) {
     return (
@@ -237,16 +207,14 @@ function InfoTable({ rows }) {
   }, /** @type {Record<string, import('../../data/infoPages').InfoRow[]>} */ ({}));
 
   return (
-    <div className="grid gap-m md:grid-cols-2">
+    <div className="grid gap-6 md:grid-cols-2">
       {Object.entries(groups).map(([group, groupRows]) => (
         <div key={group} className="flex flex-col">
-          {group && (
-            <p className="text-step-d1 font-bold text-ual-dark dark:text-ual-light">{group}</p>
-          )}
+          {group && <p className="text-step-d1 font-bold text-ual-dark">{group}</p>}
           {groupRows.map((row, i) => (
             <div
               key={i}
-              className="flex items-center justify-between gap-s border-t border-ual-dark/10 py-2xs text-step-d1 text-ual-medium dark:border-ual-light/15"
+              className="flex items-center justify-between gap-4 border-t border-ual-dark/10 py-2 text-step-d1 text-ual-medium"
             >
               <span>{row.label}</span>
               <span>{row.value}</span>
@@ -259,41 +227,37 @@ function InfoTable({ rows }) {
 }
 
 /**
- * Prominent dark call-to-action button (matches the Figma "Find your nearest
- * doctor" / banner style). Internal hrefs render next/link.
+ * Prominent dark call-to-action button (banner style). Internal hrefs
+ * render next/link.
  *
  * @param {{ cta: { label: string, href: string } }} props
  */
 function CtaButton({ cta }) {
   const isInternal = cta.href.startsWith('/');
 
-  // DDS text hyperlink (Figma "CTA / hyperlink" with the 16px external-link
-  // icon) — used where the design calls for an inline underlined link rather
-  // than the black banner button, e.g. "Read full terms and conditions".
   if (cta.variant === 'hyperlink') {
-    // Colour (black, orange on hover) comes from the unlayered global `a`
-    // rules — no point fighting them with utilities here.
-    const linkClass =
-      'inline-flex w-fit items-center gap-3xs text-step-0 underline underline-offset-2 focus-visible:outline-2 focus-visible:outline-ual-dark dark:focus-visible:outline-ual-light';
-    if (isInternal) {
-      return (
-        <Link href={cta.href} className={linkClass}>
-          {cta.label}
-        </Link>
-      );
-    }
     return (
-      <a href={cta.href} target="_blank" rel="noreferrer" className={linkClass}>
+      <LinkButton
+        href={cta.href}
+        className="w-fit text-step-0"
+        {...(isInternal ? {} : { target: '_blank', rel: 'noreferrer' })}
+      >
         {cta.label}
-        <span className="sr-only"> (opens in a new tab)</span>
-        <ExternalLinkIcon width={16} height={16} aria-hidden="true" className="shrink-0" />
-      </a>
+        {!isInternal && (
+          <>
+            <span className="sr-only"> (opens in a new tab)</span>
+            <ExternalLinkIcon
+              width={16}
+              height={16}
+              aria-hidden="true"
+              className="ml-1 inline shrink-0"
+            />
+          </>
+        )}
+      </LinkButton>
     );
   }
 
-  // The text colour lives on the inner span/icon (not the anchor) so it beats
-  // the unlayered `a { color: var(--color-dark) }` base rule in globals.css —
-  // otherwise the white label renders black-on-black and disappears.
   const inner = (
     <>
       <span className="text-ual-light group-hover:text-ual-orange">
@@ -310,7 +274,7 @@ function CtaButton({ cta }) {
   );
 
   const className =
-    'group flex w-full max-w-prose-ual items-center justify-between gap-m bg-ual-dark px-l py-m text-step-1 font-bold tracking-ual-tight focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ual-dark dark:bg-ual-dark-95 dark:focus-visible:outline-ual-light';
+    'group flex w-full max-w-prose-ual items-center justify-between gap-6 bg-ual-dark px-8 py-6 text-step-1 font-bold tracking-ual-tight focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ual-dark';
 
   if (isInternal) {
     return (
