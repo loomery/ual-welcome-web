@@ -53,10 +53,12 @@ export function MobileMenu() {
     };
   }, [open]);
 
+  // Orange is a press affordance only — it appears while an item is being
+  // clicked (:active), not on the selected/current item and not on hover.
   const primaryClass =
-    'block px-4 py-3.5 text-step-1 leading-ual-condensed text-ual-light no-underline focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-ual-orange';
+    'block px-4 py-3.5 text-step-1 leading-ual-condensed text-ual-light no-underline active:text-ual-orange focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-ual-orange';
   const secondaryClass =
-    'block px-4 py-3.5 text-step-0 text-ual-light no-underline hover:text-ual-orange focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-ual-orange';
+    'block px-4 py-3.5 text-step-0 text-ual-light no-underline active:text-ual-orange focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-ual-orange';
 
   return (
     <div className="md:hidden">
@@ -104,12 +106,7 @@ export function MobileMenu() {
                   href={item.to}
                   onClick={() => setOpen(false)}
                   aria-current={active ? 'page' : undefined}
-                  className={[
-                    primaryClass,
-                    active
-                      ? 'font-ual-bold text-[var(--color-orange-pressed)]'
-                      : 'hover:text-ual-orange',
-                  ].join(' ')}
+                  className={[primaryClass, active ? 'font-ual-bold' : ''].join(' ')}
                 >
                   {item.label}
                 </Link>
