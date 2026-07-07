@@ -1,22 +1,22 @@
 import Link from 'next/link';
 import { UalLogo } from '../Icon/UalLogo';
+import { MobileMenu } from './MobileMenu';
 
 /**
- * Top bar — a slim black band with just the `ual:` wordmark, mirroring the
- * new home design.
+ * Top bar — a slim black band with the `ual:` wordmark and, on mobile, the
+ * hamburger menu that opens the primary navigation (the desktop side nav is
+ * used at `md:` and above, so the hamburger is hidden there).
  *
  * Per the brief, the global UAL site controls that sit on the right of the
  * real arts.ac.uk bar (Subjects, Courses, Search, language, Accessibility
- * tools, Menu) are deliberately omitted — they aren't needed for this
- * prototype. The product navigation (Home / Tasks / Events / Map) lives in
- * the desktop side nav and the mobile bottom tab bar, NOT here.
+ * tools) are deliberately omitted — they aren't needed for this prototype.
  *
  * The bar shows at every breakpoint and stays pinned to the top.
  */
 export function Header() {
   return (
-    <header className="sticky top-0 z-300 bg-ual-dark py-3 text-ual-light">
-      <div className="px-(--grid-gutter)">
+    <header className="sticky top-0 z-300 bg-ual-dark py-2 text-ual-light md:py-3">
+      <div className="flex items-center justify-between px-(--grid-gutter)">
         <Link
           href="/"
           className="inline-flex items-center text-ual-light no-underline"
@@ -24,6 +24,7 @@ export function Header() {
         >
           <UalLogo className="h-6 w-auto" />
         </Link>
+        <MobileMenu />
       </div>
     </header>
   );
