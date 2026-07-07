@@ -2,22 +2,12 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { isOnboardingRoute } from '../../utils/isOnboardingRoute';
 import { SIDE_NAV_ITEMS } from './navConfig';
 
-/**
- * Desktop side navigation. Visible only at ≥49.5rem (the same breakpoint at
- * which the mobile bottom nav hides). It sits in the left column of the app
- * body on a grey panel, beneath the black top bar, and lists the product nav
- * (Home / Tasks / Events / Map / Settings / Help).
- *
- * Branding lives in the top bar now, so the sidebar carries no logo; the
- * theme toggle was retired with the single-theme redesign.
- *
- * Active state: bold text with a golden left rule that runs the full height
- * of the item — mirrors the Figma design.
- */
 export function SideNav() {
   const pathname = usePathname();
+  const isOnboarding = isOnboardingRoute(pathname);
 
   /**
    * @param {string | undefined} to
@@ -30,28 +20,37 @@ export function SideNav() {
   };
 
   return (
-    <nav className="side-nav" aria-label="Primary desktop">
-      <ul className="side-nav__list" role="list">
+    <nav
+      className={
+        isOnboarding
+          ? 'hidden'
+          : 'hidden bg-ual-shade md:sticky md:top-[calc(var(--space-xs)*2+var(--space-m))] md:flex md:min-h-[calc(100dvh-(var(--space-xs)*2+var(--space-m)))] md:flex-col md:pt-8'
+      }
+      aria-label="Primary desktop"
+    >
+      <ul className="m-0 flex grow list-none flex-col gap-1 px-0 py-6" role="list">
         {SIDE_NAV_ITEMS.map((item) => {
           const active = isActive(item.to);
           const isExternal = Boolean(item.href);
 
+          const linkClass =
+            'flex flex-1 items-center gap-3 min-h-15 px-6 py-3 text-step-1 leading-ual-condensed font-ual-normal text-ual-dark no-underline transition-[color] duration-100 not-aria-[current=page]:hover:text-ual-orange aria-[current=page]:font-ual-bold aria-[current=page]:text-ual-dark aria-[current=page]:hover:text-ual-dark aria-[current=page]:focus:text-ual-dark focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-ual-orange';
+
           return (
-            <li key={item.href ?? item.to}>
+            <li className="flex" key={item.href ?? item.to}>
               {isExternal ? (
-                <a href={item.href} className="side-nav__link" target="_blank" rel="noreferrer">
+                <a href={item.href} className={linkClass} target="_blank" rel="noreferrer">
                   <span>{item.label}</span>
-                  <span className="visually-hidden"> (opens in a new tab)</span>
+                  <span className="sr-only"> (opens in a new tab)</span>
                 </a>
               ) : (
                 <Link
                   href={item.to}
-                  className="side-nav__link"
+                  className={linkClass}
                   aria-current={active ? 'page' : undefined}
-                  data-active={active || undefined}
                 >
                   <span>{item.label}</span>
-                  {active && <span className="visually-hidden">(current page)</span>}
+                  {active && <span className="sr-only">(current page)</span>}
                 </Link>
               )}
             </li>

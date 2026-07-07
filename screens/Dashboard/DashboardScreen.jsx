@@ -6,6 +6,7 @@ import { Card } from '../../components/Card/Card';
 import { NextStepCard } from '../../components/Dashboard/NextStepCard';
 import { ViewToggle } from '../../components/Dashboard/ViewToggle';
 import { Progress } from '../../components/Progress/Progress';
+import { LinkButton } from '../../components/Button/LinkButton';
 import { ArrowRightIcon } from '../../components/Icon/NavIcons';
 import { visibleTasks } from '../../data/checklist';
 import { WELCOME_WEEK } from '../../data/welcomeWeek';
@@ -23,7 +24,7 @@ const VIEW_OPTIONS = /** @type {const} */ ([
 /**
  * Interest-driven home sections. The `id`s match INTEREST_OPTIONS so the
  * "My focus" view can filter on the student's selected topics. Order here
- * is the render order and mirrors the Figma personalised-home frame.
+ * is the render order.
  *
  * Cards use `to` for internal routes and `external` for off-site links;
  * a `to: '#'` placeholder marks a card whose real destination isn't built
@@ -90,7 +91,7 @@ const DASHBOARD_SECTIONS = [
 ];
 
 /**
- * Personalised dashboard (Figma "Central Saint Martins" home frame).
+ * Personalised dashboard.
  *
  *   1. Hero            — countdown + greeting + college name
  *   2. Key information — Welcome week + term date rows
@@ -112,11 +113,12 @@ export function DashboardScreen() {
 
   const interests = useMemo(() => profile?.interests ?? [], [profile?.interests]);
 
+  const effectiveView = interests.length === 0 ? 'all' : view;
+
   const visibleSections = useMemo(() => {
-    if (view === 'all') return DASHBOARD_SECTIONS;
-    if (interests.length === 0) return [];
+    if (effectiveView === 'all') return DASHBOARD_SECTIONS;
     return DASHBOARD_SECTIONS.filter((s) => interests.includes(s.id));
-  }, [view, interests]);
+  }, [effectiveView, interests]);
 
   const tasks = useMemo(() => visibleTasks(profile?.studentType), [profile?.studentType]);
   const completeCount = useMemo(
@@ -143,11 +145,11 @@ export function DashboardScreen() {
   }
 
   return (
-    <article className="dash flow" data-flow="l">
+    <article className="space-y-8">
       {/* The greeting/college hero is rendered by the app shell (AppHero). */}
-      <div className="dash-content flow" data-flow="l">
+      <div className="mx-auto max-w-6xl space-y-8">
         {/* ── KEY INFORMATION ────────────────────────────────────── */}
-        <section className="flow" data-flow="s" aria-labelledby="dash-key-info">
+        <section className="space-y-4" aria-labelledby="dash-key-info">
           <h2 id="dash-key-info">Key information</h2>
           <div className="flex flex-col">
             <KeyInfoRow
@@ -168,12 +170,12 @@ export function DashboardScreen() {
         </section>
 
         {/* ── GET SETUP ──────────────────────────────────────────── */}
-        <section className="flow" data-flow="s" aria-labelledby="dash-get-setup">
-          <div className="flex items-baseline justify-between gap-s">
+        <section className="space-y-4" aria-labelledby="dash-get-setup">
+          <div className="flex items-baseline justify-between gap-4">
             <h2 id="dash-get-setup">Get setup</h2>
             <Link
               href="/checklist"
-              className="text-step-d1 font-bold text-ual-dark underline underline-offset-2 hover:text-ual-orange dark:text-ual-light"
+              className="text-step-d1 font-bold text-ual-dark underline underline-offset-2 hover:text-ual-orange"
             >
               View all tasks
             </Link>
@@ -204,9 +206,9 @@ export function DashboardScreen() {
           )}
 
           {comingUp.length > 0 && (
-            <div className="flow" data-flow="2xs">
-              <p className="text-step-d1 font-bold text-ual-dark dark:text-ual-light">Coming up</p>
-              <ol className="flex flex-col gap-3xs">
+            <div className="space-y-2">
+              <p className="text-step-d1 font-bold text-ual-dark">Coming up</p>
+              <ol className="flex flex-col gap-1">
                 {comingUp.map((task, i) => (
                   <li key={task.id} className="text-step-d1 text-ual-medium">
                     {i + 1}. {task.title}
@@ -218,10 +220,12 @@ export function DashboardScreen() {
         </section>
 
         {/* ── VIEW TOGGLE ────────────────────────────────────────── */}
-        <div className="flow" data-flow="3xs">
-          <ViewToggle value={view} onChange={setView} options={VIEW_OPTIONS} />
-          <p className="dash-toggle__caption">
-            {view === 'all' ? 'Showing everything at UAL' : 'Showing your selected interests'}
+        <div className="space-y-1">
+          <ViewToggle value={effectiveView} onChange={setView} options={VIEW_OPTIONS} />
+          <p className="m-0 text-step-d1 text-ual-medium">
+            {effectiveView === 'all'
+              ? 'Showing everything at UAL'
+              : 'Showing your selected interests'}
           </p>
         </div>
 
@@ -229,12 +233,11 @@ export function DashboardScreen() {
         {visibleSections.map((section) => (
           <section
             key={section.id}
-            className="flow"
-            data-flow="s"
+            className="space-y-4"
             aria-labelledby={`dash-section-${section.id}`}
           >
             <h2 id={`dash-section-${section.id}`}>{section.label}</h2>
-            <div className="grid">
+            <div className="grid grid-cols-[repeat(auto-fit,minmax(min(250px,100%),1fr))] gap-(--grid-gutter)">
               {section.cards.map((card) => (
                 <Card key={card.title} title={card.title} to={card.to} external={card.external} />
               ))}
@@ -242,27 +245,11 @@ export function DashboardScreen() {
           </section>
         ))}
 
-        {/* ── NO-INTERESTS PROMPT ────────────────────────────────── */}
-        {view === 'focus' && interests.length === 0 && (
-          <section className="flow" data-flow="s" aria-labelledby="dash-empty">
-            <h2 id="dash-empty">Nothing selected yet</h2>
-            <p>
-              Switch to <strong>All at UAL</strong> to browse everything, or{' '}
-              <button type="button" onClick={handleReset} className="link-button">
-                update your interests
-              </button>{' '}
-              to personalise this view.
-            </p>
-          </section>
-        )}
-
         {/* ── PROFILE FOOTER ─────────────────────────────────────── */}
-        <section className="flow" data-flow="2xs" aria-label="Profile">
+        <section className="space-y-2" aria-label="Profile">
           <p>
-            <span className="step--1">Saved on this device. </span>
-            <button type="button" onClick={handleReset} className="link-button">
-              Edit your answers
-            </button>
+            <span className="text-step-d1">Saved on this device. </span>
+            <LinkButton onClick={handleReset}>Edit your answers</LinkButton>
           </p>
         </section>
       </div>
@@ -286,13 +273,13 @@ function KeyInfoRow({ title, startsAt, endsAt, eyebrow, href }) {
   const end = LONG_DATE_FMT.format(new Date(endsAt));
 
   return (
-    <div className="flex flex-col gap-2xs py-m">
+    <div className="flex flex-col gap-2 py-6">
       {href ? (
         <a
           href={href}
           target="_blank"
           rel="noreferrer"
-          className="flex items-center justify-between gap-s text-step-1 font-bold tracking-ual-tight text-ual-dark hover:text-ual-orange dark:text-ual-light"
+          className="flex items-center justify-between gap-4 text-step-1 font-bold tracking-ual-tight text-ual-dark hover:text-ual-orange"
         >
           <span>
             {title}
@@ -301,19 +288,12 @@ function KeyInfoRow({ title, startsAt, endsAt, eyebrow, href }) {
           <ArrowRightIcon width={28} height={28} aria-hidden="true" className="shrink-0" />
         </a>
       ) : (
-        <span className="text-step-1 font-bold tracking-ual-tight text-ual-dark dark:text-ual-light">
-          {title}
-        </span>
+        <span className="text-step-1 font-bold tracking-ual-tight text-ual-dark">{title}</span>
       )}
       {eyebrow && <p className="text-step-d1 font-bold text-ual-medium">{eyebrow}</p>}
-      {/* Start … End with a thin rule filling the gap between them (Figma
-          "Line 15"). The rule only shows on the ≥md row layout. */}
-      <div className="flex flex-col gap-3xs text-step-d1 text-ual-medium md:flex-row md:items-center md:gap-s">
+      <div className="flex flex-col gap-1 text-step-d1 text-ual-medium md:flex-row md:items-center md:gap-4">
         <span className="md:shrink-0">Start: {start}</span>
-        <span
-          aria-hidden="true"
-          className="hidden h-px grow bg-ual-dark/15 md:block dark:bg-ual-light/20"
-        />
+        <span aria-hidden="true" className="hidden h-px grow bg-ual-dark/15 md:block" />
         <span className="md:shrink-0">End: {end}</span>
       </div>
     </div>

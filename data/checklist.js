@@ -101,9 +101,6 @@ export const TASKS = [
   },
 ];
 
-/** Convenience lookup by id */
-export const TASKS_BY_ID = Object.fromEntries(TASKS.map((t) => [t.id, t]));
-
 /**
  * Tasks visible to a given student type. (No task is currently
  * international-only, but the filter is kept so the data model and the

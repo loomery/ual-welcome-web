@@ -1,6 +1,3 @@
-/**
- * UAL wordmark — taken directly from UAL Design System.
- */
 export function UalLogo(props) {
   return (
     <svg

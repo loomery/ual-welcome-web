@@ -11,7 +11,7 @@ export function Progress({ value, max, label }) {
   const percent = max === 0 ? 0 : Math.round((value / max) * 100);
   return (
     <div
-      className="progress"
+      className="h-2 w-full overflow-hidden bg-ual-dark-90"
       role="progressbar"
       aria-label={label}
       aria-valuemin={0}
@@ -19,7 +19,10 @@ export function Progress({ value, max, label }) {
       aria-valuenow={value}
       aria-valuetext={`${value} of ${max} complete (${percent}%)`}
     >
-      <div className="progress__bar" style={{ inlineSize: `${percent}%` }} />
+      <div
+        className="h-full bg-ual-dark transition-[inline-size] duration-300 ease-[ease]"
+        style={{ inlineSize: `${percent}%` }}
+      />
     </div>
   );
 }

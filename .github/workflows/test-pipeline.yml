@@ -1,0 +1,31 @@
+name: Test Pipeline
+
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: [self-hosted]
+    environment: test
+    env:
+      DXP_ACCESS_KEY: ${{ secrets.DXP_ACCESS_KEY }}
+      DXP_TENANT_ID: ${{ secrets.DXP_TENANT_ID }}
+      DXP_SERVER_URL: ${{ secrets.DXP_SERVER_URL }}
+      DXP_FS_DIRECTORY: ${{ vars.DXP_FS_DIRECTORY }}
+      DEPLOY_PATH: ${{ vars.DEPLOY_PATH }}
+    steps:
+      - uses: actions/checkout@v2
+      - name: Use Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '22.22.0'
+      - name: Install dependencies
+        run: npm install
+      - name: Build
+        run: npm run build
+      - name: Compress
+        run: npm run compress
+      - name: Deploy to DXP
+        run: node scripts/file-store.js

@@ -1,6 +1,8 @@
 import './globals.css';
 import { AppShell } from '../components/Layout/AppShell';
-import { ThemeProvider } from '../components/Theme/ThemeProvider';
+import { GoogleTagManager } from '@next/third-parties/google';
+import GTMRouteTracker from '@/components/Analytics/GTMRouteTracker';
+import Script from 'next/script';
 
 // Next does NOT prepend basePath to the `manifest` metadata field (unlike
 // icons), so under a sub-path deploy (/student-centre) a root-absolute value
@@ -8,19 +10,26 @@ import { ThemeProvider } from '../components/Theme/ThemeProvider';
 const basePath = process.env.DEPLOY_PATH ? `/${process.env.DEPLOY_PATH}` : '';
 
 export const metadata = {
-  title: 'UAL Welcome Week',
+  // `default` is used when a route declares no title (and is the home/root
+  // title); `template` wraps every page-level `title` so the product brand
+  // lives in exactly one place. Pages set only their short title, e.g.
+  // `title: 'College map'` → "College map | UAL Student Centre".
+  title: {
+    default: 'UAL Student Centre',
+    template: '%s | UAL Student Centre',
+  },
   description:
-    'Your first week at the University of the Arts London — induction checklist, explorable campus map, and Welcome Week events.',
-  applicationName: 'UAL Welcome Week',
+    'The University of the Arts London Student Centre — your induction checklist, explorable campus map, and events.',
+  applicationName: 'UAL Student Centre',
   manifest: `${basePath}/manifest.webmanifest`,
   appleWebApp: {
     capable: true,
     statusBarStyle: 'default',
-    title: 'UAL Welcome',
+    title: 'UAL Student Centre',
   },
   icons: {
-    icon: `${basePath}/icon.svg`,
-    apple: `${basePath}/icon.svg`,
+    icon: `https://ual-media-res.cloudinary.com/image/upload/v1648052990/favicon_pxfjol.ico`,
+    apple: `https://ual-media-res.cloudinary.com/image/upload/v1648052990/favicon_pxfjol.ico`,
   },
 };
 
@@ -38,10 +47,16 @@ export const viewport = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
+      <GoogleTagManager gtmId="GTM-TV73ZQ6K" />
+      <head>
+        <Script
+          src="https://integrations.arts.ac.uk/cookiecontrol/latest.min.js"
+          strategy="beforeInteractive"
+        />
+      </head>
       <body>
-        <ThemeProvider>
-          <AppShell>{children}</AppShell>
-        </ThemeProvider>
+        <GTMRouteTracker />
+        <AppShell>{children}</AppShell>
       </body>
     </html>
   );

@@ -2,10 +2,6 @@ import { notFound } from 'next/navigation';
 import { EVENTS } from '../../../data/events';
 import { EventDetailScreen } from '../../../screens/Events/EventDetailScreen';
 
-/**
- * Pre-render every event detail page at build time. Pure-static and
- * predictable — no client-side data fetching needed.
- */
 export function generateStaticParams() {
   return EVENTS.map((e) => ({ id: e.id }));
 }
@@ -17,9 +13,9 @@ export function generateStaticParams() {
 export async function generateMetadata({ params }) {
   const { id } = await params;
   const event = EVENTS.find((e) => e.id === id);
-  if (!event) return { title: 'Event not found | UAL Welcome Week' };
+  if (!event) return { title: 'Event not found' };
   return {
-    title: `${event.title} | UAL Welcome Week`,
+    title: event.title,
     description: event.description,
   };
 }

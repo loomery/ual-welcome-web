@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Button } from '../Button/Button';
+import { ChevronLeftIcon, ArrowRightIcon } from '../Icon/NavIcons';
 import { useOnboardingProfile } from '../../hooks/useOnboardingProfile';
 import { asset } from '../../utils/asset';
 import { IntroStep } from './steps/IntroStep';
@@ -54,7 +55,6 @@ export function OnboardingFlow() {
 
   const activeSteps = useMemo(() => {
     let steps = ALL_STEPS;
-    // VisaStatus is only shown to international students.
     if (draft.studentType !== 'international') {
       steps = steps.filter((s) => s !== 'visaStatus');
     }
@@ -62,6 +62,7 @@ export function OnboardingFlow() {
   }, [draft.studentType]);
 
   const stepId = activeSteps[stepIndex];
+  const nextStepId = activeSteps[stepIndex + 1];
   const isLast = stepIndex === activeSteps.length - 1;
 
   // Move keyboard focus to the step heading whenever the step changes
@@ -123,6 +124,12 @@ export function OnboardingFlow() {
     setStepIndex((i) => Math.max(i - 1, 0));
   }
 
+  function skipStep() {
+    patch(stepSlice(stepId, draft));
+    setDirection('forward');
+    setStepIndex((i) => Math.min(i + 1, activeSteps.length - 1));
+  }
+
   function handleSkip() {
     patch(stepSlice(stepId, draft));
     commit();
@@ -147,33 +154,26 @@ export function OnboardingFlow() {
 
   return (
     <div
-      className={['onboarding-flow', stepId === 'interests' && 'onboarding-flow--wide']
-        .filter(Boolean)
-        .join(' ')}
+      className={[
+        'mx-auto w-full py-4 md:py-0',
+        stepId === 'intro' ? 'max-w-grid' : 'max-w-[57.6rem]',
+      ].join(' ')}
     >
       {/* ── TOP BAR — back button + progress bar + skip ────────────────── */}
       {stepId !== 'intro' && stepId !== 'finish' && (
-        <div className="onboarding-flow__topbar">
+        <div className="mb-6 flex items-center gap-4">
           <button
             type="button"
             onClick={goBack}
             aria-label="Go back to previous step"
-            className="onboarding-flow__back"
+            className="-ms-2 inline-flex cursor-pointer items-center gap-1 border-0 bg-transparent p-2 text-step-d1 text-ual-dark hover:text-ual-orange focus-visible:text-ual-orange focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ual-orange"
           >
-            <svg width="14" height="14" viewBox="0 0 18 18" fill="none" aria-hidden="true">
-              <path
-                d="M11 3L5 9L11 15"
-                stroke="currentColor"
-                strokeWidth="1.6"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>
+            <ChevronLeftIcon width="14" height="14" aria-hidden="true" />
             <span>Back</span>
           </button>
 
           <div
-            className="onboarding-flow__progress"
+            className="h-2 grow overflow-hidden bg-ual-dark-90"
             role="progressbar"
             aria-valuemin={0}
             aria-valuemax={progressTotal}
@@ -181,23 +181,26 @@ export function OnboardingFlow() {
             aria-label={`Step ${progressCurrent} of ${progressTotal}`}
           >
             <div
-              className="onboarding-flow__progress-bar"
+              className="h-full bg-ual-dark transition-[width] duration-400 ease-ual"
               style={{ width: `${(progressCurrent / progressTotal) * 100}%` }}
             />
           </div>
 
-          <button type="button" onClick={handleSkip} className="onboarding-flow__skip">
+          <button
+            type="button"
+            onClick={skipStep}
+            className="cursor-pointer border-0 bg-transparent p-2 text-step-d1 font-ual-bold text-ual-medium underline underline-offset-4 hover:text-ual-orange focus-visible:text-ual-orange focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ual-orange"
+          >
             Skip
           </button>
         </div>
       )}
 
       {/* ── STEP CONTENT ───────────────────────────────────────────────── */}
-      <div className="onboarding-flow__content">
+      <div className="mb-8">
         <div
           key={stepId}
-          className="flow"
-          data-flow="m"
+          className="space-y-6"
           style={{
             animation: `${
               direction === 'forward' ? 'onboardSlideIn' : 'onboardSlideInBack'
@@ -210,6 +213,8 @@ export function OnboardingFlow() {
               hasExistingProfile={Boolean(profile?.completedAt)}
               onResume={() => router.push('/')}
               onStartOver={handleStartOver}
+              onNewStudent={goNext}
+              onReturningStudent={handleSkip}
             />
           )}
           {stepId === 'name' && (
@@ -259,25 +264,39 @@ export function OnboardingFlow() {
         </div>
       </div>
 
-      {/* ── ACTION BAR ─────────────────────────────────────────────────── */}
-      <div className="onboarding-flow__actions">
-        <Button onClick={goNext} disabled={!canAdvance}>
-          {stepId === 'intro'
-            ? 'Get started'
-            : isLast
-              ? 'Open my hub'
-              : stepId === 'interests'
-                ? "Let's go"
-                : 'Continue'}
+      {stepId !== 'intro' && (
+        <Button
+          weight="normal"
+          className="w-full justify-between whitespace-nowrap md:w-auto md:min-w-[18rem]"
+          onClick={goNext}
+          disabled={!canAdvance}
+        >
+          {isLast ? 'Open my hub' : ctaLabel(nextStepId)}
+          <ArrowRightIcon aria-hidden="true" />
         </Button>
-        {stepId === 'intro' && (
-          <Button ghost onClick={handleSkip}>
-            Skip and show me everything
-          </Button>
-        )}
-      </div>
+      )}
     </div>
   );
+}
+
+/** @param {string} [nextStepId] */
+function ctaLabel(nextStepId) {
+  switch (nextStepId) {
+    case 'college':
+      return 'Next, select college/institute';
+    case 'year':
+      return 'Next, select year of study';
+    case 'studentType':
+      return 'Next, select student type';
+    case 'visaStatus':
+      return 'Next, confirm visa status';
+    case 'interests':
+      return 'Next, select your interests';
+    case 'finish':
+      return 'Next, view summary';
+    default:
+      return 'Continue';
+  }
 }
 
 /**
