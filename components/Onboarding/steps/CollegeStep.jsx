@@ -27,6 +27,7 @@ export function CollegeStep({ headingRef, value, onChange }) {
               selected={value === college.id}
               onClick={() => onChange(college.id)}
               title={college.name}
+              hint={college.area}
             />
           </li>
         ))}

@@ -5,6 +5,7 @@
  *
  * @typedef {'new' | 'returning'} StudentStatus
  * @typedef {'domestic' | 'international'} StudentType
+ * @typedef {'not_started' | 'having_issues' | 'waiting' | 'received'} VisaStatus
  *
  * @typedef {Object} CollegeOption
  * @property {string} id        Matches data/buildings.js → Building.id
@@ -19,6 +20,11 @@
  *
  * @typedef {Object} StudentTypeOption
  * @property {StudentType} id
+ * @property {string} label
+ * @property {string} hint
+ *
+ * @typedef {Object} VisaStatusOption
+ * @property {VisaStatus} id
  * @property {string} label
  * @property {string} hint
  *
@@ -105,6 +111,18 @@ export const STUDENT_STATUS_OPTIONS = [
 export const STUDENT_TYPE_OPTIONS = [
   { id: 'domestic', label: 'UK / Domestic', hint: 'Already living in the UK before studying at UAL' },
   { id: 'international', label: 'International', hint: 'Moving to the UK to study at UAL' },
+];
+
+/** @type {VisaStatusOption[]} — shown only to international students. */
+export const VISA_STATUS_OPTIONS = [
+  { id: 'not_started', label: "No, I haven't started yet", hint: "We'll help you get started" },
+  { id: 'having_issues', label: "No, I'm having issues", hint: "We'll connect you with support" },
+  {
+    id: 'waiting',
+    label: 'Yes, waiting for confirmation',
+    hint: "Hang tight — we'll keep you informed",
+  },
+  { id: 'received', label: "Yes, I've received it", hint: "You're all set on the visa front" },
 ];
 
 /**

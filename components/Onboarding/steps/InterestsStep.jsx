@@ -32,7 +32,7 @@ export function InterestsStep({ headingRef, value, onChange, options = INTEREST_
 
       <div className="flex items-center gap-3 border border-ual-dark-90 px-4 py-3 text-step-d1 text-ual-medium">
         <InfoIcon className="size-5 shrink-0 text-ual-dark" aria-hidden="true" />
-        <span>These will show as &lsquo;Selected interests&rsquo; on your home page</span>
+        <span>These will show as &lsquo;your selected interests&rsquo; on your home page</span>
       </div>
 
       <ul
@@ -56,7 +56,7 @@ export function InterestsStep({ headingRef, value, onChange, options = INTEREST_
             role="checkbox"
             selected={allSelected}
             onClick={() => onChange(allSelected ? [] : options.map((o) => o.id))}
-            title="Select all"
+            title="Select/Unselect all"
             hint="See all topics on your home screen"
           />
         </li>
