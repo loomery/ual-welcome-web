@@ -109,7 +109,11 @@ export const STUDENT_STATUS_OPTIONS = [
 
 /** @type {StudentTypeOption[]} */
 export const STUDENT_TYPE_OPTIONS = [
-  { id: 'domestic', label: 'UK / Domestic', hint: 'Already living in the UK before studying at UAL' },
+  {
+    id: 'domestic',
+    label: 'UK / Domestic',
+    hint: 'Already living in the UK before studying at UAL',
+  },
   { id: 'international', label: 'International', hint: 'Moving to the UK to study at UAL' },
 ];
 

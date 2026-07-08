@@ -33,7 +33,12 @@ export function FinishStep({ headingRef, onHome, onEditProfile }) {
           Take me to the home page
           <ArrowRightIcon aria-hidden="true" />
         </Button>
-        <Button variant="outline" weight="normal" className="w-full md:w-auto" onClick={onEditProfile}>
+        <Button
+          variant="outline"
+          weight="normal"
+          className="w-full md:w-auto"
+          onClick={onEditProfile}
+        >
           Edit profile
         </Button>
       </div>
