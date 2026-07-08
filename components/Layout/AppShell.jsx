@@ -53,11 +53,15 @@ export function AppShell({ children }) {
         </div>
         <main
           id="main-content"
-          className={
-            focused
-              ? 'mx-auto max-w-grid min-w-0 px-(--grid-gutter) py-8 md:mx-0 md:w-full md:max-w-none md:bg-transparent md:py-10 min-[75rem]:px-12'
-              : 'mx-auto max-w-grid min-w-0 px-(--grid-gutter) py-8 md:mx-0 md:w-full md:max-w-none md:bg-white md:py-12 min-[75rem]:px-12'
-          }
+          className={[
+            'mx-auto max-w-grid min-w-0 px-(--grid-gutter) py-8 md:mx-0 md:w-full md:max-w-none min-[75rem]:px-12',
+            focused ? 'md:bg-transparent md:py-10' : 'md:bg-white md:py-12',
+            // Home surfaces grey cards, so its content canvas is white at every
+            // width; other pages keep the shade body background on mobile.
+            isHome && 'bg-white',
+          ]
+            .filter(Boolean)
+            .join(' ')}
           tabIndex={-1}
         >
           {!focused && <Breadcrumbs className="mb-8" />}
