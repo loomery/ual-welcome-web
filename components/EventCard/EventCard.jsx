@@ -1,6 +1,3 @@
-'use client';
-
-import Link from 'next/link';
 import { DateStampBar } from '../Dashboard/DateStampBar';
 import { ArrowRightIcon, CaptionIcon } from '../Icon/NavIcons';
 import { TIME_FMT } from '../../utils/dates';
@@ -8,6 +5,9 @@ import { asset } from '../../utils/asset';
 
 /** Shared artwork used when an event has no image of its own. */
 const FALLBACK_IMAGE = '/images/card-fallback.png';
+
+/** Where events live now — the UAL "What's on" website. */
+const WHATS_ON_URL = 'https://www.arts.ac.uk/whats-on';
 
 /**
  * Event card — UAL-branded, image-led.
@@ -32,17 +32,16 @@ export function EventCard({ event, compact }) {
   const end = new Date(event.endsAt);
   const timeRange = `${TIME_FMT.format(start)}–${TIME_FMT.format(end)}`;
 
-  const className = [
-    'group flex h-full flex-col border border-[#d1d1d1] bg-ual-light',
-    compact && 'w-72 max-w-[85vw]',
-  ]
+  const className = ['group flex h-full flex-col bg-ual-light', compact && 'w-72 max-w-[85vw]']
     .filter(Boolean)
     .join(' ');
 
   return (
     <article className={className}>
-      <Link
-        href={`/events/${event.id}`}
+      <a
+        href={event.externalUrl ?? WHATS_ON_URL}
+        target="_blank"
+        rel="noreferrer"
         className="group/link flex h-full flex-col text-inherit no-underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ual-orange"
       >
         <span
@@ -80,7 +79,8 @@ export function EventCard({ event, compact }) {
             <ArrowRightIcon />
           </span>
         </div>
-      </Link>
+        <span className="sr-only"> (opens in a new tab)</span>
+      </a>
     </article>
   );
 }

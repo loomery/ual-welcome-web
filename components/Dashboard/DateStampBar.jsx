@@ -1,9 +1,6 @@
-import { DAY_FMT, LONG_DATE_FMT, MONTH_FMT } from '../../utils/dates';
+import { DAY_FMT, LONG_DATE_FMT, MONTH_FMT, isSameDay } from '../../utils/dates';
 
 /**
- * DateStampBar — the UAL dark timeline strip used at the foot of the Key
- * dates cards and event cards: a bold category label, a start date-stamp, a
- * connecting hairline and an end date-stamp, all on the signature black band.
  *
  * @param {Object} props
  * @param {string} props.label      Short category label (e.g. "Welcome").
@@ -13,17 +10,15 @@ import { DAY_FMT, LONG_DATE_FMT, MONTH_FMT } from '../../utils/dates';
 export function DateStampBar({ label, startsAt, endsAt }) {
   const start = new Date(startsAt);
   const end = new Date(endsAt);
-  // A single-day event collapses to one stamp; multi-day ranges (Key dates)
-  // show both ends of the line.
-  const sameDay = start.toDateString() === end.toDateString();
+  const isRange = !isSameDay(start, end);
   return (
     <div className="flex items-stretch bg-ual-dark text-ual-light">
       <span className="flex items-center px-3 text-step-d1 font-ual-bold tracking-ual-tight uppercase">
         {label}
       </span>
-      <Stamp date={start} />
+      {isRange && <Stamp date={start} />}
       <span aria-hidden="true" className="my-auto h-px grow bg-ual-light/40" />
-      {!sameDay && <Stamp date={end} />}
+      <Stamp date={isRange ? end : start} />
     </div>
   );
 }

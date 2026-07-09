@@ -15,9 +15,6 @@ const PLACEHOLDER_PLANS = [
   { id: 'second', label: 'Second floor' },
 ];
 
-/** Above this many floor plans, swap the thumbnail rail for a compact dropdown. */
-const MAX_THUMBNAILS = 6;
-
 /**
  * A single floor-plan image. Real plans ship a portrait (mobile) and a landscape
  * (desktop) variant, swapped via <picture>; colleges without plans fall back to
@@ -103,9 +100,6 @@ export function MapScreen() {
   const hasImages = Array.isArray(building.floorPlans) && building.floorPlans.length > 0;
   const plans = hasImages ? building.floorPlans : PLACEHOLDER_PLANS;
   const safeActive = Math.min(activePlan, plans.length - 1);
-  // Many-floor buildings (e.g. LCF, 15 plans) get a compact floor dropdown
-  // instead of a long thumbnail rail; few-floor ones keep the thumbnails.
-  const useFloorDropdown = hasImages && plans.length > MAX_THUMBNAILS;
   const activePlanData = plans[safeActive];
   const activeLabel = activePlanData.label;
 
@@ -143,33 +137,12 @@ export function MapScreen() {
       </section>
 
       <section className="flex flex-col gap-4" aria-label={`${building.name} college map`}>
-        {useFloorDropdown && (
-          <label className="flex flex-col gap-2">
-            <span className="text-step-d1 font-bold text-ual-dark">Floor</span>
-            <select
-              value={safeActive}
-              onChange={(e) => setActivePlan(Number(e.target.value))}
-              className="w-full appearance-none bg-ual-dark px-6 py-4 text-step-1 font-bold text-ual-light focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ual-orange"
-            >
-              {plans.map((plan, i) => (
-                <option key={plan.id} value={i}>
-                  {plan.label}
-                </option>
-              ))}
-            </select>
-          </label>
-        )}
-
-        <div
-          className={
-            useFloorDropdown ? '' : 'flex flex-col gap-4 md:flex-row-reverse md:items-start'
-          }
-        >
+        <div className="flex flex-col gap-4 md:flex-row md:items-start">
           <button
             type="button"
             onClick={() => setLightboxOpen(true)}
             aria-label={`Expand ${activeLabel} plan`}
-            className="aspect-3/4 w-full grow cursor-zoom-in overflow-hidden bg-white p-4 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ual-orange md:aspect-3/2"
+            className="aspect-3/4 w-full shrink-0 cursor-zoom-in overflow-hidden bg-white p-4 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ual-orange md:aspect-3/2 md:flex-1"
           >
             <PlanGraphic
               plan={activePlanData}
@@ -179,20 +152,31 @@ export function MapScreen() {
             />
           </button>
 
-          {!useFloorDropdown && (
-            <ul role="list" className="flex gap-2 md:w-30 md:shrink-0 md:flex-col">
-              {plans.map((plan, i) => {
-                const selected = i === safeActive;
-                return (
-                  <li key={plan.id} className="grow md:grow-0">
-                    <button
-                      type="button"
-                      onClick={() => setActivePlan(i)}
-                      aria-pressed={selected}
-                      aria-label={`Show ${plan.label} plan`}
+          {/* Floor list — always a scrollable list (never a dropdown), capped
+              to a fixed height so a long floor count scrolls inside this box
+              instead of growing the page. Same behaviour on mobile and desktop. */}
+          <ul
+            role="list"
+            className="flex max-h-64 flex-col gap-1 overflow-y-auto md:max-h-120 md:w-64 md:shrink-0"
+          >
+            {plans.map((plan, i) => {
+              const selected = i === safeActive;
+              return (
+                <li key={plan.id}>
+                  <button
+                    type="button"
+                    onClick={() => setActivePlan(i)}
+                    aria-pressed={selected}
+                    aria-label={`Show ${plan.label} plan`}
+                    className={[
+                      'flex w-full items-center gap-3 p-2 text-left focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ual-orange',
+                      selected ? 'bg-ual-shade' : 'hover:bg-ual-shade',
+                    ].join(' ')}
+                  >
+                    <span
                       className={[
-                        'aspect-4/3 w-full cursor-pointer overflow-hidden bg-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ual-orange',
-                        selected ? 'outline-2 outline-ual-dark' : 'opacity-70 hover:opacity-100',
+                        'aspect-4/3 w-20 shrink-0 overflow-hidden bg-white',
+                        selected ? 'outline-2 outline-ual-dark' : 'opacity-70',
                       ].join(' ')}
                     >
                       <PlanGraphic
@@ -201,14 +185,14 @@ export function MapScreen() {
                         alt=""
                         className="size-full object-contain"
                       />
-                    </button>
-                  </li>
-                );
-              })}
-            </ul>
-          )}
+                    </span>
+                    <span className="text-step-d1 font-bold text-ual-dark">{plan.label}</span>
+                  </button>
+                </li>
+              );
+            })}
+          </ul>
         </div>
-        {!useFloorDropdown && <p className="text-step-d1 text-ual-medium">{activeLabel}</p>}
       </section>
 
       <section className="flex flex-col gap-2" aria-labelledby="address-heading">

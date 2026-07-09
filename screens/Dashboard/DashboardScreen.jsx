@@ -26,7 +26,6 @@ import { usePersistedState } from '../../hooks/usePersistedState';
 const INTEREST_HREF = {
   course: '/studying',
   access: '/checklist',
-  life: '/events',
   health: '/help',
   safety: '/help',
   finances: '/help',
@@ -200,10 +199,10 @@ export function DashboardScreen() {
             student centre space set up.
           </p>
           <Link
-            href="/onboarding"
+            href="/profile"
             className="inline-flex min-h-11 items-center text-step-0 font-ual-bold text-ual-dark underline underline-offset-2 hover:text-ual-orange focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ual-orange"
           >
-            Edit your interests
+            Edit your preferences
           </Link>
         </div>
 
@@ -248,9 +247,15 @@ export function DashboardScreen() {
             </li>
           ))}
         </ul>
-        <Button href="/events" className="w-full justify-center md:w-auto">
+        <Button
+          href="https://www.arts.ac.uk/whats-on"
+          target="_blank"
+          rel="noreferrer"
+          className="w-full justify-center md:w-auto"
+        >
           View more events
           <ArrowRightIcon aria-hidden="true" />
+          <span className="sr-only"> (opens in a new tab)</span>
         </Button>
       </section>
     </article>

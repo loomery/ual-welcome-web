@@ -308,29 +308,6 @@ export const BUILDINGS = [
     },
   },
   {
-    id: 'ftti',
-    name: 'Fashion Textiles and Technology Institute',
-    college: 'FTTI',
-    address: 'East Bank, Stratford, London E20',
-    size: [0.8, 0.8],
-    height: 1.0,
-    description: 'Fashion, textiles and technology at East Bank, Queen Elizabeth Olympic Park.',
-    geo: { lat: 51.5454, lng: -0.0102 },
-    transport: {
-      stations: [
-        { name: 'Stratford', walk: '5 min walk' },
-        { name: 'Stratford International', walk: '8 min walk' },
-      ],
-      buses: [
-        { name: '25', walk: '5 min walk' },
-        { name: '97', walk: '5 min walk' },
-      ],
-      accessibilityNote:
-        'Full access and route guides to Fashion Textiles and Technology Institute are available on AccessAble.',
-      accessibilityUrl: 'https://www.accessable.co.uk/university-of-the-arts-london',
-    },
-  },
-  {
     id: 'dai',
     name: 'UAL School of Pre-degree Studies',
     college: 'Pre-degree',
