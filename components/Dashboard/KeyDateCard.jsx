@@ -22,7 +22,7 @@ export function KeyDateCard({ title, description, label, startsAt, endsAt, href 
     <>
       <div className="flex grow flex-col gap-2 p-4 pb-6">
         <div className="flex items-start justify-between gap-4">
-          <h3 className="text-step-1/ual-condensed font-ual-bold tracking-ual-tight text-ual-dark">
+          <h3 className="text-step-1/ual-condensed font-ual-normal tracking-ual-tight text-ual-dark">
             {title}
           </h3>
           {href && (

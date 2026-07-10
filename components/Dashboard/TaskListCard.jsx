@@ -19,7 +19,7 @@ export function TaskListCard({ items }) {
         i === 0 ? (
           <li key={item.id} className="bg-ual-dark text-ual-light">
             <div className="flex flex-col gap-3 p-6">
-              <span className="inline-flex w-fit items-center gap-2 border border-ual-light px-2 py-1 text-step-d1 font-ual-bold tracking-ual-tight">
+              <span className="inline-flex w-fit items-center gap-2 border border-ual-light px-2 py-1 text-step-d1 font-ual-normal tracking-ual-tight">
                 <span
                   className="inline-flex size-4 items-center justify-center rounded-full bg-ual-util-green/60"
                   aria-hidden="true"
@@ -30,7 +30,7 @@ export function TaskListCard({ items }) {
               </span>
               <div className="flex flex-wrap items-start justify-between gap-4">
                 <div className="min-w-48 flex-1 space-y-2">
-                  <h3 className="text-step-1/ual-condensed font-ual-bold tracking-ual-tight text-ual-light">
+                  <h3 className="text-step-1/ual-condensed font-ual-normal tracking-ual-tight text-ual-light">
                     {item.number}. {item.title}
                   </h3>
                   {item.description && <p className="text-ual-dark-90">{item.description}</p>}
@@ -42,7 +42,7 @@ export function TaskListCard({ items }) {
         ) : (
           <li key={item.id} className="bg-ual-light text-ual-dark">
             <div className="flex flex-wrap items-center justify-between gap-3 p-6">
-              <h3 className="text-step-0 font-ual-bold tracking-ual-tight text-ual-dark">
+              <h3 className="text-step-0 font-ual-normal tracking-ual-tight text-ual-dark">
                 {item.number}. {item.title}
               </h3>
               <ViewTaskLink href={item.href} tone="secondary" />
@@ -65,7 +65,7 @@ export function TaskListCard({ items }) {
 function ViewTaskLink({ href, tone }) {
   const external = !href.startsWith('/');
   const cls = [
-    'inline-flex min-h-11 shrink-0 items-center justify-center px-4 py-2 text-step-d1 font-ual-bold no-underline transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ual-orange',
+    'inline-flex min-h-11 shrink-0 items-center justify-center px-4 py-2 text-step-d1 font-ual-normal no-underline transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ual-orange',
     tone === 'primary'
       ? 'bg-ual-orange text-ual-dark hover:bg-[var(--color-orange-pressed)]'
       : 'bg-[#d1d1d1] text-ual-dark hover:bg-[#c2c2c2]',

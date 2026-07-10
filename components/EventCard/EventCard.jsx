@@ -69,7 +69,7 @@ export function EventCard({ event, compact }) {
           <p className="m-0 text-step-d1 text-ual-medium">
             <span className="font-ual-bold text-ual-dark">Timing:</span> {timeRange}
           </p>
-          <h3 className="m-0 text-step-1/ual-condensed font-ual-bold tracking-ual-tight text-balance text-ual-dark transition-colors group-hover/link:text-ual-orange group-focus-visible/link:text-ual-orange">
+          <h3 className="m-0 text-step-1/ual-condensed font-ual-normal tracking-ual-tight text-balance text-ual-dark transition-colors group-hover/link:text-ual-orange group-focus-visible/link:text-ual-orange">
             {event.title}
           </h3>
           <span

@@ -36,7 +36,7 @@ function Stamp({ date }) {
       className="flex min-w-14 flex-col items-center justify-center px-3 py-4 leading-ual-single"
     >
       <span className="sr-only">{LONG_DATE_FMT.format(date)}</span>
-      <span aria-hidden="true" className="text-step-0 font-ual-bold">
+      <span aria-hidden="true" className="text-step-0 font-ual-normal">
         {DAY_FMT.format(date)}
       </span>
       <span aria-hidden="true" className="text-step-d1">

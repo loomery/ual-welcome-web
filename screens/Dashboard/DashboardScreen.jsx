@@ -152,15 +152,15 @@ export function DashboardScreen() {
                 </div>
 
                 <TaskListCard items={taskItems} />
-              </div>
 
-              <Link
-                href="/checklist"
-                className="inline-flex min-h-11 items-center gap-2 text-step-0 font-ual-bold text-ual-dark underline underline-offset-2 hover:text-ual-orange focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ual-orange [&>svg]:size-6"
-              >
-                View all tasks
-                <ArrowRightIcon aria-hidden="true" />
-              </Link>
+                <Link
+                  href="/checklist"
+                  className="inline-flex min-h-11 items-center gap-2 text-step-0 font-ual-normal text-ual-dark underline underline-offset-2 hover:text-ual-orange focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ual-orange [&>svg]:size-6"
+                >
+                  View all tasks
+                  <ArrowRightIcon aria-hidden="true" />
+                </Link>
+              </div>
             </>
           )}
         </section>
@@ -200,7 +200,7 @@ export function DashboardScreen() {
           </p>
           <Link
             href="/profile"
-            className="inline-flex min-h-11 items-center text-step-0 font-ual-bold text-ual-dark underline underline-offset-2 hover:text-ual-orange focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ual-orange"
+            className="inline-flex min-h-11 items-center text-step-0 font-ual-normal text-ual-dark underline underline-offset-2 hover:text-ual-orange focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ual-orange"
           >
             Edit your preferences
           </Link>
@@ -226,7 +226,7 @@ export function DashboardScreen() {
             type="button"
             onClick={() => setInterestsExpanded((v) => !v)}
             aria-expanded={interestsExpanded}
-            className="inline-flex min-h-11 cursor-pointer items-center gap-2 text-step-0 font-ual-bold text-ual-dark underline underline-offset-2 hover:text-ual-orange focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ual-orange [&>svg]:size-5"
+            className="inline-flex min-h-11 cursor-pointer items-center gap-2 text-step-0 font-ual-normal text-ual-dark underline underline-offset-2 hover:text-ual-orange focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ual-orange [&>svg]:size-5"
           >
             {interestsExpanded ? 'View less' : 'View more'}
             <ChevronDownIcon aria-hidden="true" className={interestsExpanded ? 'rotate-180' : ''} />
