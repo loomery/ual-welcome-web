@@ -32,6 +32,23 @@
  * @property {boolean} [internationalOnly]  If true, only shown to international students.
  * @property {Array<'new'|'returning'>} [statuses]  Which cohorts see this task
  *   (defaults to both new and returning students).
+ * @property {TaskDetail} [detail]  Content for the task's own detail page
+ *   (/checklist/{id}); when set, the checklist row links here instead of `cta`.
+ *
+ * @typedef {Object} DetailSection
+ * @property {string} heading
+ * @property {string} [lead]     Intro line shown above a bullet list.
+ * @property {string} [body]     Paragraph.
+ * @property {string[]} [bullets]  Bulleted points.
+ *
+ * @typedef {Object} HelpBlock
+ * @property {string} intro
+ * @property {HelpChannel[]} channels
+ *
+ * @typedef {Object} TaskDetail
+ * @property {string} [intro]    Lead paragraph (defaults to the task's shortDescription).
+ * @property {DetailSection[]} sections
+ * @property {HelpBlock} [help]
  */
 
 // TODO(UAL): replace placeholder URLs with the canonical UAL destinations.
@@ -41,6 +58,34 @@ const AUTHENTICATOR_APPS = {
 };
 
 const MICROSOFT_SIGNIN = 'https://www.office.com';
+
+/**
+ * Shared IT Service Desk contact channels, used by the "Get help" block on
+ * task detail pages (and the MFA page).
+ *
+ * @type {import('./checklist').HelpChannel[]}
+ */
+export const IT_HELP_CHANNELS = [
+  {
+    id: 'ticket',
+    label: 'Raise a ticket',
+    value: 'MySupport',
+    href: 'https://www.arts.ac.uk/students/it-services',
+  },
+  {
+    id: 'email',
+    label: 'Email us',
+    value: 'servicedesk@arts.ac.uk',
+    href: 'mailto:servicedesk@arts.ac.uk',
+  },
+  {
+    id: 'call',
+    label: 'Call us',
+    value: '+44 (0)20 7514 9898',
+    note: '24/7, 365 days a year',
+    href: 'tel:+442075149898',
+  },
+];
 
 /** @type {Task[]} */
 export const TASKS = [
@@ -67,6 +112,32 @@ export const TASKS = [
     cta: {
       label: 'Set up email',
       href: 'https://www.arts.ac.uk/students/welcome/your-journey-to-UAL/get-connected',
+    },
+    detail: {
+      sections: [
+        {
+          heading: 'What your UAL email is for',
+          body: 'Your UAL email is where you’ll receive important updates about your studies, course, and time at UAL, so make sure to check it regularly.',
+        },
+        {
+          heading: 'Getting access',
+          body: 'Once you have accepted your place you will gain access to the account within 72 hours.',
+        },
+        {
+          heading: 'Next steps',
+          lead: 'We’ll send instructions:',
+          bullets: [
+            'To the personal email address you used to apply',
+            'About 10 weeks before starting your course',
+            'When you have firmly accepted your place',
+          ],
+        },
+      ],
+      help: {
+        intro:
+          'If you have problems logging in to your UAL email and network account, contact IT Services for help. They are available 24/7, 365 days a year.',
+        channels: IT_HELP_CHANNELS,
+      },
     },
   },
   {
@@ -346,27 +417,7 @@ export const MFA_PATHS = [
 /** @type {{ title: string, channels: HelpChannel[] }} */
 export const MFA_HELP = {
   title: 'Contact the UAL IT Service Desk',
-  channels: [
-    {
-      id: 'call',
-      label: 'Call us',
-      value: '+44 (0)20 7514 9898',
-      note: '24/7, 365 days a year',
-      href: 'tel:+442075149898',
-    },
-    {
-      id: 'ticket',
-      label: 'Raise a ticket',
-      value: 'MySupport',
-      href: 'https://www.arts.ac.uk/students/it-services',
-    },
-    {
-      id: 'email',
-      label: 'Email us',
-      value: 'servicedesk@arts.ac.uk',
-      href: 'mailto:servicedesk@arts.ac.uk',
-    },
-  ],
+  channels: IT_HELP_CHANNELS,
 };
 
 /** @type {Cta} */
