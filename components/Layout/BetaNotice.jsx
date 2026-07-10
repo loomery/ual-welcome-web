@@ -5,7 +5,7 @@ const FEEDBACK_URL = 'https://www.arts.ac.uk/';
 export function BetaNotice() {
   return (
     <div className="bg-(--color-yellow) text-ual-dark" role="note" aria-label="Beta service">
-      <div className="flex items-center gap-3 px-(--grid-gutter) py-3">
+      <div className="flex items-center gap-3 px-(--grid-gutter) py-3 md:pl-6">
         <span className="inline-flex shrink-0 items-center bg-ual-dark px-2 py-1 text-step-d1 font-ual-bold text-ual-light">
           Beta
         </span>

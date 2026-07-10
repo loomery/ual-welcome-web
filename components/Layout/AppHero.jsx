@@ -48,7 +48,7 @@ export function AppHero({ scrolled = false }) {
       ].join(' ')}
       aria-labelledby="app-hero-title"
     >
-      <div className="flex h-full flex-col justify-center gap-1 px-(--grid-gutter) py-8 md:py-6">
+      <div className="flex h-full flex-col justify-center gap-1 px-(--grid-gutter) py-8 md:py-6 md:pl-6">
         <p className="m-0 text-step-0 text-ual-dark-90">{greeting}</p>
         <Title
           id="app-hero-title"
