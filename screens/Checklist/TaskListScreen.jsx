@@ -2,20 +2,24 @@
 
 import { useEffect, useMemo } from 'react';
 import { useRouter } from 'next/navigation';
-import { visibleTasks } from '../../data/checklist';
+import { visibleTasks, visibleOtherTasks, REPEATED_SERVICES } from '../../data/checklist';
 import { usePersistedState } from '../../hooks/usePersistedState';
 import { useOnboardingProfile } from '../../hooks/useOnboardingProfile';
-import { StatusCheckbox } from '../../components/StatusCircle/StatusCheckbox';
-import { TaskAction } from '../../components/Checklist/TaskAction';
+import { ToDoList } from '../../components/Checklist/ToDoList';
+import { InterestTile } from '../../components/Dashboard/InterestTile';
+import { Button } from '../../components/Button/Button';
+import { ArrowRightIcon } from '../../components/Icon/NavIcons';
 
 const STATUS_KEY = 'ual:task:status:v1';
 
+const INTRO =
+  'There’s lots to think about and do as you begin your journey with us at UAL. Here are the key tasks you’ll need to complete to get started.';
+
 /**
- * "Get set up for term" — lists the essential setup tasks inline. Each row
- * has a toggleable completion circle, a title, a short description, and an
- * inline action (link, app buttons, and/or an availability note). There is
- * no separate detail page except MFA, whose "Get started" action links to
- * /checklist/mfa.
+ * "Essentials" (/checklist) — the arrival to-do list. A short intro, then the
+ * "Arrival essentials" to-do list card (each task has a completion checkbox, a
+ * title/chevron linking to its destination, a description and an optional
+ * availability note) and a list of "Other important tasks" links.
  */
 export function TaskListScreen() {
   const router = useRouter();
@@ -31,12 +35,13 @@ export function TaskListScreen() {
     }
   }, [hydrated, isComplete, router]);
 
-  const tasks = useMemo(() => visibleTasks(profile?.studentType), [profile?.studentType]);
-
-  const completeCount = useMemo(
-    () => tasks.filter((t) => statuses[t.id] === 'complete').length,
-    [tasks, statuses],
+  const tasks = useMemo(
+    () => visibleTasks(profile?.studentType, profile?.studentStatus),
+    [profile?.studentType, profile?.studentStatus],
   );
+  const otherTasks = useMemo(() => visibleOtherTasks(profile?.studentType), [profile?.studentType]);
+
+  const allComplete = tasks.length > 0 && tasks.every((t) => statuses[t.id] === 'complete');
 
   if (!hydrated || !isComplete) return null;
 
@@ -48,70 +53,58 @@ export function TaskListScreen() {
   }
 
   return (
-    <article className="flex flex-col gap-8">
-      <header className="flex flex-col gap-3">
+    <article className="flex flex-col gap-12">
+      <header className="flex flex-col gap-6">
         <h1 className="text-step-4/ual-condensed font-bold tracking-ual-tight text-ual-dark">
-          Get set up for term
+          Essentials
         </h1>
-        <p className="text-step-1 text-ual-medium">
-          You need to complete these tasks in order to start your term
-        </p>
+        <p className="max-w-200 text-step-2 text-ual-dark">{INTRO}</p>
       </header>
 
-      <section aria-labelledby="essential-heading" className="flex flex-col gap-4">
-        <h2
-          id="essential-heading"
-          className="text-step-2 font-bold tracking-ual-tight text-ual-dark"
-        >
-          Essential tasks
+      <section aria-labelledby="arrival-heading" className="flex flex-col gap-4">
+        <h2 id="arrival-heading" className="text-step-3 font-bold tracking-ual-tight text-ual-dark">
+          Arrival essentials
         </h2>
-        <p className="text-step-d1 text-ual-medium">
-          {completeCount} of {tasks.length} complete
-        </p>
+        <p className="max-w-200 text-step-0 text-ual-dark">{INTRO}</p>
 
-        <ul role="list" className="flex flex-col">
-          {tasks.map((task) => {
-            const done = statuses[task.id] === 'complete';
+        <ToDoList tasks={tasks} statuses={statuses} onToggle={toggle} />
 
-            return (
-              <li
-                key={task.id}
-                className="grid grid-cols-[auto_1fr] items-center gap-x-4 border-t border-ual-dark/10 py-6"
+        {allComplete && (
+          <div className="flex flex-col gap-6">
+            <ul role="list" className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+              {REPEATED_SERVICES.map((service) => (
+                <li key={service.id}>
+                  <InterestTile label={service.label} body={service.body} href={service.href} />
+                </li>
+              ))}
+            </ul>
+            <Button variant="solid" href="/studying" className="w-fit">
+              View more study tools
+              <ArrowRightIcon aria-hidden="true" />
+            </Button>
+          </div>
+        )}
+      </section>
+
+      <section aria-labelledby="other-heading" className="flex flex-col gap-6">
+        <h2 id="other-heading" className="text-step-3 font-bold tracking-ual-tight text-ual-dark">
+          Other important tasks
+        </h2>
+        <ul role="list" className="flex flex-wrap gap-x-8 gap-y-3">
+          {otherTasks.map((task) => (
+            <li key={task.id}>
+              <a
+                href={task.href}
+                target="_blank"
+                rel="noreferrer"
+                className="inline-flex items-center gap-2 text-step-0 text-ual-dark underline underline-offset-2 hover:text-ual-orange focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ual-orange [&>svg]:size-5"
               >
-                <button
-                  type="button"
-                  onClick={() => toggle(task.id)}
-                  aria-pressed={done}
-                  aria-label={
-                    done
-                      ? `${task.title} — complete, click to undo`
-                      : `Mark "${task.title}" as complete`
-                  }
-                  className="shrink-0 cursor-pointer border-0 bg-transparent p-0 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ual-orange"
-                >
-                  <StatusCheckbox status={done ? 'complete' : 'not-started'} size={22} />
-                </button>
-
-                <h3 className="text-step-1 font-bold tracking-ual-tight text-ual-dark">
-                  {task.title}
-                </h3>
-
-                <div className="col-start-2 mt-2 flex min-w-0 flex-col gap-2">
-                  <p className="text-step-d1/ual-default text-ual-medium">
-                    {task.shortDescription}
-                  </p>
-
-                  {task.note && (
-                    <p className="inline-flex w-fit items-center gap-1 bg-ual-shade px-3 py-2 text-step-d1 text-ual-medium">
-                      <span aria-hidden="true">&#9432;</span> {task.note}
-                    </p>
-                  )}
-
-                  <TaskAction cta={task.cta} apps={task.apps} />
-                </div>
-              </li>
-            );
-          })}
+                {task.label}
+                <ArrowRightIcon aria-hidden="true" />
+                <span className="sr-only"> (opens in a new tab)</span>
+              </a>
+            </li>
+          ))}
         </ul>
       </section>
     </article>
