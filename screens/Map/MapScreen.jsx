@@ -4,7 +4,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { BUILDINGS } from '../../data/buildings';
 import { directionsUrl } from '../../utils/directions';
 import { useOnboardingProfile } from '../../hooks/useOnboardingProfile';
-import { CloseIcon } from '../../components/Icon/NavIcons';
+import { ChevronDownIcon, CloseIcon } from '../../components/Icon/NavIcons';
 import { asset } from '../../utils/asset';
 
 /** Placeholder floor plans shown for colleges without real plans yet. */
@@ -121,37 +121,31 @@ export function MapScreen() {
         <label className="flex flex-col gap-2">
           <span className="sr-only">Choose a college</span>
           {hydrated && (
-            <select
-              value={collegeId}
-              onChange={(e) => handleSelectCollege(e.target.value)}
-              className="w-full appearance-none bg-ual-dark px-6 py-4 text-step-1 font-bold text-ual-light focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ual-orange"
-            >
-              {BUILDINGS.map((b) => (
-                <option key={b.id} value={b.id}>
-                  {b.name}
-                </option>
-              ))}
-            </select>
+            <div className="group relative">
+              <select
+                value={collegeId}
+                onChange={(e) => handleSelectCollege(e.target.value)}
+                className="w-full cursor-pointer appearance-none bg-ual-dark px-6 py-4 pr-14 text-step-1 font-bold text-ual-light focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ual-orange"
+              >
+                {BUILDINGS.map((b) => (
+                  <option key={b.id} value={b.id}>
+                    {b.name}
+                  </option>
+                ))}
+              </select>
+              <ChevronDownIcon
+                width={20}
+                height={20}
+                aria-hidden="true"
+                className="pointer-events-none absolute top-1/2 right-6 -translate-y-1/2 text-ual-light transition-transform duration-200 group-focus-within:rotate-180"
+              />
+            </div>
           )}
         </label>
       </section>
 
       <section className="flex flex-col gap-4" aria-label={`${building.name} college map`}>
         <div className="flex flex-col gap-4 md:flex-row md:items-start">
-          <button
-            type="button"
-            onClick={() => setLightboxOpen(true)}
-            aria-label={`Expand ${activeLabel} plan`}
-            className="aspect-3/4 w-full shrink-0 cursor-zoom-in overflow-hidden bg-white p-4 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ual-orange md:aspect-3/2 md:flex-1"
-          >
-            <PlanGraphic
-              plan={activePlanData}
-              hasImages={hasImages}
-              alt={`${building.name} — ${activeLabel} plan`}
-              className="size-full object-contain"
-            />
-          </button>
-
           {/* Floor list — always a scrollable list (never a dropdown), capped
               to a fixed height so a long floor count scrolls inside this box
               instead of growing the page. Same behaviour on mobile and desktop. */}
@@ -192,6 +186,20 @@ export function MapScreen() {
               );
             })}
           </ul>
+
+          <button
+            type="button"
+            onClick={() => setLightboxOpen(true)}
+            aria-label={`Expand ${activeLabel} plan`}
+            className="aspect-3/4 w-full shrink-0 cursor-zoom-in overflow-hidden bg-white p-4 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ual-orange md:aspect-3/2 md:flex-1"
+          >
+            <PlanGraphic
+              plan={activePlanData}
+              hasImages={hasImages}
+              alt={`${building.name} — ${activeLabel} plan`}
+              className="size-full object-contain"
+            />
+          </button>
         </div>
       </section>
 
