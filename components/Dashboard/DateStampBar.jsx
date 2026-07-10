@@ -13,7 +13,7 @@ export function DateStampBar({ label, startsAt, endsAt }) {
   const isRange = !isSameDay(start, end);
   return (
     <div className="flex items-stretch bg-ual-dark text-ual-light">
-      <span className="flex items-center px-3 text-step-d1 font-ual-bold tracking-ual-tight uppercase">
+      <span className="flex items-center px-3 text-step-d1 font-ual-bold tracking-ual-tight">
         {label}
       </span>
       {isRange && <Stamp date={start} />}
