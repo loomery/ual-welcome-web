@@ -1,11 +1,11 @@
 /**
  * Essential setup tasks for new UAL students.
  *
- * The "Get set up for term" page (/checklist) lists these inline: each task
- * shows a completion circle, a title, a short description, and an inline
- * action — either a link (`cta`), app-download buttons (`apps`), or both,
- * plus an optional availability `note`. Most tasks complete in place; only
- * MFA has its own detail page (/checklist/mfa) with the device-path guide.
+ * The "Essentials" page (/checklist) lists these inside a "To do list" card:
+ * each row has a completion checkbox, a title, a short description, an optional
+ * availability `note`, and a chevron that links to the task destination (`cta`
+ * — the MFA task links to its own /checklist/mfa detail page, the rest to
+ * external UAL pages).
  *
  * Progress is tracked separately in localStorage:
  *   'ual:task:status:v1'  →  Record<taskId, 'not-started'|'in-progress'|'complete'>
@@ -26,7 +26,7 @@
  * @property {string} title
  * @property {TaskTag} tag
  * @property {string} shortDescription   One-liner shown in the list and the dashboard.
- * @property {Cta} [cta]                 Inline action link.
+ * @property {Cta} [cta]                 Task destination (chevron / "View task").
  * @property {AppLinks} [apps]           App download buttons (Apple / Android).
  * @property {string} [note]             Muted availability caveat.
  * @property {boolean} [internationalOnly]  If true, only shown to international students.
@@ -44,60 +44,84 @@ const MICROSOFT_SIGNIN = 'https://www.office.com';
 export const TASKS = [
   {
     id: 'ual-email',
-    title: 'Access your UAL email',
+    title: 'Set up your email and UAL network account',
     tag: 'essential',
-    shortDescription: 'This email is needed to enrol and get setup on all available UAL services.',
+    shortDescription:
+      'Once you’ve accepted your offer to study with us, you’ll need to set up your UAL email address to enrol as a student.',
     cta: {
-      label: 'Setup email',
+      label: 'Set up email',
       href: 'https://www.arts.ac.uk/students/welcome/your-journey-to-UAL/get-connected',
     },
   },
   {
-    id: 'student-portal',
-    title: 'Student portal',
-    tag: 'essential',
-    shortDescription: 'Get the latest UAL news, timetable and access available online resources',
-    cta: { label: 'Go to Student portal', href: 'https://www.arts.ac.uk/students' },
-  },
-  {
     id: 'mfa',
-    title: 'Multi-factor authentication',
+    title: 'Set up multi-factor authentication (MFA)',
     tag: 'essential',
     shortDescription:
-      'Multi-Factor Authentication (MFA) adds an extra layer of protection to your identity, your data and our systems',
+      'Multi-Factor Authentication (MFA) adds an extra layer of protection to your identity, your data and our systems.',
     cta: { label: 'Get started', href: '/checklist/mfa' },
   },
   {
-    id: 'myual-app',
-    title: 'Download your MyUAL app',
+    id: 'enrol',
+    title: 'Enrol',
     tag: 'essential',
-    shortDescription: 'Get the latest UAL news, timetable and access available online resources',
-    // TODO(UAL): replace with the real MyUAL App Store / Google Play links.
-    apps: {
-      apple: 'https://www.apple.com/app-store/',
-      android: 'https://play.google.com/store',
-    },
+    shortDescription: 'You must enrol each academic year to join or continue your course.',
+    // TODO(UAL): replace with the canonical enrolment URL.
+    cta: { label: 'Enrol', href: 'https://www.arts.ac.uk/students/enrolment' },
   },
   {
-    id: 'moodle',
-    title: 'Set up Moodle',
+    id: 'digital-accounts',
+    title: 'Set up your digital accounts',
     tag: 'essential',
     shortDescription:
-      'Moodle is your virtual learning environment, it has course materials, assignments, announcements.',
+      'There are multiple accounts you need during your term. Activate them before you start.',
+    // TODO(UAL): replace with the canonical digital-accounts URL.
+    cta: { label: 'Get started', href: 'https://www.arts.ac.uk/students/it-services' },
+  },
+  {
+    id: 'first-session',
+    title: 'Find out when your first session is',
+    tag: 'essential',
+    shortDescription:
+      'Your timetable will be published at the end of August. We’ll email you when it’s ready to view and tell you how to access it.',
+    note: 'Available after you have fully enrolled and set up Moodle',
+    // TODO(UAL): replace with the canonical timetable URL.
+    cta: { label: 'View timetable', href: 'https://www.arts.ac.uk/students' },
+  },
+  {
+    id: 'id-card',
+    title: 'Collect your ID card',
+    tag: 'essential',
+    shortDescription:
+      'Get your ID card to access our college and institute buildings and facilities',
     note: 'Available after you have fully enrolled',
-    cta: { label: 'Go to Moodle', href: 'https://moodle.arts.ac.uk' },
+    // TODO(UAL): replace with the canonical ID-card URL.
+    cta: { label: 'Learn more', href: 'https://www.arts.ac.uk/students' },
+  },
+];
+
+/**
+ * "Other important tasks" — supplementary links shown below the to-do list.
+ * Not tracked for completion; each is a plain external link.
+ *
+ * @typedef {Object} OtherTask
+ * @property {string} id
+ * @property {string} label
+ * @property {string} href
+ *
+ * @type {OtherTask[]}
+ */
+// TODO(UAL): replace placeholder URLs with the canonical UAL destinations.
+export const OTHER_TASKS = [
+  {
+    id: 'doctor',
+    label: 'Register with a doctor',
+    href: 'https://www.arts.ac.uk/students/student-health-and-wellbeing',
   },
   {
-    id: 'seats-app',
-    title: 'Download your SEAtS app',
-    tag: 'essential',
-    shortDescription:
-      'You will need to mark your own attendance to sessions using the SEAtS mobile phone app once you start',
-    // TODO(UAL): replace with the real SEAtS App Store / Google Play links.
-    apps: {
-      apple: 'https://www.apple.com/app-store/',
-      android: 'https://play.google.com/store',
-    },
+    id: 'consent',
+    label: 'Complete sexual consent training',
+    href: 'https://www.arts.ac.uk/students',
   },
 ];
 
