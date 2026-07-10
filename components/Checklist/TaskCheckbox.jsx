@@ -1,7 +1,7 @@
 /**
  * TaskCheckbox — the square completion indicator used in the Essentials
  * "To do list". Empty square outline when not complete; a filled green square
- * with a white tick when complete (per Figma). Self-contained (no CSS classes),
+ * with a white tick when complete. Self-contained (no CSS classes),
  * scaled via width/height off a fixed 24×24 viewBox.
  *
  * @param {{ complete?: boolean, size?: number }} props

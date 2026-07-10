@@ -2,10 +2,12 @@
 
 import { useEffect, useMemo } from 'react';
 import { useRouter } from 'next/navigation';
-import { visibleTasks, OTHER_TASKS } from '../../data/checklist';
+import { visibleTasks, visibleOtherTasks, REPEATED_SERVICES } from '../../data/checklist';
 import { usePersistedState } from '../../hooks/usePersistedState';
 import { useOnboardingProfile } from '../../hooks/useOnboardingProfile';
 import { ToDoList } from '../../components/Checklist/ToDoList';
+import { InterestTile } from '../../components/Dashboard/InterestTile';
+import { Button } from '../../components/Button/Button';
 import { ArrowRightIcon } from '../../components/Icon/NavIcons';
 
 const STATUS_KEY = 'ual:task:status:v1';
@@ -33,7 +35,13 @@ export function TaskListScreen() {
     }
   }, [hydrated, isComplete, router]);
 
-  const tasks = useMemo(() => visibleTasks(profile?.studentType), [profile?.studentType]);
+  const tasks = useMemo(
+    () => visibleTasks(profile?.studentType, profile?.studentStatus),
+    [profile?.studentType, profile?.studentStatus],
+  );
+  const otherTasks = useMemo(() => visibleOtherTasks(profile?.studentType), [profile?.studentType]);
+
+  const allComplete = tasks.length > 0 && tasks.every((t) => statuses[t.id] === 'complete');
 
   if (!hydrated || !isComplete) return null;
 
@@ -60,6 +68,22 @@ export function TaskListScreen() {
         <p className="max-w-200 text-step-0 text-ual-dark">{INTRO}</p>
 
         <ToDoList tasks={tasks} statuses={statuses} onToggle={toggle} />
+
+        {allComplete && (
+          <div className="flex flex-col gap-6">
+            <ul role="list" className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+              {REPEATED_SERVICES.map((service) => (
+                <li key={service.id}>
+                  <InterestTile label={service.label} body={service.body} href={service.href} />
+                </li>
+              ))}
+            </ul>
+            <Button variant="solid" href="/studying" className="w-fit">
+              View more study tools
+              <ArrowRightIcon aria-hidden="true" />
+            </Button>
+          </div>
+        )}
       </section>
 
       <section aria-labelledby="other-heading" className="flex flex-col gap-6">
@@ -67,7 +91,7 @@ export function TaskListScreen() {
           Other important tasks
         </h2>
         <ul role="list" className="flex flex-wrap gap-x-8 gap-y-3">
-          {OTHER_TASKS.map((task) => (
+          {otherTasks.map((task) => (
             <li key={task.id}>
               <a
                 href={task.href}

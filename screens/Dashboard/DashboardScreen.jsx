@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { EventCard } from '../../components/EventCard/EventCard';
 import { TaskListCard } from '../../components/Dashboard/TaskListCard';
 import { CompleteBanner } from '../../components/Dashboard/CompleteBanner';
@@ -53,16 +54,22 @@ const HOME_EVENTS = 3;
  * The greeting / college hero above this is rendered by the app shell.
  */
 export function DashboardScreen() {
+  const router = useRouter();
   const { profile } = useOnboardingProfile();
   const [taskStatuses] = usePersistedState('ual:task:status:v1', {});
   const [tasksDismissed, setTasksDismissed] = usePersistedState(
-    'ual:home:tasks-complete-dismissed:v1',
+    // Shared with the Essentials to-do list: one app-wide "tasks complete,
+    // stop showing me the completed list" preference.
+    'ual:tasks-complete-dismissed:v1',
     false,
   );
   const [interestsExpanded, setInterestsExpanded] = useState(false);
 
   // ── Essential tasks ────────────────────────────────────────────────────
-  const tasks = useMemo(() => visibleTasks(profile?.studentType), [profile?.studentType]);
+  const tasks = useMemo(
+    () => visibleTasks(profile?.studentType, profile?.studentStatus),
+    [profile?.studentType, profile?.studentStatus],
+  );
   const completeCount = useMemo(
     () => tasks.filter((t) => taskStatuses[t.id] === 'complete').length,
     [tasks, taskStatuses],
@@ -134,7 +141,10 @@ export function DashboardScreen() {
                   tone="success"
                 />
               </div>
-              <CompleteBanner onDismiss={() => setTasksDismissed(true)} href="/checklist" />
+              <CompleteBanner
+                onView={() => router.push('/checklist')}
+                onDismiss={() => setTasksDismissed(true)}
+              />
             </>
           ) : (
             <>

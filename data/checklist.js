@@ -30,6 +30,8 @@
  * @property {AppLinks} [apps]           App download buttons (Apple / Android).
  * @property {string} [note]             Muted availability caveat.
  * @property {boolean} [internationalOnly]  If true, only shown to international students.
+ * @property {Array<'new'|'returning'>} [statuses]  Which cohorts see this task
+ *   (defaults to both new and returning students).
  */
 
 // TODO(UAL): replace placeholder URLs with the canonical UAL destinations.
@@ -43,9 +45,23 @@ const MICROSOFT_SIGNIN = 'https://www.office.com';
 /** @type {Task[]} */
 export const TASKS = [
   {
+    id: 'pay-tuition',
+    title: 'Pay tuition fee',
+    tag: 'essential',
+    internationalOnly: true,
+    shortDescription:
+      'Before you start your studies, it is important to know how to pay your tuition fees.',
+    // TODO(UAL): replace with the canonical tuition-fees URL.
+    cta: {
+      label: 'Pay tuition fee',
+      href: 'https://www.arts.ac.uk/students/stories/fees-and-funding',
+    },
+  },
+  {
     id: 'ual-email',
     title: 'Set up your email and UAL network account',
     tag: 'essential',
+    statuses: ['new'],
     shortDescription:
       'Once you’ve accepted your offer to study with us, you’ll need to set up your UAL email address to enrol as a student.',
     cta: {
@@ -57,6 +73,7 @@ export const TASKS = [
     id: 'mfa',
     title: 'Set up multi-factor authentication (MFA)',
     tag: 'essential',
+    statuses: ['new'],
     shortDescription:
       'Multi-Factor Authentication (MFA) adds an extra layer of protection to your identity, your data and our systems.',
     cta: { label: 'Get started', href: '/checklist/mfa' },
@@ -65,6 +82,7 @@ export const TASKS = [
     id: 'enrol',
     title: 'Enrol',
     tag: 'essential',
+    statuses: ['new'],
     shortDescription: 'You must enrol each academic year to join or continue your course.',
     // TODO(UAL): replace with the canonical enrolment URL.
     cta: { label: 'Enrol', href: 'https://www.arts.ac.uk/students/enrolment' },
@@ -73,10 +91,29 @@ export const TASKS = [
     id: 'digital-accounts',
     title: 'Set up your digital accounts',
     tag: 'essential',
+    statuses: ['new'],
     shortDescription:
       'There are multiple accounts you need during your term. Activate them before you start.',
     // TODO(UAL): replace with the canonical digital-accounts URL.
     cta: { label: 'Get started', href: 'https://www.arts.ac.uk/students/it-services' },
+  },
+  {
+    id: 'enrol-returning',
+    title: 'Enrol for the new academic year',
+    tag: 'essential',
+    statuses: ['returning'],
+    shortDescription: 'You must enrol each academic year to join or continue your course.',
+    // TODO(UAL): replace with the canonical enrolment URL.
+    cta: { label: 'Enrol', href: 'https://www.arts.ac.uk/students/enrolment' },
+  },
+  {
+    id: 'review-details',
+    title: 'Review personal details',
+    tag: 'essential',
+    statuses: ['returning'],
+    shortDescription:
+      'Log into Moodle and amend any of your details to ensure they are up to date.',
+    cta: { label: 'Go to Moodle', href: 'https://moodle.arts.ac.uk' },
   },
   {
     id: 'first-session',
@@ -92,6 +129,7 @@ export const TASKS = [
     id: 'id-card',
     title: 'Collect your ID card',
     tag: 'essential',
+    statuses: ['new'],
     shortDescription:
       'Get your ID card to access our college and institute buildings and facilities',
     note: 'Available after you have fully enrolled',
@@ -108,6 +146,7 @@ export const TASKS = [
  * @property {string} id
  * @property {string} label
  * @property {string} href
+ * @property {boolean} [internationalOnly]  If true, only shown to international students.
  *
  * @type {OtherTask[]}
  */
@@ -123,18 +162,92 @@ export const OTHER_TASKS = [
     label: 'Complete sexual consent training',
     href: 'https://www.arts.ac.uk/students',
   },
+  {
+    id: 'uk-bank',
+    label: 'Open a UK bank account',
+    href: 'https://www.arts.ac.uk/students/student-services/international-students',
+    internationalOnly: true,
+  },
 ];
 
 /**
- * Tasks visible to a given student type. (No task is currently
- * international-only, but the filter is kept so the data model and the
- * screens that consume it stay forward-compatible.)
+ * "Repeated services" — the quick links surfaced once every arrival task is
+ * done: the tools a student reaches for throughout the year. Rendered as the
+ * shared InterestTile cards.
  *
- * @param {string} [studentType]  one of STUDENT_TYPE_OPTIONS[].id ('domestic' | 'international')
+ * @typedef {Object} Service
+ * @property {string} id
+ * @property {string} label
+ * @property {string} body
+ * @property {string} href
+ *
+ * @type {Service[]}
+ */
+// TODO(UAL): replace placeholder URLs with the canonical UAL destinations.
+export const REPEATED_SERVICES = [
+  {
+    id: 'timetable',
+    label: 'Timetable',
+    body: 'Check when and where your classes are.',
+    href: 'https://www.arts.ac.uk/students',
+  },
+  {
+    id: 'moodle',
+    label: 'Moodle',
+    body: 'Your virtual learning environment and course materials.',
+    href: 'https://moodle.arts.ac.uk',
+  },
+  {
+    id: 'email',
+    label: 'Email',
+    body: 'Access your UAL email and calendar.',
+    href: 'https://www.office.com',
+  },
+  {
+    id: 'print-credit',
+    label: 'Print credit',
+    body: 'Top up and manage your printing credit.',
+    href: 'https://www.arts.ac.uk/students/it-services',
+  },
+  {
+    id: 'seats',
+    label: 'SEAtS',
+    body: 'Mark your attendance at sessions.',
+    href: 'https://www.arts.ac.uk/students',
+  },
+  {
+    id: 'academic-support',
+    label: 'Academic support online',
+    body: 'Study skills, workshops and academic help.',
+    href: 'https://www.arts.ac.uk/students/academic-support',
+  },
+];
+
+/**
+ * Tasks visible to a given student. New and returning students see different
+ * arrival tasks; international students get extra essentials (e.g. "Pay
+ * tuition fee") on top of their cohort's list.
+ *
+ * @param {string} [studentType]    one of STUDENT_TYPE_OPTIONS[].id ('domestic' | 'international')
+ * @param {string} [studentStatus]  one of STUDENT_STATUS_OPTIONS[].id ('new' | 'returning'); defaults to 'new'
  * @returns {Task[]}
  */
-export function visibleTasks(studentType) {
-  return TASKS.filter((t) => !t.internationalOnly || studentType === 'international');
+export function visibleTasks(studentType, studentStatus = 'new') {
+  return TASKS.filter((t) => {
+    if (t.internationalOnly && studentType !== 'international') return false;
+    if (t.statuses && !t.statuses.includes(studentStatus)) return false;
+    return true;
+  });
+}
+
+/**
+ * "Other important tasks" links visible to a given student type.
+ *
+ * @param {string} [studentType]  'domestic' | 'international'
+ * @returns {OtherTask[]}
+ */
+export function visibleOtherTasks(studentType) {
+  return OTHER_TASKS.filter((t) => !t.internationalOnly || studentType === 'international');
 }
 
 /* ─────────────────────────────────────────────────────────────────────────
