@@ -26,6 +26,6 @@ export const NAV_ITEMS = [
  * @type {NavItem[]}
  */
 export const MENU_SECONDARY = [
-  { href: '#', label: 'About the beta' },
-  { href: 'https://www.arts.ac.uk/', label: 'Main UAL site' },
+  { href: '#', label: 'What is a beta?' },
+  { href: 'https://www.arts.ac.uk/', label: 'Main UAL website' },
 ];

@@ -62,7 +62,7 @@ export function EventCard({ event, compact }) {
 
         <DateStampBar label="Event" startsAt={event.startsAt} endsAt={event.endsAt} />
 
-        <div className="flex grow flex-col gap-2 p-4">
+        <div className="flex grow flex-col gap-2 py-4">
           <p className="m-0 line-clamp-1 text-step-d1 text-ual-medium">
             Location: {event.location}
           </p>
