@@ -13,32 +13,19 @@ import { isOnboardingRoute } from '../../utils/isOnboardingRoute';
  */
 const STORAGE_PREFIX = 'ual:';
 
-/**
- * UAL corporate footer. The on-device privacy note + reset affordance
- * (important for shared/kiosk machines) is preserved as a slim row at the
- * very bottom.
- */
+/** UAL corporate footer. */
 
 /** @type {Array<Array<{ label: string, href: string }>>} */
 const FOOTER_COLUMNS = [
   [
     { label: 'Privacy information', href: 'https://www.arts.ac.uk/' },
-    { label: 'General Data Processing Information', href: 'https://www.arts.ac.uk/' },
     { label: 'Cookies', href: 'https://www.arts.ac.uk/' },
+  ],
+  [
+    { label: 'Accessibility statement', href: 'https://www.arts.ac.uk/' },
     { label: 'Disclaimer', href: 'https://www.arts.ac.uk/' },
   ],
-  [
-    { label: 'Public information', href: 'https://www.arts.ac.uk/about-ual/public-information' },
-    { label: 'Feedback', href: 'https://www.arts.ac.uk/' },
-    { label: 'Contact us', href: 'https://www.arts.ac.uk/contact-us' },
-    { label: 'Press Office', href: 'https://www.arts.ac.uk/about-ual/press-office' },
-  ],
-  [
-    { label: 'Working at UAL', href: 'https://www.arts.ac.uk/about-ual/jobs' },
-    { label: 'Accessibility statement', href: 'https://www.arts.ac.uk/' },
-    { label: 'UAL Prospectus 2023/24', href: 'https://www.arts.ac.uk/' },
-    { label: 'Modern slavery statement', href: 'https://www.arts.ac.uk/' },
-  ],
+  [{ label: 'Feedback', href: 'https://www.arts.ac.uk/' }],
 ];
 
 /** @type {Array<{ label: string, href: string, path: string }>} */
@@ -115,13 +102,18 @@ export function Footer() {
       role="contentinfo"
     >
       <div className="mx-auto grid max-w-grid gap-8 px-(--grid-gutter)">
-        <p className="m-0 text-step-2/ual-condensed font-ual-bold tracking-ual-tight text-ual-light">
-          Because the world
-          <br />
-          needs creativity
-        </p>
+        <div className="flex flex-col gap-4">
+          <span className="inline-flex w-fit items-center border border-ual-light px-2 py-1 text-step-d1 font-ual-bold text-ual-light">
+            Beta
+          </span>
+          <p className="m-0 text-step-2/ual-condensed font-ual-bold tracking-ual-tight text-ual-light">
+            Because the world
+            <br />
+            needs creativity
+          </p>
+        </div>
 
-        <nav className="grid grid-cols-1 gap-6 md:max-w-5xl md:grid-cols-3" aria-label="Footer">
+        <nav className="grid grid-cols-1 gap-6 md:max-w-xl md:grid-cols-3" aria-label="Footer">
           {FOOTER_COLUMNS.map((column, i) => (
             <ul key={i} className="m-0 flex list-none flex-col gap-3 p-0" role="list">
               {column.map((link) => (

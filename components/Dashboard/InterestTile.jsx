@@ -15,7 +15,7 @@ export function InterestTile({ label, body, href }) {
   return (
     <Link
       href={href}
-      className="group flex h-full flex-col gap-3 bg-ual-shade p-6 text-ual-dark no-underline transition-colors hover:text-ual-orange focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ual-orange"
+      className="group flex h-full flex-col gap-(--space-xs) bg-ual-shade p-(--space-m) text-ual-dark no-underline transition-colors hover:text-ual-orange focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ual-orange"
     >
       <h3 className="text-step-1/ual-condensed font-ual-bold tracking-ual-tight">{label}</h3>
       {body && <p className="text-step-d1 text-ual-medium">{body}</p>}
