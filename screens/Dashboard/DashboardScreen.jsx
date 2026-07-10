@@ -1,288 +1,258 @@
 'use client';
 
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import Link from 'next/link';
-import { Card } from '../../components/Card/Card';
-import { NextStepCard } from '../../components/Dashboard/NextStepCard';
-import { ViewToggle } from '../../components/Dashboard/ViewToggle';
+import { EventCard } from '../../components/EventCard/EventCard';
+import { TaskListCard } from '../../components/Dashboard/TaskListCard';
+import { CompleteBanner } from '../../components/Dashboard/CompleteBanner';
+import { KeyDateCard } from '../../components/Dashboard/KeyDateCard';
+import { InterestTile } from '../../components/Dashboard/InterestTile';
 import { Progress } from '../../components/Progress/Progress';
-import { LinkButton } from '../../components/Button/LinkButton';
-import { ArrowRightIcon } from '../../components/Icon/NavIcons';
+import { Button } from '../../components/Button/Button';
+import { ArrowRightIcon, ChevronDownIcon } from '../../components/Icon/NavIcons';
 import { visibleTasks } from '../../data/checklist';
 import { WELCOME_WEEK } from '../../data/welcomeWeek';
 import { USEFUL_INFO } from '../../data/usefulInfo';
-import { LONG_DATE_FMT } from '../../utils/dates';
+import { INTEREST_OPTIONS } from '../../data/onboardingOptions';
+import { EVENTS } from '../../data/events';
 import { useOnboardingProfile } from '../../hooks/useOnboardingProfile';
 import { usePersistedState } from '../../hooks/usePersistedState';
 
-const VIEW_OPTIONS = /** @type {const} */ ([
-  { value: 'focus', label: 'My selected interests' },
-  { value: 'all', label: 'All at UAL' },
-]);
-
 /**
- * Interest-driven home sections. The `id`s match INTEREST_OPTIONS so the
- * "My focus" view can filter on the student's selected topics. Order here
- * is the render order.
- *
- * Cards use `to` for internal routes and `external` for off-site links;
- * a `to: '#'` placeholder marks a card whose real destination isn't built
- * yet (the design shows the tile, the link is a stub).
- *
- * @type {Array<{ id: string, label: string, cards: Array<{ title: string, to?: string, external?: string }> }>}
+ * Where each interest tile points. Interests map onto the primary nav
+ * sections, so a tile takes the student straight to the relevant area.
+ * @type {Record<string, string>}
  */
-const DASHBOARD_SECTIONS = [
-  {
-    id: 'course',
-    label: 'Course and studying',
-    cards: [
-      { title: 'Course details via Moodle', external: 'https://moodle.arts.ac.uk' },
-      { title: 'Resources', to: '/info/resources' },
-      { title: 'What is Moodle', to: '#' },
-    ],
-  },
-  {
-    id: 'access',
-    label: 'IT & UAL access',
-    cards: [
-      { title: 'Tools to set up', to: '/checklist' },
-      { title: 'Resources', to: '/info/resources' },
-      { title: 'Campus access', to: '/map' },
-    ],
-  },
-  {
-    id: 'life',
-    label: 'Student life',
-    cards: [
-      { title: 'Socials and events', to: '/events' },
-      { title: 'Student union (SU)', external: 'https://www.arts.ac.uk/students/student-union' },
-      { title: 'Area guide', to: '/map' },
-    ],
-  },
-  {
-    id: 'health',
-    label: 'Health and wellbeing',
-    cards: [
-      { title: 'Set up with a local doctor', to: '/info/local-doctor' },
-      { title: 'Disability service', to: '#' },
-    ],
-  },
-  {
-    id: 'safety',
-    label: 'Safety',
-    cards: [
-      { title: 'Safety at UAL', to: '/info/safety-at-ual' },
-      { title: 'Campus safety', to: '#' },
-    ],
-  },
-  {
-    id: 'finances',
-    label: 'Finances',
-    cards: [
-      { title: 'Setting up a bank account', to: '#' },
-      { title: 'Resources', to: '#' },
-      { title: 'About your tuition fees', to: '#' },
-      { title: 'Discounts', to: '#' },
-    ],
-  },
-];
+const INTEREST_HREF = {
+  course: '/studying',
+  access: '/checklist',
+  life: '/events',
+  health: '/help',
+  safety: '/help',
+  finances: '/help',
+};
+
+/** How many interest tiles show before the "View more" toggle expands the rest. */
+const COLLAPSED_INTERESTS = 3;
+
+/** How many essential tasks the home surfaces before "View all tasks". */
+const HOME_TASKS = 3;
+
+/** How many events the "What's on" reel shows. */
+const HOME_EVENTS = 3;
 
 /**
- * Personalised dashboard.
+ * Personalised home.
  *
- *   1. Hero            — countdown + greeting + college name
- *   2. Key information — Welcome week + term date rows
- *   3. Get Setup       — progress bar, next-step card, "Coming up" list
- *   4. View toggle     — My focus / All at UAL
- *   5. Sections        — six interest-driven link-card groups
+ *   1. Essential tasks — arrival checklist (progress + task card, or an
+ *      "all complete" banner the student can dismiss for good).
+ *   2. Key dates       — Welcome week + term-date cards with date-stamp bars.
+ *   3. Selected interests — the student's picked interests as tiles, with a
+ *      "View more" toggle that reveals the rest of the categories.
+ *   4. What's on       — a reel of upcoming Welcome Week events.
  *
- * Section visibility:
- *   - "My focus":   only sections matching the student's interests.
- *   - "All at UAL": every section regardless of interests.
+ * The greeting / college hero above this is rendered by the app shell.
  */
 export function DashboardScreen() {
   const { profile } = useOnboardingProfile();
   const [taskStatuses] = usePersistedState('ual:task:status:v1', {});
-  const [view, setView] = usePersistedState(
-    'ual:dash:view:v1',
-    /** @type {'focus'|'all'} */ ('focus'),
+  const [tasksDismissed, setTasksDismissed] = usePersistedState(
+    'ual:home:tasks-complete-dismissed:v1',
+    false,
   );
+  const [interestsExpanded, setInterestsExpanded] = useState(false);
 
-  const interests = useMemo(() => profile?.interests ?? [], [profile?.interests]);
-
-  const effectiveView = interests.length === 0 ? 'all' : view;
-
-  const visibleSections = useMemo(() => {
-    if (effectiveView === 'all') return DASHBOARD_SECTIONS;
-    return DASHBOARD_SECTIONS.filter((s) => interests.includes(s.id));
-  }, [effectiveView, interests]);
-
+  // ── Essential tasks ────────────────────────────────────────────────────
   const tasks = useMemo(() => visibleTasks(profile?.studentType), [profile?.studentType]);
   const completeCount = useMemo(
     () => tasks.filter((t) => taskStatuses[t.id] === 'complete').length,
     [tasks, taskStatuses],
   );
-  const incompleteTasks = useMemo(
-    () => tasks.filter((t) => taskStatuses[t.id] !== 'complete'),
+  const allComplete = tasks.length > 0 && completeCount === tasks.length;
+
+  // Surface the first few incomplete tasks; each "View task" keeps the student
+  // in-app (its own internal route, else the checklist) and is numbered by its
+  // running position in the visible list.
+  const taskItems = useMemo(
+    () =>
+      tasks
+        .filter((t) => taskStatuses[t.id] !== 'complete')
+        .slice(0, HOME_TASKS)
+        .map((t, i) => ({
+          id: t.id,
+          number: i + 1,
+          title: t.title,
+          description: t.shortDescription,
+          href: t.cta?.href?.startsWith('/') ? t.cta.href : '/checklist',
+        })),
     [tasks, taskStatuses],
   );
-  const nextTask = incompleteTasks[0] ?? null;
-  const comingUp = incompleteTasks.slice(1, 3);
 
+  // ── Key dates ──────────────────────────────────────────────────────────
   const termInfo = useMemo(() => USEFUL_INFO.find((i) => i.id === 'term-dates'), []);
 
+  // ── Selected interests ─────────────────────────────────────────────────
+  const interestIds = useMemo(() => profile?.interests ?? [], [profile?.interests]);
+  // Selected interests first, then the rest — so the collapsed view shows what
+  // the student picked and "View more" reveals the remaining categories.
+  const orderedInterests = useMemo(() => {
+    const picked = INTEREST_OPTIONS.filter((o) => interestIds.includes(o.id));
+    const rest = INTEREST_OPTIONS.filter((o) => !interestIds.includes(o.id));
+    return [...picked, ...rest];
+  }, [interestIds]);
+  const visibleInterests = interestsExpanded
+    ? orderedInterests
+    : orderedInterests.slice(0, COLLAPSED_INTERESTS);
+
+  // ── What's on ──────────────────────────────────────────────────────────
+  const upcoming = useMemo(
+    () => [...EVENTS].sort((a, b) => a.startsAt.localeCompare(b.startsAt)).slice(0, HOME_EVENTS),
+    [],
+  );
+
   return (
-    <article className="space-y-8">
-      {/* The greeting/college hero is rendered by the app shell (AppHero). */}
-      <div className="mx-auto max-w-6xl space-y-8">
-        {/* ── KEY INFORMATION ────────────────────────────────────── */}
-        <section className="space-y-4" aria-labelledby="dash-key-info">
-          <h2 id="dash-key-info">Key information</h2>
-          <div className="flex flex-col">
-            <KeyInfoRow
-              title="Welcome week dates"
-              startsAt={WELCOME_WEEK.startsAt}
-              endsAt={WELCOME_WEEK.endsAt}
-            />
-            {termInfo?.dates && (
-              <KeyInfoRow
-                title="Term dates"
-                eyebrow={termInfo.eyebrow}
-                startsAt={termInfo.dates.startsAt}
-                endsAt={termInfo.dates.endsAt}
-                href={termInfo.href}
-              />
-            )}
+    <article className="mx-auto max-w-6xl space-y-12">
+      {/* ── ESSENTIAL TASKS ────────────────────────────────────────────── */}
+      {!(allComplete && tasksDismissed) && (
+        <section className="space-y-6" aria-labelledby="home-tasks">
+          <div className="space-y-2">
+            <h2 id="home-tasks">Essential tasks</h2>
+            <p className="text-step-1 text-ual-medium">
+              Complete this to do list before the course start
+            </p>
           </div>
+
+          {allComplete ? (
+            <>
+              <div className="space-y-2">
+                <p className="text-step-0 text-ual-dark">
+                  {completeCount} of {tasks.length} complete
+                </p>
+                <Progress
+                  value={completeCount}
+                  max={tasks.length}
+                  label={`${completeCount} of ${tasks.length} tasks complete`}
+                  tone="success"
+                />
+              </div>
+              <CompleteBanner onDismiss={() => setTasksDismissed(true)} href="/checklist" />
+            </>
+          ) : (
+            <>
+              <div className="space-y-6 bg-ual-shade p-6">
+                <div className="space-y-2">
+                  <p className="text-step-0 text-ual-dark">
+                    {completeCount} of {tasks.length} complete
+                  </p>
+                  <Progress
+                    value={completeCount}
+                    max={tasks.length}
+                    label={`${completeCount} of ${tasks.length} tasks complete`}
+                    tone="success"
+                  />
+                </div>
+
+                <TaskListCard items={taskItems} />
+              </div>
+
+              <Link
+                href="/checklist"
+                className="inline-flex min-h-11 items-center gap-2 text-step-0 font-ual-bold text-ual-dark underline underline-offset-2 hover:text-ual-orange focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ual-orange [&>svg]:size-6"
+              >
+                View all tasks
+                <ArrowRightIcon aria-hidden="true" />
+              </Link>
+            </>
+          )}
         </section>
+      )}
 
-        {/* ── GET SETUP ──────────────────────────────────────────── */}
-        <section className="space-y-4" aria-labelledby="dash-get-setup">
-          <div className="flex items-baseline justify-between gap-4">
-            <h2 id="dash-get-setup">Get setup</h2>
-            <Link
-              href="/checklist"
-              className="text-step-d1 font-bold text-ual-dark underline underline-offset-2 hover:text-ual-orange"
-            >
-              View all tasks
-            </Link>
-          </div>
-
-          <Progress
-            value={completeCount}
-            max={tasks.length}
-            label={`${completeCount} of ${tasks.length} tasks complete`}
+      {/* ── KEY DATES ──────────────────────────────────────────────────── */}
+      <section className="space-y-6" aria-labelledby="home-key-dates">
+        <h2 id="home-key-dates">Key dates</h2>
+        <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+          <KeyDateCard
+            title="Welcome week dates"
+            description="See what's going on at UAL and get ready for term"
+            label="Welcome"
+            startsAt={WELCOME_WEEK.startsAt}
+            endsAt={WELCOME_WEEK.endsAt}
           />
-          <p className="text-step-d1 text-ual-medium">
-            {completeCount} of {tasks.length} complete
-          </p>
-
-          {nextTask && (
-            <NextStepCard
-              title={nextTask.title}
-              body={nextTask.shortDescription}
-              primary={{
-                // The home next-step keeps the student inside the app: it
-                // follows the task's own internal route (e.g. MFA →
-                // /checklist/mfa) but falls back to the checklist page when
-                // the task's cta is an external link (e.g. "Setup email").
-                label: nextTask.cta?.label ?? 'View task',
-                href: nextTask.cta?.href?.startsWith('/') ? nextTask.cta.href : '/checklist',
-              }}
+          {termInfo?.dates && (
+            <KeyDateCard
+              title="Term dates"
+              description="View your term dates for the academic year"
+              label={termInfo.eyebrow ?? 'Autumn'}
+              startsAt={termInfo.dates.startsAt}
+              endsAt={termInfo.dates.endsAt}
+              href={termInfo.href}
             />
           )}
+        </div>
+      </section>
 
-          {comingUp.length > 0 && (
-            <div className="space-y-2">
-              <p className="text-step-d1 font-bold text-ual-dark">Coming up</p>
-              <ol className="flex flex-col gap-1">
-                {comingUp.map((task, i) => (
-                  <li key={task.id} className="text-step-d1 text-ual-medium">
-                    {i + 1}. {task.title}
-                  </li>
-                ))}
-              </ol>
-            </div>
-          )}
-        </section>
-
-        {/* ── VIEW TOGGLE ────────────────────────────────────────── */}
-        <div className="space-y-1">
-          <ViewToggle value={effectiveView} onChange={setView} options={VIEW_OPTIONS} />
-          <p className="m-0 text-step-d1 text-ual-medium">
-            {effectiveView === 'all'
-              ? 'Showing everything at UAL'
-              : 'Showing your selected interests'}
+      {/* ── SELECTED INTERESTS ─────────────────────────────────────────── */}
+      <section className="space-y-6" aria-labelledby="home-interests">
+        <div className="space-y-2">
+          <h2 id="home-interests">Selected interests</h2>
+          <p className="text-step-1 text-ual-medium">
+            Showing {interestIds.length} of {INTEREST_OPTIONS.length} interests based on your
+            student centre space set up.
           </p>
+          <Link
+            href="/onboarding"
+            className="inline-flex min-h-11 items-center text-step-0 font-ual-bold text-ual-dark underline underline-offset-2 hover:text-ual-orange focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ual-orange"
+          >
+            Edit your interests
+          </Link>
         </div>
 
-        {/* ── INTEREST SECTIONS ──────────────────────────────────── */}
-        {visibleSections.map((section) => (
-          <section
-            key={section.id}
-            className="space-y-4"
-            aria-labelledby={`dash-section-${section.id}`}
-          >
-            <h2 id={`dash-section-${section.id}`}>{section.label}</h2>
-            <div className="grid grid-cols-[repeat(auto-fit,minmax(min(250px,100%),1fr))] gap-(--grid-gutter)">
-              {section.cards.map((card) => (
-                <Card key={card.title} title={card.title} to={card.to} external={card.external} />
-              ))}
-            </div>
-          </section>
-        ))}
-
-        {/* ── PROFILE FOOTER ─────────────────────────────────────── */}
-        <section className="space-y-2" aria-label="Profile">
-          <p>
-            <span className="text-step-d1">Saved on this device. </span>
-            <LinkButton href="/profile">Edit your answers</LinkButton>
-          </p>
-        </section>
-      </div>
-    </article>
-  );
-}
-
-/**
- * One row in the Key information list: a title (optionally a link with an
- * arrow), an optional eyebrow, and a Start / End date pair.
- *
- * @param {Object} props
- * @param {string} props.title
- * @param {string} props.startsAt
- * @param {string} props.endsAt
- * @param {string} [props.eyebrow]
- * @param {string} [props.href]
- */
-function KeyInfoRow({ title, startsAt, endsAt, eyebrow, href }) {
-  const start = LONG_DATE_FMT.format(new Date(startsAt));
-  const end = LONG_DATE_FMT.format(new Date(endsAt));
-
-  return (
-    <div className="flex flex-col gap-2 py-6">
-      {href ? (
-        <a
-          href={href}
-          target="_blank"
-          rel="noreferrer"
-          className="flex items-center justify-between gap-4 text-step-1 font-bold tracking-ual-tight text-ual-dark hover:text-ual-orange"
+        <ul
+          className="grid list-none grid-cols-1 gap-6 p-0 md:grid-cols-2 lg:grid-cols-3"
+          role="list"
         >
-          <span>
-            {title}
-            <span className="sr-only"> (opens in a new tab)</span>
-          </span>
-          <ArrowRightIcon width={28} height={28} aria-hidden="true" className="shrink-0" />
-        </a>
-      ) : (
-        <span className="text-step-1 font-bold tracking-ual-tight text-ual-dark">{title}</span>
-      )}
-      {eyebrow && <p className="text-step-d1 font-bold text-ual-medium">{eyebrow}</p>}
-      <div className="flex flex-col gap-1 text-step-d1 text-ual-medium md:flex-row md:items-center md:gap-4">
-        <span className="md:shrink-0">Start: {start}</span>
-        <span aria-hidden="true" className="hidden h-px grow bg-ual-dark/15 md:block" />
-        <span className="md:shrink-0">End: {end}</span>
-      </div>
-    </div>
+          {visibleInterests.map((interest) => (
+            <li key={interest.id}>
+              <InterestTile
+                label={interest.label}
+                body={interest.body}
+                href={INTEREST_HREF[interest.id] ?? '/help'}
+              />
+            </li>
+          ))}
+        </ul>
+
+        {orderedInterests.length > COLLAPSED_INTERESTS && (
+          <button
+            type="button"
+            onClick={() => setInterestsExpanded((v) => !v)}
+            aria-expanded={interestsExpanded}
+            className="inline-flex min-h-11 cursor-pointer items-center gap-2 text-step-0 font-ual-bold text-ual-dark underline underline-offset-2 hover:text-ual-orange focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ual-orange [&>svg]:size-5"
+          >
+            {interestsExpanded ? 'View less' : 'View more'}
+            <ChevronDownIcon aria-hidden="true" className={interestsExpanded ? 'rotate-180' : ''} />
+          </button>
+        )}
+      </section>
+
+      {/* ── WHAT'S ON ──────────────────────────────────────────────────── */}
+      <section className="space-y-6" aria-labelledby="home-whats-on">
+        <h2 id="home-whats-on">What&apos;s on</h2>
+        <ul
+          className="-mx-(--grid-gutter) flex snap-x snap-mandatory list-none gap-6 overflow-x-auto px-(--grid-gutter) pb-2 md:mx-0 md:px-0"
+          role="list"
+        >
+          {upcoming.map((event) => (
+            <li key={event.id} className="snap-start">
+              <EventCard event={event} compact />
+            </li>
+          ))}
+        </ul>
+        <Button href="/events" className="w-full justify-center md:w-auto">
+          View more events
+          <ArrowRightIcon aria-hidden="true" />
+        </Button>
+      </section>
+    </article>
   );
 }
