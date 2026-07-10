@@ -12,7 +12,6 @@ import { visibleTasks } from '../../data/checklist';
 import { WELCOME_WEEK } from '../../data/welcomeWeek';
 import { USEFUL_INFO } from '../../data/usefulInfo';
 import { LONG_DATE_FMT } from '../../utils/dates';
-import { asset } from '../../utils/asset';
 import { useOnboardingProfile } from '../../hooks/useOnboardingProfile';
 import { usePersistedState } from '../../hooks/usePersistedState';
 
@@ -53,7 +52,7 @@ const DASHBOARD_SECTIONS = [
   },
   {
     id: 'life',
-    label: 'Life at UAL',
+    label: 'Student life',
     cards: [
       { title: 'Socials and events', to: '/events' },
       { title: 'Student union (SU)', external: 'https://www.arts.ac.uk/students/student-union' },
@@ -62,30 +61,28 @@ const DASHBOARD_SECTIONS = [
   },
   {
     id: 'health',
-    label: 'Health, wellbeing and safety',
+    label: 'Health and wellbeing',
     cards: [
       { title: 'Set up with a local doctor', to: '/info/local-doctor' },
       { title: 'Disability service', to: '#' },
+    ],
+  },
+  {
+    id: 'safety',
+    label: 'Safety',
+    cards: [
       { title: 'Safety at UAL', to: '/info/safety-at-ual' },
       { title: 'Campus safety', to: '#' },
     ],
   },
   {
     id: 'finances',
-    label: 'Finance',
+    label: 'Finances',
     cards: [
       { title: 'Setting up a bank account', to: '#' },
       { title: 'Resources', to: '#' },
       { title: 'About your tuition fees', to: '#' },
       { title: 'Discounts', to: '#' },
-    ],
-  },
-  {
-    id: 'careers',
-    label: 'Careers',
-    cards: [
-      { title: 'Job opportunities', to: '#' },
-      { title: 'Career advice', to: '#' },
     ],
   },
 ];
@@ -104,7 +101,7 @@ const DASHBOARD_SECTIONS = [
  *   - "All at UAL": every section regardless of interests.
  */
 export function DashboardScreen() {
-  const { profile, reset } = useOnboardingProfile();
+  const { profile } = useOnboardingProfile();
   const [taskStatuses] = usePersistedState('ual:task:status:v1', {});
   const [view, setView] = usePersistedState(
     'ual:dash:view:v1',
@@ -133,16 +130,6 @@ export function DashboardScreen() {
   const comingUp = incompleteTasks.slice(1, 3);
 
   const termInfo = useMemo(() => USEFUL_INFO.find((i) => i.id === 'term-dates'), []);
-
-  function handleReset() {
-    if (typeof window === 'undefined') return;
-    if (window.confirm('Reset your hub? This clears your answers from this device.')) {
-      reset();
-      // asset() prefixes the deploy sub-path — window.location bypasses Next's
-      // basePath handling, so a bare '/onboarding' lands on the host root.
-      window.location.assign(asset('/onboarding'));
-    }
-  }
 
   return (
     <article className="space-y-8">
@@ -249,7 +236,7 @@ export function DashboardScreen() {
         <section className="space-y-2" aria-label="Profile">
           <p>
             <span className="text-step-d1">Saved on this device. </span>
-            <LinkButton onClick={handleReset}>Edit your answers</LinkButton>
+            <LinkButton href="/profile">Edit your answers</LinkButton>
           </p>
         </section>
       </div>

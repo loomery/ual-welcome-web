@@ -1,7 +1,7 @@
 'use client';
 
 import { usePathname } from 'next/navigation';
-import { isOnboardingRoute } from '../../utils/isOnboardingRoute';
+import { isFocusedRoute } from '../../utils/isFocusedRoute';
 import { SkipLinks } from './SkipLinks';
 import { Header } from './Header';
 import { BetaNotice } from './BetaNotice';
@@ -34,7 +34,7 @@ import { Breadcrumbs } from '../Breadcrumbs/Breadcrumbs';
 export function AppShell({ children }) {
   const pathname = usePathname();
   const isHome = pathname === '/';
-  const isOnboarding = isOnboardingRoute(pathname);
+  const focused = isFocusedRoute(pathname);
 
   return (
     <div>
@@ -44,7 +44,7 @@ export function AppShell({ children }) {
       {isHome && <AppHero variant="full" />}
       <div
         className={
-          isOnboarding ? 'md:block' : 'md:grid md:grid-cols-[18rem_minmax(0,1fr)] md:items-start'
+          focused ? 'md:block' : 'md:grid md:grid-cols-[18rem_minmax(0,1fr)] md:items-start'
         }
       >
         <div className="md:flex md:flex-col md:self-stretch">
@@ -54,13 +54,13 @@ export function AppShell({ children }) {
         <main
           id="main-content"
           className={
-            isOnboarding
+            focused
               ? 'mx-auto max-w-grid min-w-0 px-(--grid-gutter) py-8 md:mx-0 md:w-full md:max-w-none md:bg-transparent md:py-10 min-[75rem]:px-12'
               : 'mx-auto max-w-grid min-w-0 px-(--grid-gutter) py-8 md:mx-0 md:w-full md:max-w-none md:bg-white md:py-12 min-[75rem]:px-12'
           }
           tabIndex={-1}
         >
-          {!isOnboarding && <Breadcrumbs className="mb-8" />}
+          {!focused && <Breadcrumbs className="mb-8" />}
           {children}
         </main>
       </div>

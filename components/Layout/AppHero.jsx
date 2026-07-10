@@ -4,7 +4,7 @@ import { useMemo } from 'react';
 import { usePathname } from 'next/navigation';
 import { COLLEGE_OPTIONS } from '../../data/onboardingOptions';
 import { useOnboardingProfile } from '../../hooks/useOnboardingProfile';
-import { isOnboardingRoute } from '../../utils/isOnboardingRoute';
+import { isFocusedRoute } from '../../utils/isFocusedRoute';
 
 /**
  * Welcome-week banner + greeting/college hero. Lives in the app shell so it
@@ -21,7 +21,7 @@ import { isOnboardingRoute } from '../../utils/isOnboardingRoute';
  */
 export function AppHero({ variant = 'full' }) {
   const pathname = usePathname();
-  const isOnboarding = isOnboardingRoute(pathname);
+  const isOnboarding = isFocusedRoute(pathname);
   const { profile, hydrated } = useOnboardingProfile();
 
   const college = useMemo(
