@@ -78,65 +78,77 @@ export function MobileMenu() {
         )}
       </button>
 
+      {/* Off-canvas layer: fixed to the viewport and clipped, so the closed
+          drawer (translated off-screen right) can't create horizontal scroll. */}
       <div
-        onClick={close}
-        aria-hidden="true"
         className={[
-          'fixed inset-x-0 top-15 bottom-0 z-40 bg-ual-dark/40 transition-opacity duration-200 ease-ual',
-          open ? 'opacity-100' : 'pointer-events-none opacity-0',
-        ].join(' ')}
-      />
-
-      <nav
-        id="mobile-menu"
-        ref={panelRef}
-        aria-label="Primary"
-        inert={!open}
-        className={[
-          'fixed top-15 right-0 bottom-0 z-40 w-[318px] max-w-[85vw] overflow-y-auto bg-ual-dark pt-4 transition-transform duration-200 ease-ual',
-          open ? 'translate-x-0' : 'translate-x-full',
+          'fixed top-15 bottom-0 left-0 z-40 w-screen overflow-hidden',
+          open ? '' : 'pointer-events-none',
         ].join(' ')}
       >
-        <ul role="list" className="flex flex-col gap-1">
-          {NAV_ITEMS.map((item) => {
-            const active = isActive(item.to);
-            return (
-              <li key={item.to}>
-                <Link
-                  href={item.to}
-                  onClick={() => setOpen(false)}
-                  aria-current={active ? 'page' : undefined}
-                  className={[primaryClass, active ? 'font-ual-bold' : ''].join(' ')}
-                >
-                  {item.label}
-                </Link>
-              </li>
-            );
-          })}
-        </ul>
+        <div
+          onClick={close}
+          aria-hidden="true"
+          className={[
+            'absolute inset-0 bg-ual-dark/40 transition-opacity duration-200 ease-ual',
+            open ? 'opacity-100' : 'pointer-events-none opacity-0',
+          ].join(' ')}
+        />
 
-        <hr className="m-4 border-t border-ual-light/20" />
+        <nav
+          id="mobile-menu"
+          ref={panelRef}
+          aria-label="Primary"
+          inert={!open}
+          className={[
+            // Stays on-screen (right-aligned) and reveals via clip-path rather
+            // than translating off-screen — a translated-off drawer would add
+            // horizontal scroll to the whole page.
+            'absolute top-0 right-0 bottom-0 w-[318px] max-w-[85vw] overflow-y-auto bg-ual-dark pt-4 transition-[clip-path] duration-200 ease-ual',
+            open ? '[clip-path:inset(0)]' : '[clip-path:inset(0_0_0_100%)]',
+          ].join(' ')}
+        >
+          <ul role="list" className="flex flex-col gap-1">
+            {NAV_ITEMS.map((item) => {
+              const active = isActive(item.to);
+              return (
+                <li key={item.to}>
+                  <Link
+                    href={item.to}
+                    onClick={() => setOpen(false)}
+                    aria-current={active ? 'page' : undefined}
+                    className={[primaryClass, active ? 'font-ual-bold' : ''].join(' ')}
+                  >
+                    {item.label}
+                  </Link>
+                </li>
+              );
+            })}
+          </ul>
 
-        <ul role="list" className="flex flex-col gap-1 pb-6">
-          {MENU_SECONDARY.map((item) => {
-            const isExternal = item.href.startsWith('http');
-            return (
-              <li key={item.label}>
-                <a
-                  href={item.href}
-                  onClick={() => setOpen(false)}
-                  target={isExternal ? '_blank' : undefined}
-                  rel={isExternal ? 'noreferrer' : undefined}
-                  className={secondaryClass}
-                >
-                  {item.label}
-                  {isExternal && <span className="sr-only"> (opens in a new tab)</span>}
-                </a>
-              </li>
-            );
-          })}
-        </ul>
-      </nav>
+          <hr className="m-4 border-t border-ual-light/20" />
+
+          <ul role="list" className="flex flex-col gap-1 pb-6">
+            {MENU_SECONDARY.map((item) => {
+              const isExternal = item.href.startsWith('http');
+              return (
+                <li key={item.label}>
+                  <a
+                    href={item.href}
+                    onClick={() => setOpen(false)}
+                    target={isExternal ? '_blank' : undefined}
+                    rel={isExternal ? 'noreferrer' : undefined}
+                    className={secondaryClass}
+                  >
+                    {item.label}
+                    {isExternal && <span className="sr-only"> (opens in a new tab)</span>}
+                  </a>
+                </li>
+              );
+            })}
+          </ul>
+        </nav>
+      </div>
     </div>
   );
 }

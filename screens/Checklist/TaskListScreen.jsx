@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import { visibleTasks } from '../../data/checklist';
 import { usePersistedState } from '../../hooks/usePersistedState';
 import { useOnboardingProfile } from '../../hooks/useOnboardingProfile';
-import { StatusCircle } from '../../components/StatusCircle/StatusCircle';
+import { StatusCheckbox } from '../../components/StatusCircle/StatusCheckbox';
 import { TaskAction } from '../../components/Checklist/TaskAction';
 
 const STATUS_KEY = 'ual:task:status:v1';
@@ -74,7 +74,10 @@ export function TaskListScreen() {
             const done = statuses[task.id] === 'complete';
 
             return (
-              <li key={task.id} className="flex gap-4 border-t border-ual-dark/10 py-6">
+              <li
+                key={task.id}
+                className="grid grid-cols-[auto_1fr] items-center gap-x-4 border-t border-ual-dark/10 py-6"
+              >
                 <button
                   type="button"
                   onClick={() => toggle(task.id)}
@@ -84,15 +87,16 @@ export function TaskListScreen() {
                       ? `${task.title} — complete, click to undo`
                       : `Mark "${task.title}" as complete`
                   }
-                  className="mt-1 shrink-0 cursor-pointer rounded-full border-0 bg-transparent p-0 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ual-orange"
+                  className="shrink-0 cursor-pointer border-0 bg-transparent p-0 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ual-orange"
                 >
-                  <StatusCircle status={done ? 'complete' : 'not-started'} size={22} />
+                  <StatusCheckbox status={done ? 'complete' : 'not-started'} size={22} />
                 </button>
 
-                <div className="flex min-w-0 grow flex-col gap-2">
-                  <h3 className="text-step-1 font-bold tracking-ual-tight text-ual-dark">
-                    {task.title}
-                  </h3>
+                <h3 className="text-step-1 font-bold tracking-ual-tight text-ual-dark">
+                  {task.title}
+                </h3>
+
+                <div className="col-start-2 mt-2 flex min-w-0 flex-col gap-2">
                   <p className="text-step-d1/ual-default text-ual-medium">
                     {task.shortDescription}
                   </p>

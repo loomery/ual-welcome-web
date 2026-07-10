@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import { MFA_PATHS, MFA_HELP, MFA_READ_MORE } from '../../data/checklist';
 import { usePersistedState } from '../../hooks/usePersistedState';
 import { useOnboardingProfile } from '../../hooks/useOnboardingProfile';
-import { StatusCircle } from '../../components/StatusCircle/StatusCircle';
+import { StatusCheckbox } from '../../components/StatusCircle/StatusCheckbox';
 import { TaskAction } from '../../components/Checklist/TaskAction';
 import { ArrowRightIcon, CheckCircleIcon } from '../../components/Icon/NavIcons';
 
@@ -128,9 +128,9 @@ export function MfaScreen() {
                   onClick={() => toggleStep(step.id)}
                   aria-pressed={done}
                   aria-label={done ? 'Done, click to undo' : 'Mark step as done'}
-                  className="mt-1 shrink-0 cursor-pointer rounded-full border-0 bg-transparent p-0 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ual-orange"
+                  className="mt-1 shrink-0 cursor-pointer border-0 bg-transparent p-0 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ual-orange"
                 >
-                  <StatusCircle status={done ? 'complete' : 'not-started'} size={22} />
+                  <StatusCheckbox status={done ? 'complete' : 'not-started'} size={22} />
                 </button>
 
                 <div className="flex min-w-0 grow flex-col gap-2">

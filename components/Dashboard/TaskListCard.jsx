@@ -14,7 +14,7 @@ import Link from 'next/link';
  */
 export function TaskListCard({ items }) {
   return (
-    <ol role="list" className="divide-y divide-[#d1d1d1] border border-[#d1d1d1]">
+    <ol role="list" className="divide-y divide-[#d1d1d1]">
       {items.map((item, i) =>
         i === 0 ? (
           <li key={item.id} className="bg-ual-dark text-ual-light">
