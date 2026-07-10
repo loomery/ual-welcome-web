@@ -16,7 +16,7 @@ import { MobileMenu } from './MobileMenu';
 export function Header() {
   return (
     <header className="sticky top-0 z-300 bg-ual-dark py-2 text-ual-light md:py-3">
-      <div className="flex items-center justify-between px-(--grid-gutter)">
+      <div className="flex items-center justify-between px-(--grid-gutter) md:pl-6">
         <Link
           href="/"
           className="inline-flex items-center text-ual-light no-underline"
