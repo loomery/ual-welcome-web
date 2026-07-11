@@ -1,19 +1,20 @@
 import { ArrowRightIcon } from '../Icon/NavIcons';
 
 /**
- * GetHelpSection — the "Get help" block at the foot of a task detail page: a
- * heading, an intro line and a row of contact cards (each a shade surface with
- * a label, its value and a bottom arrow), reusing the checklist card style.
+ * GetHelpSection — the contact block at the foot of a detail page: a heading,
+ * an intro line and a row of contact cards (each a shade surface with a label,
+ * its value and a bottom arrow), reusing the checklist card style.
  *
  * @param {Object} props
+ * @param {string} [props.title='Get help']
  * @param {string} [props.intro]
  * @param {import('../../data/checklist').HelpChannel[]} props.channels
  */
-export function GetHelpSection({ intro, channels }) {
+export function GetHelpSection({ title = 'Get help', intro, channels }) {
   return (
     <section aria-labelledby="get-help-heading" className="flex flex-col gap-4">
       <h2 id="get-help-heading" className="text-step-3 font-bold tracking-ual-tight text-ual-dark">
-        Get help
+        {title}
       </h2>
       {intro && <p className="max-w-200 text-step-0 text-ual-dark">{intro}</p>}
       <ul role="list" className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
