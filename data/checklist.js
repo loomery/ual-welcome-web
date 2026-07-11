@@ -35,19 +35,48 @@
  * @property {TaskDetail} [detail]  Content for the task's own detail page
  *   (/checklist/{id}); when set, the checklist row links here instead of `cta`.
  *
+ * Detail-page copy supports inline links written as [label](url) — rendered
+ * by the RichText component.
+ *
  * @typedef {Object} DetailSection
  * @property {string} heading
  * @property {string} [lead]     Intro line shown above a bullet list.
- * @property {string} [body]     Paragraph.
+ * @property {string} [body]     Paragraph (kept for single-paragraph sections).
+ * @property {string[]} [paragraphs]  Multiple paragraphs.
  * @property {string[]} [bullets]  Bulleted points.
+ * @property {Cta} [link]        Trailing arrow link.
+ *
+ * @typedef {Object} SubTaskStep
+ * @property {string} text
+ * @property {string[]} [bullets]  Nested points under this step.
+ *
+ * @typedef {Object} SubTaskItem
+ * @property {string} id
+ * @property {string} label
+ * @property {string} [href]         External destination (adds the external-link icon).
+ * @property {string} [description]
+ * @property {string} [lead]         e.g. "What you’ll need to do" above numbered steps.
+ * @property {SubTaskStep[]} [steps] Numbered sub-steps.
+ * @property {string[]} [bullets]
+ * @property {string} [note]         Muted info pill.
+ * @property {Cta} [link]            Trailing arrow link.
+ *
+ * @typedef {Object} SubTaskList
+ * @property {string} title        e.g. "Accounts to set up" / "Set up steps".
+ * @property {SubTaskItem[]} items Completion is persisted per item.
  *
  * @typedef {Object} HelpBlock
  * @property {string} intro
  * @property {HelpChannel[]} channels
  *
  * @typedef {Object} TaskDetail
+ * @property {string} [title]    Page H1 (defaults to the task title).
+ * @property {string} [tag]      Pill label (defaults to 'Essential').
  * @property {string} [intro]    Lead paragraph (defaults to the task's shortDescription).
  * @property {DetailSection[]} sections
+ * @property {SubTaskList} [subTasks]
+ * @property {Cta} [video]       "Watch a video guide" link.
+ * @property {Cta} [readMore]    Full-width dark banner CTA.
  * @property {HelpBlock} [help]
  */
 
@@ -100,6 +129,49 @@ export const TASKS = [
     cta: {
       label: 'Pay tuition fee',
       href: 'https://www.arts.ac.uk/students/stories/fees-and-funding',
+    },
+    detail: {
+      title: 'Pay fees or confirm funding',
+      intro:
+        'Before you start your studies, it is important to know how to pay your tuition fees and what sort of funding options might be available.',
+      sections: [
+        {
+          heading: 'Tuition fees',
+          paragraphs: [
+            'Tuition fees cover the cost of studying. They vary depending on your course level (i.e. undergraduate or postgraduate) and your fee status (home or international).',
+            'Check your [tuition fees](https://www.arts.ac.uk/study-at-ual/fees-and-funding/tuition-fees). If you have questions about your fee status, reply to your offer email or [contact the Student Advice Service](https://www.arts.ac.uk/students/student-services/student-advice-service)',
+          ],
+        },
+        {
+          heading: 'How to pay your tuition fees',
+          body: 'Find out how to [pay your tuition fees](https://www.arts.ac.uk/study-at-ual/fees-and-funding/how-to-pay-your-fees). You’ll be asked to confirm your funding or pay your fees when you enrol onto your course. Options include direct payments, student loans or through a sponsor via pro-forma invoice.',
+        },
+        {
+          heading: 'Immigration and visas',
+          paragraphs: [
+            "If you're joining us from a country outside of the UK, you will likely need visa or immigration permission allowing you to live and study in the UK.",
+            'Before you travel, check what requirements there are and that you have applied for the right type of study visa for your needs.',
+            'You can check which type you may need using the [UK Government’s visa checking tool](https://www.gov.uk/check-uk-visa)',
+          ],
+          lead: 'Find out more about immigration, visas and who to contact at UAL.',
+          link: {
+            label: 'Immigration and visa support',
+            href: 'https://www.arts.ac.uk/students/student-services/immigration-and-visa-advice',
+          },
+        },
+      ],
+      help: {
+        intro:
+          'The Student Advice Service can help with financial based questions and give guidance on managing money.',
+        channels: [
+          {
+            id: 'advice',
+            label: 'Student Advice Service',
+            value: 'Enquiry form',
+            href: 'https://www.arts.ac.uk/students/student-services/student-advice-service',
+          },
+        ],
+      },
     },
   },
   {
@@ -157,6 +229,53 @@ export const TASKS = [
     shortDescription: 'You must enrol each academic year to join or continue your course.',
     // TODO(UAL): replace with the canonical enrolment URL.
     cta: { label: 'Enrol', href: 'https://www.arts.ac.uk/students/enrolment' },
+    detail: {
+      title: 'Enrol for the new academic year',
+      intro:
+        'You must enrol each academic year to join or continue your course. When it’s time for you to enrol, we’ll send an email with instructions on what to do.',
+      sections: [
+        {
+          heading: 'How to enrol',
+          body: 'Enrolment opens for new students from [Monday 17 August 2026]. Not everyone gets invited to enrol straight away. We send invitations out to students who are eligible to enrol in batches, so check your inbox regularly.',
+        },
+      ],
+      subTasks: {
+        title: 'Accounts to set up',
+        items: [
+          {
+            id: 'portal',
+            label: 'Log in to your UAL Portal',
+            href: 'https://ualportal.arts.ac.uk/urd/sits.urd/run/siw_lgn',
+          },
+          {
+            id: 'enrolment-form',
+            label: 'Complete the online enrolment form',
+            steps: [
+              { text: 'Reconfirm your passport upload. Let us know about any change' },
+              {
+                text: 'Confirm tuition payment or funding. Pay your tuition fees or provide confirmation of your funding arrangements',
+              },
+            ],
+            note: 'You won’t be able to delete previous versions of any documents. UAL is required to keep a full record of your enrolment while you study with us',
+            link: {
+              label: 'More details on payment and funding',
+              href: 'https://www.arts.ac.uk/students/stories/fees-and-funding',
+            },
+          },
+          { id: 'confirmation', label: 'Await your confirmation email' },
+        ],
+      },
+      video: { label: 'Watch a video guide', href: 'https://www.youtube.com/watch?v=6Ol9tAoDutQ' },
+      readMore: {
+        label: 'Read more about enrolling at UAL',
+        href: 'https://www.arts.ac.uk/study-at-ual/how-to-enrol/information-for-new-students',
+      },
+      help: {
+        intro:
+          'If you have problems logging in to your UAL email and network account, contact IT Services for help. They are available 24/7, 365 days a year.',
+        channels: IT_HELP_CHANNELS,
+      },
+    },
   },
   {
     id: 'digital-accounts',
@@ -176,6 +295,71 @@ export const TASKS = [
     shortDescription: 'You must enrol each academic year to join or continue your course.',
     // TODO(UAL): replace with the canonical enrolment URL.
     cta: { label: 'Enrol', href: 'https://www.arts.ac.uk/students/enrolment' },
+    detail: {
+      intro: 'You need to complete these tasks in order to start your term.',
+      sections: [
+        {
+          heading: 'How to enrol',
+          paragraphs: [
+            'You must enrol each academic year to continue your course. When it’s time for you to enrol we’ll send you an email with instructions on what to do.',
+            'Enrolment opens for returning students from [Monday 3 August 2026]. Not everyone gets invited to enrol straight away. We send invitations out to students who are eligible to enrol in batches, so check your inbox regularly.',
+          ],
+        },
+      ],
+      subTasks: {
+        title: 'Accounts to set up',
+        items: [
+          {
+            id: 'portal-details',
+            label: 'Check your details in your UAL Portal',
+            href: 'https://ualportal.arts.ac.uk/urd/sits.urd/run/siw_lgn',
+          },
+          {
+            id: 'enrolment-form',
+            label: 'Complete the online enrolment form',
+            lead: 'What you’ll need to do',
+            steps: [
+              { text: 'Add your student number. Find in the portal' },
+              {
+                text: 'Upload copies of:',
+                bullets: [
+                  'Passport (Birth certificate if you don’t have a passport)',
+                  'Academic qualifications',
+                ],
+              },
+              { text: 'Confirm tuition payment/funding' },
+              { text: 'Upload a passport sized photo for your student ID card' },
+            ],
+          },
+          { id: 'confirmation', label: 'Await your confirmation email' },
+        ],
+      },
+      video: { label: 'Watch a video guide', href: 'https://www.youtube.com/watch?v=6Ol9tAoDutQ' },
+      readMore: {
+        label: 'Read more about enrolling at UAL',
+        href: 'https://www.arts.ac.uk/study-at-ual/how-to-enrol',
+      },
+      help: {
+        intro:
+          'If you have problems logging in to your UAL email and network account, contact IT Services for help. They are available 24/7, 365 days a year.',
+        channels: [
+          {
+            id: 'email',
+            label: 'Email us',
+            value: 'servicedesk@arts.ac.uk',
+            note: 'Reply directly to the ‘Start your enrolment: Online registration open’ email we sent',
+            href: 'mailto:servicedesk@arts.ac.uk',
+          },
+          {
+            id: 'call',
+            label: 'Call us',
+            value: '+44 (0)20 7514 9898',
+            note: 'Contact IT Services for help',
+            href: 'tel:+442075149898',
+          },
+        ],
+      },
+    },
   },
   {
     id: 'review-details',
@@ -195,6 +379,20 @@ export const TASKS = [
     note: 'Available after you have fully enrolled and set up Moodle',
     // TODO(UAL): replace with the canonical timetable URL.
     cta: { label: 'View timetable', href: 'https://www.arts.ac.uk/students' },
+    detail: {
+      intro:
+        'Your timetable will be published at the end of August. We’ll email you when it’s ready to view.',
+      sections: [
+        {
+          heading: 'Access your timetable',
+          body: 'You can see your current timetable online in a variety of ways: choose what works for you.',
+          link: {
+            label: 'Get your timetable',
+            href: 'https://www.arts.ac.uk/students/student-timetables',
+          },
+        },
+      ],
+    },
   },
   {
     id: 'id-card',
@@ -206,6 +404,41 @@ export const TASKS = [
     note: 'Available after you have fully enrolled',
     // TODO(UAL): replace with the canonical ID-card URL.
     cta: { label: 'Learn more', href: 'https://www.arts.ac.uk/students' },
+    detail: {
+      sections: [
+        {
+          heading: 'When to collect',
+          paragraphs: [
+            "Once you’ve completed the online registration step of enrolment, we'll contact you by email inviting you to collect your Student ID card. Each College or Institute has dedicated collection dates and locations for ID card collection.",
+            'Find out [when and where you can collect your ID card](https://www.arts.ac.uk/study-at-ual/how-to-enrol/student-id-card-collection)',
+          ],
+        },
+      ],
+      help: {
+        intro:
+          'If your Student ID card is lost, expired or faulty, contact the Student Centre at [College/Institute] for guidance.',
+        channels: [
+          {
+            id: 'faqs',
+            label: 'FAQs',
+            value: 'Online',
+            href: 'https://www.arts.ac.uk/colleges/central-saint-martins/student-life-at-csm/facilities/library-and-shared-spaces/central-saint-martins-student-centre/frequently-asked-questions',
+          },
+          {
+            id: 'email',
+            label: 'Email us',
+            value: 'csmstudentcentre@arts.ac.uk',
+            href: 'mailto:csmstudentcentre@arts.ac.uk',
+          },
+          {
+            id: 'call',
+            label: 'Call us',
+            value: '+44 (0)207 514 7202',
+            href: 'tel:+442075147202',
+          },
+        ],
+      },
+    },
   },
 ];
 
@@ -218,6 +451,8 @@ export const TASKS = [
  * @property {string} label
  * @property {string} href
  * @property {boolean} [internationalOnly]  If true, only shown to international students.
+ * @property {TaskDetail} [detail]  Detail page (/checklist/{id}); when set, the
+ *   link goes there instead of `href`.
  *
  * @type {OtherTask[]}
  */
@@ -227,17 +462,175 @@ export const OTHER_TASKS = [
     id: 'doctor',
     label: 'Register with a doctor',
     href: 'https://www.arts.ac.uk/students/student-health-and-wellbeing',
+    detail: {
+      title: 'Get setup with a local doctor',
+      tag: 'Important',
+      intro:
+        'Looking after your physical health is an important part of making the most of your time at university.',
+      sections: [
+        {
+          heading: 'About',
+          paragraphs: [
+            'Local doctors, also known as a GP (General practice) provides access to healthcare, routine prescriptions, and emergency support.',
+            'We recommend registering with a doctor (GP) near your new home so you can access medical care easily if needed.',
+          ],
+          lead: 'Free NHS treatment is accessible to:',
+          bullets: [
+            'All UK students',
+            'EU and International students on a full-time course lasting more than 6 months.',
+            'You may need to pay for prescriptions, dental treatment and eye care.',
+          ],
+        },
+      ],
+      subTasks: {
+        title: 'Set up steps',
+        items: [
+          {
+            id: 'find',
+            label: 'Find your nearest doctors using the button below',
+            link: {
+              label: 'Find your nearest doctors',
+              href: 'https://www.nhs.uk/service-search/find-a-GP',
+            },
+          },
+          { id: 'browse', label: 'Browse your options on the nhs website' },
+          { id: 'register', label: 'Fill in the registration form on the website' },
+        ],
+      },
+      readMore: {
+        label: 'Read more about health at UAL',
+        href: 'https://www.arts.ac.uk/students/student-services/counselling-health-advice-and-chaplaincy/health-advice',
+      },
+    },
   },
   {
     id: 'consent',
     label: 'Complete sexual consent training',
     href: 'https://www.arts.ac.uk/students',
+    detail: {
+      title: 'Complete sexual consent training module',
+      tag: 'Important',
+      intro:
+        'At UAL we are committed to promoting a positive consent culture and raising awareness of support both within and outside the University.',
+      sections: [
+        {
+          heading: 'About',
+          paragraphs: [
+            'The course reinforces the message that enthusiastic sexual consent (both giving and getting) is a crucial part of all sexual interactions and contributes to respectful, equal and fulfilling relationships.',
+            'This short online training module aims to start a conversation about what sexual consent means and challenge myths surrounding sexual violence. You will learn about consent, consent myths, how to tackle rape culture and where you can find support.',
+            'No one ever deserves to experience any form of sexual violence or harassment and it is never the survivor’s fault.',
+          ],
+        },
+        {
+          heading: 'Trigger warning',
+          body: 'Please be aware when sharing / accessing this course that the module includes scenarios that discuss rape and sexual assault.',
+        },
+      ],
+      help: {
+        intro: 'If you need support or have questions, you can contact the teams below.',
+        channels: [
+          {
+            id: 'general-email',
+            label: 'Email us',
+            value: 'counselling@arts.ac.uk',
+            note: 'General enquiries',
+            href: 'mailto:counselling@arts.ac.uk',
+          },
+          {
+            id: 'general-call',
+            label: 'Call us',
+            value: '+44 (0)20 7514 6251',
+            note: 'General enquiries',
+            href: 'tel:+442075146251',
+          },
+          {
+            id: 'wellbeing-email',
+            label: 'Email us',
+            value: 'studenthealth@arts.ac.uk',
+            note: 'Mental health or wellbeing support',
+            href: 'mailto:studenthealth@arts.ac.uk',
+          },
+          {
+            id: 'wellbeing-call',
+            label: 'Call us',
+            value: '+44 (0)20 7514 6426',
+            note: 'Mental health or wellbeing support',
+            href: 'tel:+442075146426',
+          },
+        ],
+      },
+    },
   },
   {
     id: 'uk-bank',
     label: 'Open a UK bank account',
     href: 'https://www.arts.ac.uk/students/student-services/international-students',
     internationalOnly: true,
+    detail: {
+      tag: 'Important',
+      intro:
+        'Simplify finances by opening a UK bank account. Save on potential oversea bank charges.',
+      sections: [
+        {
+          heading: 'About',
+          paragraphs: [
+            "It's important to have a UK bank account while you are studying here to be able to pay for your bills and everyday things, get paid by employers, and keep your money safe.",
+            'Check out useful information on how to open UK bank accounts in our guide to Moving to the UK.',
+            'If you continue to use the debit or credit card from your home bank you may have to pay overseas bank charges. Find some good advice about the best student bank accounts.',
+          ],
+        },
+        {
+          heading: 'How to open a bank account',
+          paragraphs: [
+            'It will take a few weeks after arriving in the UK to open your new bank account. Make sure you have another source of money for your first few weeks in London, such as cash or a debit/credit card from your home country with low international fees.',
+            "To open a bank account, you'll need to visit a bank branch.",
+          ],
+        },
+      ],
+      subTasks: {
+        title: 'Set up steps',
+        items: [
+          {
+            id: 'choose-bank',
+            label: 'Choose a bank',
+            link: {
+              label: 'Check out the best student bank accounts',
+              href: 'https://www.moneysavingexpert.com/students/student-bank-account/',
+            },
+          },
+          {
+            id: 'documents',
+            label: 'Gather required documents',
+            bullets: [
+              'Your passport',
+              'Proof of your address in your home country. ( For example: banks will accept an offer letter from UAL.)',
+              'Proof of your UK address, such as your housing contract or a utility bill',
+            ],
+          },
+          {
+            id: 'bank-letter',
+            label: "Request a 'bank letter' from UAL",
+            lead: 'Send an email to your college, including these details:',
+            bullets: [
+              'Your Student ID.',
+              'UK address. Please include room or flat number.',
+              'Home country address.',
+              "Optional: Chosen bank name. If you haven't decided yet we'll send you a general letter.",
+            ],
+            link: {
+              label: 'View more about requesting a bank letter',
+              href: 'https://www.arts.ac.uk/study-at-ual/international/moving-to-the-uk#request',
+            },
+          },
+          {
+            id: 'visit-branch',
+            label: 'Visit bank branch and apply',
+            description:
+              'Visit your chosen bank with your required documents. Talk to a member of staff at the bank branch and they will help you set up a bank account',
+          },
+        ],
+      },
+    },
   },
 ];
 
