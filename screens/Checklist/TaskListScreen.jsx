@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useMemo } from 'react';
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { visibleTasks, visibleOtherTasks, REPEATED_SERVICES } from '../../data/checklist';
 import { usePersistedState } from '../../hooks/usePersistedState';
@@ -91,20 +92,26 @@ export function TaskListScreen() {
           Other important tasks
         </h2>
         <ul role="list" className="flex flex-wrap gap-x-8 gap-y-3">
-          {otherTasks.map((task) => (
-            <li key={task.id}>
-              <a
-                href={task.href}
-                target="_blank"
-                rel="noreferrer"
-                className="inline-flex items-center gap-2 text-step-0 text-ual-dark underline underline-offset-2 hover:text-ual-orange focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ual-orange [&>svg]:size-5"
-              >
-                {task.label}
-                <ArrowRightIcon aria-hidden="true" />
-                <span className="sr-only"> (opens in a new tab)</span>
-              </a>
-            </li>
-          ))}
+          {otherTasks.map((task) => {
+            const cls =
+              'inline-flex items-center gap-2 text-step-0 text-ual-dark underline underline-offset-2 hover:text-ual-orange focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ual-orange [&>svg]:size-5';
+            return (
+              <li key={task.id}>
+                {task.detail ? (
+                  <Link href={`/checklist/${task.id}`} className={cls}>
+                    {task.label}
+                    <ArrowRightIcon aria-hidden="true" />
+                  </Link>
+                ) : (
+                  <a href={task.href} target="_blank" rel="noreferrer" className={cls}>
+                    {task.label}
+                    <ArrowRightIcon aria-hidden="true" />
+                    <span className="sr-only"> (opens in a new tab)</span>
+                  </a>
+                )}
+              </li>
+            );
+          })}
         </ul>
       </section>
     </article>

@@ -17,7 +17,8 @@ import { TaskCheckbox } from './TaskCheckbox';
  * @param {(id: string) => void} props.onToggle
  */
 export function ToDoTask({ task, complete, onToggle }) {
-  const href = task.cta?.href;
+  // Tasks with their own detail page link there; the rest use their cta.
+  const href = task.detail ? `/checklist/${task.id}` : task.cta?.href;
   const isInternal = href?.startsWith('/');
 
   const titleRow = (
