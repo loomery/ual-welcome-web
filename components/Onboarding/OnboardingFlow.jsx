@@ -33,7 +33,7 @@ export function OnboardingFlow() {
   const [direction, setDirection] = useState(/** @type {'forward' | 'back'} */ ('forward'));
   const [skipDialogOpen, setSkipDialogOpen] = useState(false);
   const headingRef = useRef(/** @type {HTMLHeadingElement | null} */ (null));
-  const dialogRef = useRef(/** @type {HTMLDivElement | null} */ (null));
+  const dialogRef = useRef(/** @type {HTMLDialogElement | null} */ (null));
 
   const [draft, setDraft] = useState(() => ({
     name: profile?.name ?? '',
@@ -87,21 +87,13 @@ export function OnboardingFlow() {
     return () => window.removeEventListener('popstate', trapBack);
   }, []);
 
-  // Skip-interests confirmation dialog: Escape closes, body scroll locks,
-  // focus moves into the dialog.
+  // Native <dialog> gives Escape-to-close, focus move and an inert modal
+  // backdrop for free; just mirror open state onto it.
   useEffect(() => {
-    if (!skipDialogOpen) return;
-    const onKey = (e) => {
-      if (e.key === 'Escape') setSkipDialogOpen(false);
-    };
-    window.addEventListener('keydown', onKey);
-    const prevOverflow = document.body.style.overflow;
-    document.body.style.overflow = 'hidden';
-    dialogRef.current?.focus();
-    return () => {
-      window.removeEventListener('keydown', onKey);
-      document.body.style.overflow = prevOverflow;
-    };
+    const dialog = dialogRef.current;
+    if (!dialog) return;
+    if (skipDialogOpen && !dialog.open) dialog.showModal();
+    else if (!skipDialogOpen && dialog.open) dialog.close();
   }, [skipDialogOpen]);
 
   function confirmSkipInterests() {
@@ -288,48 +280,43 @@ export function OnboardingFlow() {
         </Button>
       )}
 
-      {skipDialogOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-          <div
-            className="fixed inset-0 bg-ual-dark/50"
-            aria-hidden="true"
-            onClick={() => setSkipDialogOpen(false)}
-          />
-          <div
-            ref={dialogRef}
-            role="alertdialog"
-            aria-modal="true"
-            aria-labelledby="skip-dialog-title"
-            aria-describedby="skip-dialog-desc"
-            tabIndex={-1}
-            className="relative z-10 w-full max-w-[24rem] bg-ual-light p-6 outline-none"
-          >
-            <div className="mb-3 flex items-center gap-2">
-              <WarningIcon className="size-6 text-ual-util-orange" aria-hidden="true" />
-              <h2 id="skip-dialog-title" className="text-step-1 font-ual-bold text-ual-dark">
-                Skip interests
-              </h2>
-            </div>
-            <p id="skip-dialog-desc" className="mb-6 text-step-d1 text-ual-medium">
-              Are you sure you want to skip selecting topics you&apos;re interested in? Your home
-              page will not display any interests.
-            </p>
-            <div className="flex gap-4">
-              <Button variant="outline" weight="normal" onClick={() => setSkipDialogOpen(false)}>
-                Cancel
-              </Button>
-              <Button
-                weight="normal"
-                className="justify-between whitespace-nowrap"
-                onClick={confirmSkipInterests}
-              >
-                Skip interests
-                <ArrowRightIcon aria-hidden="true" />
-              </Button>
-            </div>
+      <dialog
+        ref={dialogRef}
+        role="alertdialog"
+        aria-labelledby="skip-dialog-title"
+        aria-describedby="skip-dialog-desc"
+        onCancel={() => setSkipDialogOpen(false)}
+        onClick={(e) => {
+          if (e.target === dialogRef.current) setSkipDialogOpen(false);
+        }}
+        className="m-auto w-[calc(100%-2rem)] max-w-[24rem] bg-ual-light backdrop:bg-ual-dark/50"
+      >
+        <div className="p-6">
+          <div className="mb-3 flex items-center gap-2">
+            <WarningIcon className="size-6 text-ual-util-orange" aria-hidden="true" />
+            <h2 id="skip-dialog-title" className="text-step-1 font-ual-bold text-ual-dark">
+              Skip interests
+            </h2>
+          </div>
+          <p id="skip-dialog-desc" className="mb-6 text-step-d1 text-ual-medium">
+            Are you sure you want to skip selecting topics you&apos;re interested in? Your home page
+            will not display any interests.
+          </p>
+          <div className="flex gap-4">
+            <Button variant="outline" weight="normal" onClick={() => setSkipDialogOpen(false)}>
+              Cancel
+            </Button>
+            <Button
+              weight="normal"
+              className="justify-between whitespace-nowrap"
+              onClick={confirmSkipInterests}
+            >
+              Skip interests
+              <ArrowRightIcon aria-hidden="true" />
+            </Button>
           </div>
         </div>
-      )}
+      </dialog>
     </div>
   );
 }
