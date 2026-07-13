@@ -1,11 +1,11 @@
 /**
  * Essential setup tasks for new UAL students.
  *
- * The "Get set up for term" page (/checklist) lists these inline: each task
- * shows a completion circle, a title, a short description, and an inline
- * action — either a link (`cta`), app-download buttons (`apps`), or both,
- * plus an optional availability `note`. Most tasks complete in place; only
- * MFA has its own detail page (/checklist/mfa) with the device-path guide.
+ * The "Essentials" page (/checklist) lists these inside a "To do list" card:
+ * each row has a completion checkbox, a title, a short description, an optional
+ * availability `note`, and a chevron that links to the task destination (`cta`
+ * — the MFA task links to its own /checklist/mfa detail page, the rest to
+ * external UAL pages).
  *
  * Progress is tracked separately in localStorage:
  *   'ual:task:status:v1'  →  Record<taskId, 'not-started'|'in-progress'|'complete'>
@@ -26,10 +26,12 @@
  * @property {string} title
  * @property {TaskTag} tag
  * @property {string} shortDescription   One-liner shown in the list and the dashboard.
- * @property {Cta} [cta]                 Inline action link.
+ * @property {Cta} [cta]                 Task destination (chevron / "View task").
  * @property {AppLinks} [apps]           App download buttons (Apple / Android).
  * @property {string} [note]             Muted availability caveat.
  * @property {boolean} [internationalOnly]  If true, only shown to international students.
+ * @property {Array<'new'|'returning'>} [statuses]  Which cohorts see this task
+ *   (defaults to both new and returning students).
  */
 
 // TODO(UAL): replace placeholder URLs with the canonical UAL destinations.
@@ -43,74 +45,209 @@ const MICROSOFT_SIGNIN = 'https://www.office.com';
 /** @type {Task[]} */
 export const TASKS = [
   {
-    id: 'ual-email',
-    title: 'Access your UAL email',
+    id: 'pay-tuition',
+    title: 'Pay tuition fee',
     tag: 'essential',
-    shortDescription: 'This email is needed to enrol and get setup on all available UAL services.',
+    internationalOnly: true,
+    shortDescription:
+      'Before you start your studies, it is important to know how to pay your tuition fees.',
+    // TODO(UAL): replace with the canonical tuition-fees URL.
     cta: {
-      label: 'Setup email',
+      label: 'Pay tuition fee',
+      href: 'https://www.arts.ac.uk/students/stories/fees-and-funding',
+    },
+  },
+  {
+    id: 'ual-email',
+    title: 'Set up your email and UAL network account',
+    tag: 'essential',
+    statuses: ['new'],
+    shortDescription:
+      'Once you’ve accepted your offer to study with us, you’ll need to set up your UAL email address to enrol as a student.',
+    cta: {
+      label: 'Set up email',
       href: 'https://www.arts.ac.uk/students/welcome/your-journey-to-UAL/get-connected',
     },
   },
   {
-    id: 'student-portal',
-    title: 'Student portal',
-    tag: 'essential',
-    shortDescription: 'Get the latest UAL news, timetable and access available online resources',
-    cta: { label: 'Go to Student portal', href: 'https://www.arts.ac.uk/students' },
-  },
-  {
     id: 'mfa',
-    title: 'Multi-factor authentication',
+    title: 'Set up multi-factor authentication (MFA)',
     tag: 'essential',
+    statuses: ['new'],
     shortDescription:
-      'Multi-Factor Authentication (MFA) adds an extra layer of protection to your identity, your data and our systems',
+      'Multi-Factor Authentication (MFA) adds an extra layer of protection to your identity, your data and our systems.',
     cta: { label: 'Get started', href: '/checklist/mfa' },
   },
   {
-    id: 'myual-app',
-    title: 'Download your MyUAL app',
+    id: 'enrol',
+    title: 'Enrol',
     tag: 'essential',
-    shortDescription: 'Get the latest UAL news, timetable and access available online resources',
-    // TODO(UAL): replace with the real MyUAL App Store / Google Play links.
-    apps: {
-      apple: 'https://www.apple.com/app-store/',
-      android: 'https://play.google.com/store',
-    },
+    statuses: ['new'],
+    shortDescription: 'You must enrol each academic year to join or continue your course.',
+    // TODO(UAL): replace with the canonical enrolment URL.
+    cta: { label: 'Enrol', href: 'https://www.arts.ac.uk/students/enrolment' },
   },
   {
-    id: 'moodle',
-    title: 'Set up Moodle',
+    id: 'digital-accounts',
+    title: 'Set up your digital accounts',
     tag: 'essential',
+    statuses: ['new'],
     shortDescription:
-      'Moodle is your virtual learning environment, it has course materials, assignments, announcements.',
-    note: 'Available after you have fully enrolled',
+      'There are multiple accounts you need during your term. Activate them before you start.',
+    // TODO(UAL): replace with the canonical digital-accounts URL.
+    cta: { label: 'Get started', href: 'https://www.arts.ac.uk/students/it-services' },
+  },
+  {
+    id: 'enrol-returning',
+    title: 'Enrol for the new academic year',
+    tag: 'essential',
+    statuses: ['returning'],
+    shortDescription: 'You must enrol each academic year to join or continue your course.',
+    // TODO(UAL): replace with the canonical enrolment URL.
+    cta: { label: 'Enrol', href: 'https://www.arts.ac.uk/students/enrolment' },
+  },
+  {
+    id: 'review-details',
+    title: 'Review personal details',
+    tag: 'essential',
+    statuses: ['returning'],
+    shortDescription:
+      'Log into Moodle and amend any of your details to ensure they are up to date.',
     cta: { label: 'Go to Moodle', href: 'https://moodle.arts.ac.uk' },
   },
   {
-    id: 'seats-app',
-    title: 'Download your SEAtS app',
+    id: 'first-session',
+    title: 'Find out when your first session is',
     tag: 'essential',
     shortDescription:
-      'You will need to mark your own attendance to sessions using the SEAtS mobile phone app once you start',
-    // TODO(UAL): replace with the real SEAtS App Store / Google Play links.
-    apps: {
-      apple: 'https://www.apple.com/app-store/',
-      android: 'https://play.google.com/store',
-    },
+      'Your timetable will be published at the end of August. We’ll email you when it’s ready to view and tell you how to access it.',
+    note: 'Available after you have fully enrolled and set up Moodle',
+    // TODO(UAL): replace with the canonical timetable URL.
+    cta: { label: 'View timetable', href: 'https://www.arts.ac.uk/students' },
+  },
+  {
+    id: 'id-card',
+    title: 'Collect your ID card',
+    tag: 'essential',
+    statuses: ['new'],
+    shortDescription:
+      'Get your ID card to access our college and institute buildings and facilities',
+    note: 'Available after you have fully enrolled',
+    // TODO(UAL): replace with the canonical ID-card URL.
+    cta: { label: 'Learn more', href: 'https://www.arts.ac.uk/students' },
   },
 ];
 
 /**
- * Tasks visible to a given student type. (No task is currently
- * international-only, but the filter is kept so the data model and the
- * screens that consume it stay forward-compatible.)
+ * "Other important tasks" — supplementary links shown below the to-do list.
+ * Not tracked for completion; each is a plain external link.
  *
- * @param {string} [studentType]  one of STUDENT_TYPE_OPTIONS[].id ('domestic' | 'international')
+ * @typedef {Object} OtherTask
+ * @property {string} id
+ * @property {string} label
+ * @property {string} href
+ * @property {boolean} [internationalOnly]  If true, only shown to international students.
+ *
+ * @type {OtherTask[]}
+ */
+// TODO(UAL): replace placeholder URLs with the canonical UAL destinations.
+export const OTHER_TASKS = [
+  {
+    id: 'doctor',
+    label: 'Register with a doctor',
+    href: 'https://www.arts.ac.uk/students/student-health-and-wellbeing',
+  },
+  {
+    id: 'consent',
+    label: 'Complete sexual consent training',
+    href: 'https://www.arts.ac.uk/students',
+  },
+  {
+    id: 'uk-bank',
+    label: 'Open a UK bank account',
+    href: 'https://www.arts.ac.uk/students/student-services/international-students',
+    internationalOnly: true,
+  },
+];
+
+/**
+ * "Repeated services" — the quick links surfaced once every arrival task is
+ * done: the tools a student reaches for throughout the year. Rendered as the
+ * shared InterestTile cards.
+ *
+ * @typedef {Object} Service
+ * @property {string} id
+ * @property {string} label
+ * @property {string} body
+ * @property {string} href
+ *
+ * @type {Service[]}
+ */
+// TODO(UAL): replace placeholder URLs with the canonical UAL destinations.
+export const REPEATED_SERVICES = [
+  {
+    id: 'timetable',
+    label: 'Timetable',
+    body: 'Check when and where your classes are.',
+    href: 'https://www.arts.ac.uk/students',
+  },
+  {
+    id: 'moodle',
+    label: 'Moodle',
+    body: 'Your virtual learning environment and course materials.',
+    href: 'https://moodle.arts.ac.uk',
+  },
+  {
+    id: 'email',
+    label: 'Email',
+    body: 'Access your UAL email and calendar.',
+    href: 'https://www.office.com',
+  },
+  {
+    id: 'print-credit',
+    label: 'Print credit',
+    body: 'Top up and manage your printing credit.',
+    href: 'https://www.arts.ac.uk/students/it-services',
+  },
+  {
+    id: 'seats',
+    label: 'SEAtS',
+    body: 'Mark your attendance at sessions.',
+    href: 'https://www.arts.ac.uk/students',
+  },
+  {
+    id: 'academic-support',
+    label: 'Academic support online',
+    body: 'Study skills, workshops and academic help.',
+    href: 'https://www.arts.ac.uk/students/academic-support',
+  },
+];
+
+/**
+ * Tasks visible to a given student. New and returning students see different
+ * arrival tasks; international students get extra essentials (e.g. "Pay
+ * tuition fee") on top of their cohort's list.
+ *
+ * @param {string} [studentType]    one of STUDENT_TYPE_OPTIONS[].id ('domestic' | 'international')
+ * @param {string} [studentStatus]  one of STUDENT_STATUS_OPTIONS[].id ('new' | 'returning'); defaults to 'new'
  * @returns {Task[]}
  */
-export function visibleTasks(studentType) {
-  return TASKS.filter((t) => !t.internationalOnly || studentType === 'international');
+export function visibleTasks(studentType, studentStatus = 'new') {
+  return TASKS.filter((t) => {
+    if (t.internationalOnly && studentType !== 'international') return false;
+    if (t.statuses && !t.statuses.includes(studentStatus)) return false;
+    return true;
+  });
+}
+
+/**
+ * "Other important tasks" links visible to a given student type.
+ *
+ * @param {string} [studentType]  'domestic' | 'international'
+ * @returns {OtherTask[]}
+ */
+export function visibleOtherTasks(studentType) {
+  return OTHER_TASKS.filter((t) => !t.internationalOnly || studentType === 'international');
 }
 
 /* ─────────────────────────────────────────────────────────────────────────

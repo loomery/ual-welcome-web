@@ -358,13 +358,13 @@ export const HELP_CATEGORIES = [
     contacts: [
       {
         type: 'online',
-        label: 'In the app',
+        label: 'UAL website',
         value: 'Browse workshop events',
-        href: '/events',
+        href: 'https://www.arts.ac.uk/whats-on',
       },
     ],
     ctaLabel: 'Browse workshop events',
-    ctaHref: '/events',
+    ctaHref: 'https://www.arts.ac.uk/whats-on',
   },
 
   // ─── Academic orientation ──────────────────────────────────────────

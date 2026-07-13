@@ -4,60 +4,62 @@ import { useMemo } from 'react';
 import { usePathname } from 'next/navigation';
 import { COLLEGE_OPTIONS } from '../../data/onboardingOptions';
 import { useOnboardingProfile } from '../../hooks/useOnboardingProfile';
-import { isOnboardingRoute } from '../../utils/isOnboardingRoute';
+import { isFocusedRoute } from '../../utils/isFocusedRoute';
 
 /**
- * Welcome-week banner + greeting/college hero. Lives in the app shell so it
- * can appear on every page, in one of two layouts:
+ * Greeting + college hero.
  *
- *  - `full`    — a full-width band beneath the header (home page). The college
- *                name is the page `<h1>`.
- *  - `compact` — a narrow black box at the top of the left sidebar column
- *                (every other page). Here the page keeps its own `<h1>`, so the
- *                college name renders as a `<p>` to avoid a second top heading.
+ *  - Mobile: a static full-width black band that scrolls away.
+ *  - Desktop: the SAME band, sticky beneath the top bar, keeping a constant
+ *    height while collapsing HORIZONTALLY — its width animates from full-width
+ *    to the sidebar width (anchored left) and the college name shrinks to
+ *    match, folding into the compact sidebar box and revealing the main
+ *    content to its right. The animation is triggered by a scroll threshold
+ *    (`scrolled` flips once, like a toggle) and then plays start-to-finish on
+ *    its own — it is NOT continuously tied to scroll position/distance.
+ *
+ * The college name is the page `<h1>` on the home route; a `<p>` elsewhere.
+ * Hidden on focused routes (onboarding).
  *
  * @param {Object} props
- * @param {'full' | 'compact'} [props.variant]
+ * @param {boolean} [props.scrolled]  Desktop only: snap to the collapsed size.
  */
-export function AppHero({ variant = 'full' }) {
+export function AppHero({ scrolled = false }) {
   const pathname = usePathname();
-  const isOnboarding = isOnboardingRoute(pathname);
+  const isFocused = isFocusedRoute(pathname);
+  const isHome = pathname === '/';
   const { profile, hydrated } = useOnboardingProfile();
 
   const college = useMemo(
     () => COLLEGE_OPTIONS.find((c) => c.id === profile?.collegeId),
     [profile?.collegeId],
   );
+  const greeting = hydrated ? (profile?.name ? `Hi, ${profile.name.split(' ')[0]}` : 'Hi') : ' ';
+  const collegeName = hydrated ? (college?.name ?? 'Welcome to UAL') : ' ';
 
-  const firstName = (profile?.name ?? '').split(' ')[0];
-  const greeting = firstName ? `Hi, ${firstName}` : 'Hi';
-  const isFull = variant === 'full';
-  const Title = isFull ? 'h1' : 'p';
+  if (isFocused) return null;
 
-  // Compact variant is hidden on mobile (no sidebar column there) and shown
-  // from 49.5rem up. Onboarding hides the hero entirely in both variants.
-  const wrapperClass = isOnboarding ? 'hidden' : isFull ? '' : 'hidden md:block';
-
-  const innerClass = isFull ? 'px-[var(--grid-gutter)] pt-8 pb-16 space-y-2' : 'md:p-6 space-y-2';
-
-  const greetingClass = isFull
-    ? 'm-0 text-step-0 text-ual-dark-90'
-    : 'm-0 text-ual-dark-90 md:text-step-d1';
-
-  const titleClass = isFull
-    ? 'text-step-4 tracking-ual-tight leading-ual-single text-ual-light max-w-[20ch]'
-    : 'tracking-ual-tight leading-ual-single text-ual-light md:text-step-2 md:max-w-[12ch]';
-
+  const Title = isHome ? 'h1' : 'p';
   return (
-    <div className={wrapperClass}>
-      <section className="bg-ual-dark text-ual-light" aria-labelledby="app-hero-title">
-        <div className={innerClass}>
-          <p className={greetingClass}>{hydrated ? greeting : ' '}</p>
-          <Title id="app-hero-title" className={titleClass}>
-            {hydrated ? (college?.name ?? 'Welcome to UAL') : ' '}
-          </Title>
-        </div>
-      </section>
-    </div>
+    <section
+      className={[
+        'bg-ual-dark text-ual-light md:sticky md:top-12 md:z-20 md:h-44 md:overflow-hidden md:transition-[width] md:duration-300 md:ease-ual motion-reduce:md:transition-none',
+        scrolled ? 'md:w-72' : 'md:w-[100cqw]',
+      ].join(' ')}
+      aria-labelledby="app-hero-title"
+    >
+      <div className="flex h-full flex-col justify-center gap-1 px-(--grid-gutter) py-8 md:py-6 md:pl-6">
+        <p className="m-0 text-step-0 text-ual-dark-90">{greeting}</p>
+        <Title
+          id="app-hero-title"
+          className={[
+            'm-0 max-w-[20ch] font-ual-bold tracking-ual-tight text-ual-light md:max-w-none md:transition-[font-size] md:duration-300 md:ease-ual motion-reduce:md:transition-none',
+            scrolled ? 'text-step-2/ual-single' : 'text-step-4/ual-single',
+          ].join(' ')}
+        >
+          {collegeName}
+        </Title>
+      </div>
+    </section>
   );
 }
