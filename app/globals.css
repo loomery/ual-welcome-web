@@ -125,12 +125,12 @@
 
   /* ---- Fluid type scale (Utopia) ---- */
   --step-base: 16px;
-  --step--1: clamp(0.9rem, 0.895rem + 0.0223vw, 0.9151rem);
-  --step-0: clamp(1.125rem, 1.0833rem + 0.1852vw, 1.25rem);
-  --step-1: clamp(1.4063rem, 1.3058rem + 0.4463vw, 1.7075rem);
-  --step-2: clamp(1.7578rem, 1.5663rem + 0.8513vw, 2.3324rem);
-  --step-3: clamp(2.1973rem, 1.8676rem + 1.465vw, 3.1861rem);
-  --step-4: clamp(2.7466rem, 2.2114rem + 2.3788vw, 4.3522rem);
+  --step--1: clamp(0.9rem, 0.8667rem + 0.1481vw, 1rem);
+  --step-0: clamp(1.125rem, 1.1042rem + 0.0926vw, 1.1875rem);
+  --step-1: clamp(1.4063rem, 1.3721rem + 0.1519vw, 1.5088rem);
+  --step-2: clamp(1.7578rem, 1.7052rem + 0.2338vw, 1.9156rem);
+  --step-3: clamp(2.1973rem, 2.1189rem + 0.3484vw, 2.4325rem);
+  --step-4: clamp(2.7466rem, 2.6323rem + 0.5078vw, 3.0894rem);
 
   /* ---- Fluid space scale ---- */
   --space-3xs: clamp(0.25rem, 0.2299rem + 0.0893vw, 0.3125rem);
@@ -321,15 +321,15 @@
   }
 
   h2 {
-    font-size: var(--step-2);
+    font-size: var(--step-3);
   }
 
   h3 {
-    font-size: var(--step-1);
+    font-size: var(--step-2);
   }
 
   h4 {
-    font-size: var(--step-0);
+    font-size: var(--step-1);
   }
 
   iframe {

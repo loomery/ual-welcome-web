@@ -2,12 +2,13 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { isOnboardingRoute } from '../../utils/isOnboardingRoute';
-import { SIDE_NAV_ITEMS } from './navConfig';
+import { isFocusedRoute } from '../../utils/isFocusedRoute';
+import { NAV_ITEMS, MENU_SECONDARY } from './navConfig';
+import { ExternalLinkIcon } from '../Icon/NavIcons';
 
 export function SideNav() {
   const pathname = usePathname();
-  const isOnboarding = isOnboardingRoute(pathname);
+  const isOnboarding = isFocusedRoute(pathname);
 
   /**
    * @param {string | undefined} to
@@ -24,12 +25,15 @@ export function SideNav() {
       className={
         isOnboarding
           ? 'hidden'
-          : 'hidden bg-ual-shade md:sticky md:top-[calc(var(--space-xs)*2+var(--space-m))] md:flex md:min-h-[calc(100dvh-(var(--space-xs)*2+var(--space-m)))] md:flex-col md:pt-8'
+          : // Sticky offset clears the fixed header (3rem) + hero (11rem) band
+            // above it — anything smaller and the nav sticks too early and
+            // scrolls in behind the hero, appearing to vanish partway down.
+            'hidden bg-ual-shade md:sticky md:top-56 md:flex md:min-h-[calc(100dvh-14rem)] md:flex-col'
       }
       aria-label="Primary desktop"
     >
-      <ul className="m-0 flex grow list-none flex-col gap-1 px-0 py-6" role="list">
-        {SIDE_NAV_ITEMS.map((item) => {
+      <ul className="m-0 flex list-none flex-col gap-1 px-0 py-6" role="list">
+        {NAV_ITEMS.map((item) => {
           const active = isActive(item.to);
           const isExternal = Boolean(item.href);
 
@@ -53,6 +57,32 @@ export function SideNav() {
                   {active && <span className="sr-only">(current page)</span>}
                 </Link>
               )}
+            </li>
+          );
+        })}
+      </ul>
+
+      <hr className="mx-6 my-2 border-t border-ual-dark/10" />
+
+      <ul className="m-0 flex list-none flex-col gap-1 px-0 py-6" role="list">
+        {MENU_SECONDARY.map((item) => {
+          const isExternal = item.href.startsWith('http');
+          return (
+            <li className="flex" key={item.label}>
+              <a
+                href={item.href}
+                target={isExternal ? '_blank' : undefined}
+                rel={isExternal ? 'noreferrer' : undefined}
+                className="flex min-h-11 flex-1 items-center gap-2 px-6 py-2 text-step-d1 text-ual-dark no-underline transition-[color] duration-100 hover:text-ual-orange focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-ual-orange"
+              >
+                <span>{item.label}</span>
+                {isExternal && (
+                  <>
+                    <ExternalLinkIcon aria-hidden="true" width={16} height={16} />
+                    <span className="sr-only"> (opens in a new tab)</span>
+                  </>
+                )}
+              </a>
             </li>
           );
         })}

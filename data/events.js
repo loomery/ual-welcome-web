@@ -12,6 +12,7 @@
  * @property {EventCategory} category
  * @property {string} [whatToBring]      Optional — shown in "What do I need to bring?" section.
  * @property {string} [externalUrl]      Optional — "View more about this event" CTA link.
+ * @property {string} [image]            Optional card artwork (path under public/); falls back to a shared image.
  */
 
 /** @type {UalEvent[]} */

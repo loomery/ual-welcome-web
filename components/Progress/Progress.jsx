@@ -6,9 +6,12 @@
  * @param {number} props.value
  * @param {number} props.max
  * @param {string} props.label
+ * @param {'default'|'success'} [props.tone]  Fill colour — 'default' is the
+ *   dark DS fill; 'success' is UAL green (used on the home arrival checklist).
  */
-export function Progress({ value, max, label }) {
+export function Progress({ value, max, label, tone = 'default' }) {
   const percent = max === 0 ? 0 : Math.round((value / max) * 100);
+  const fill = tone === 'success' ? 'bg-ual-util-green' : 'bg-ual-dark';
   return (
     <div
       className="h-2 w-full overflow-hidden bg-ual-dark-90"
@@ -20,7 +23,7 @@ export function Progress({ value, max, label }) {
       aria-valuetext={`${value} of ${max} complete (${percent}%)`}
     >
       <div
-        className="h-full bg-ual-dark transition-[inline-size] duration-300 ease-[ease]"
+        className={`h-full ${fill} transition-[inline-size] duration-300 ease-[ease]`}
         style={{ inlineSize: `${percent}%` }}
       />
     </div>

@@ -1,33 +1,26 @@
 'use client';
 
 import { usePathname } from 'next/navigation';
-import { isOnboardingRoute } from '../../utils/isOnboardingRoute';
+import { isFocusedRoute } from '../../utils/isFocusedRoute';
+import { useScrolled } from '../../hooks/useScrolled';
 import { SkipLinks } from './SkipLinks';
 import { Header } from './Header';
 import { BetaNotice } from './BetaNotice';
 import { AppHero } from './AppHero';
 import { SideNav } from './SideNav';
-import { BottomNav } from './BottomNav';
 import { Footer } from './Footer';
 import { RouteAnnouncer } from './RouteAnnouncer';
 import { ScrollToTop } from './ScrollToTop';
 import { Breadcrumbs } from '../Breadcrumbs/Breadcrumbs';
 
 /**
- * App shell:
- *  - Skip links (WCAG 2.4.1 Bypass Blocks)
- *  - Full-width black top bar (logo only) — every breakpoint
- *  - Site-wide beta notice strip beneath the header
- *  - The greeting/college hero (`AppHero`) appears on every page in one of two
- *    layouts: a full-width band beneath the header on the home page, or a
- *    compact box at the top of the left sidebar column on every other page.
- *  - A body row: desktop side nav (left) + main content (right). On mobile
- *    the side nav is hidden and the bottom tab bar is the primary nav.
- *  - Full-width footer beneath the row (privacy note + on-device reset)
- *  - Live region announcing route changes
- *
- * `'use client'` so it can read `usePathname()` to switch the hero layout
- * on the home page. Children keep their own server/client boundaries.
+ * App shell. The greeting/college hero is a black band that, on desktop, keeps
+ * a constant height and collapses horizontally (full-width → sidebar width,
+ * anchored left) once the page is scrolled past a threshold, folding into the
+ * compact sidebar box while the main content rises to sit beside it. This is a
+ * snap between two fixed states (`scrolled`), not an effect tied continuously
+ * to scroll position. It stays sticky beneath the top bar for the whole page.
+ * On mobile it's a static full-width band that scrolls away.
  *
  * @param {Object} props
  * @param {import('react').ReactNode} props.children
@@ -35,38 +28,49 @@ import { Breadcrumbs } from '../Breadcrumbs/Breadcrumbs';
 export function AppShell({ children }) {
   const pathname = usePathname();
   const isHome = pathname === '/';
-  const isOnboarding = isOnboardingRoute(pathname);
+  const focused = isFocusedRoute(pathname);
+  const scrolled = useScrolled();
 
   return (
     <div>
       <SkipLinks />
       <Header />
       <BetaNotice />
-      {isHome && <AppHero variant="full" />}
       <div
         className={
-          isOnboarding ? 'md:block' : 'md:grid md:grid-cols-[18rem_minmax(0,1fr)] md:items-start'
+          focused ? '@container md:block' : '@container md:grid md:grid-cols-[18rem_minmax(0,1fr)]'
         }
       >
-        <div className="md:flex md:flex-col md:self-stretch">
-          {!isHome && <AppHero variant="compact" />}
+        <div className="md:min-w-0">
+          <AppHero scrolled={scrolled} />
           <SideNav />
         </div>
         <main
           id="main-content"
-          className={
-            isOnboarding
-              ? 'mx-auto max-w-grid min-w-0 px-(--grid-gutter) py-8 md:mx-0 md:w-full md:max-w-none md:bg-transparent md:py-10 min-[75rem]:px-12'
-              : 'mx-auto max-w-grid min-w-0 px-(--grid-gutter) py-8 md:mx-0 md:w-full md:max-w-none md:bg-white md:py-12 min-[75rem]:px-12'
-          }
+          className={[
+            'mx-auto max-w-grid min-w-0 px-(--grid-gutter) py-8 md:mx-0 md:w-full md:max-w-none min-[75rem]:px-12',
+            focused ? 'md:bg-transparent md:py-10' : 'md:bg-white md:py-12',
+            // Home surfaces grey cards, so its content canvas is white at every
+            // width; other pages keep the shade body background on mobile.
+            isHome && 'bg-white',
+            // Sit below the full-width hero at the top; once scrolled, the hero
+            // animates to its narrow sidebar width, so content rises to sit
+            // beside it (hero keeps a constant 11rem height throughout). Same
+            // trigger + duration as the hero's own animation, so they move together.
+            !focused &&
+              (scrolled
+                ? 'md:mt-0 md:transition-[margin-top] md:duration-300 md:ease-ual motion-reduce:md:transition-none'
+                : 'md:mt-44 md:transition-[margin-top] md:duration-300 md:ease-ual motion-reduce:md:transition-none'),
+          ]
+            .filter(Boolean)
+            .join(' ')}
           tabIndex={-1}
         >
-          {!isOnboarding && <Breadcrumbs className="mb-8" />}
+          {!focused && <Breadcrumbs className="mb-8" />}
           {children}
         </main>
       </div>
       <Footer />
-      <BottomNav />
       <RouteAnnouncer />
       <ScrollToTop />
     </div>

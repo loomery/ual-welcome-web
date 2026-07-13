@@ -3,7 +3,7 @@
  * dataset for college choice, but keeps the option-set decoupled from
  * the 3D scene config (different concerns).
  *
- * @typedef {'1st' | '2nd' | 'placement' | '3rd'} Year
+ * @typedef {'new' | 'returning'} StudentStatus
  * @typedef {'domestic' | 'international'} StudentType
  * @typedef {'not_started' | 'having_issues' | 'waiting' | 'received'} VisaStatus
  *
@@ -14,10 +14,9 @@
  * @property {string} area      Where the campus is in London — used in the dashboard hero
  * @property {string} eventsUrl Deep-link to the college's What's On page on arts.ac.uk
  *
- * @typedef {Object} YearOption
- * @property {Year} id
+ * @typedef {Object} StudentStatusOption
+ * @property {StudentStatus} id
  * @property {string} label
- * @property {string} hint
  *
  * @typedef {Object} StudentTypeOption
  * @property {StudentType} id
@@ -87,13 +86,6 @@ export const COLLEGE_OPTIONS = [
     eventsUrl: 'https://www.arts.ac.uk/whats-on',
   },
   {
-    id: 'ftti',
-    name: 'Fashion Textiles and Technology Institute',
-    short: 'FTTI',
-    area: 'East Bank, Stratford',
-    eventsUrl: 'https://www.arts.ac.uk/whats-on',
-  },
-  {
     id: 'dai',
     name: 'UAL School of Pre-degree Studies',
     short: 'Pre-degree',
@@ -102,21 +94,23 @@ export const COLLEGE_OPTIONS = [
   },
 ];
 
-/** @type {YearOption[]} */
-export const YEAR_OPTIONS = [
-  { id: '1st', label: '1st year', hint: 'Just starting your course' },
-  { id: '2nd', label: '2nd year', hint: 'Continuing your studies' },
-  { id: 'placement', label: 'Placement year', hint: 'Industry placement' },
-  { id: '3rd', label: '3rd year', hint: 'Final year or beyond' },
+/** @type {StudentStatusOption[]} */
+export const STUDENT_STATUS_OPTIONS = [
+  { id: 'new', label: 'New student' },
+  { id: 'returning', label: 'Returning student' },
 ];
 
 /** @type {StudentTypeOption[]} */
 export const STUDENT_TYPE_OPTIONS = [
-  { id: 'domestic', label: 'UK / Home', hint: "I'm a UK or EU-settled student" },
-  { id: 'international', label: 'International', hint: "I'm studying from outside the UK" },
+  {
+    id: 'domestic',
+    label: 'UK / Domestic',
+    hint: 'Already living in the UK before studying at UAL',
+  },
+  { id: 'international', label: 'International', hint: 'Moving to the UK to study at UAL' },
 ];
 
-/** @type {VisaStatusOption[]} */
+/** @type {VisaStatusOption[]} — shown only to international students. */
 export const VISA_STATUS_OPTIONS = [
   { id: 'not_started', label: "No, I haven't started yet", hint: "We'll help you get started" },
   { id: 'having_issues', label: "No, I'm having issues", hint: "We'll connect you with support" },
@@ -148,22 +142,22 @@ export const INTEREST_OPTIONS = [
   },
   {
     id: 'life',
-    label: 'Life at UAL',
+    label: 'Student life',
     body: 'Your Student Union, events and guides to help you settle into life at university',
   },
   {
     id: 'health',
-    label: 'Health, wellbeing and safety',
-    body: 'Access disability support, joining a GP and safety information',
+    label: 'Health and wellbeing',
+    body: 'Access disability support, joining a GP and wellbeing services',
+  },
+  {
+    id: 'safety',
+    label: 'Safety',
+    body: 'Stay safe on and off campus and find support when you need it',
   },
   {
     id: 'finances',
     label: 'Finances',
-    body: 'Tuition fees, bank accounts, financial support and student discounts.',
-  },
-  {
-    id: 'careers',
-    label: 'Careers',
-    body: 'Job opportunities and advice to help you build your future while you study',
+    body: 'Tuition fees, bank accounts, financial support and student discounts',
   },
 ];

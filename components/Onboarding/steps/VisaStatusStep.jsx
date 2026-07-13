@@ -3,22 +3,25 @@ import { OnboardingTile } from '../OnboardingTile';
 import { VISA_STATUS_OPTIONS } from '../../../data/onboardingOptions';
 
 /**
- * Step 7 (international students only) — check student visa status.
- * All four options allow the flow to continue; visa-specific content
- * is surfaced later in the personalised dashboard.
+ * Visa status — shown only to international students. Helps route them to the
+ * Student Advice Service.
  *
  * @param {Object} props
  * @param {{ current: HTMLHeadingElement | null }} props.headingRef
- * @param {string} props.value  Currently selected visa status ID.
+ * @param {string} props.value  Currently selected visa-status ID.
  * @param {(visaStatus: string) => void} props.onChange
  */
 export function VisaStatusStep({ headingRef, value, onChange }) {
   return (
     <div className="space-y-6">
-      <StepHeader headingRef={headingRef} title="Have you set up your student visa?" />
+      <StepHeader
+        headingRef={headingRef}
+        title="Have you sorted your student visa?"
+        body="This helps us point you to the right support."
+      />
 
       <ul
-        className="grid list-none grid-cols-1 gap-3 p-0 md:grid-cols-2 [&>li]:flex"
+        className="grid list-none grid-cols-1 gap-4 p-0 md:grid-cols-2 [&>li]:flex"
         role="radiogroup"
         aria-label="Choose your visa status"
       >
