@@ -207,3 +207,28 @@ export function CheckCircleIcon(props) {
     </svg>
   );
 }
+
+/** Filled play-in-rectangle — the "watch a video guide" affordance. */
+export function PlayIcon(props) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
+      <rect x="2" y="4" width="20" height="16" fill="currentColor" />
+      <path d="M10 9l6 3-6 3V9Z" fill="white" />
+    </svg>
+  );
+}
+
+export function CheckCircleOutlineIcon(props) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
+      <circle cx="12" cy="12" r="9.5" stroke="currentColor" strokeWidth={1.6} />
+      <path
+        d="m8 12.5 2.5 2.5 5.5-6"
+        stroke="currentColor"
+        strokeWidth={1.6}
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
