@@ -145,47 +145,46 @@ export function MapScreen() {
       </section>
 
       <section className="flex flex-col gap-4" aria-label={`${building.name} college map`}>
-        <div className="flex flex-col gap-4 md:flex-row md:items-start">
-          {/* Floor list — always a scrollable list (never a dropdown), capped
-              to a fixed height so a long floor count scrolls inside this box
-              instead of growing the page. Same behaviour on mobile and desktop. */}
-          <ul
-            role="list"
-            className="flex max-h-64 flex-col gap-1 overflow-y-auto md:max-h-120 md:w-64 md:shrink-0"
-          >
-            {plans.map((plan, i) => {
-              const selected = i === safeActive;
-              return (
-                <li key={plan.id}>
-                  <button
-                    type="button"
-                    onClick={() => setActivePlan(i)}
-                    aria-pressed={selected}
-                    aria-label={`Show ${plan.label} plan`}
-                    className={[
-                      'flex w-full items-center gap-3 p-2 text-left focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ual-orange',
-                      selected ? 'bg-ual-shade' : 'hover:bg-ual-shade',
-                    ].join(' ')}
-                  >
-                    <span
+        <div className="flex flex-col gap-4 md:flex-row md:items-stretch">
+          <div className="md:relative md:w-64 md:shrink-0">
+            <ul
+              role="list"
+              className="flex max-h-64 flex-col gap-1 overflow-y-auto md:absolute md:inset-0 md:max-h-none md:w-auto"
+            >
+              {plans.map((plan, i) => {
+                const selected = i === safeActive;
+                return (
+                  <li key={plan.id}>
+                    <button
+                      type="button"
+                      onClick={() => setActivePlan(i)}
+                      aria-pressed={selected}
+                      aria-label={`Show ${plan.label} plan`}
                       className={[
-                        'aspect-4/3 w-20 shrink-0 overflow-hidden bg-white',
-                        selected ? 'outline-2 outline-ual-dark' : 'opacity-70',
+                        'flex w-full items-center gap-3 p-2 text-left focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ual-orange',
+                        selected ? 'bg-ual-shade' : 'hover:bg-ual-shade',
                       ].join(' ')}
                     >
-                      <PlanGraphic
-                        plan={plan}
-                        hasImages={hasImages}
-                        alt=""
-                        className="size-full object-contain"
-                      />
-                    </span>
-                    <span className="text-step-d1 font-bold text-ual-dark">{plan.label}</span>
-                  </button>
-                </li>
-              );
-            })}
-          </ul>
+                      <span
+                        className={[
+                          'aspect-4/3 w-20 shrink-0 overflow-hidden bg-white',
+                          selected ? 'outline-2 outline-ual-dark' : 'opacity-70',
+                        ].join(' ')}
+                      >
+                        <PlanGraphic
+                          plan={plan}
+                          hasImages={hasImages}
+                          alt=""
+                          className="size-full object-contain"
+                        />
+                      </span>
+                      <span className="text-step-d1 font-bold text-ual-dark">{plan.label}</span>
+                    </button>
+                  </li>
+                );
+              })}
+            </ul>
+          </div>
 
           <button
             type="button"

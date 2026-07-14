@@ -6,7 +6,7 @@ export function HelpCategoriesScreen() {
   return (
     <article className="space-y-8">
       <div className="space-y-4">
-        <h1>Get help and support</h1>
+        <h1>Get help</h1>
         <p className="text-step-1 text-ual-medium">
           Not sure who to contact? Find the right team or service below.
         </p>
@@ -22,29 +22,21 @@ export function HelpCategoriesScreen() {
               {section.label}
             </h2>
 
-            <ul
-              role="list"
-              className="border-2 border-ual-dark-90 [&>li+li]:border-t [&>li+li]:border-ual-dark-90"
-            >
+            <ul role="list" className="border-t border-ual-dark-90">
               {categories.map((cat) => (
                 <li key={cat.id}>
                   <Link
                     href={`/help/${cat.id}`}
-                    className="flex min-h-14 items-center gap-4 bg-ual-light px-4 py-3 text-ual-dark no-underline transition-colors duration-150 hover:bg-ual-shade focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-ual-orange"
+                    className="flex min-h-20 items-center gap-4 border-b border-ual-dark-90 py-6 text-ual-dark no-underline transition-colors duration-150 hover:text-ual-orange focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-ual-orange"
                   >
-                    <span className="flex min-w-0 grow flex-col gap-1">
-                      <span className="text-step-0 font-ual-bold">{cat.title}</span>
-                      <span className="text-step-d1/ual-condensed text-ual-medium">
-                        {cat.shortDescription}
-                      </span>
-                    </span>
+                    <span className="min-w-0 grow text-step-0 font-ual-normal">{cat.title}</span>
 
                     {/* Chevron */}
                     <ChevronRightIcon
                       aria-hidden="true"
-                      width="16"
-                      height="16"
-                      className="shrink-0 text-ual-medium"
+                      width="20"
+                      height="20"
+                      className="shrink-0 text-ual-dark"
                     />
                   </Link>
                 </li>

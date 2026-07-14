@@ -55,7 +55,7 @@ export const STUDYING_LANDING = [
         id: 'getting-around',
         label: 'Getting around',
         body: 'Building information, and how to get to college.',
-        href: '/map',
+        href: '/studying/getting-around',
       },
       {
         id: 'library',
@@ -400,7 +400,7 @@ export const STUDYING_TOPICS = [
             id: 'getting-around',
             label: 'Getting around',
             body: 'Building information, and how to get to college.',
-            href: '/map',
+            href: '/studying/getting-around',
           },
           {
             id: 'library',
