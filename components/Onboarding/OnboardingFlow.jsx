@@ -1,21 +1,20 @@
 'use client';
 
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Button } from '../Button/Button';
 import { ChevronLeftIcon, ArrowRightIcon, WarningIcon } from '../Icon/NavIcons';
 import { useOnboardingProfile } from '../../hooks/useOnboardingProfile';
+import { visibleInterestOptions } from '../../data/onboardingOptions';
 import { asset } from '../../utils/asset';
 import { IntroStep } from './steps/IntroStep';
 import { NameStep } from './steps/NameStep';
 import { CollegeStep } from './steps/CollegeStep';
 import { StudentTypeStep } from './steps/StudentTypeStep';
-import { VisaStatusStep } from './steps/VisaStatusStep';
 import { InterestsStep } from './steps/InterestsStep';
 import { FinishStep } from './steps/FinishStep';
 
-// visaStatus is filtered out below unless the student is international.
-const ALL_STEPS = ['intro', 'name', 'college', 'studentType', 'visaStatus', 'interests', 'finish'];
+const STEPS = ['intro', 'name', 'college', 'studentType', 'interests', 'finish'];
 
 /**
  * Multi-step onboarding flow.
@@ -40,18 +39,10 @@ export function OnboardingFlow() {
     studentStatus: profile?.studentStatus ?? '',
     collegeId: profile?.collegeId ?? '',
     studentType: profile?.studentType ?? '',
-    visaStatus: profile?.visaStatus ?? '',
     interests: profile?.interests ?? [],
   }));
 
-  // The visa step only applies to international students.
-  const steps = useMemo(
-    () =>
-      draft.studentType === 'international'
-        ? ALL_STEPS
-        : ALL_STEPS.filter((s) => s !== 'visaStatus'),
-    [draft.studentType],
-  );
+  const steps = STEPS;
 
   const stepId = steps[stepIndex];
   const nextStepId = steps[stepIndex + 1];
@@ -69,8 +60,6 @@ export function OnboardingFlow() {
         return Boolean(draft.collegeId);
       case 'studentType':
         return Boolean(draft.studentType);
-      case 'visaStatus':
-        return Boolean(draft.visaStatus);
       default:
         return true;
     }
@@ -135,7 +124,6 @@ export function OnboardingFlow() {
       studentStatus: '',
       collegeId: '',
       studentType: '',
-      visaStatus: '',
       interests: [],
     });
     setStepIndex(0);
@@ -244,18 +232,12 @@ export function OnboardingFlow() {
               onChange={(v) => setDraft((d) => ({ ...d, studentType: v }))}
             />
           )}
-          {stepId === 'visaStatus' && (
-            <VisaStatusStep
-              headingRef={headingRef}
-              value={draft.visaStatus}
-              onChange={(v) => setDraft((d) => ({ ...d, visaStatus: v }))}
-            />
-          )}
           {stepId === 'interests' && (
             <InterestsStep
               headingRef={headingRef}
               value={draft.interests}
               onChange={(v) => setDraft((d) => ({ ...d, interests: v }))}
+              options={visibleInterestOptions(draft.studentType)}
             />
           )}
           {stepId === 'finish' && (
@@ -328,8 +310,6 @@ function ctaLabel(nextStepId) {
       return 'Next, select your college';
     case 'studentType':
       return 'Next, select student type';
-    case 'visaStatus':
-      return 'Next, confirm visa status';
     case 'interests':
       return 'Next, select uni interests';
     case 'finish':
@@ -354,8 +334,6 @@ function stepSlice(stepId, draft) {
       return { collegeId: draft.collegeId };
     case 'studentType':
       return { studentType: draft.studentType };
-    case 'visaStatus':
-      return { visaStatus: draft.visaStatus };
     case 'interests':
       return { interests: draft.interests };
     default:
