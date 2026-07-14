@@ -30,6 +30,7 @@ const INTEREST_HREF = {
   health: '/help',
   safety: '/help',
   finances: '/help',
+  'moving-uk': '/explore/moving-to-the-uk',
 };
 
 /** How many interest tiles show before the "View more" toggle expands the rest. */
@@ -89,7 +90,13 @@ export function DashboardScreen() {
           number: i + 1,
           title: t.title,
           description: t.shortDescription,
-          href: t.cta?.href?.startsWith('/') ? t.cta.href : '/checklist',
+          // Open the actual task: its own detail page if it has one, else an
+          // internal cta, else fall back to the checklist.
+          href: t.detail
+            ? `/checklist/${t.id}`
+            : t.cta?.href?.startsWith('/')
+              ? t.cta.href
+              : '/checklist',
         })),
     [tasks, taskStatuses],
   );
@@ -99,16 +106,16 @@ export function DashboardScreen() {
 
   // ── Selected interests ─────────────────────────────────────────────────
   const interestIds = useMemo(() => profile?.interests ?? [], [profile?.interests]);
-  // Selected interests first, then the rest — so the collapsed view shows what
-  // the student picked and "View more" reveals the remaining categories.
-  const orderedInterests = useMemo(() => {
-    const picked = INTEREST_OPTIONS.filter((o) => interestIds.includes(o.id));
-    const rest = INTEREST_OPTIONS.filter((o) => !interestIds.includes(o.id));
-    return [...picked, ...rest];
-  }, [interestIds]);
+  // Only the topics the student actually selected. "View more" appears only
+  // when they picked more than the collapsed count, and reveals the rest of
+  // their own selection (not every category).
+  const selectedInterests = useMemo(
+    () => INTEREST_OPTIONS.filter((o) => interestIds.includes(o.id)),
+    [interestIds],
+  );
   const visibleInterests = interestsExpanded
-    ? orderedInterests
-    : orderedInterests.slice(0, COLLAPSED_INTERESTS);
+    ? selectedInterests
+    : selectedInterests.slice(0, COLLAPSED_INTERESTS);
 
   // ── What's on ──────────────────────────────────────────────────────────
   const upcoming = useMemo(
@@ -231,7 +238,7 @@ export function DashboardScreen() {
           ))}
         </ul>
 
-        {orderedInterests.length > COLLAPSED_INTERESTS && (
+        {selectedInterests.length > COLLAPSED_INTERESTS && (
           <button
             type="button"
             onClick={() => setInterestsExpanded((v) => !v)}
@@ -257,15 +264,9 @@ export function DashboardScreen() {
             </li>
           ))}
         </ul>
-        <Button
-          href="https://www.arts.ac.uk/whats-on"
-          target="_blank"
-          rel="noreferrer"
-          className="w-full justify-center md:w-auto"
-        >
+        <Button href="/explore/student-life/events" className="w-full justify-center md:w-auto">
           View more events
           <ArrowRightIcon aria-hidden="true" />
-          <span className="sr-only"> (opens in a new tab)</span>
         </Button>
       </section>
     </article>

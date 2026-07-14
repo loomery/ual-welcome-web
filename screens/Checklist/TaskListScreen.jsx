@@ -68,7 +68,9 @@ export function TaskListScreen() {
         </h2>
         <p className="max-w-200 text-step-0 text-ual-dark">{INTRO}</p>
 
-        <ToDoList tasks={tasks} statuses={statuses} onToggle={toggle} />
+        <div className="mt-6">
+          <ToDoList tasks={tasks} statuses={statuses} onToggle={toggle} />
+        </div>
 
         {allComplete && (
           <div className="flex flex-col gap-6">
