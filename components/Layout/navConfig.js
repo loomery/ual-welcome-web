@@ -20,12 +20,13 @@ export const NAV_ITEMS = [
 ];
 
 /**
- * Secondary links shown beneath the divider in the mobile menu only.
- * "About the beta" has no page yet, so it is an inert placeholder.
+ * Secondary links shown beneath the divider in the side nav and mobile menu.
+ * Use `to` for internal routes (rendered with next/link so the sub-path
+ * basePath is applied) and `href` for external links.
  *
  * @type {NavItem[]}
  */
 export const MENU_SECONDARY = [
-  { href: '#', label: 'What is a beta?' },
+  { to: '/info/about-the-beta', label: 'What is a beta?' },
   { href: 'https://www.arts.ac.uk/', label: 'Main UAL website' },
 ];

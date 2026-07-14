@@ -66,23 +66,22 @@ export function SideNav() {
 
       <ul className="m-0 flex list-none flex-col gap-1 px-0 py-6" role="list">
         {MENU_SECONDARY.map((item) => {
-          const isExternal = item.href.startsWith('http');
+          const isExternal = Boolean(item.href);
+          const linkClass =
+            'flex min-h-11 flex-1 items-center gap-2 px-6 py-2 text-step-d1 text-ual-dark no-underline transition-[color] duration-100 hover:text-ual-orange focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-ual-orange';
           return (
             <li className="flex" key={item.label}>
-              <a
-                href={item.href}
-                target={isExternal ? '_blank' : undefined}
-                rel={isExternal ? 'noreferrer' : undefined}
-                className="flex min-h-11 flex-1 items-center gap-2 px-6 py-2 text-step-d1 text-ual-dark no-underline transition-[color] duration-100 hover:text-ual-orange focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-ual-orange"
-              >
-                <span>{item.label}</span>
-                {isExternal && (
-                  <>
-                    <ExternalLinkIcon aria-hidden="true" width={16} height={16} />
-                    <span className="sr-only"> (opens in a new tab)</span>
-                  </>
-                )}
-              </a>
+              {isExternal ? (
+                <a href={item.href} target="_blank" rel="noreferrer" className={linkClass}>
+                  <span>{item.label}</span>
+                  <ExternalLinkIcon aria-hidden="true" width={16} height={16} />
+                  <span className="sr-only"> (opens in a new tab)</span>
+                </a>
+              ) : (
+                <Link href={item.to} className={linkClass}>
+                  <span>{item.label}</span>
+                </Link>
+              )}
             </li>
           );
         })}
