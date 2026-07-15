@@ -101,38 +101,43 @@ export function Footer() {
       }
       role="contentinfo"
     >
-      <div className="mx-auto grid max-w-grid gap-8 px-(--grid-gutter)">
+      <div className="mx-auto flex max-w-grid flex-col gap-12 px-(--grid-gutter)">
         <div className="flex flex-col gap-4">
           <span className="inline-flex w-fit items-center border border-ual-light px-2 py-1 text-step-d1 font-ual-bold text-ual-light">
             Beta
           </span>
-          <p className="m-0 text-step-2/ual-condensed font-ual-bold tracking-ual-tight text-ual-light">
-            Because the world
-            <br />
-            needs creativity
-          </p>
+          <div className="flex flex-col gap-8 md:flex-row md:items-start md:justify-between md:gap-16">
+            <p className="m-0 text-step-2/ual-condensed font-ual-bold tracking-ual-tight text-ual-light">
+              Because the world
+              <br />
+              needs creativity
+            </p>
+
+            <nav
+              className="grid grid-cols-2 gap-x-12 gap-y-6 sm:grid-cols-3 md:gap-x-16"
+              aria-label="Footer"
+            >
+              {FOOTER_COLUMNS.map((column, i) => (
+                <ul key={i} className="m-0 flex list-none flex-col gap-3 p-0" role="list">
+                  {column.map((link) => (
+                    <li key={link.label}>
+                      <a
+                        href={link.href}
+                        className="text-step-d1 text-ual-light underline underline-offset-[3px] hover:text-ual-orange focus-visible:text-ual-orange"
+                        target="_blank"
+                        rel="noreferrer"
+                      >
+                        {link.label}
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              ))}
+            </nav>
+          </div>
         </div>
 
-        <nav className="grid grid-cols-1 gap-6 md:max-w-xl md:grid-cols-3" aria-label="Footer">
-          {FOOTER_COLUMNS.map((column, i) => (
-            <ul key={i} className="m-0 flex list-none flex-col gap-3 p-0" role="list">
-              {column.map((link) => (
-                <li key={link.label}>
-                  <a
-                    href={link.href}
-                    className="text-step-d1 text-ual-light underline underline-offset-[3px] hover:text-ual-orange focus-visible:text-ual-orange"
-                    target="_blank"
-                    rel="noreferrer"
-                  >
-                    {link.label}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          ))}
-        </nav>
-
-        <div className="flex flex-wrap items-center justify-between gap-6 border-t border-ual-dark-50 pt-6">
+        <div className="flex flex-wrap items-center justify-between gap-6">
           <ul className="m-0 flex list-none gap-4 p-0" role="list">
             {SOCIALS.map((s) => (
               <li key={s.label}>
