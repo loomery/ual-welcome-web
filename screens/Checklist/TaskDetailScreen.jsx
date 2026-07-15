@@ -2,7 +2,7 @@
 
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { TASKS, OTHER_TASKS, visibleTasks } from '../../data/checklist';
+import { TASKS, OTHER_TASKS, visibleTasks, visibleOtherTasks } from '../../data/checklist';
 import { COLLEGE_OPTIONS } from '../../data/onboardingOptions';
 import { usePersistedState } from '../../hooks/usePersistedState';
 import { useOnboardingProfile } from '../../hooks/useOnboardingProfile';
@@ -63,13 +63,17 @@ export function TaskDetailScreen({ taskId }) {
 
   const { detail } = task;
   const done = statuses[task.id] === 'complete';
-  const list = visibleTasks(profile?.studentType, profile?.studentStatus);
-  const index = list.findIndex((t) => t.id === task.id);
+
+  const flow = [
+    ...visibleTasks(profile?.studentType, profile?.studentStatus),
+    ...visibleOtherTasks(profile?.studentType),
+  ];
+  const index = flow.findIndex((t) => t.id === task.id);
   // Skip to the next task that has its own page (a detail page or an internal
   // cta) so "Go to next task" opens a task, never dead-ends on the list.
   const nextTask =
     index >= 0
-      ? list.slice(index + 1).find((t) => t.detail || t.cta?.href?.startsWith('/'))
+      ? flow.slice(index + 1).find((t) => t.detail || t.cta?.href?.startsWith('/'))
       : undefined;
 
   // The student's college fills the [College/Institute] placeholder in copy.
