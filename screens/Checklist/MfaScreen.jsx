@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { MFA_PATHS, MFA_HELP, MFA_READ_MORE } from '../../data/checklist';
+import { MFA_PATHS, MFA_HELP, MFA_READ_MORE, visibleTasks } from '../../data/checklist';
 import { usePersistedState } from '../../hooks/usePersistedState';
 import { useOnboardingProfile } from '../../hooks/useOnboardingProfile';
 import { TaskAction } from '../../components/Checklist/TaskAction';
@@ -30,7 +30,7 @@ const PATH_TAB_LABEL = {
  */
 export function MfaScreen() {
   const router = useRouter();
-  const { isComplete: hasCompletedOnboarding, hydrated } = useOnboardingProfile();
+  const { profile, isComplete: hasCompletedOnboarding, hydrated } = useOnboardingProfile();
   const [statuses, setStatuses] = usePersistedState(STATUS_KEY, {});
   const [pathId, setPathId] = useState(MFA_PATHS[0].id);
 
@@ -45,6 +45,19 @@ export function MfaScreen() {
   if (!hydrated || !hasCompletedOnboarding) return null;
 
   const taskComplete = statuses.mfa === 'complete';
+
+  // "Go to next task" targets the next task that has its own page.
+  const tasks = visibleTasks(profile?.studentType, profile?.studentStatus);
+  const mfaIndex = tasks.findIndex((t) => t.id === 'mfa');
+  const nextTask =
+    mfaIndex >= 0
+      ? tasks.slice(mfaIndex + 1).find((t) => t.detail || t.cta?.href?.startsWith('/'))
+      : undefined;
+  const nextTaskHref = nextTask
+    ? nextTask.detail
+      ? `/checklist/${nextTask.id}`
+      : nextTask.cta.href
+    : '/checklist';
 
   function toggleComplete() {
     setStatuses((prev) => ({ ...prev, mfa: prev.mfa === 'complete' ? 'in-progress' : 'complete' }));
@@ -145,7 +158,7 @@ export function MfaScreen() {
             <CheckCircleOutlineIcon aria-hidden="true" />
           </button>
           <Link
-            href="/checklist"
+            href={nextTaskHref}
             className="inline-flex items-center gap-3 self-end border-b border-ual-dark-90 pb-3 text-step-0 text-ual-dark no-underline hover:text-ual-orange focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ual-orange [&>svg]:size-5"
           >
             Go to next task
