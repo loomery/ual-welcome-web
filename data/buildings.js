@@ -1,9 +1,14 @@
 /**
- * @typedef {{ name: string, walk: string }} TransportStop
+ * @typedef {Object} TransportStop
+ * @property {string} name
+ * @property {string} walk
+ * @property {Array<'rail'|'tube'>} [modes]  Rail/Underground symbols to show
  *
  * @typedef {Object} BuildingTransport
  * @property {TransportStop[]} stations   Closest tube/rail stations
  * @property {TransportStop[]} buses      Closest bus routes
+ * @property {string} [taxi]              Taxi drop-off guidance
+ * @property {string} [parking]           Accessible parking note
  * @property {string} accessibilityNote   Plain-text accessibility summary
  * @property {string} accessibilityUrl   Link to full accessibility info
  *
@@ -12,6 +17,7 @@
  * @property {string} name
  * @property {string} college
  * @property {string} address
+ * @property {string} [areaUrl]       "Read more about your college area" link
  * @property {[number, number]} size  Relative footprint [width, depth] in scene units (~km).
  * @property {number} height          Relative building height in scene units.
  * @property {string} description
@@ -38,6 +44,8 @@ export const BUILDINGS = [
     name: 'Central Saint Martins',
     college: 'CSM',
     address: '1 Granary Square, London N1C 4AA',
+    // TODO(UAL): confirm the canonical "college area" URLs.
+    areaUrl: 'https://www.arts.ac.uk/colleges/central-saint-martins',
     size: [1.8, 0.58],
     height: 1.0,
     description:
@@ -71,8 +79,8 @@ export const BUILDINGS = [
     ],
     transport: {
       stations: [
-        { name: 'Kings Cross', walk: '10 min walk' },
-        { name: 'St Pancras', walk: '10 min walk' },
+        { name: 'Kings Cross', walk: '10 min walk', modes: ['rail', 'tube'] },
+        { name: 'St Pancras', walk: '10 min walk', modes: ['rail', 'tube'] },
       ],
       buses: [
         { name: '10', walk: '5 min walk' },
@@ -80,6 +88,8 @@ export const BUILDINGS = [
         { name: '30', walk: '5 min walk' },
         { name: '46', walk: '5 min walk' },
       ],
+      taxi: "We recommend that you have your taxi drop you off on Handyside Street, directly behind our King's Cross site. You will then need to make your way up Stable Street to access the building.",
+      parking: 'Blue Badge holders can park for free with a Blue Badge on display.',
       accessibilityNote:
         'Full access and route guides to Central Saint Martins are available on AccessAble.',
       accessibilityUrl: 'https://www.accessable.co.uk/university-of-the-arts-london',
@@ -90,6 +100,7 @@ export const BUILDINGS = [
     name: 'London College of Fashion',
     college: 'LCF',
     address: 'East Bank, Stratford, London E20',
+    areaUrl: 'https://www.arts.ac.uk/colleges/london-college-of-fashion',
     size: [1.0, 0.9],
     height: 1.9,
     description: 'New campus at East Bank, Queen Elizabeth Olympic Park.',
@@ -113,8 +124,8 @@ export const BUILDINGS = [
     ],
     transport: {
       stations: [
-        { name: 'Stratford', walk: '5 min walk' },
-        { name: 'Stratford International', walk: '8 min walk' },
+        { name: 'Stratford', walk: '5 min walk', modes: ['rail', 'tube'] },
+        { name: 'Stratford International', walk: '8 min walk', modes: ['rail'] },
       ],
       buses: [
         { name: '25', walk: '5 min walk' },
@@ -130,14 +141,15 @@ export const BUILDINGS = [
     name: 'London College of Communication',
     college: 'LCC',
     address: 'Elephant & Castle, London SE1 6SB',
+    areaUrl: 'https://www.arts.ac.uk/colleges/london-college-of-communication',
     size: [1.1, 1.0],
     height: 1.5,
     description: 'Design, media and screen courses at Elephant & Castle.',
     geo: { lat: 51.4958, lng: -0.1001 },
     transport: {
       stations: [
-        { name: 'Elephant & Castle', walk: '5 min walk' },
-        { name: 'Borough', walk: '15 min walk' },
+        { name: 'Elephant & Castle', walk: '5 min walk', modes: ['rail', 'tube'] },
+        { name: 'Borough', walk: '15 min walk', modes: ['tube'] },
       ],
       buses: [
         { name: '1', walk: '3 min walk' },
@@ -154,6 +166,7 @@ export const BUILDINGS = [
     name: 'Camberwell College of Arts',
     college: 'Camberwell',
     address: 'Peckham Road, London SE5 8UF',
+    areaUrl: 'https://www.arts.ac.uk/colleges/camberwell-college-of-arts',
     size: [1.5, 0.65],
     height: 0.95,
     description: 'Fine art, illustration, conservation and 3D design.',
@@ -184,8 +197,8 @@ export const BUILDINGS = [
     ],
     transport: {
       stations: [
-        { name: 'Denmark Hill', walk: '15 min walk' },
-        { name: 'Loughborough Junction', walk: '15 min walk' },
+        { name: 'Denmark Hill', walk: '15 min walk', modes: ['rail'] },
+        { name: 'Loughborough Junction', walk: '15 min walk', modes: ['rail'] },
       ],
       buses: [
         { name: '12', walk: '1 min walk' },
@@ -202,6 +215,7 @@ export const BUILDINGS = [
     name: 'Chelsea College of Arts',
     college: 'Chelsea',
     address: '16 John Islip St, London SW1P 4JU',
+    areaUrl: 'https://www.arts.ac.uk/colleges/chelsea-college-of-arts',
     size: [1.5, 0.58],
     height: 0.8,
     description: 'Fine art, graphic design, interior and spatial design.',
@@ -229,8 +243,8 @@ export const BUILDINGS = [
     ],
     transport: {
       stations: [
-        { name: 'Pimlico', walk: '10 min walk' },
-        { name: 'Victoria', walk: '15 min walk' },
+        { name: 'Pimlico', walk: '10 min walk', modes: ['tube'] },
+        { name: 'Victoria', walk: '15 min walk', modes: ['rail', 'tube'] },
       ],
       buses: [
         { name: '2', walk: '5 min walk' },
@@ -247,6 +261,7 @@ export const BUILDINGS = [
     name: 'Wimbledon College of Arts',
     college: 'Wimbledon',
     address: 'Merton Hall Road, London SW19 3QA',
+    areaUrl: 'https://www.arts.ac.uk/colleges/wimbledon-college-of-arts',
     size: [1.6, 0.8],
     height: 0.72,
     description: 'Performance design, theatre and fine art.',
@@ -272,8 +287,8 @@ export const BUILDINGS = [
     ],
     transport: {
       stations: [
-        { name: 'Wimbledon', walk: '15 min walk' },
-        { name: 'Wimbledon Chase', walk: '5 min walk' },
+        { name: 'Wimbledon', walk: '15 min walk', modes: ['rail', 'tube'] },
+        { name: 'Wimbledon Chase', walk: '5 min walk', modes: ['rail'] },
       ],
       buses: [
         { name: '163', walk: '3 min walk' },
@@ -289,14 +304,15 @@ export const BUILDINGS = [
     name: 'Creative Computing Institute',
     college: 'CCI',
     address: 'Arthouse, Barbican, London EC2Y 8RH',
+    areaUrl: 'https://www.arts.ac.uk/creative-computing-institute',
     size: [0.8, 0.8],
     height: 1.0,
     description: 'Creative computing, AI and digital technologies.',
     geo: { lat: 51.5196, lng: -0.0963 },
     transport: {
       stations: [
-        { name: 'Barbican', walk: '5 min walk' },
-        { name: 'Farringdon', walk: '8 min walk' },
+        { name: 'Barbican', walk: '5 min walk', modes: ['tube'] },
+        { name: 'Farringdon', walk: '8 min walk', modes: ['rail', 'tube'] },
       ],
       buses: [
         { name: '4', walk: '3 min walk' },
@@ -312,14 +328,15 @@ export const BUILDINGS = [
     name: 'UAL School of Pre-degree Studies',
     college: 'Pre-degree',
     address: '272 High Holborn, London WC1V 7EY',
+    areaUrl: 'https://www.arts.ac.uk/study-at-ual/pre-degree',
     size: [0.8, 0.8],
     height: 1.0,
     description: 'Pre-degree and foundation courses across UAL.',
     geo: { lat: 51.5178, lng: -0.1183 },
     transport: {
       stations: [
-        { name: 'Holborn', walk: '3 min walk' },
-        { name: 'Chancery Lane', walk: '5 min walk' },
+        { name: 'Holborn', walk: '3 min walk', modes: ['tube'] },
+        { name: 'Chancery Lane', walk: '5 min walk', modes: ['tube'] },
       ],
       buses: [
         { name: '1', walk: '2 min walk' },
