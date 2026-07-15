@@ -64,7 +64,12 @@ export function TaskDetailScreen({ taskId }) {
   const done = statuses[task.id] === 'complete';
   const list = visibleTasks(profile?.studentType, profile?.studentStatus);
   const index = list.findIndex((t) => t.id === task.id);
-  const nextTask = index >= 0 ? list[index + 1] : undefined;
+  // Skip to the next task that has its own page (a detail page or an internal
+  // cta) so "Go to next task" opens a task, never dead-ends on the list.
+  const nextTask =
+    index >= 0
+      ? list.slice(index + 1).find((t) => t.detail || t.cta?.href?.startsWith('/'))
+      : undefined;
 
   function toggleComplete() {
     setStatuses((prev) => ({
