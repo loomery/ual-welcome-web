@@ -63,6 +63,8 @@
  *
  * @typedef {Object} SubTaskList
  * @property {string} title        e.g. "Accounts to set up" / "Set up steps".
+ * @property {boolean} [ordered]   Render as a plain numbered how-to list (no
+ *   checkboxes or progress count) instead of a tick-off checklist.
  * @property {SubTaskItem[]} items Completion is persisted per item.
  *
  * @typedef {Object} HelpBlock
@@ -484,6 +486,7 @@ export const OTHER_TASKS = [
       ],
       subTasks: {
         title: 'Set up steps',
+        ordered: true,
         items: [
           {
             id: 'find',
