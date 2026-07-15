@@ -87,7 +87,7 @@ export function TaskDetailScreen({ taskId }) {
         <p className="max-w-200 text-step-2 text-ual-dark">{intro}</p>
       </header>
 
-      {detail.sections.map((section) => (
+      {(detail.sections ?? []).map((section) => (
         <section key={section.heading} className="flex max-w-200 flex-col gap-3">
           <h2 className="text-step-3 font-bold tracking-ual-tight text-ual-dark">
             {section.heading}
