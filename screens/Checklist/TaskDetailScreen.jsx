@@ -183,7 +183,11 @@ export function TaskDetailScreen({ taskId }) {
       )}
 
       {detail.help && (
-        <GetHelpSection intro={fill(detail.help.intro)} channels={detail.help.channels} />
+        <GetHelpSection
+          intro={fill(detail.help.intro)}
+          channels={detail.help.channels}
+          groups={detail.help.groups}
+        />
       )}
     </article>
   );
