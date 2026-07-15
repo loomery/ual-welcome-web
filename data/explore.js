@@ -40,6 +40,7 @@ const WITNESS_CRIME_URL =
 export const EXPLORE_LANDING = [
   {
     heading: 'Moving to the UK',
+    internationalOnly: true,
     cards: [
       {
         id: 'uk-guide',
@@ -376,4 +377,20 @@ export function visibleTopicSections(topic, studentType, studentStatus = 'new') 
           }
         : s,
     );
+}
+
+/**
+ * The /explore landing groups for a student's type: drops international-only
+ * groups (e.g. Moving to the UK) and international-only cards for domestic
+ * students.
+ *
+ * @param {string} [studentType]  'domestic' | 'international'
+ * @returns {TopicSection[]}
+ */
+export function visibleExploreLanding(studentType) {
+  const international = studentType === 'international';
+  return EXPLORE_LANDING.filter((g) => !g.internationalOnly || international).map((g) => ({
+    ...g,
+    cards: g.cards.filter((c) => !c.internationalOnly || international),
+  }));
 }
