@@ -69,8 +69,10 @@
  * @property {SubTaskItem[]} items Completion is persisted per item.
  *
  * @typedef {Object} HelpBlock
- * @property {string} intro
- * @property {HelpChannel[]} channels
+ * @property {string} [intro]
+ * @property {HelpChannel[]} [channels]  Flat list of contact cards.
+ * @property {{ heading: string, channels: HelpChannel[] }[]} [groups]  Contact
+ *   cards split into labelled sub-groups (e.g. General enquiries / Mental health).
  *
  * @typedef {Object} TaskDetail
  * @property {string} [title]    Page H1 (defaults to the task title).
@@ -583,36 +585,52 @@ export const OTHER_TASKS = [
           body: 'Please be aware when sharing / accessing this course that the module includes scenarios that discuss rape and sexual assault.',
         },
       ],
+      subTasks: {
+        title: 'Set up steps',
+        items: [
+          {
+            id: 'module',
+            label: 'Complete the sexual consent training module',
+            // TODO(UAL): replace with the canonical consent-module URL.
+            href: 'https://www.arts.ac.uk/students',
+          },
+        ],
+      },
       help: {
-        intro: 'If you need support or have questions, you can contact the teams below.',
-        channels: [
+        groups: [
           {
-            id: 'general-email',
-            label: 'Email us',
-            value: 'counselling@arts.ac.uk',
-            note: 'General enquiries',
-            href: 'mailto:counselling@arts.ac.uk',
+            heading: 'General enquiries',
+            channels: [
+              {
+                id: 'general-email',
+                label: 'Email us',
+                value: 'counselling@arts.ac.uk',
+                href: 'mailto:counselling@arts.ac.uk',
+              },
+              {
+                id: 'general-call',
+                label: 'Call us',
+                value: '+44 (0)20 7514 6251',
+                href: 'tel:+442075146251',
+              },
+            ],
           },
           {
-            id: 'general-call',
-            label: 'Call us',
-            value: '+44 (0)20 7514 6251',
-            note: 'General enquiries',
-            href: 'tel:+442075146251',
-          },
-          {
-            id: 'wellbeing-email',
-            label: 'Email us',
-            value: 'studenthealth@arts.ac.uk',
-            note: 'Mental health or wellbeing support',
-            href: 'mailto:studenthealth@arts.ac.uk',
-          },
-          {
-            id: 'wellbeing-call',
-            label: 'Call us',
-            value: '+44 (0)20 7514 6426',
-            note: 'Mental health or wellbeing support',
-            href: 'tel:+442075146426',
+            heading: 'Mental health or wellbeing support',
+            channels: [
+              {
+                id: 'wellbeing-email',
+                label: 'Email us',
+                value: 'studenthealth@arts.ac.uk',
+                href: 'mailto:studenthealth@arts.ac.uk',
+              },
+              {
+                id: 'wellbeing-call',
+                label: 'Call us',
+                value: '+44 (0)20 7514 6426',
+                href: 'tel:+442075146426',
+              },
+            ],
           },
         ],
       },
