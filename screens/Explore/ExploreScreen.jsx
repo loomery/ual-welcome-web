@@ -1,7 +1,8 @@
 'use client';
 
 import Link from 'next/link';
-import { EXPLORE_LANDING } from '../../data/explore';
+import { visibleExploreLanding } from '../../data/explore';
+import { useOnboardingProfile } from '../../hooks/useOnboardingProfile';
 import { InterestTile } from '../../components/Dashboard/InterestTile';
 import { ArrowRightIcon } from '../../components/Icon/NavIcons';
 
@@ -12,6 +13,9 @@ import { ArrowRightIcon } from '../../components/Icon/NavIcons';
  * through to its topic page.
  */
 export function ExploreScreen() {
+  const { profile } = useOnboardingProfile();
+  const groups = visibleExploreLanding(profile?.studentType);
+
   return (
     <article className="flex flex-col gap-12">
       <header className="flex flex-col gap-6">
@@ -24,7 +28,7 @@ export function ExploreScreen() {
         </p>
       </header>
 
-      {EXPLORE_LANDING.map((group) => (
+      {groups.map((group) => (
         <section key={group.heading} className="flex flex-col gap-6">
           <h2 className="text-step-3 font-bold tracking-ual-tight text-ual-dark">
             {group.heading}
