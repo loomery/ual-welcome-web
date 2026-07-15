@@ -3,6 +3,7 @@
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { TASKS, OTHER_TASKS, visibleTasks } from '../../data/checklist';
+import { COLLEGE_OPTIONS } from '../../data/onboardingOptions';
 import { usePersistedState } from '../../hooks/usePersistedState';
 import { useOnboardingProfile } from '../../hooks/useOnboardingProfile';
 import { GetHelpSection } from '../../components/Checklist/GetHelpSection';
@@ -66,6 +67,12 @@ export function TaskDetailScreen({ taskId }) {
   const index = list.findIndex((t) => t.id === task.id);
   const nextTask = index >= 0 ? list[index + 1] : undefined;
 
+  // The student's college fills the [College/Institute] placeholder in copy.
+  const collegeName =
+    COLLEGE_OPTIONS.find((c) => c.id === profile?.collegeId)?.name ?? 'your College or Institute';
+  const fill = (text) =>
+    typeof text === 'string' ? text.replaceAll('[College/Institute]', collegeName) : text;
+
   function toggleComplete() {
     setStatuses((prev) => ({
       ...prev,
@@ -73,7 +80,7 @@ export function TaskDetailScreen({ taskId }) {
     }));
   }
 
-  const intro = detail.intro ?? task.shortDescription;
+  const intro = fill(detail.intro ?? task.shortDescription);
 
   return (
     <article className="flex flex-col gap-8">
@@ -94,10 +101,10 @@ export function TaskDetailScreen({ taskId }) {
           </h2>
           {(section.paragraphs ?? (section.body ? [section.body] : [])).map((paragraph) => (
             <p key={paragraph} className="text-step-0 text-ual-dark">
-              <RichText text={paragraph} />
+              <RichText text={fill(paragraph)} />
             </p>
           ))}
-          {section.lead && <p className="text-step-0 text-ual-dark">{section.lead}</p>}
+          {section.lead && <p className="text-step-0 text-ual-dark">{fill(section.lead)}</p>}
           {section.bullets && (
             <ul className="flex list-disc flex-col gap-2 pl-6 text-step-0 text-ual-dark">
               {section.bullets.map((bullet) => (
@@ -166,7 +173,9 @@ export function TaskDetailScreen({ taskId }) {
         </a>
       )}
 
-      {detail.help && <GetHelpSection intro={detail.help.intro} channels={detail.help.channels} />}
+      {detail.help && (
+        <GetHelpSection intro={fill(detail.help.intro)} channels={detail.help.channels} />
+      )}
     </article>
   );
 }
