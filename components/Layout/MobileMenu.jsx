@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { NAV_ITEMS, MENU_SECONDARY } from './navConfig';
+import { isOnboardingRoute } from '../../utils/isOnboardingRoute';
 import { MenuIcon, CloseIcon } from '../Icon/NavIcons';
 
 /**
@@ -59,6 +60,10 @@ export function MobileMenu() {
     'block px-4 py-3.5 text-step-1 leading-ual-condensed text-ual-light no-underline active:text-ual-orange focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-ual-orange';
   const secondaryClass =
     'block px-4 py-3.5 text-step-0 text-ual-light no-underline active:text-ual-orange focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-ual-orange';
+
+  // No nav during onboarding — the flow is self-contained and shouldn't offer
+  // an escape hatch. Placed after hooks to keep hook order stable.
+  if (isOnboardingRoute(pathname)) return null;
 
   return (
     <div className="md:hidden">
