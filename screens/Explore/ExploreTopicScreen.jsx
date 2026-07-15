@@ -5,7 +5,82 @@ import { useOnboardingProfile } from '../../hooks/useOnboardingProfile';
 import { GetHelpSection } from '../../components/Checklist/GetHelpSection';
 import { RichText } from '../../components/Checklist/RichText';
 import { InterestTile } from '../../components/Dashboard/InterestTile';
+import { Button } from '../../components/Button/Button';
 import { ArrowRightIcon, ExternalLinkIcon } from '../../components/Icon/NavIcons';
+
+/**
+ * One ordered content block within a topic section (paragraph, bullets, an
+ * inline link, a sub-heading, a dark CTA button, or a grid of service cards).
+ *
+ * @param {{ block: object }} props
+ */
+function SectionBlock({ block }) {
+  switch (block.type) {
+    case 'paragraph':
+      return (
+        <p className="max-w-200 text-step-0 text-ual-dark">
+          <RichText text={block.text} />
+        </p>
+      );
+    case 'subHeading':
+      return (
+        <h3 className="mt-2 text-step-1 font-bold tracking-ual-tight text-ual-dark">
+          {block.text}
+        </h3>
+      );
+    case 'bullets':
+      return (
+        <ul className="flex max-w-200 list-disc flex-col gap-2 pl-6 text-step-0 text-ual-dark">
+          {block.items.map((item) => (
+            <li key={item}>{item}</li>
+          ))}
+        </ul>
+      );
+    case 'link': {
+      const external = !block.href.startsWith('/');
+      return (
+        <a
+          href={block.href}
+          target={external ? '_blank' : undefined}
+          rel={external ? 'noreferrer' : undefined}
+          className="w-fit text-step-0 text-ual-dark underline underline-offset-2 hover:text-ual-orange focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ual-orange"
+        >
+          {block.label}
+          {external && <span className="sr-only"> (opens in a new tab)</span>}
+        </a>
+      );
+    }
+    case 'button': {
+      const external = !block.href.startsWith('/');
+      return (
+        <Button
+          variant="solid"
+          weight="normal"
+          href={block.href}
+          className="w-fit"
+          target={external ? '_blank' : undefined}
+          rel={external ? 'noreferrer' : undefined}
+        >
+          {block.label}
+          <ArrowRightIcon aria-hidden="true" />
+          {external && <span className="sr-only"> (opens in a new tab)</span>}
+        </Button>
+      );
+    }
+    case 'cards':
+      return (
+        <ul role="list" className="grid gap-4 sm:grid-cols-2">
+          {block.cards.map((card) => (
+            <li key={card.id}>
+              <InterestTile label={card.label} body={card.body} href={card.href} />
+            </li>
+          ))}
+        </ul>
+      );
+    default:
+      return null;
+  }
+}
 
 /**
  * An Explore topic page (/explore/{id}) — title + intro, then a mix of copy
@@ -39,6 +114,9 @@ export function ExploreTopicScreen({ topicId }) {
               {section.heading}
             </h2>
           )}
+          {section.blocks?.map((block, bi) => (
+            <SectionBlock key={bi} block={block} />
+          ))}
           {section.description && (
             <p className="max-w-200 text-step-0 text-ual-dark">{section.description}</p>
           )}

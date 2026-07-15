@@ -94,7 +94,7 @@ export const EXPLORE_LANDING = [
         id: 'your-health-wellbeing',
         label: 'Your Health and wellbeing',
         body: 'Look after your health and wellbeing while studying.',
-        href: WELLBEING_URL,
+        href: '/explore/health-and-wellbeing',
       },
       {
         id: 'disability-support',
@@ -245,47 +245,122 @@ export const EXPLORE_TOPICS = [
   },
   {
     id: 'health-and-wellbeing',
-    title: 'Health and wellbeing',
+    title: 'Your Health and wellbeing',
     intro:
       'Looking after your health and wellbeing is an important part of student life. Our support teams and community are here to help.',
     sections: [
       {
-        cards: [
+        heading: 'Your health',
+        blocks: [
           {
-            id: 'your-health-wellbeing',
-            label: 'Your Health and wellbeing',
-            body: 'Look after your health and wellbeing while studying.',
-            href: WELLBEING_URL,
+            type: 'paragraph',
+            text: 'Looking after your physical health is an important part of making the most of your time at university.',
           },
           {
-            id: 'disability-support',
-            label: 'Disability support',
-            body: 'Professional advice and support for students who are disabled and neurodivergent.',
-            href: DISABILITY_URL,
+            type: 'cards',
+            cards: [
+              {
+                id: 'health-advice',
+                label: 'Health advice',
+                body: 'Explore our health advice, and get support.',
+                href: COUNSELLING_URL,
+              },
+            ],
+          },
+        ],
+      },
+      {
+        heading: 'Register with a doctor',
+        blocks: [
+          {
+            type: 'paragraph',
+            text: 'We recommend registering with a doctor (GP) near your new home so you can access medical care easily if needed.',
+          },
+          { type: 'paragraph', text: 'Free NHS treatment is accessible to:' },
+          {
+            type: 'bullets',
+            items: [
+              'All UK students',
+              'EU and International students on a full-time course lasting more than 6 months',
+            ],
           },
           {
-            id: 'language-support',
-            label: 'Language support',
-            body: 'English language support for those who speak it as a second language.',
-            href: LANGUAGE_URL,
-            internationalOnly: true,
+            type: 'paragraph',
+            text: 'You may need to pay for prescriptions, dental treatment and eye care.',
+          },
+          { type: 'link', label: 'Check out our other health advice.', href: COUNSELLING_URL },
+          { type: 'subHeading', text: 'How to register' },
+          {
+            type: 'bullets',
+            items: [
+              'Find your nearest doctors using the button below',
+              'Browse your options on the NHS website',
+              'Fill in the registration form on the website',
+            ],
           },
           {
-            id: 'counselling-chaplaincy',
-            label: 'Counselling, Health Advice and Chaplaincy',
-            body: 'Access support for mental health, health concerns and faith and spiritual support.',
-            href: COUNSELLING_URL,
+            type: 'button',
+            label: 'Find your nearest doctor',
+            href: 'https://www.nhs.uk/service-search/find-a-gp',
+          },
+        ],
+      },
+      {
+        heading: 'Get wellbeing support',
+        blocks: [
+          {
+            type: 'paragraph',
+            text: "Life at university can be challenging. We're here to support you in all areas of your student life.",
           },
           {
-            id: 'mental-health-advice',
-            label: 'Mental health advice',
-            body: 'Get support from Mental Health Advisers with the impact of your mental health difficulties.',
-            href: COUNSELLING_URL,
+            type: 'paragraph',
+            text: "If you're struggling or need support, explore our drop-in advice sessions, online resources, counselling services and group workshops.",
+          },
+          {
+            type: 'cards',
+            cards: [
+              {
+                id: 'wellbeing-hub',
+                label: 'Visit the Wellbeing hub',
+                body: 'Find the advice and support you need to look after your health and wellbeing while studying.',
+                href: WELLBEING_URL,
+              },
+            ],
+          },
+          { type: 'subHeading', text: 'Explore additional wellbeing services' },
+          {
+            type: 'cards',
+            cards: [
+              {
+                id: 'counselling-chaplaincy',
+                label: 'Counselling, Health Advice and Chaplaincy',
+                body: 'Access support for mental health, health concerns and faith and spiritual support.',
+                href: COUNSELLING_URL,
+              },
+              {
+                id: 'mental-health-advice',
+                label: 'Mental health advice',
+                body: 'Get support from Mental Health Advisers with the impact of your mental health difficulties.',
+                href: COUNSELLING_URL,
+              },
+              {
+                id: 'disability-support',
+                label: 'Disability support',
+                body: 'Professional advice and support for students who are disabled and neurodivergent.',
+                href: DISABILITY_URL,
+              },
+              {
+                id: 'language-support',
+                label: 'Language support',
+                body: 'English language support for those who speak it as a second language.',
+                href: LANGUAGE_URL,
+                internationalOnly: true,
+              },
+            ],
           },
         ],
       },
     ],
-    readMore: { label: 'Visit the Wellbeing Hub', href: WELLBEING_URL },
   },
   {
     id: 'student-life',
@@ -367,16 +442,21 @@ export const EXPLORE_TOPICS = [
  * @returns {TopicSection[]}
  */
 export function visibleTopicSections(topic, studentType, studentStatus = 'new') {
+  const international = studentType === 'international';
+  const keepCard = (c) => !c.internationalOnly || international;
   return topic.sections
     .filter((s) => !s.statuses || s.statuses.includes(studentStatus))
-    .map((s) =>
-      s.cards
-        ? {
-            ...s,
-            cards: s.cards.filter((c) => !c.internationalOnly || studentType === 'international'),
-          }
-        : s,
-    );
+    .map((s) => {
+      if (s.blocks) {
+        return {
+          ...s,
+          blocks: s.blocks.map((b) =>
+            b.type === 'cards' ? { ...b, cards: b.cards.filter(keepCard) } : b,
+          ),
+        };
+      }
+      return s.cards ? { ...s, cards: s.cards.filter(keepCard) } : s;
+    });
 }
 
 /**
