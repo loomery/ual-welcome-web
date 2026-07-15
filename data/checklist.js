@@ -384,6 +384,17 @@ export const TASKS = [
         'Your timetable will be published at the end of August. We’ll email you when it’s ready to view.',
       sections: [
         {
+          heading: 'Term dates',
+          paragraphs: [
+            'Term dates and the start of your course vary depending on your level of study. Take a look at UAL [standard term dates](https://www.arts.ac.uk/students/academic-support/term-dates).',
+          ],
+          lead: 'Make sure you know when your first session or course induction is.',
+          bullets: [
+            'Check your UAL email to see if we’ve contacted you about any events for your course',
+            'Check your timetable to see when your first class is.',
+          ],
+        },
+        {
           heading: 'Access your timetable',
           body: 'You can see your current timetable online in a variety of ways: choose what works for you.',
           link: {
