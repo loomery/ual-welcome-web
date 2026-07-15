@@ -54,6 +54,7 @@
  * @property {string} id
  * @property {string} label
  * @property {string} [href]         External destination (adds the external-link icon).
+ * @property {AppLinks} [apps]       App-store download links (iOS / Android).
  * @property {string} [description]
  * @property {string} [lead]         e.g. "What you’ll need to do" above numbered steps.
  * @property {SubTaskStep[]} [steps] Numbered sub-steps.
@@ -86,6 +87,12 @@
 const AUTHENTICATOR_APPS = {
   apple: 'https://apps.apple.com/app/microsoft-authenticator/id983156458',
   android: 'https://play.google.com/store/apps/details?id=com.azure.authenticator',
+};
+
+// TODO(UAL): confirm the canonical SEAtS app store links.
+const SEATS_APPS = {
+  apple: 'https://apps.apple.com/gb/app/seats-mobile/id1073579321',
+  android: 'https://play.google.com/store/apps/details?id=com.seats.mobile',
 };
 
 const MICROSOFT_SIGNIN = 'https://www.office.com';
@@ -288,6 +295,42 @@ export const TASKS = [
       'There are multiple accounts you need during your term. Activate them before you start.',
     // TODO(UAL): replace with the canonical digital-accounts URL.
     cta: { label: 'Get started', href: 'https://www.arts.ac.uk/students/it-services' },
+    detail: {
+      intro:
+        'There are multiple accounts you need during your term. Activate them before you start.',
+      subTasks: {
+        title: 'Accounts to set up',
+        items: [
+          {
+            id: 'student-portal',
+            label: 'Student portal',
+            description:
+              'Get the latest UAL news, timetable and access available online resources.',
+            href: 'https://ualportal.arts.ac.uk/urd/sits.urd/run/siw_lgn',
+          },
+          {
+            id: 'moodle',
+            label: 'Moodle',
+            description:
+              'Moodle is your virtual learning environment, it has course materials, assignments, announcements.',
+            note: 'Available after you have fully enrolled',
+            href: 'https://moodle.arts.ac.uk/login/index.php',
+          },
+          {
+            id: 'seats',
+            label: 'Download your SEAtS app',
+            description:
+              'You will need to mark your own attendance to sessions using the SEAtS mobile phone app once you start.',
+            apps: SEATS_APPS,
+          },
+        ],
+      },
+      help: {
+        intro:
+          'If you have problems logging in to your UAL email and network account, contact IT Services for help. They are available 24/7, 365 days a year.',
+        channels: IT_HELP_CHANNELS,
+      },
+    },
   },
   {
     id: 'enrol-returning',

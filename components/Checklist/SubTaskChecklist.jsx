@@ -3,6 +3,7 @@
 import { usePersistedState } from '../../hooks/usePersistedState';
 import { ArrowRightIcon, ExternalLinkIcon, InfoIcon } from '../Icon/NavIcons';
 import { RichText } from './RichText';
+import { TaskAction } from './TaskAction';
 import { TaskCheckbox } from './TaskCheckbox';
 
 const SUBTASK_KEY = 'ual:subtask:status:v1';
@@ -97,6 +98,8 @@ export function SubTaskChecklist({ taskId, subTasks }) {
                     <RichText text={item.description} />
                   </p>
                 )}
+
+                {item.apps && <TaskAction apps={item.apps} />}
 
                 {item.lead && <p className="max-w-200 text-step-0 text-ual-dark">{item.lead}</p>}
 
