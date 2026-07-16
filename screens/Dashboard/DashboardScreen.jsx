@@ -255,7 +255,7 @@ export function DashboardScreen() {
       <section className="space-y-6" aria-labelledby="home-whats-on">
         <h2 id="home-whats-on">What&apos;s on</h2>
         <ul
-          className="-mx-(--grid-gutter) flex snap-x snap-mandatory list-none gap-6 overflow-x-auto px-(--grid-gutter) pb-2 md:mx-0 md:px-0"
+          className="-mx-(--grid-gutter) flex snap-x snap-mandatory scroll-px-(--grid-gutter) list-none gap-6 overflow-x-auto px-(--grid-gutter) pb-2 md:mx-0 md:scroll-px-0 md:px-0"
           role="list"
         >
           {upcoming.map((event) => (
