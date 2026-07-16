@@ -191,52 +191,6 @@ export const INFO_PAGES = [
     ],
   },
   {
-    slug: 'local-doctor',
-    title: 'Get set up with a local doctor',
-    blocks: [
-      {
-        type: 'prose',
-        heading: 'About',
-        body: [
-          'Local doctors, also known as a GP (general practice), provide access to healthcare, routine prescriptions and emergency support.',
-        ],
-      },
-      {
-        type: 'prose',
-        heading: 'Who should register',
-        body: [
-          'Free NHS treatment is accessible to all UK students, and to EU and international students on a full-time course lasting more than 6 months.',
-        ],
-      },
-      {
-        type: 'prose',
-        heading: 'When to register',
-        body: [
-          'At the beginning of your studies, even if you are already registered elsewhere in the UK.',
-        ],
-      },
-      {
-        type: 'list',
-        heading: 'Times when payment is due',
-        items: ['Prescriptions and medication', 'Dental treatment', 'Optical services'],
-      },
-      {
-        type: 'list',
-        heading: 'How to register',
-        ordered: true,
-        items: [
-          'Find your nearest doctor using the button below.',
-          'Browse your options on the NHS website.',
-          'Fill in the registration form on the NHS website.',
-        ],
-        cta: {
-          label: 'Find your nearest doctor',
-          href: 'https://www.nhs.uk/service-search/find-a-gp',
-        },
-      },
-    ],
-  },
-  {
     slug: 'safety-at-ual',
     title: 'Safety at UAL',
     blocks: [
