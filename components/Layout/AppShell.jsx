@@ -14,9 +14,9 @@ import { Breadcrumbs } from '../Breadcrumbs/Breadcrumbs';
 
 /**
  * App shell. On desktop the greeting/college hero is a static black block at
- * the top of the left sidebar column (sticky beneath the top bar); the main
- * content sits beside it in the right column. On mobile the hero is a
- * full-width band above the content that scrolls away.
+ * the top of the left sidebar column that scrolls away (the nav below it is
+ * sticky); the main content sits beside it in the right column. On mobile the
+ * hero is a full-width band above the content that scrolls away.
  *
  * @param {Object} props
  * @param {import('react').ReactNode} props.children

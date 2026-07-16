@@ -10,8 +10,9 @@ import { isFocusedRoute } from '../../utils/isFocusedRoute';
  * Greeting + college hero — a static black band.
  *
  *  - Mobile: a full-width band at the top of the page that scrolls away.
- *  - Desktop: a fixed-width block at the top of the left sidebar column,
- *    sticky beneath the top bar. No width/size animation.
+ *  - Desktop: a static fixed-width block at the top of the left sidebar
+ *    column that scrolls away (the sticky nav below it pins under the top
+ *    bar). No width/size animation.
  *
  * The college name is the page `<h1>` on the home route; a `<p>` elsewhere.
  * Hidden on focused routes (onboarding).
@@ -34,7 +35,7 @@ export function AppHero() {
   const Title = isHome ? 'h1' : 'p';
   return (
     <section
-      className="bg-ual-dark text-ual-light md:sticky md:top-12 md:z-20 md:h-44 md:overflow-hidden"
+      className="bg-ual-dark text-ual-light md:h-44 md:overflow-hidden"
       aria-labelledby="app-hero-title"
     >
       <div className="flex h-full flex-col justify-center gap-1 px-(--grid-gutter) py-8 md:py-6 md:pl-6">
