@@ -166,7 +166,7 @@ export const STUDYING_TOPICS = [
         ],
       },
       {
-        heading: 'Accessing a library',
+        heading: 'Accessing the libraries',
         paragraphs: [
           'As a UAL student you can access all of our libraries. The libraries have open access and bookable study spaces with computers, photocopying and printing facilities. You can also borrow a laptop and get help from the library staff to develop your research or digital skills.',
         ],

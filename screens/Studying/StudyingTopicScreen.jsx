@@ -35,7 +35,7 @@ export function StudyingTopicScreen({ topicId }) {
       {sections.map((section, i) => (
         <section key={section.heading ?? i} className="flex flex-col gap-4">
           {section.heading && (
-            <h2 className="text-step-3 font-bold tracking-ual-tight text-ual-dark">
+            <h2 className="text-step-2 font-bold tracking-ual-tight text-ual-dark">
               {section.heading}
             </h2>
           )}

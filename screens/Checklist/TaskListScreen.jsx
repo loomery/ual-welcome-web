@@ -74,6 +74,9 @@ export function TaskListScreen() {
 
         {allComplete && (
           <div className="flex flex-col gap-6">
+            <p className="max-w-200 text-step-0 text-ual-dark">
+              Discover the support and study tools waiting for you
+            </p>
             <ul role="list" className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
               {REPEATED_SERVICES.map((service) => (
                 <li key={service.id}>

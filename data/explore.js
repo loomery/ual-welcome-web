@@ -113,7 +113,7 @@ export const EXPLORE_LANDING = [
     link: { label: 'View more services', href: '/explore/health-and-wellbeing' },
   },
   {
-    heading: 'Student life',
+    heading: 'Find your community',
     cards: [
       {
         id: 'arts-su',
