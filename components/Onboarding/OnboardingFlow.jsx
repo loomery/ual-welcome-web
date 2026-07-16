@@ -16,6 +16,9 @@ import { FinishStep } from './steps/FinishStep';
 
 const STEPS = ['intro', 'name', 'college', 'studentType', 'interests', 'finish'];
 
+/** Steps that require a choice, so they don't show a "Skip" button. */
+const UNSKIPPABLE_STEPS = ['college', 'studentType'];
+
 /**
  * Multi-step onboarding flow.
  *
@@ -179,7 +182,7 @@ export function OnboardingFlow() {
             />
           </div>
 
-          {stepId !== 'college' && (
+          {!UNSKIPPABLE_STEPS.includes(stepId) && (
             <button
               type="button"
               onClick={stepId === 'interests' ? () => setSkipDialogOpen(true) : skipStep}

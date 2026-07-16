@@ -320,7 +320,7 @@ export const STUDYING_TOPICS = [
           },
           {
             id: 'student-portal',
-            label: 'Student portal',
+            label: 'UAL Portal',
             body: 'Your student record, enrolment and personal details.',
             href: 'https://ualportal.arts.ac.uk/urd/sits.urd/run/siw_lgn',
           },
