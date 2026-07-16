@@ -144,7 +144,7 @@ export const TASKS = [
     detail: {
       title: 'Pay fees or confirm funding',
       intro:
-        'Before you start your studies, it is important to know how to pay your tuition fees and what sort of funding options might be available.',
+        'Discover opportunities to fund your studies and get advice on your fees and finances.',
       sections: [
         {
           heading: 'Tuition fees',
@@ -156,6 +156,14 @@ export const TASKS = [
         {
           heading: 'How to pay your tuition fees',
           body: 'Find out how to [pay your tuition fees](https://www.arts.ac.uk/study-at-ual/fees-and-funding/how-to-pay-your-fees). You’ll be asked to confirm your funding or pay your fees when you enrol onto your course. Options include direct payments, student loans or through a sponsor via pro-forma invoice.',
+        },
+        {
+          heading: 'Funding and scholarships',
+          body: 'The Student Advice team provides students with information and advice about funding options available to cover tuition fees, living costs and course costs.',
+          link: {
+            label: 'Search for all available scholarships',
+            href: 'https://www.arts.ac.uk/study-at-ual/fees-and-funding/scholarships-search',
+          },
         },
         {
           heading: 'Immigration and visas',
@@ -200,7 +208,7 @@ export const TASKS = [
       sections: [
         {
           heading: 'What your UAL email is for',
-          body: 'Your UAL email is where you’ll receive important updates about your studies, course, and time at UAL, so make sure to check it regularly.',
+          body: 'Your UAL email is where you’ll receive important updates about your studies, course, and time at UAL, so you must check it regularly.',
         },
         {
           heading: 'Getting access',
@@ -314,8 +322,14 @@ export const TASKS = [
             id: 'moodle',
             label: 'Moodle',
             description:
-              'Moodle is your virtual learning environment, it has course materials, assignments, announcements.',
-            note: 'Available after you have fully enrolled',
+              'Moodle is the online home for your course. You’ll use your Moodle dashboard to:',
+            bullets: [
+              'Access course materials',
+              'Take part in activities such as discussions and online seminars',
+              'Submit assessments',
+              'Find important information about your course',
+            ],
+            note: 'Available after you have fully enrolled. You’ll have access to a Course site and individual sites for each of your Units.',
             href: 'https://moodle.arts.ac.uk/login/index.php',
           },
           {
@@ -360,6 +374,11 @@ export const TASKS = [
             id: 'portal-details',
             label: 'Check your details in your UAL Portal',
             href: 'https://ualportal.arts.ac.uk/urd/sits.urd/run/siw_lgn',
+            lead: 'What you’ll need to do',
+            bullets: [
+              'View your personal information and download status letters under ‘My Study Details’.',
+              'Double check your details are up to date. If your contact details or personal information change, please update them as soon as possible.',
+            ],
           },
           {
             id: 'enrolment-form',

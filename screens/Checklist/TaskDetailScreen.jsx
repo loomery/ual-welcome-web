@@ -105,7 +105,7 @@ export function TaskDetailScreen({ taskId }) {
 
       {(detail.sections ?? []).map((section) => (
         <section key={section.heading} className="flex max-w-200 flex-col gap-3">
-          <h2 className="text-step-3 font-bold tracking-ual-tight text-ual-dark">
+          <h2 className="text-step-2 font-bold tracking-ual-tight text-ual-dark">
             {section.heading}
           </h2>
           {(section.paragraphs ?? (section.body ? [section.body] : [])).map((paragraph) => (
