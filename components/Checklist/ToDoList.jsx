@@ -25,11 +25,8 @@ export function ToDoList({ tasks, statuses, onToggle }) {
   const completeCount = tasks.filter(isComplete).length;
   const allComplete = tasks.length > 0 && completeCount === tasks.length;
 
-  // Completed tasks slide to the bottom; order within each group is preserved.
-  const ordered = [...tasks].sort((a, b) => Number(isComplete(a)) - Number(isComplete(b)));
-
   const showCompleted = override ?? !allComplete;
-  const visible = showCompleted ? ordered : ordered.filter((t) => !isComplete(t));
+  const visible = showCompleted ? tasks : tasks.filter((t) => !isComplete(t));
 
   // Once dismissed, the whole card stays hidden while everything is complete.
   if (allComplete && dismissed) return null;
