@@ -125,6 +125,17 @@ export function DashboardScreen() {
 
   return (
     <article className="mx-auto max-w-6xl space-y-12">
+      {/* ── PAGE INTRO ─────────────────────────────────────────────────── */}
+      <header className="space-y-6">
+        <h1 className="text-step-4/ual-condensed font-bold tracking-ual-tight text-ual-dark">
+          Welcome to UAL
+        </h1>
+        <p className="max-w-200 text-step-2 text-ual-dark">
+          There&rsquo;s a lot to learn when starting at university. Let&rsquo;s kick start your
+          journey
+        </p>
+      </header>
+
       {/* ── ESSENTIAL TASKS ────────────────────────────────────────────── */}
       {!(allComplete && tasksDismissed) && (
         <section className="space-y-6" aria-labelledby="home-tasks">
