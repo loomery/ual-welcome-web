@@ -25,10 +25,9 @@ export function SideNav() {
       className={
         isOnboarding
           ? 'hidden'
-          : // Sticky offset clears the fixed header (3rem) + hero (11rem) band
-            // above it — anything smaller and the nav sticks too early and
-            // scrolls in behind the hero, appearing to vanish partway down.
-            'hidden bg-ual-shade md:sticky md:top-56 md:flex md:min-h-[calc(100dvh-14rem)] md:flex-col'
+          : // Sticks just below the fixed header (3rem). The hero above it is
+            // static and scrolls away, so the nav pins under the top bar.
+            'hidden bg-ual-shade md:sticky md:top-12 md:flex md:min-h-[calc(100dvh-3rem)] md:flex-col'
       }
       aria-label="Primary desktop"
     >
