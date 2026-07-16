@@ -179,13 +179,15 @@ export function OnboardingFlow() {
             />
           </div>
 
-          <button
-            type="button"
-            onClick={stepId === 'interests' ? () => setSkipDialogOpen(true) : skipStep}
-            className="cursor-pointer border-0 bg-transparent p-2 text-step-d1 font-ual-bold text-ual-medium underline underline-offset-4 hover:text-ual-orange focus-visible:text-ual-orange focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ual-orange"
-          >
-            Skip
-          </button>
+          {stepId !== 'college' && (
+            <button
+              type="button"
+              onClick={stepId === 'interests' ? () => setSkipDialogOpen(true) : skipStep}
+              className="cursor-pointer border-0 bg-transparent p-2 text-step-d1 font-ual-bold text-ual-medium underline underline-offset-4 hover:text-ual-orange focus-visible:text-ual-orange focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ual-orange"
+            >
+              Skip
+            </button>
+          )}
         </div>
       )}
 
