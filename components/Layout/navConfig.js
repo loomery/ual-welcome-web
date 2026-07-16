@@ -13,7 +13,7 @@
  */
 export const NAV_ITEMS = [
   { to: '/', label: 'Home' },
-  { to: '/checklist', label: 'Essentials' },
+  { to: '/essentials', label: 'Essentials' },
   { to: '/studying', label: 'Studying' },
   { to: '/explore', label: 'Explore' },
   { to: '/help', label: 'Get help' },

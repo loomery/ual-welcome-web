@@ -109,7 +109,7 @@ export const STUDYING_LANDING = [
         id: 'mfa',
         label: 'Multi-factor authentication',
         body: 'Secure your accounts by adding a step to verify your identity on login.',
-        href: '/checklist/mfa',
+        href: '/essentials/mfa',
       },
       {
         id: 'contact-it',
@@ -240,7 +240,7 @@ export const STUDYING_TOPICS = [
         heading: 'Set up multi-factor authentication',
         statuses: ['new'],
         paragraphs: ['Protect your identity, data and our systems'],
-        link: { label: 'Get started with MFA', href: '/checklist/mfa' },
+        link: { label: 'Get started with MFA', href: '/essentials/mfa' },
       },
       {
         heading: 'Wifi',

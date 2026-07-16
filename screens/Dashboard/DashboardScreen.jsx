@@ -26,7 +26,7 @@ import { usePersistedState } from '../../hooks/usePersistedState';
  */
 const INTEREST_HREF = {
   course: '/studying',
-  access: '/checklist',
+  access: '/essentials',
   health: '/help',
   safety: '/help',
   finances: '/help',
@@ -91,12 +91,12 @@ export function DashboardScreen() {
           title: t.title,
           description: t.shortDescription,
           // Open the actual task: its own detail page if it has one, else an
-          // internal cta, else fall back to the checklist.
+          // internal cta, else fall back to the essentials list.
           href: t.detail
-            ? `/checklist/${t.id}`
+            ? `/essentials/${t.id}`
             : t.cta?.href?.startsWith('/')
               ? t.cta.href
-              : '/checklist',
+              : '/essentials',
         })),
     [tasks, taskStatuses],
   );
@@ -149,7 +149,7 @@ export function DashboardScreen() {
                 />
               </div>
               <CompleteBanner
-                onView={() => router.push('/checklist')}
+                onView={() => router.push('/essentials')}
                 onDismiss={() => setTasksDismissed(true)}
               />
             </>
@@ -171,7 +171,7 @@ export function DashboardScreen() {
                 <TaskListCard items={taskItems} />
 
                 <Link
-                  href="/checklist"
+                  href="/essentials"
                   className="inline-flex min-h-11 items-center gap-2 text-step-0 font-ual-normal text-ual-dark underline underline-offset-2 hover:text-ual-orange focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ual-orange [&>svg]:size-6"
                 >
                   View all tasks

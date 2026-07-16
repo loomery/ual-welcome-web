@@ -17,7 +17,7 @@ const INTRO =
   'There’s lots to think about and do as you begin your journey with us at UAL. Here are the key tasks you’ll need to complete to get started.';
 
 /**
- * "Essentials" (/checklist) — the arrival to-do list. A short intro, then the
+ * "Essentials" (/essentials) — the arrival to-do list. A short intro, then the
  * "Arrival essentials" to-do list card (each task has a completion checkbox, a
  * title/chevron linking to its destination, a description and an optional
  * availability note) and a list of "Other important tasks" links.
@@ -103,7 +103,7 @@ export function TaskListScreen() {
             return (
               <li key={task.id}>
                 {task.detail ? (
-                  <Link href={`/checklist/${task.id}`} className={cls}>
+                  <Link href={`/essentials/${task.id}`} className={cls}>
                     {task.label}
                     <ArrowRightIcon aria-hidden="true" />
                   </Link>

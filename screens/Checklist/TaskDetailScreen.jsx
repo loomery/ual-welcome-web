@@ -30,13 +30,13 @@ function detailTask(taskId) {
 
 /** Where the checklist row / "Go to next task" should point for a task. */
 function taskHref(task) {
-  if (!task) return '/checklist';
-  if (task.detail) return `/checklist/${task.id}`;
-  return task.cta?.href?.startsWith('/') ? task.cta.href : '/checklist';
+  if (!task) return '/essentials';
+  if (task.detail) return `/essentials/${task.id}`;
+  return task.cta?.href?.startsWith('/') ? task.cta.href : '/essentials';
 }
 
 /**
- * A single task detail page (/checklist/{id}): tag + title + intro, content
+ * A single task detail page (/essentials/{id}): tag + title + intro, content
  * sections (paragraphs with inline links, bullets, arrow links), an optional
  * sub-checklist ("Accounts to set up" / "Set up steps"), a video-guide link,
  * a "Your progress" control, a dark read-more banner and a "Get help" block.
@@ -56,7 +56,7 @@ export function TaskDetailScreen({ taskId }) {
   useEffect(() => {
     if (!hydrated) return;
     if (!isComplete) router.replace('/onboarding');
-    else if (!task?.detail) router.replace('/checklist');
+    else if (!task?.detail) router.replace('/essentials');
   }, [hydrated, isComplete, task, router]);
 
   if (!hydrated || !isComplete || !task?.detail) return null;

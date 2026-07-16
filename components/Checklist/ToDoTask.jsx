@@ -8,7 +8,7 @@ import { TaskCheckbox } from './TaskCheckbox';
  * task destination), its description and an optional availability note.
  *
  * The checkbox toggles completion in place; the title/chevron navigate to the
- * task's `cta` destination (an internal detail route like /checklist/mfa, or
+ * task's `cta` destination (an internal detail route like /essentials/mfa, or
  * an external UAL page).
  *
  * @param {Object} props
@@ -18,7 +18,7 @@ import { TaskCheckbox } from './TaskCheckbox';
  */
 export function ToDoTask({ task, complete, onToggle }) {
   // Tasks with their own detail page link there; the rest use their cta.
-  const href = task.detail ? `/checklist/${task.id}` : task.cta?.href;
+  const href = task.detail ? `/essentials/${task.id}` : task.cta?.href;
   const isInternal = href?.startsWith('/');
 
   const titleRow = (

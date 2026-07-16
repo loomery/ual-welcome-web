@@ -55,9 +55,9 @@ export function MfaScreen() {
       : undefined;
   const nextTaskHref = nextTask
     ? nextTask.detail
-      ? `/checklist/${nextTask.id}`
+      ? `/essentials/${nextTask.id}`
       : nextTask.cta.href
-    : '/checklist';
+    : '/essentials';
 
   function toggleComplete() {
     setStatuses((prev) => ({ ...prev, mfa: prev.mfa === 'complete' ? 'in-progress' : 'complete' }));
