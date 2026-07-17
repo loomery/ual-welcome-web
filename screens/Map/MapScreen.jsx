@@ -193,7 +193,7 @@ export function MapScreen() {
                     >
                       <span
                         className={[
-                          'aspect-4/3 w-20 shrink-0 overflow-hidden bg-white',
+                          'aspect-4/3 w-20 shrink-0 overflow-hidden bg-ual-light',
                           selected ? 'outline-2 outline-ual-dark' : 'opacity-70',
                         ].join(' ')}
                       >
@@ -216,7 +216,7 @@ export function MapScreen() {
             type="button"
             onClick={() => setLightboxOpen(true)}
             aria-label={`Expand ${activeLabel} plan`}
-            className="aspect-3/4 w-full shrink-0 cursor-zoom-in overflow-hidden bg-white p-4 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ual-orange md:aspect-3/2 md:flex-1"
+            className="aspect-3/4 w-full shrink-0 cursor-zoom-in overflow-hidden bg-ual-light p-4 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ual-orange md:aspect-3/2 md:flex-1"
           >
             <PlanGraphic
               plan={activePlanData}
@@ -322,7 +322,7 @@ export function MapScreen() {
             <CloseIcon aria-hidden="true" width={22} height={22} />
           </button>
           <div
-            className="max-h-full w-full max-w-grid bg-white p-4"
+            className="max-h-full w-full max-w-grid bg-ual-light p-4"
             onClick={(e) => e.stopPropagation()}
           >
             <PlanGraphic

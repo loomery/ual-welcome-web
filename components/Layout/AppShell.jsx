@@ -46,7 +46,7 @@ export function AppShell({ children }) {
             // White content canvas at every width so the grey (shade) cards and
             // dividers read as distinct surfaces (matches Figma); onboarding
             // ("focused") keeps a transparent canvas.
-            focused ? 'md:bg-transparent md:py-10' : 'bg-white md:py-12',
+            focused ? 'md:bg-transparent md:py-10' : 'bg-ual-light md:py-12',
           ]
             .filter(Boolean)
             .join(' ')}
