@@ -78,24 +78,27 @@ export function DashboardScreen() {
   const allComplete = tasks.length > 0 && completeCount === tasks.length;
 
   // Surface the first few incomplete tasks; each "View task" keeps the student
-  // in-app (its own internal route, else the checklist) and is numbered by its
-  // running position in the visible list.
+  // in-app (its own internal route, else the checklist). The number is the
+  // task's fixed position in the full list, assigned before filtering, so
+  // completing a task never renumbers the ones below it (e.g. "Enrol" stays
+  // number 3 rather than being promoted to 1).
   const taskItems = useMemo(
     () =>
       tasks
-        .filter((t) => taskStatuses[t.id] !== 'complete')
+        .map((t, i) => ({ task: t, number: i + 1 }))
+        .filter(({ task }) => taskStatuses[task.id] !== 'complete')
         .slice(0, HOME_TASKS)
-        .map((t, i) => ({
-          id: t.id,
-          number: i + 1,
-          title: t.title,
-          description: t.shortDescription,
+        .map(({ task, number }) => ({
+          id: task.id,
+          number,
+          title: task.title,
+          description: task.shortDescription,
           // Open the actual task: its own detail page if it has one, else an
           // internal cta, else fall back to the essentials list.
-          href: t.detail
-            ? `/essentials/${t.id}`
-            : t.cta?.href?.startsWith('/')
-              ? t.cta.href
+          href: task.detail
+            ? `/essentials/${task.id}`
+            : task.cta?.href?.startsWith('/')
+              ? task.cta.href
               : '/essentials',
         })),
     [tasks, taskStatuses],
