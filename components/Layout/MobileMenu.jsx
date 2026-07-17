@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { NAV_ITEMS, MENU_SECONDARY } from './navConfig';
+import { isOnboardingRoute } from '../../utils/isOnboardingRoute';
 import { MenuIcon, CloseIcon } from '../Icon/NavIcons';
 
 /**
@@ -59,6 +60,10 @@ export function MobileMenu() {
     'block px-4 py-3.5 text-step-1 leading-ual-condensed text-ual-light no-underline active:text-ual-orange focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-ual-orange';
   const secondaryClass =
     'block px-4 py-3.5 text-step-0 text-ual-light no-underline active:text-ual-orange focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-ual-orange';
+
+  // No nav during onboarding — the flow is self-contained and shouldn't offer
+  // an escape hatch. Placed after hooks to keep hook order stable.
+  if (isOnboardingRoute(pathname)) return null;
 
   return (
     <div className="md:hidden">
@@ -130,19 +135,25 @@ export function MobileMenu() {
 
           <ul role="list" className="flex flex-col gap-1 pb-6">
             {MENU_SECONDARY.map((item) => {
-              const isExternal = item.href.startsWith('http');
+              const isExternal = Boolean(item.href);
               return (
                 <li key={item.label}>
-                  <a
-                    href={item.href}
-                    onClick={() => setOpen(false)}
-                    target={isExternal ? '_blank' : undefined}
-                    rel={isExternal ? 'noreferrer' : undefined}
-                    className={secondaryClass}
-                  >
-                    {item.label}
-                    {isExternal && <span className="sr-only"> (opens in a new tab)</span>}
-                  </a>
+                  {isExternal ? (
+                    <a
+                      href={item.href}
+                      onClick={() => setOpen(false)}
+                      target="_blank"
+                      rel="noreferrer"
+                      className={secondaryClass}
+                    >
+                      {item.label}
+                      <span className="sr-only"> (opens in a new tab)</span>
+                    </a>
+                  ) : (
+                    <Link href={item.to} onClick={() => setOpen(false)} className={secondaryClass}>
+                      {item.label}
+                    </Link>
+                  )}
                 </li>
               );
             })}

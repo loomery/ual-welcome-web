@@ -22,13 +22,14 @@ export function SideNav() {
 
   return (
     <nav
+      id="primary-nav"
+      tabIndex={-1}
       className={
         isOnboarding
           ? 'hidden'
-          : // Sticky offset clears the fixed header (3rem) + hero (11rem) band
-            // above it — anything smaller and the nav sticks too early and
-            // scrolls in behind the hero, appearing to vanish partway down.
-            'hidden bg-ual-shade md:sticky md:top-56 md:flex md:min-h-[calc(100dvh-14rem)] md:flex-col'
+          : // Sticks just below the fixed header (3rem). The hero above it is
+            // static and scrolls away, so the nav pins under the top bar.
+            'hidden bg-ual-shade md:sticky md:top-12 md:flex md:min-h-[calc(100dvh-3rem)] md:flex-col'
       }
       aria-label="Primary desktop"
     >
@@ -66,23 +67,22 @@ export function SideNav() {
 
       <ul className="m-0 flex list-none flex-col gap-1 px-0 py-6" role="list">
         {MENU_SECONDARY.map((item) => {
-          const isExternal = item.href.startsWith('http');
+          const isExternal = Boolean(item.href);
+          const linkClass =
+            'flex min-h-11 flex-1 items-center gap-2 px-6 py-2 text-step-d1 text-ual-dark no-underline transition-[color] duration-100 hover:text-ual-orange focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-ual-orange';
           return (
             <li className="flex" key={item.label}>
-              <a
-                href={item.href}
-                target={isExternal ? '_blank' : undefined}
-                rel={isExternal ? 'noreferrer' : undefined}
-                className="flex min-h-11 flex-1 items-center gap-2 px-6 py-2 text-step-d1 text-ual-dark no-underline transition-[color] duration-100 hover:text-ual-orange focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-ual-orange"
-              >
-                <span>{item.label}</span>
-                {isExternal && (
-                  <>
-                    <ExternalLinkIcon aria-hidden="true" width={16} height={16} />
-                    <span className="sr-only"> (opens in a new tab)</span>
-                  </>
-                )}
-              </a>
+              {isExternal ? (
+                <a href={item.href} target="_blank" rel="noreferrer" className={linkClass}>
+                  <span>{item.label}</span>
+                  <ExternalLinkIcon aria-hidden="true" width={16} height={16} />
+                  <span className="sr-only"> (opens in a new tab)</span>
+                </a>
+              ) : (
+                <Link href={item.to} className={linkClass}>
+                  <span>{item.label}</span>
+                </Link>
+              )}
             </li>
           );
         })}

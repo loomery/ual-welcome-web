@@ -5,7 +5,6 @@
  *
  * @typedef {'new' | 'returning'} StudentStatus
  * @typedef {'domestic' | 'international'} StudentType
- * @typedef {'not_started' | 'having_issues' | 'waiting' | 'received'} VisaStatus
  *
  * @typedef {Object} CollegeOption
  * @property {string} id        Matches data/buildings.js → Building.id
@@ -23,15 +22,11 @@
  * @property {string} label
  * @property {string} hint
  *
- * @typedef {Object} VisaStatusOption
- * @property {VisaStatus} id
- * @property {string} label
- * @property {string} hint
- *
  * @typedef {Object} InterestOption
  * @property {string} id
  * @property {string} label
  * @property {string} body           One-liner that explains what they'll see if they pick this
+ * @property {boolean} [internationalOnly]  Only offered to international students.
  */
 
 /** @type {CollegeOption[]} */
@@ -104,22 +99,14 @@ export const STUDENT_STATUS_OPTIONS = [
 export const STUDENT_TYPE_OPTIONS = [
   {
     id: 'domestic',
-    label: 'UK / Domestic',
-    hint: 'Already living in the UK before studying at UAL',
+    label: 'UK home student',
+    hint: 'Paying home student tuition fees',
   },
-  { id: 'international', label: 'International', hint: 'Moving to the UK to study at UAL' },
-];
-
-/** @type {VisaStatusOption[]} — shown only to international students. */
-export const VISA_STATUS_OPTIONS = [
-  { id: 'not_started', label: "No, I haven't started yet", hint: "We'll help you get started" },
-  { id: 'having_issues', label: "No, I'm having issues", hint: "We'll connect you with support" },
   {
-    id: 'waiting',
-    label: 'Yes, waiting for confirmation',
-    hint: "Hang tight — we'll keep you informed",
+    id: 'international',
+    label: 'International student',
+    hint: 'Paying international student fees',
   },
-  { id: 'received', label: "Yes, I've received it", hint: "You're all set on the visa front" },
 ];
 
 /**
@@ -160,4 +147,21 @@ export const INTEREST_OPTIONS = [
     label: 'Finances',
     body: 'Tuition fees, bank accounts, financial support and student discounts',
   },
+  {
+    id: 'moving-uk',
+    label: 'Moving to the UK',
+    body: 'Settling into the UK — visas, banking, healthcare and British life',
+    internationalOnly: true,
+  },
 ];
+
+/**
+ * Interest options offered to a given student type. The "Moving to the UK"
+ * topic is only relevant to — and only shown to — international students.
+ *
+ * @param {string} [studentType]  'domestic' | 'international'
+ * @returns {InterestOption[]}
+ */
+export function visibleInterestOptions(studentType) {
+  return INTEREST_OPTIONS.filter((o) => !o.internationalOnly || studentType === 'international');
+}

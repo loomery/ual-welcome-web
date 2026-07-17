@@ -3,20 +3,23 @@
 import { usePersistedState } from '../../hooks/usePersistedState';
 import { ArrowRightIcon, ExternalLinkIcon, InfoIcon } from '../Icon/NavIcons';
 import { RichText } from './RichText';
+import { TaskAction } from './TaskAction';
 import { TaskCheckbox } from './TaskCheckbox';
 
 const SUBTASK_KEY = 'ual:subtask:status:v1';
 
 /**
- * SubTaskChecklist — the smaller to-do list inside a task detail page (e.g.
- * "Accounts to set up" on the enrol page). Same bordered-row look as the main
- * to-do list; each item has a completion checkbox persisted per task.
+ * SubTaskChecklist — the smaller list inside a task detail page. By default a
+ * tick-off checklist ("Accounts to set up") with per-item completion; when
+ * `subTasks.ordered` is set it renders as a plain numbered how-to list (no
+ * checkboxes, no progress count), e.g. the "Set up steps" on the doctor task.
  *
  * @param {Object} props
  * @param {string} props.taskId
  * @param {import('../../data/checklist').SubTaskList} props.subTasks
  */
 export function SubTaskChecklist({ taskId, subTasks }) {
+  const ordered = Boolean(subTasks.ordered);
   const [statuses, setStatuses] = usePersistedState(
     SUBTASK_KEY,
     /** @type {Record<string, boolean>} */ ({}),
@@ -29,35 +32,48 @@ export function SubTaskChecklist({ taskId, subTasks }) {
     setStatuses((prev) => ({ ...prev, [key(id)]: !prev[key(id)] }));
   }
 
+  const ListTag = ordered ? 'ol' : 'ul';
+
   return (
     <div className="flex w-full max-w-197.25 flex-col gap-4">
       <h3 className="text-step-2 font-ual-normal tracking-ual-tight text-ual-dark">
         {subTasks.title}
       </h3>
-      <p className="text-step-0 text-ual-dark">
-        {completeCount} of {subTasks.items.length} complete
-      </p>
+      {!ordered && (
+        <p className="text-step-0 text-ual-dark">
+          {completeCount} of {subTasks.items.length} complete
+        </p>
+      )}
 
       {/* No role="list": the global [role='list'] li reset would strip the
           markers off the nested step/bullet lists inside each row. */}
-      <ul className="m-0 flex list-none flex-col divide-y divide-ual-dark/10 border-y border-ual-dark/20 p-0">
-        {subTasks.items.map((item) => {
-          const done = Boolean(statuses[key(item.id)]);
+      <ListTag className="m-0 flex list-none flex-col divide-y divide-ual-dark/10 border-y border-ual-dark/20 p-0">
+        {subTasks.items.map((item, i) => {
+          const done = !ordered && Boolean(statuses[key(item.id)]);
           return (
             <li key={item.id} className="flex items-start gap-4 p-4">
-              <button
-                type="button"
-                onClick={() => toggle(item.id)}
-                aria-pressed={done}
-                aria-label={
-                  done
-                    ? `${item.label} — complete, click to undo`
-                    : `Mark "${item.label}" as complete`
-                }
-                className="mt-1 shrink-0 cursor-pointer border-0 bg-transparent p-0 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ual-orange"
-              >
-                <TaskCheckbox complete={done} size={24} />
-              </button>
+              {ordered ? (
+                <span
+                  aria-hidden="true"
+                  className="mt-1 shrink-0 text-step-1 font-ual-bold text-ual-dark"
+                >
+                  {i + 1}.
+                </span>
+              ) : (
+                <button
+                  type="button"
+                  onClick={() => toggle(item.id)}
+                  aria-pressed={done}
+                  aria-label={
+                    done
+                      ? `${item.label} — complete, click to undo`
+                      : `Mark "${item.label}" as complete`
+                  }
+                  className="mt-1 shrink-0 cursor-pointer border-0 bg-transparent p-0 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ual-orange"
+                >
+                  <TaskCheckbox complete={done} size={24} />
+                </button>
+              )}
 
               <div className="flex min-w-0 flex-1 flex-col gap-3">
                 {item.href ? (
@@ -82,6 +98,8 @@ export function SubTaskChecklist({ taskId, subTasks }) {
                     <RichText text={item.description} />
                   </p>
                 )}
+
+                {item.apps && <TaskAction apps={item.apps} />}
 
                 {item.lead && <p className="max-w-200 text-step-0 text-ual-dark">{item.lead}</p>}
 
@@ -133,7 +151,7 @@ export function SubTaskChecklist({ taskId, subTasks }) {
             </li>
           );
         })}
-      </ul>
+      </ListTag>
     </div>
   );
 }

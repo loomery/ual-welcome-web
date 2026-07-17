@@ -1,37 +1,32 @@
 'use client';
 
 import { useState } from 'react';
-import { usePersistedState } from '../../hooks/usePersistedState';
 import { CompleteBanner } from '../Dashboard/CompleteBanner';
 import { ToDoTask } from './ToDoTask';
 
-// Shared with the home dashboard banner: one "I've finished, stop showing me
-// the completed list" preference, derived alongside the task statuses.
-const DISMISS_KEY = 'ual:tasks-complete-dismissed:v1';
-
 /**
- * The Essentials "To do list" card.
+ * The Essentials "To do list" card. Dismissal is controlled by the parent
+ * (TaskListScreen), which drops the surrounding section once complete and
+ * dismissed — so this component never renders in that state.
  *
  * @param {Object} props
  * @param {import('../../data/checklist').Task[]} props.tasks
  * @param {Record<string, import('../../data/checklist').TaskStatus>} props.statuses
  * @param {(id: string) => void} props.onToggle
+ * @param {boolean} props.dismissed
+ * @param {() => void} props.onDismiss
  */
-export function ToDoList({ tasks, statuses, onToggle }) {
+export function ToDoList({ tasks, statuses, onToggle, dismissed, onDismiss }) {
   const [override, setOverride] = useState(/** @type {boolean | null} */ (null));
-  const [dismissed, setDismissed] = usePersistedState(DISMISS_KEY, false);
 
   const isComplete = (t) => statuses[t.id] === 'complete';
   const completeCount = tasks.filter(isComplete).length;
   const allComplete = tasks.length > 0 && completeCount === tasks.length;
 
-  // Completed tasks slide to the bottom; order within each group is preserved.
-  const ordered = [...tasks].sort((a, b) => Number(isComplete(a)) - Number(isComplete(b)));
-
   const showCompleted = override ?? !allComplete;
-  const visible = showCompleted ? ordered : ordered.filter((t) => !isComplete(t));
+  const visible = showCompleted ? tasks : tasks.filter((t) => !isComplete(t));
 
-  // Once dismissed, the whole card stays hidden while everything is complete.
+  // Belt-and-braces: the parent already hides the section in this state.
   if (allComplete && dismissed) return null;
 
   const collapsedComplete = allComplete && !showCompleted;
@@ -44,7 +39,7 @@ export function ToDoList({ tasks, statuses, onToggle }) {
       </p>
 
       {collapsedComplete ? (
-        <CompleteBanner onView={() => setOverride(true)} onDismiss={() => setDismissed(true)} />
+        <CompleteBanner onView={() => setOverride(true)} onDismiss={onDismiss} />
       ) : (
         <>
           <ul

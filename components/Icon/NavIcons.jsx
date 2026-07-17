@@ -64,45 +64,6 @@ export function WarningIcon(props) {
   );
 }
 
-export function PinIcon(props) {
-  return (
-    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
-      <path
-        d="M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21Z"
-        stroke="currentColor"
-        strokeWidth={1.6}
-        strokeLinejoin="round"
-      />
-      <circle cx="12" cy="9.5" r="2.3" stroke="currentColor" strokeWidth={1.6} />
-    </svg>
-  );
-}
-
-/**
- * Heart icon — used as the "save this event" toggle on EventCard and
- * as the "Saved" filter affordance in EventsScreen.
- *
- * `filled` swaps the rendering from outline-only to a solid fill. We do
- * the visual swap inside the SVG (rather than two separate components)
- * so the surrounding button can animate `filled` purely via state.
- *
- * @param {Object} props
- * @param {boolean} [props.filled]
- */
-export function HeartIcon({ filled, ...props }) {
-  return (
-    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
-      <path
-        d="M12 20.4 4.6 13a4.6 4.6 0 1 1 6.5-6.5L12 7.4l.9-.9A4.6 4.6 0 1 1 19.4 13L12 20.4Z"
-        stroke="currentColor"
-        strokeWidth={1.6}
-        strokeLinejoin="round"
-        fill={filled ? 'currentColor' : 'none'}
-      />
-    </svg>
-  );
-}
-
 export function ArrowRightIcon(props) {
   return (
     <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
@@ -229,6 +190,29 @@ export function CheckCircleOutlineIcon(props) {
         strokeLinecap="round"
         strokeLinejoin="round"
       />
+    </svg>
+  );
+}
+
+/** National Rail — the double-arrow symbol on a solid disc. */
+export function NationalRailIcon(props) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
+      <circle cx="12" cy="12" r="12" fill="currentColor" />
+      <g fill="#fff">
+        <path d="M18.6 8.6H8.1L5.2 5.9H2.6l3.9 3.9h12.1z" />
+        <path d="M5.4 15.4h10.5l2.9 2.7h2.6l-3.9-3.9H5.4z" />
+      </g>
+    </svg>
+  );
+}
+
+/** Transport for London — the Underground roundel (ring + bar). */
+export function UndergroundIcon(props) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" {...props}>
+      <circle cx="12" cy="12" r="8.4" stroke="currentColor" strokeWidth={3.2} />
+      <rect x="1.5" y="10" width="21" height="4" fill="currentColor" />
     </svg>
   );
 }

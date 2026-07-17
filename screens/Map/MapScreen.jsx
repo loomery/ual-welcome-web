@@ -4,7 +4,14 @@ import { useEffect, useMemo, useState } from 'react';
 import { BUILDINGS } from '../../data/buildings';
 import { directionsUrl } from '../../utils/directions';
 import { useOnboardingProfile } from '../../hooks/useOnboardingProfile';
-import { ChevronDownIcon, CloseIcon } from '../../components/Icon/NavIcons';
+import {
+  ArrowRightIcon,
+  ChevronDownIcon,
+  CloseIcon,
+  ExternalLinkIcon,
+  NationalRailIcon,
+  UndergroundIcon,
+} from '../../components/Icon/NavIcons';
 import { asset } from '../../utils/asset';
 
 /** Placeholder floor plans shown for colleges without real plans yet. */
@@ -59,9 +66,10 @@ function appleMapsUrl(b) {
 }
 
 /**
- * "Find your campus" — pick a college, browse its floor plans in an
- * Amazon-style gallery (large plan + thumbnails, click to expand), and read
- * its address, transport and accessibility info. Replaces the old 3D scene.
+ * "Getting around" — your college's address and directions, a floor-plan
+ * gallery (large plan + thumbnails, click to expand) with a compact college
+ * picker, transport info and accessibility guidance. Pick a different college
+ * from the Floor plan dropdown to see its details.
  */
 export function MapScreen() {
   const { profile, hydrated } = useOnboardingProfile();
@@ -104,28 +112,48 @@ export function MapScreen() {
   const activeLabel = activePlanData.label;
 
   return (
-    <article className="flex flex-col gap-8">
+    <article className="flex flex-col gap-10">
       <header className="flex flex-col gap-3">
         <h1 className="text-step-4/ual-condensed font-bold tracking-ual-tight text-ual-dark">
-          Find your college
+          Getting around
         </h1>
         <p className="text-step-1 text-ual-medium">
-          Key services, building information, and how to get to college
+          Key services, building information, and how to get to college.
         </p>
       </header>
 
-      <section className="flex flex-col gap-4" aria-labelledby="campus-heading">
-        <h2 id="campus-heading" className="text-step-2 font-bold tracking-ual-tight text-ual-dark">
-          Your college
+      <section className="flex flex-col gap-2" aria-labelledby="address-heading">
+        <h2 id="address-heading" className="text-step-2 font-bold tracking-ual-tight text-ual-dark">
+          Address
         </h2>
-        <label className="flex flex-col gap-2">
-          <span className="sr-only">Choose a college</span>
+        <p className="text-step-1 font-bold text-ual-dark">{building.name}</p>
+        <p className="text-step-d1 text-ual-medium">{building.address}</p>
+        <p className="mt-2 text-step-d1 font-bold text-ual-dark">Get directions</p>
+        <div className="flex flex-wrap gap-6">
+          <DirectionLink href={directionsUrl(building)} label="Google maps" />
+          <DirectionLink href={citymapperUrl(building)} label="Citymapper" />
+          <DirectionLink href={appleMapsUrl(building)} label="Apple maps" />
+        </div>
+      </section>
+
+      <section className="flex flex-col gap-4" aria-labelledby="floorplan-heading">
+        <div className="flex flex-wrap items-center justify-between gap-4">
+          <h2
+            id="floorplan-heading"
+            className="text-step-2 font-bold tracking-ual-tight text-ual-dark"
+          >
+            Floor plan
+          </h2>
           {hydrated && (
             <div className="group relative">
+              <label className="sr-only" htmlFor="college-select">
+                Choose a college
+              </label>
               <select
+                id="college-select"
                 value={collegeId}
                 onChange={(e) => handleSelectCollege(e.target.value)}
-                className="w-full cursor-pointer appearance-none bg-ual-dark px-6 py-4 pr-14 text-step-1 font-bold text-ual-light focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ual-orange"
+                className="w-full cursor-pointer appearance-none bg-ual-dark py-2 pr-10 pl-4 text-step-d1 font-bold text-ual-light focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ual-orange"
               >
                 {BUILDINGS.map((b) => (
                   <option key={b.id} value={b.id}>
@@ -134,64 +162,61 @@ export function MapScreen() {
                 ))}
               </select>
               <ChevronDownIcon
-                width={20}
-                height={20}
+                width={18}
+                height={18}
                 aria-hidden="true"
-                className="pointer-events-none absolute top-1/2 right-6 -translate-y-1/2 text-ual-light transition-transform duration-200 group-focus-within:rotate-180"
+                className="pointer-events-none absolute top-1/2 right-3 -translate-y-1/2 text-ual-light transition-transform duration-200 group-focus-within:rotate-180"
               />
             </div>
           )}
-        </label>
-      </section>
+        </div>
 
-      <section className="flex flex-col gap-4" aria-label={`${building.name} college map`}>
-        <div className="flex flex-col gap-4 md:flex-row md:items-start">
-          {/* Floor list — always a scrollable list (never a dropdown), capped
-              to a fixed height so a long floor count scrolls inside this box
-              instead of growing the page. Same behaviour on mobile and desktop. */}
-          <ul
-            role="list"
-            className="flex max-h-64 flex-col gap-1 overflow-y-auto md:max-h-120 md:w-64 md:shrink-0"
-          >
-            {plans.map((plan, i) => {
-              const selected = i === safeActive;
-              return (
-                <li key={plan.id}>
-                  <button
-                    type="button"
-                    onClick={() => setActivePlan(i)}
-                    aria-pressed={selected}
-                    aria-label={`Show ${plan.label} plan`}
-                    className={[
-                      'flex w-full items-center gap-3 p-2 text-left focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ual-orange',
-                      selected ? 'bg-ual-shade' : 'hover:bg-ual-shade',
-                    ].join(' ')}
-                  >
-                    <span
+        <div className="flex flex-col gap-4 md:flex-row md:items-stretch">
+          <div className="md:relative md:w-64 md:shrink-0">
+            <ul
+              role="list"
+              className="flex max-h-64 flex-col gap-1 overflow-y-auto md:absolute md:inset-0 md:max-h-none md:w-auto"
+            >
+              {plans.map((plan, i) => {
+                const selected = i === safeActive;
+                return (
+                  <li key={plan.id}>
+                    <button
+                      type="button"
+                      onClick={() => setActivePlan(i)}
+                      aria-pressed={selected}
+                      aria-label={`Show ${plan.label} plan`}
                       className={[
-                        'aspect-4/3 w-20 shrink-0 overflow-hidden bg-white',
-                        selected ? 'outline-2 outline-ual-dark' : 'opacity-70',
+                        'flex w-full items-center gap-3 p-2 text-left focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ual-orange',
+                        selected ? 'bg-ual-shade' : 'hover:bg-ual-shade',
                       ].join(' ')}
                     >
-                      <PlanGraphic
-                        plan={plan}
-                        hasImages={hasImages}
-                        alt=""
-                        className="size-full object-contain"
-                      />
-                    </span>
-                    <span className="text-step-d1 font-bold text-ual-dark">{plan.label}</span>
-                  </button>
-                </li>
-              );
-            })}
-          </ul>
+                      <span
+                        className={[
+                          'aspect-4/3 w-20 shrink-0 overflow-hidden bg-ual-light',
+                          selected ? 'outline-2 outline-ual-dark' : 'opacity-70',
+                        ].join(' ')}
+                      >
+                        <PlanGraphic
+                          plan={plan}
+                          hasImages={hasImages}
+                          alt=""
+                          className="size-full object-contain"
+                        />
+                      </span>
+                      <span className="text-step-d1 font-bold text-ual-dark">{plan.label}</span>
+                    </button>
+                  </li>
+                );
+              })}
+            </ul>
+          </div>
 
           <button
             type="button"
             onClick={() => setLightboxOpen(true)}
             aria-label={`Expand ${activeLabel} plan`}
-            className="aspect-3/4 w-full shrink-0 cursor-zoom-in overflow-hidden bg-white p-4 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ual-orange md:aspect-3/2 md:flex-1"
+            className="aspect-3/4 w-full shrink-0 cursor-zoom-in overflow-hidden bg-ual-light p-4 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ual-orange md:aspect-3/2 md:flex-1"
           >
             <PlanGraphic
               plan={activePlanData}
@@ -203,40 +228,44 @@ export function MapScreen() {
         </div>
       </section>
 
-      <section className="flex flex-col gap-2" aria-labelledby="address-heading">
-        <h2 id="address-heading" className="text-step-2 font-bold tracking-ual-tight text-ual-dark">
-          Address
-        </h2>
-        <p className="text-step-1 font-bold text-ual-dark">{building.name}</p>
-        <p className="text-step-d1 text-ual-medium">{building.address}</p>
-        <p className="mt-2 text-step-d1 font-bold text-ual-dark">Get directions to college</p>
-        <div className="flex flex-wrap gap-8">
-          <DirectionLink href={citymapperUrl(building)} label="Citymapper" />
-          <DirectionLink href={appleMapsUrl(building)} label="Apple maps" />
-          <DirectionLink href={directionsUrl(building)} label="Google maps" />
-        </div>
-      </section>
-
       {building.transport && (
-        <section className="flex flex-col gap-4" aria-labelledby="transport-heading">
+        <section className="flex flex-col gap-6" aria-labelledby="transport-heading">
           <h2
             id="transport-heading"
             className="text-step-2 font-bold tracking-ual-tight text-ual-dark"
           >
             Transport
           </h2>
-          <div className="grid gap-6 md:grid-cols-2">
-            <TransportTable
-              caption="Closest stations"
-              distanceHeader="Distance to uni"
-              stops={building.transport.stations}
-            />
-            <TransportTable
-              caption="Closest buses"
-              distanceHeader="Distance to uni"
-              stops={building.transport.buses.slice(0, 4)}
-            />
+
+          <div className="flex flex-col gap-4">
+            <h3 className="text-step-1 tracking-ual-tight text-ual-dark">Public transport</h3>
+            <div className="grid gap-8 md:grid-cols-2">
+              <TransportTable
+                title="Train, underground and overground"
+                header="Closest station"
+                stops={building.transport.stations}
+              />
+              <TransportTable
+                title="Buses"
+                header="Closest bus"
+                stops={building.transport.buses.slice(0, 4)}
+              />
+            </div>
           </div>
+
+          {building.transport.taxi && (
+            <div className="flex flex-col gap-2">
+              <h3 className="text-step-1 tracking-ual-tight text-ual-dark">Taxi drop-off</h3>
+              <p className="max-w-200 text-step-d1 text-ual-medium">{building.transport.taxi}</p>
+            </div>
+          )}
+
+          {building.transport.parking && (
+            <div className="flex flex-col gap-2">
+              <h3 className="text-step-1 tracking-ual-tight text-ual-dark">Accessible parking</h3>
+              <p className="max-w-200 text-step-d1 text-ual-medium">{building.transport.parking}</p>
+            </div>
+          )}
         </section>
       )}
 
@@ -248,7 +277,7 @@ export function MapScreen() {
           >
             Accessibility
           </h2>
-          <p className="text-step-d1 text-ual-medium">
+          <p className="max-w-200 text-step-d1 text-ual-medium">
             {building.transport.accessibilityNote.replace(/on AccessAble\.?$/, '')}
             <a
               href={building.transport.accessibilityUrl}
@@ -261,6 +290,19 @@ export function MapScreen() {
             .<span className="sr-only"> (opens in a new tab)</span>
           </p>
         </section>
+      )}
+
+      {building.areaUrl && (
+        <a
+          href={building.areaUrl}
+          target="_blank"
+          rel="noreferrer"
+          className="group flex w-full max-w-200 items-center justify-between gap-4 bg-ual-dark p-8 text-step-2 font-bold tracking-ual-tight text-ual-light no-underline transition-colors hover:text-ual-orange focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ual-orange [&>svg]:size-8"
+        >
+          Read more about your college area
+          <ArrowRightIcon aria-hidden="true" />
+          <span className="sr-only"> (opens in a new tab)</span>
+        </a>
       )}
 
       {lightboxOpen && (
@@ -280,7 +322,7 @@ export function MapScreen() {
             <CloseIcon aria-hidden="true" width={22} height={22} />
           </button>
           <div
-            className="max-h-full w-full max-w-grid bg-white p-4"
+            className="max-h-full w-full max-w-grid bg-ual-light p-4"
             onClick={(e) => e.stopPropagation()}
           >
             <PlanGraphic
@@ -305,35 +347,56 @@ function DirectionLink({ href, label }) {
       href={href}
       target="_blank"
       rel="noreferrer"
-      className="text-step-d1 font-bold text-ual-dark underline underline-offset-2 hover:text-ual-orange"
+      className="inline-flex items-center gap-1.5 text-step-d1 font-bold text-ual-dark underline underline-offset-2 hover:text-ual-orange [&>svg]:size-4"
     >
       {label}
+      <ExternalLinkIcon aria-hidden="true" />
       <span className="sr-only"> (opens in a new tab)</span>
     </a>
   );
 }
 
 /**
- * @param {{ caption: string, distanceHeader: string, stops: import('../../data/buildings').TransportStop[] }} props
+ * @param {{ title: string, header: string, stops: import('../../data/buildings').TransportStop[] }} props
  */
-function TransportTable({ caption, distanceHeader, stops }) {
+function TransportTable({ title, header, stops }) {
+  const hasModes = stops.some((s) => s.modes?.length);
   return (
-    <table className="w-full border-collapse text-step-d1">
-      <caption className="mb-2 text-left font-bold text-ual-dark">{caption}</caption>
-      <thead className="sr-only">
-        <tr>
-          <th scope="col">{caption}</th>
-          <th scope="col">{distanceHeader}</th>
-        </tr>
-      </thead>
-      <tbody>
-        {stops.map((stop) => (
-          <tr key={stop.name} className="border-b border-ual-dark/10">
-            <td className="py-2 text-ual-dark">{stop.name}</td>
-            <td className="py-2 text-right text-ual-medium">{stop.walk}</td>
+    <div className="flex flex-col gap-3">
+      <h4 className="text-step-d1 font-bold text-ual-dark">{title}</h4>
+      <table className="w-full border-collapse text-step-d1">
+        <thead>
+          <tr className="border-b border-ual-dark/15 text-ual-medium">
+            <th scope="col" className="py-2 text-left font-ual-normal">
+              {header}
+            </th>
+            {hasModes && <th aria-hidden="true" className="w-14" />}
+            <th scope="col" className="py-2 text-right font-ual-normal">
+              Distance to uni
+            </th>
           </tr>
-        ))}
-      </tbody>
-    </table>
+        </thead>
+        <tbody>
+          {stops.map((stop) => (
+            <tr key={stop.name} className="border-b border-ual-dark/15">
+              <td className="py-2 text-ual-dark">{stop.name}</td>
+              {hasModes && (
+                <td className="py-2">
+                  <span className="flex items-center gap-1.5 text-ual-dark [&>svg]:size-4">
+                    {stop.modes?.includes('rail') && (
+                      <NationalRailIcon aria-label="National Rail" role="img" />
+                    )}
+                    {stop.modes?.includes('tube') && (
+                      <UndergroundIcon aria-label="London Underground" role="img" />
+                    )}
+                  </span>
+                </td>
+              )}
+              <td className="py-2 text-right text-ual-medium">{stop.walk}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
   );
 }

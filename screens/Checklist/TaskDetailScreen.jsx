@@ -2,7 +2,8 @@
 
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { TASKS, OTHER_TASKS, visibleTasks } from '../../data/checklist';
+import { TASKS, OTHER_TASKS, visibleTasks, visibleOtherTasks } from '../../data/checklist';
+import { COLLEGE_OPTIONS } from '../../data/onboardingOptions';
 import { usePersistedState } from '../../hooks/usePersistedState';
 import { useOnboardingProfile } from '../../hooks/useOnboardingProfile';
 import { GetHelpSection } from '../../components/Checklist/GetHelpSection';
@@ -29,13 +30,13 @@ function detailTask(taskId) {
 
 /** Where the checklist row / "Go to next task" should point for a task. */
 function taskHref(task) {
-  if (!task) return '/checklist';
-  if (task.detail) return `/checklist/${task.id}`;
-  return task.cta?.href?.startsWith('/') ? task.cta.href : '/checklist';
+  if (!task) return '/essentials';
+  if (task.detail) return `/essentials/${task.id}`;
+  return task.cta?.href?.startsWith('/') ? task.cta.href : '/essentials';
 }
 
 /**
- * A single task detail page (/checklist/{id}): tag + title + intro, content
+ * A single task detail page (/essentials/{id}): tag + title + intro, content
  * sections (paragraphs with inline links, bullets, arrow links), an optional
  * sub-checklist ("Accounts to set up" / "Set up steps"), a video-guide link,
  * a "Your progress" control, a dark read-more banner and a "Get help" block.
@@ -55,16 +56,31 @@ export function TaskDetailScreen({ taskId }) {
   useEffect(() => {
     if (!hydrated) return;
     if (!isComplete) router.replace('/onboarding');
-    else if (!task?.detail) router.replace('/checklist');
+    else if (!task?.detail) router.replace('/essentials');
   }, [hydrated, isComplete, task, router]);
 
   if (!hydrated || !isComplete || !task?.detail) return null;
 
   const { detail } = task;
   const done = statuses[task.id] === 'complete';
-  const list = visibleTasks(profile?.studentType, profile?.studentStatus);
-  const index = list.findIndex((t) => t.id === task.id);
-  const nextTask = index >= 0 ? list[index + 1] : undefined;
+
+  const flow = [
+    ...visibleTasks(profile?.studentType, profile?.studentStatus),
+    ...visibleOtherTasks(profile?.studentType),
+  ];
+  const index = flow.findIndex((t) => t.id === task.id);
+  // Skip to the next task that has its own page (a detail page or an internal
+  // cta) so "Go to next task" opens a task, never dead-ends on the list.
+  const nextTask =
+    index >= 0
+      ? flow.slice(index + 1).find((t) => t.detail || t.cta?.href?.startsWith('/'))
+      : undefined;
+
+  // The student's college fills the [College/Institute] placeholder in copy.
+  const collegeName =
+    COLLEGE_OPTIONS.find((c) => c.id === profile?.collegeId)?.name ?? 'your College or Institute';
+  const fill = (text) =>
+    typeof text === 'string' ? text.replaceAll('[College/Institute]', collegeName) : text;
 
   function toggleComplete() {
     setStatuses((prev) => ({
@@ -73,7 +89,7 @@ export function TaskDetailScreen({ taskId }) {
     }));
   }
 
-  const intro = detail.intro ?? task.shortDescription;
+  const intro = fill(detail.intro ?? task.shortDescription);
 
   return (
     <article className="flex flex-col gap-8">
@@ -87,17 +103,17 @@ export function TaskDetailScreen({ taskId }) {
         <p className="max-w-200 text-step-2 text-ual-dark">{intro}</p>
       </header>
 
-      {detail.sections.map((section) => (
+      {(detail.sections ?? []).map((section) => (
         <section key={section.heading} className="flex max-w-200 flex-col gap-3">
-          <h2 className="text-step-3 font-bold tracking-ual-tight text-ual-dark">
+          <h2 className="text-step-2 font-bold tracking-ual-tight text-ual-dark">
             {section.heading}
           </h2>
           {(section.paragraphs ?? (section.body ? [section.body] : [])).map((paragraph) => (
             <p key={paragraph} className="text-step-0 text-ual-dark">
-              <RichText text={paragraph} />
+              <RichText text={fill(paragraph)} />
             </p>
           ))}
-          {section.lead && <p className="text-step-0 text-ual-dark">{section.lead}</p>}
+          {section.lead && <p className="text-step-0 text-ual-dark">{fill(section.lead)}</p>}
           {section.bullets && (
             <ul className="flex list-disc flex-col gap-2 pl-6 text-step-0 text-ual-dark">
               {section.bullets.map((bullet) => (
@@ -166,7 +182,14 @@ export function TaskDetailScreen({ taskId }) {
         </a>
       )}
 
-      {detail.help && <GetHelpSection intro={detail.help.intro} channels={detail.help.channels} />}
+      {detail.help && (
+        <GetHelpSection
+          title={detail.help.title}
+          intro={fill(detail.help.intro)}
+          channels={detail.help.channels}
+          groups={detail.help.groups}
+        />
+      )}
     </article>
   );
 }

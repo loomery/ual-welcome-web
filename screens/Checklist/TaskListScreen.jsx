@@ -12,12 +12,13 @@ import { Button } from '../../components/Button/Button';
 import { ArrowRightIcon } from '../../components/Icon/NavIcons';
 
 const STATUS_KEY = 'ual:task:status:v1';
+const DISMISS_KEY = 'ual:tasks-complete-dismissed:v1';
 
 const INTRO =
   'There’s lots to think about and do as you begin your journey with us at UAL. Here are the key tasks you’ll need to complete to get started.';
 
 /**
- * "Essentials" (/checklist) — the arrival to-do list. A short intro, then the
+ * "Essentials" (/essentials) — the arrival to-do list. A short intro, then the
  * "Arrival essentials" to-do list card (each task has a completion checkbox, a
  * title/chevron linking to its destination, a description and an optional
  * availability note) and a list of "Other important tasks" links.
@@ -29,6 +30,10 @@ export function TaskListScreen() {
     STATUS_KEY,
     /** @type {Record<string, import('../../data/checklist').TaskStatus>} */ ({}),
   );
+  // Shared with the home dashboard: one "I've finished, stop showing me the
+  // completed list" preference. Lifted here (not inside ToDoList) so the whole
+  // Arrival essentials section can be removed once complete and dismissed.
+  const [dismissed, setDismissed] = usePersistedState(DISMISS_KEY, false);
 
   useEffect(() => {
     if (hydrated && !isComplete) {
@@ -62,30 +67,48 @@ export function TaskListScreen() {
         <p className="max-w-200 text-step-2 text-ual-dark">{INTRO}</p>
       </header>
 
-      <section aria-labelledby="arrival-heading" className="flex flex-col gap-4">
-        <h2 id="arrival-heading" className="text-step-3 font-bold tracking-ual-tight text-ual-dark">
-          Arrival essentials
-        </h2>
-        <p className="max-w-200 text-step-0 text-ual-dark">{INTRO}</p>
+      {/* Once every task is complete and the student has dismissed the list,
+          drop the whole Arrival essentials section. */}
+      {!(allComplete && dismissed) && (
+        <section aria-labelledby="arrival-heading" className="flex flex-col gap-4">
+          <h2
+            id="arrival-heading"
+            className="text-step-3 font-bold tracking-ual-tight text-ual-dark"
+          >
+            Arrival essentials
+          </h2>
+          <p className="max-w-200 text-step-0 text-ual-dark">{INTRO}</p>
 
-        <ToDoList tasks={tasks} statuses={statuses} onToggle={toggle} />
-
-        {allComplete && (
-          <div className="flex flex-col gap-6">
-            <ul role="list" className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-              {REPEATED_SERVICES.map((service) => (
-                <li key={service.id}>
-                  <InterestTile label={service.label} body={service.body} href={service.href} />
-                </li>
-              ))}
-            </ul>
-            <Button variant="solid" href="/studying" className="w-fit">
-              View more study tools
-              <ArrowRightIcon aria-hidden="true" />
-            </Button>
+          <div className="mt-6">
+            <ToDoList
+              tasks={tasks}
+              statuses={statuses}
+              onToggle={toggle}
+              dismissed={dismissed}
+              onDismiss={() => setDismissed(true)}
+            />
           </div>
-        )}
-      </section>
+
+          {allComplete && (
+            <div className="flex flex-col gap-6">
+              <p className="max-w-200 text-step-0 text-ual-dark">
+                Discover the support and study tools waiting for you
+              </p>
+              <ul role="list" className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                {REPEATED_SERVICES.map((service) => (
+                  <li key={service.id}>
+                    <InterestTile label={service.label} body={service.body} href={service.href} />
+                  </li>
+                ))}
+              </ul>
+              <Button variant="solid" href="/studying" className="w-fit">
+                View more study tools
+                <ArrowRightIcon aria-hidden="true" />
+              </Button>
+            </div>
+          )}
+        </section>
+      )}
 
       <section aria-labelledby="other-heading" className="flex flex-col gap-6">
         <h2 id="other-heading" className="text-step-3 font-bold tracking-ual-tight text-ual-dark">
@@ -98,7 +121,7 @@ export function TaskListScreen() {
             return (
               <li key={task.id}>
                 {task.detail ? (
-                  <Link href={`/checklist/${task.id}`} className={cls}>
+                  <Link href={`/essentials/${task.id}`} className={cls}>
                     {task.label}
                     <ArrowRightIcon aria-hidden="true" />
                   </Link>
