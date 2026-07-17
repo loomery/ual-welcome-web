@@ -55,7 +55,7 @@ export const STUDYING_LANDING = [
         id: 'getting-around',
         label: 'Getting around',
         body: 'Building information, and how to get to college.',
-        href: '/map',
+        href: '/studying/getting-around',
       },
       {
         id: 'library',
@@ -109,7 +109,7 @@ export const STUDYING_LANDING = [
         id: 'mfa',
         label: 'Multi-factor authentication',
         body: 'Secure your accounts by adding a step to verify your identity on login.',
-        href: '/checklist/mfa',
+        href: '/essentials/mfa',
       },
       {
         id: 'contact-it',
@@ -166,7 +166,7 @@ export const STUDYING_TOPICS = [
         ],
       },
       {
-        heading: 'Accessing a library',
+        heading: 'Accessing the libraries',
         paragraphs: [
           'As a UAL student you can access all of our libraries. The libraries have open access and bookable study spaces with computers, photocopying and printing facilities. You can also borrow a laptop and get help from the library staff to develop your research or digital skills.',
         ],
@@ -240,7 +240,7 @@ export const STUDYING_TOPICS = [
         heading: 'Set up multi-factor authentication',
         statuses: ['new'],
         paragraphs: ['Protect your identity, data and our systems'],
-        link: { label: 'Get started with MFA', href: '/checklist/mfa' },
+        link: { label: 'Get started with MFA', href: '/essentials/mfa' },
       },
       {
         heading: 'Wifi',
@@ -320,7 +320,7 @@ export const STUDYING_TOPICS = [
           },
           {
             id: 'student-portal',
-            label: 'Student portal',
+            label: 'UAL Portal',
             body: 'Your student record, enrolment and personal details.',
             href: 'https://ualportal.arts.ac.uk/urd/sits.urd/run/siw_lgn',
           },
@@ -400,7 +400,7 @@ export const STUDYING_TOPICS = [
             id: 'getting-around',
             label: 'Getting around',
             body: 'Building information, and how to get to college.',
-            href: '/map',
+            href: '/studying/getting-around',
           },
           {
             id: 'library',

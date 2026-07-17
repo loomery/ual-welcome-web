@@ -1,10 +1,10 @@
 /**
  * Essential setup tasks for new UAL students.
  *
- * The "Essentials" page (/checklist) lists these inside a "To do list" card:
+ * The "Essentials" page (/essentials) lists these inside a "To do list" card:
  * each row has a completion checkbox, a title, a short description, an optional
  * availability `note`, and a chevron that links to the task destination (`cta`
- * — the MFA task links to its own /checklist/mfa detail page, the rest to
+ * — the MFA task links to its own /essentials/mfa detail page, the rest to
  * external UAL pages).
  *
  * Progress is tracked separately in localStorage:
@@ -33,7 +33,7 @@
  * @property {Array<'new'|'returning'>} [statuses]  Which cohorts see this task
  *   (defaults to both new and returning students).
  * @property {TaskDetail} [detail]  Content for the task's own detail page
- *   (/checklist/{id}); when set, the checklist row links here instead of `cta`.
+ *   (/essentials/{id}); when set, the checklist row links here instead of `cta`.
  *
  * Detail-page copy supports inline links written as [label](url) — rendered
  * by the RichText component.
@@ -54,6 +54,7 @@
  * @property {string} id
  * @property {string} label
  * @property {string} [href]         External destination (adds the external-link icon).
+ * @property {AppLinks} [apps]       App-store download links (iOS / Android).
  * @property {string} [description]
  * @property {string} [lead]         e.g. "What you’ll need to do" above numbered steps.
  * @property {SubTaskStep[]} [steps] Numbered sub-steps.
@@ -63,11 +64,16 @@
  *
  * @typedef {Object} SubTaskList
  * @property {string} title        e.g. "Accounts to set up" / "Set up steps".
+ * @property {boolean} [ordered]   Render as a plain numbered how-to list (no
+ *   checkboxes or progress count) instead of a tick-off checklist.
  * @property {SubTaskItem[]} items Completion is persisted per item.
  *
  * @typedef {Object} HelpBlock
- * @property {string} intro
- * @property {HelpChannel[]} channels
+ * @property {string} [title]  Section heading (defaults to 'Get help').
+ * @property {string} [intro]
+ * @property {HelpChannel[]} [channels]  Flat list of contact cards.
+ * @property {{ heading: string, channels: HelpChannel[] }[]} [groups]  Contact
+ *   cards split into labelled sub-groups (e.g. General enquiries / Mental health).
  *
  * @typedef {Object} TaskDetail
  * @property {string} [title]    Page H1 (defaults to the task title).
@@ -84,6 +90,12 @@
 const AUTHENTICATOR_APPS = {
   apple: 'https://apps.apple.com/app/microsoft-authenticator/id983156458',
   android: 'https://play.google.com/store/apps/details?id=com.azure.authenticator',
+};
+
+// TODO(UAL): confirm the canonical SEAtS app store links.
+const SEATS_APPS = {
+  apple: 'https://apps.apple.com/gb/app/seats-mobile/id1073579321',
+  android: 'https://play.google.com/store/apps/details?id=com.seats.mobile',
 };
 
 const MICROSOFT_SIGNIN = 'https://www.office.com';
@@ -133,7 +145,7 @@ export const TASKS = [
     detail: {
       title: 'Pay fees or confirm funding',
       intro:
-        'Before you start your studies, it is important to know how to pay your tuition fees and what sort of funding options might be available.',
+        'Discover opportunities to fund your studies and get advice on your fees and finances.',
       sections: [
         {
           heading: 'Tuition fees',
@@ -145,6 +157,14 @@ export const TASKS = [
         {
           heading: 'How to pay your tuition fees',
           body: 'Find out how to [pay your tuition fees](https://www.arts.ac.uk/study-at-ual/fees-and-funding/how-to-pay-your-fees). You’ll be asked to confirm your funding or pay your fees when you enrol onto your course. Options include direct payments, student loans or through a sponsor via pro-forma invoice.',
+        },
+        {
+          heading: 'Funding and scholarships',
+          body: 'The Student Advice team provides students with information and advice about funding options available to cover tuition fees, living costs and course costs.',
+          link: {
+            label: 'Search for all available scholarships',
+            href: 'https://www.arts.ac.uk/study-at-ual/fees-and-funding/scholarships-search',
+          },
         },
         {
           heading: 'Immigration and visas',
@@ -189,7 +209,7 @@ export const TASKS = [
       sections: [
         {
           heading: 'What your UAL email is for',
-          body: 'Your UAL email is where you’ll receive important updates about your studies, course, and time at UAL, so make sure to check it regularly.',
+          body: 'Your UAL email is where you’ll receive important updates about your studies, course, and time at UAL, so you must check it regularly.',
         },
         {
           heading: 'Getting access',
@@ -219,7 +239,7 @@ export const TASKS = [
     statuses: ['new'],
     shortDescription:
       'Multi-Factor Authentication (MFA) adds an extra layer of protection to your identity, your data and our systems.',
-    cta: { label: 'Get started', href: '/checklist/mfa' },
+    cta: { label: 'Get started', href: '/essentials/mfa' },
   },
   {
     id: 'enrol',
@@ -286,6 +306,48 @@ export const TASKS = [
       'There are multiple accounts you need during your term. Activate them before you start.',
     // TODO(UAL): replace with the canonical digital-accounts URL.
     cta: { label: 'Get started', href: 'https://www.arts.ac.uk/students/it-services' },
+    detail: {
+      intro:
+        'There are multiple accounts you need during your term. Activate them before you start.',
+      subTasks: {
+        title: 'Accounts to set up',
+        items: [
+          {
+            id: 'student-portal',
+            label: 'UAL Portal',
+            description:
+              'Get the latest UAL news, timetable and access available online resources.',
+            href: 'https://ualportal.arts.ac.uk/urd/sits.urd/run/siw_lgn',
+          },
+          {
+            id: 'moodle',
+            label: 'Moodle',
+            description:
+              'Moodle is the online home for your course. You’ll use your Moodle dashboard to:',
+            bullets: [
+              'Access course materials',
+              'Take part in activities such as discussions and online seminars',
+              'Submit assessments',
+              'Find important information about your course',
+            ],
+            note: 'Available after you have fully enrolled. You’ll have access to a Course site and individual sites for each of your Units.',
+            href: 'https://moodle.arts.ac.uk/login/index.php',
+          },
+          {
+            id: 'seats',
+            label: 'Download your SEAtS app',
+            description:
+              'You will need to mark your own attendance to sessions using the SEAtS mobile phone app once you start.',
+            apps: SEATS_APPS,
+          },
+        ],
+      },
+      help: {
+        intro:
+          'If you have problems logging in to your UAL email and network account, contact IT Services for help. They are available 24/7, 365 days a year.',
+        channels: IT_HELP_CHANNELS,
+      },
+    },
   },
   {
     id: 'enrol-returning',
@@ -313,6 +375,11 @@ export const TASKS = [
             id: 'portal-details',
             label: 'Check your details in your UAL Portal',
             href: 'https://ualportal.arts.ac.uk/urd/sits.urd/run/siw_lgn',
+            lead: 'What you’ll need to do',
+            bullets: [
+              'View your personal information and download status letters under ‘My Study Details’.',
+              'Double check your details are up to date. If your contact details or personal information change, please update them as soon as possible.',
+            ],
           },
           {
             id: 'enrolment-form',
@@ -384,6 +451,17 @@ export const TASKS = [
         'Your timetable will be published at the end of August. We’ll email you when it’s ready to view.',
       sections: [
         {
+          heading: 'Term dates',
+          paragraphs: [
+            'Term dates and the start of your course vary depending on your level of study. Take a look at UAL [standard term dates](https://www.arts.ac.uk/students/academic-support/term-dates).',
+          ],
+          lead: 'Make sure you know when your first session or course induction is.',
+          bullets: [
+            'Check your UAL email to see if we’ve contacted you about any events for your course',
+            'Check your timetable to see when your first class is.',
+          ],
+        },
+        {
           heading: 'Access your timetable',
           body: 'You can see your current timetable online in a variety of ways: choose what works for you.',
           link: {
@@ -451,7 +529,7 @@ export const TASKS = [
  * @property {string} label
  * @property {string} href
  * @property {boolean} [internationalOnly]  If true, only shown to international students.
- * @property {TaskDetail} [detail]  Detail page (/checklist/{id}); when set, the
+ * @property {TaskDetail} [detail]  Detail page (/essentials/{id}); when set, the
  *   link goes there instead of `href`.
  *
  * @type {OtherTask[]}
@@ -484,6 +562,7 @@ export const OTHER_TASKS = [
       ],
       subTasks: {
         title: 'Set up steps',
+        ordered: true,
         items: [
           {
             id: 'find',
@@ -500,6 +579,23 @@ export const OTHER_TASKS = [
       readMore: {
         label: 'Read more about health at UAL',
         href: 'https://www.arts.ac.uk/students/student-services/counselling-health-advice-and-chaplaincy/health-advice',
+      },
+      help: {
+        title: 'Contact the wellbeing team',
+        channels: [
+          {
+            id: 'email',
+            label: 'Email us',
+            value: 'studenthealth@arts.ac.uk',
+            href: 'mailto:studenthealth@arts.ac.uk',
+          },
+          {
+            id: 'call',
+            label: 'Call us',
+            value: '+44 (0)20 7514 6251',
+            href: 'tel:+442075146251',
+          },
+        ],
       },
     },
   },
@@ -526,36 +622,51 @@ export const OTHER_TASKS = [
           body: 'Please be aware when sharing / accessing this course that the module includes scenarios that discuss rape and sexual assault.',
         },
       ],
+      subTasks: {
+        title: 'Set up steps',
+        items: [
+          {
+            id: 'module',
+            label: 'Complete the sexual consent training module',
+            href: 'https://academicsupportonline.arts.ac.uk/user/login?destination=/learning-materials/20187',
+          },
+        ],
+      },
       help: {
-        intro: 'If you need support or have questions, you can contact the teams below.',
-        channels: [
+        groups: [
           {
-            id: 'general-email',
-            label: 'Email us',
-            value: 'counselling@arts.ac.uk',
-            note: 'General enquiries',
-            href: 'mailto:counselling@arts.ac.uk',
+            heading: 'General enquiries',
+            channels: [
+              {
+                id: 'general-email',
+                label: 'Email us',
+                value: 'counselling@arts.ac.uk',
+                href: 'mailto:counselling@arts.ac.uk',
+              },
+              {
+                id: 'general-call',
+                label: 'Call us',
+                value: '+44 (0)20 7514 6251',
+                href: 'tel:+442075146251',
+              },
+            ],
           },
           {
-            id: 'general-call',
-            label: 'Call us',
-            value: '+44 (0)20 7514 6251',
-            note: 'General enquiries',
-            href: 'tel:+442075146251',
-          },
-          {
-            id: 'wellbeing-email',
-            label: 'Email us',
-            value: 'studenthealth@arts.ac.uk',
-            note: 'Mental health or wellbeing support',
-            href: 'mailto:studenthealth@arts.ac.uk',
-          },
-          {
-            id: 'wellbeing-call',
-            label: 'Call us',
-            value: '+44 (0)20 7514 6426',
-            note: 'Mental health or wellbeing support',
-            href: 'tel:+442075146426',
+            heading: 'Mental health or wellbeing support',
+            channels: [
+              {
+                id: 'wellbeing-email',
+                label: 'Email us',
+                value: 'studenthealth@arts.ac.uk',
+                href: 'mailto:studenthealth@arts.ac.uk',
+              },
+              {
+                id: 'wellbeing-call',
+                label: 'Call us',
+                value: '+44 (0)20 7514 6426',
+                href: 'tel:+442075146426',
+              },
+            ],
           },
         ],
       },

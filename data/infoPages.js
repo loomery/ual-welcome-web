@@ -191,52 +191,6 @@ export const INFO_PAGES = [
     ],
   },
   {
-    slug: 'local-doctor',
-    title: 'Get set up with a local doctor',
-    blocks: [
-      {
-        type: 'prose',
-        heading: 'About',
-        body: [
-          'Local doctors, also known as a GP (general practice), provide access to healthcare, routine prescriptions and emergency support.',
-        ],
-      },
-      {
-        type: 'prose',
-        heading: 'Who should register',
-        body: [
-          'Free NHS treatment is accessible to all UK students, and to EU and international students on a full-time course lasting more than 6 months.',
-        ],
-      },
-      {
-        type: 'prose',
-        heading: 'When to register',
-        body: [
-          'At the beginning of your studies, even if you are already registered elsewhere in the UK.',
-        ],
-      },
-      {
-        type: 'list',
-        heading: 'Times when payment is due',
-        items: ['Prescriptions and medication', 'Dental treatment', 'Optical services'],
-      },
-      {
-        type: 'list',
-        heading: 'How to register',
-        ordered: true,
-        items: [
-          'Find your nearest doctor using the button below.',
-          'Browse your options on the NHS website.',
-          'Fill in the registration form on the NHS website.',
-        ],
-        cta: {
-          label: 'Find your nearest doctor',
-          href: 'https://www.nhs.uk/service-search/find-a-gp',
-        },
-      },
-    ],
-  },
-  {
     slug: 'safety-at-ual',
     title: 'Safety at UAL',
     blocks: [
@@ -252,6 +206,36 @@ export const INFO_PAGES = [
           'Call 999.',
           'Call when someone is seriously ill or injured, their life is at immediate risk, or you have witnessed a crime.',
         ],
+      },
+    ],
+  },
+  {
+    slug: 'about-the-beta',
+    title: 'What is a beta?',
+    lead: "This Student Centre is in beta — an early version we're still building and improving.",
+    blocks: [
+      {
+        type: 'prose',
+        heading: 'What “beta” means',
+        body: [
+          'A beta is an early release of a new service. It works and is safe to use, but some features are still being added and refined, and a few things may change or occasionally not work as expected.',
+        ],
+      },
+      {
+        type: 'prose',
+        heading: 'Why we launch in beta',
+        body: [
+          'Releasing early lets us learn from how students actually use the Student Centre, so we can prioritise what matters most and fix problems quickly — rather than guessing behind the scenes.',
+        ],
+      },
+      {
+        type: 'prose',
+        heading: 'How you can help',
+        body: [
+          'Your feedback shapes what we build next. If something is confusing, missing or broken, please tell us — it only takes a minute.',
+        ],
+        // TODO(UAL): replace with the canonical feedback destination (matches BetaNotice).
+        cta: { label: 'Give your feedback', href: 'https://www.arts.ac.uk/' },
       },
     ],
   },

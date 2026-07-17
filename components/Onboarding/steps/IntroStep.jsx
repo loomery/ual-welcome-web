@@ -49,10 +49,10 @@ export function IntroStep({
         </div>
 
         <div className="flex flex-col gap-4">
-          <p className="text-base/ual-default font-ual-bold text-(--color-copy-headings)">
+          <p className="text-step-0/ual-default font-ual-bold text-(--color-copy-headings)">
             Answer a few questions to see content you&apos;re interested in
           </p>
-          <ul className="list-disc space-y-2 ps-6 text-base/ual-default text-(--color-copy-headings)">
+          <ul className="list-disc space-y-2 ps-6 text-step-0/ual-default text-(--color-copy-headings)">
             {BENEFITS.map((item) => (
               <li key={item}>{item}</li>
             ))}

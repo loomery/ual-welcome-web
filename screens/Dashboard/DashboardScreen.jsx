@@ -26,10 +26,11 @@ import { usePersistedState } from '../../hooks/usePersistedState';
  */
 const INTEREST_HREF = {
   course: '/studying',
-  access: '/checklist',
+  access: '/essentials',
   health: '/help',
   safety: '/help',
   finances: '/help',
+  'moving-uk': '/explore/moving-to-the-uk',
 };
 
 /** How many interest tiles show before the "View more" toggle expands the rest. */
@@ -77,19 +78,28 @@ export function DashboardScreen() {
   const allComplete = tasks.length > 0 && completeCount === tasks.length;
 
   // Surface the first few incomplete tasks; each "View task" keeps the student
-  // in-app (its own internal route, else the checklist) and is numbered by its
-  // running position in the visible list.
+  // in-app (its own internal route, else the checklist). The number is the
+  // task's fixed position in the full list, assigned before filtering, so
+  // completing a task never renumbers the ones below it (e.g. "Enrol" stays
+  // number 3 rather than being promoted to 1).
   const taskItems = useMemo(
     () =>
       tasks
-        .filter((t) => taskStatuses[t.id] !== 'complete')
+        .map((t, i) => ({ task: t, number: i + 1 }))
+        .filter(({ task }) => taskStatuses[task.id] !== 'complete')
         .slice(0, HOME_TASKS)
-        .map((t, i) => ({
-          id: t.id,
-          number: i + 1,
-          title: t.title,
-          description: t.shortDescription,
-          href: t.cta?.href?.startsWith('/') ? t.cta.href : '/checklist',
+        .map(({ task, number }) => ({
+          id: task.id,
+          number,
+          title: task.title,
+          description: task.shortDescription,
+          // Open the actual task: its own detail page if it has one, else an
+          // internal cta, else fall back to the essentials list.
+          href: task.detail
+            ? `/essentials/${task.id}`
+            : task.cta?.href?.startsWith('/')
+              ? task.cta.href
+              : '/essentials',
         })),
     [tasks, taskStatuses],
   );
@@ -99,16 +109,16 @@ export function DashboardScreen() {
 
   // ── Selected interests ─────────────────────────────────────────────────
   const interestIds = useMemo(() => profile?.interests ?? [], [profile?.interests]);
-  // Selected interests first, then the rest — so the collapsed view shows what
-  // the student picked and "View more" reveals the remaining categories.
-  const orderedInterests = useMemo(() => {
-    const picked = INTEREST_OPTIONS.filter((o) => interestIds.includes(o.id));
-    const rest = INTEREST_OPTIONS.filter((o) => !interestIds.includes(o.id));
-    return [...picked, ...rest];
-  }, [interestIds]);
+  // Only the topics the student actually selected. "View more" appears only
+  // when they picked more than the collapsed count, and reveals the rest of
+  // their own selection (not every category).
+  const selectedInterests = useMemo(
+    () => INTEREST_OPTIONS.filter((o) => interestIds.includes(o.id)),
+    [interestIds],
+  );
   const visibleInterests = interestsExpanded
-    ? orderedInterests
-    : orderedInterests.slice(0, COLLAPSED_INTERESTS);
+    ? selectedInterests
+    : selectedInterests.slice(0, COLLAPSED_INTERESTS);
 
   // ── What's on ──────────────────────────────────────────────────────────
   const upcoming = useMemo(
@@ -118,6 +128,17 @@ export function DashboardScreen() {
 
   return (
     <article className="mx-auto max-w-6xl space-y-12">
+      {/* ── PAGE INTRO ─────────────────────────────────────────────────── */}
+      <header className="space-y-6">
+        <h1 className="text-step-4/ual-condensed font-bold tracking-ual-tight text-ual-dark">
+          Welcome to UAL
+        </h1>
+        <p className="max-w-200 text-step-2 text-ual-dark">
+          There&rsquo;s a lot to learn when starting at university. Let&rsquo;s kick start your
+          journey
+        </p>
+      </header>
+
       {/* ── ESSENTIAL TASKS ────────────────────────────────────────────── */}
       {!(allComplete && tasksDismissed) && (
         <section className="space-y-6" aria-labelledby="home-tasks">
@@ -142,7 +163,7 @@ export function DashboardScreen() {
                 />
               </div>
               <CompleteBanner
-                onView={() => router.push('/checklist')}
+                onView={() => router.push('/essentials')}
                 onDismiss={() => setTasksDismissed(true)}
               />
             </>
@@ -164,7 +185,7 @@ export function DashboardScreen() {
                 <TaskListCard items={taskItems} />
 
                 <Link
-                  href="/checklist"
+                  href="/essentials"
                   className="inline-flex min-h-11 items-center gap-2 text-step-0 font-ual-normal text-ual-dark underline underline-offset-2 hover:text-ual-orange focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ual-orange [&>svg]:size-6"
                 >
                   View all tasks
@@ -231,7 +252,7 @@ export function DashboardScreen() {
           ))}
         </ul>
 
-        {orderedInterests.length > COLLAPSED_INTERESTS && (
+        {selectedInterests.length > COLLAPSED_INTERESTS && (
           <button
             type="button"
             onClick={() => setInterestsExpanded((v) => !v)}
@@ -248,7 +269,7 @@ export function DashboardScreen() {
       <section className="space-y-6" aria-labelledby="home-whats-on">
         <h2 id="home-whats-on">What&apos;s on</h2>
         <ul
-          className="-mx-(--grid-gutter) flex snap-x snap-mandatory list-none gap-6 overflow-x-auto px-(--grid-gutter) pb-2 md:mx-0 md:px-0"
+          className="-mx-(--grid-gutter) flex snap-x snap-mandatory scroll-px-(--grid-gutter) list-none gap-6 overflow-x-auto px-(--grid-gutter) pb-2 md:mx-0 md:scroll-px-0 md:px-0"
           role="list"
         >
           {upcoming.map((event) => (
@@ -257,15 +278,9 @@ export function DashboardScreen() {
             </li>
           ))}
         </ul>
-        <Button
-          href="https://www.arts.ac.uk/whats-on"
-          target="_blank"
-          rel="noreferrer"
-          className="w-full justify-center md:w-auto"
-        >
+        <Button href="/explore/student-life/events" className="w-full justify-center md:w-auto">
           View more events
           <ArrowRightIcon aria-hidden="true" />
-          <span className="sr-only"> (opens in a new tab)</span>
         </Button>
       </section>
     </article>

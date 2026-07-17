@@ -1,21 +1,23 @@
 'use client';
 
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Button } from '../Button/Button';
 import { ChevronLeftIcon, ArrowRightIcon, WarningIcon } from '../Icon/NavIcons';
 import { useOnboardingProfile } from '../../hooks/useOnboardingProfile';
+import { visibleInterestOptions } from '../../data/onboardingOptions';
 import { asset } from '../../utils/asset';
 import { IntroStep } from './steps/IntroStep';
 import { NameStep } from './steps/NameStep';
 import { CollegeStep } from './steps/CollegeStep';
 import { StudentTypeStep } from './steps/StudentTypeStep';
-import { VisaStatusStep } from './steps/VisaStatusStep';
 import { InterestsStep } from './steps/InterestsStep';
 import { FinishStep } from './steps/FinishStep';
 
-// visaStatus is filtered out below unless the student is international.
-const ALL_STEPS = ['intro', 'name', 'college', 'studentType', 'visaStatus', 'interests', 'finish'];
+const STEPS = ['intro', 'name', 'college', 'studentType', 'interests', 'finish'];
+
+/** Steps that require a choice, so they don't show a "Skip" button. */
+const UNSKIPPABLE_STEPS = ['college', 'studentType'];
 
 /**
  * Multi-step onboarding flow.
@@ -33,25 +35,17 @@ export function OnboardingFlow() {
   const [direction, setDirection] = useState(/** @type {'forward' | 'back'} */ ('forward'));
   const [skipDialogOpen, setSkipDialogOpen] = useState(false);
   const headingRef = useRef(/** @type {HTMLHeadingElement | null} */ (null));
-  const dialogRef = useRef(/** @type {HTMLDivElement | null} */ (null));
+  const dialogRef = useRef(/** @type {HTMLDialogElement | null} */ (null));
 
   const [draft, setDraft] = useState(() => ({
     name: profile?.name ?? '',
     studentStatus: profile?.studentStatus ?? '',
     collegeId: profile?.collegeId ?? '',
     studentType: profile?.studentType ?? '',
-    visaStatus: profile?.visaStatus ?? '',
     interests: profile?.interests ?? [],
   }));
 
-  // The visa step only applies to international students.
-  const steps = useMemo(
-    () =>
-      draft.studentType === 'international'
-        ? ALL_STEPS
-        : ALL_STEPS.filter((s) => s !== 'visaStatus'),
-    [draft.studentType],
-  );
+  const steps = STEPS;
 
   const stepId = steps[stepIndex];
   const nextStepId = steps[stepIndex + 1];
@@ -69,8 +63,6 @@ export function OnboardingFlow() {
         return Boolean(draft.collegeId);
       case 'studentType':
         return Boolean(draft.studentType);
-      case 'visaStatus':
-        return Boolean(draft.visaStatus);
       default:
         return true;
     }
@@ -87,21 +79,13 @@ export function OnboardingFlow() {
     return () => window.removeEventListener('popstate', trapBack);
   }, []);
 
-  // Skip-interests confirmation dialog: Escape closes, body scroll locks,
-  // focus moves into the dialog.
+  // Native <dialog> gives Escape-to-close, focus move and an inert modal
+  // backdrop for free; just mirror open state onto it.
   useEffect(() => {
-    if (!skipDialogOpen) return;
-    const onKey = (e) => {
-      if (e.key === 'Escape') setSkipDialogOpen(false);
-    };
-    window.addEventListener('keydown', onKey);
-    const prevOverflow = document.body.style.overflow;
-    document.body.style.overflow = 'hidden';
-    dialogRef.current?.focus();
-    return () => {
-      window.removeEventListener('keydown', onKey);
-      document.body.style.overflow = prevOverflow;
-    };
+    const dialog = dialogRef.current;
+    if (!dialog) return;
+    if (skipDialogOpen && !dialog.open) dialog.showModal();
+    else if (!skipDialogOpen && dialog.open) dialog.close();
   }, [skipDialogOpen]);
 
   function confirmSkipInterests() {
@@ -143,7 +127,6 @@ export function OnboardingFlow() {
       studentStatus: '',
       collegeId: '',
       studentType: '',
-      visaStatus: '',
       interests: [],
     });
     setStepIndex(0);
@@ -199,13 +182,15 @@ export function OnboardingFlow() {
             />
           </div>
 
-          <button
-            type="button"
-            onClick={stepId === 'interests' ? () => setSkipDialogOpen(true) : skipStep}
-            className="cursor-pointer border-0 bg-transparent p-2 text-step-d1 font-ual-bold text-ual-medium underline underline-offset-4 hover:text-ual-orange focus-visible:text-ual-orange focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ual-orange"
-          >
-            Skip
-          </button>
+          {!UNSKIPPABLE_STEPS.includes(stepId) && (
+            <button
+              type="button"
+              onClick={stepId === 'interests' ? () => setSkipDialogOpen(true) : skipStep}
+              className="cursor-pointer border-0 bg-transparent p-2 text-step-d1 font-ual-bold text-ual-medium underline underline-offset-4 hover:text-ual-orange focus-visible:text-ual-orange focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ual-orange"
+            >
+              Skip
+            </button>
+          )}
         </div>
       )}
 
@@ -252,18 +237,12 @@ export function OnboardingFlow() {
               onChange={(v) => setDraft((d) => ({ ...d, studentType: v }))}
             />
           )}
-          {stepId === 'visaStatus' && (
-            <VisaStatusStep
-              headingRef={headingRef}
-              value={draft.visaStatus}
-              onChange={(v) => setDraft((d) => ({ ...d, visaStatus: v }))}
-            />
-          )}
           {stepId === 'interests' && (
             <InterestsStep
               headingRef={headingRef}
               value={draft.interests}
               onChange={(v) => setDraft((d) => ({ ...d, interests: v }))}
+              options={visibleInterestOptions(draft.studentType)}
             />
           )}
           {stepId === 'finish' && (
@@ -288,48 +267,43 @@ export function OnboardingFlow() {
         </Button>
       )}
 
-      {skipDialogOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-          <div
-            className="fixed inset-0 bg-ual-dark/50"
-            aria-hidden="true"
-            onClick={() => setSkipDialogOpen(false)}
-          />
-          <div
-            ref={dialogRef}
-            role="alertdialog"
-            aria-modal="true"
-            aria-labelledby="skip-dialog-title"
-            aria-describedby="skip-dialog-desc"
-            tabIndex={-1}
-            className="relative z-10 w-full max-w-[24rem] bg-ual-light p-6 outline-none"
-          >
-            <div className="mb-3 flex items-center gap-2">
-              <WarningIcon className="size-6 text-ual-util-orange" aria-hidden="true" />
-              <h2 id="skip-dialog-title" className="text-step-1 font-ual-bold text-ual-dark">
-                Skip interests
-              </h2>
-            </div>
-            <p id="skip-dialog-desc" className="mb-6 text-step-d1 text-ual-medium">
-              Are you sure you want to skip selecting topics you&apos;re interested in? Your home
-              page will not display any interests.
-            </p>
-            <div className="flex gap-4">
-              <Button variant="outline" weight="normal" onClick={() => setSkipDialogOpen(false)}>
-                Cancel
-              </Button>
-              <Button
-                weight="normal"
-                className="justify-between whitespace-nowrap"
-                onClick={confirmSkipInterests}
-              >
-                Skip interests
-                <ArrowRightIcon aria-hidden="true" />
-              </Button>
-            </div>
+      <dialog
+        ref={dialogRef}
+        role="alertdialog"
+        aria-labelledby="skip-dialog-title"
+        aria-describedby="skip-dialog-desc"
+        onCancel={() => setSkipDialogOpen(false)}
+        onClick={(e) => {
+          if (e.target === dialogRef.current) setSkipDialogOpen(false);
+        }}
+        className="m-auto w-[calc(100%-2rem)] max-w-[24rem] bg-ual-light backdrop:bg-ual-dark/50"
+      >
+        <div className="p-6">
+          <div className="mb-3 flex items-center gap-2">
+            <WarningIcon className="size-6 text-ual-util-orange" aria-hidden="true" />
+            <h2 id="skip-dialog-title" className="text-step-1 font-ual-bold text-ual-dark">
+              Skip interests
+            </h2>
+          </div>
+          <p id="skip-dialog-desc" className="mb-6 text-step-d1 text-ual-medium">
+            Are you sure you want to skip selecting topics you&apos;re interested in? Your home page
+            will not display any interests.
+          </p>
+          <div className="flex gap-4">
+            <Button variant="outline" weight="normal" onClick={() => setSkipDialogOpen(false)}>
+              Cancel
+            </Button>
+            <Button
+              weight="normal"
+              className="justify-between whitespace-nowrap"
+              onClick={confirmSkipInterests}
+            >
+              Skip interests
+              <ArrowRightIcon aria-hidden="true" />
+            </Button>
           </div>
         </div>
-      )}
+      </dialog>
     </div>
   );
 }
@@ -341,8 +315,6 @@ function ctaLabel(nextStepId) {
       return 'Next, select your college';
     case 'studentType':
       return 'Next, select student type';
-    case 'visaStatus':
-      return 'Next, confirm visa status';
     case 'interests':
       return 'Next, select uni interests';
     case 'finish':
@@ -367,8 +339,6 @@ function stepSlice(stepId, draft) {
       return { collegeId: draft.collegeId };
     case 'studentType':
       return { studentType: draft.studentType };
-    case 'visaStatus':
-      return { visaStatus: draft.visaStatus };
     case 'interests':
       return { interests: draft.interests };
     default:

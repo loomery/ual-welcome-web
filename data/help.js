@@ -25,48 +25,27 @@
 
 /**
  * Ordered sections for the support list. Categories render grouped under
- * these headings, in this order.
+ * these headings, in this order. Order and labels come from the Figma design.
  *
  * @type {HelpSection[]}
  */
 export const SECTIONS = [
-  { id: 'intro', label: 'Get to know UAL' },
   { id: 'moving-uk', label: 'Moving to the UK' },
   { id: 'safety', label: 'Safety' },
   { id: 'wellbeing', label: 'Wellbeing and support' },
   { id: 'technology', label: 'Technology support & guides' },
-  { id: 'academic', label: 'Academic orientation' },
-  { id: 'money-housing', label: 'Money & housing' },
+  { id: 'studying', label: 'Studying' },
+  { id: 'money-housing', label: 'Money and housing' },
   { id: 'more-support', label: 'More support' },
 ];
 
 /** @type {HelpCategory[]} */
 export const HELP_CATEGORIES = [
-  // ─── Get to know UAL ───────────────────────────────────────────────
-  {
-    id: 'about-ual',
-    section: 'intro',
-    title: 'Get to know UAL',
-    shortDescription: 'A general introduction to UAL — values, history and more',
-    description:
-      'A general introduction to University of the Arts London — its values, history, and what makes it unique.',
-    contacts: [
-      {
-        type: 'online',
-        label: 'Online',
-        value: 'About UAL',
-        href: 'https://www.arts.ac.uk/about-ual',
-      },
-    ],
-    ctaLabel: 'Learn about UAL',
-    ctaHref: 'https://www.arts.ac.uk/about-ual',
-  },
-
   // ─── Moving to the UK ──────────────────────────────────────────────
   {
     id: 'immigration-visas',
     section: 'moving-uk',
-    title: 'Immigration & visas',
+    title: 'Visa and immigration',
     shortDescription: 'Student visas, immigration advice, what you need to study in the UK',
     description:
       'Guidance on student visas and immigration for international students — including what you need to study in the UK and where to get advice.',
@@ -115,7 +94,7 @@ export const HELP_CATEGORIES = [
   {
     id: 'register-doctor',
     section: 'moving-uk',
-    title: 'Register with a doctor (NHS)',
+    title: 'Register with a local doctor',
     shortDescription: 'GP registration and accessing NHS healthcare',
     description:
       'How to register with a doctor (GP) and access NHS healthcare as a student in the UK.',
@@ -187,7 +166,7 @@ export const HELP_CATEGORIES = [
   {
     id: 'health-safety',
     section: 'safety',
-    title: 'Health & safety info',
+    title: 'Health and safety info',
     shortDescription: 'Health and safety inductions, fire safety and evacuations, security',
     description:
       'Information about health and safety on campus — inductions, fire evacuation procedures, and staying safe.',
@@ -225,7 +204,7 @@ export const HELP_CATEGORIES = [
   {
     id: 'health-wellbeing',
     section: 'wellbeing',
-    title: 'Health & wellbeing',
+    title: 'Health and wellbeing',
     shortDescription: 'Counselling, mental health, GP registration',
     description:
       'UAL offers a range of wellbeing services including counselling, mental health support, and help with GP registration.',
@@ -273,7 +252,7 @@ export const HELP_CATEGORIES = [
   {
     id: 'language-support',
     section: 'wellbeing',
-    title: 'Language Development support',
+    title: 'Language development support',
     shortDescription: 'English language and academic communication support',
     description:
       'The Language Centre offers English language and academic communication support for students.',
@@ -323,55 +302,29 @@ export const HELP_CATEGORIES = [
     ctaHref: 'https://www.arts.ac.uk/students/it-services',
   },
   {
-    id: 'borrow-laptop',
+    id: 'wifi',
     section: 'technology',
-    title: 'Borrow a laptop',
-    shortDescription: 'Laptop loans, equipment and library services',
+    title: 'Wifi',
+    shortDescription: 'Connecting to UAL Wi-Fi across all sites',
     description:
-      'Borrow a laptop and access equipment through Library Services and your arrival essentials.',
+      'You can connect to UAL Wi-Fi across all our sites — select the UAL Wi-Fi network and log in with your UAL username and password.',
     contacts: [
       {
         type: 'online',
-        label: 'Library services',
-        value: 'Get support: skills',
-        note: 'Library services section',
-        href: 'https://www.arts.ac.uk/students/welcome/your-journey-to-UAL/get-support/skills',
-      },
-      {
-        type: 'online',
-        label: 'Arrival essentials',
-        value: 'Books and materials',
-        note: 'Books and materials section',
-        href: 'https://www.arts.ac.uk/students/welcome/your-journey-to-UAL/arrival-essentials',
+        label: 'Online',
+        value: 'IT Services',
+        href: 'https://www.arts.ac.uk/students/it-services',
       },
     ],
-    ctaLabel: 'Visit Library services',
-    ctaHref: 'https://www.arts.ac.uk/students/welcome/your-journey-to-UAL/get-support/skills',
-  },
-  {
-    id: 'workshops-studios',
-    section: 'technology',
-    title: 'Workshops & studio bookings',
-    shortDescription: 'Find and book technical workshops and studio spaces',
-    description:
-      'Find and book technical workshops and studio spaces. Browse the workshop events happening during Welcome Week.',
-    contacts: [
-      {
-        type: 'online',
-        label: 'UAL website',
-        value: 'Browse workshop events',
-        href: 'https://www.arts.ac.uk/whats-on',
-      },
-    ],
-    ctaLabel: 'Browse workshop events',
-    ctaHref: 'https://www.arts.ac.uk/whats-on',
+    ctaLabel: 'Visit IT Services',
+    ctaHref: 'https://www.arts.ac.uk/students/it-services',
   },
 
-  // ─── Academic orientation ──────────────────────────────────────────
+  // ─── Studying ──────────────────────────────────────────────────────
   {
     id: 'online-study-tools',
-    section: 'academic',
-    title: 'Find online study tools',
+    section: 'studying',
+    title: 'Online study tools',
     shortDescription: 'Digital learning tools and studying online',
     description:
       'Discover the digital learning tools available at UAL and how to make the most of studying online.',
@@ -389,8 +342,8 @@ export const HELP_CATEGORIES = [
   },
   {
     id: 'libraries',
-    section: 'academic',
-    title: 'Use of libraries',
+    section: 'studying',
+    title: 'Library',
     shortDescription: 'Library services, collections and study spaces',
     description:
       'Explore UAL Library Services — collections, online resources, study spaces, and how to borrow books and equipment.',
@@ -405,12 +358,47 @@ export const HELP_CATEGORIES = [
     ctaLabel: 'Visit Library Services',
     ctaHref: 'https://www.arts.ac.uk/students/library-services',
   },
+  {
+    id: 'facilities',
+    section: 'studying',
+    title: 'Facilities',
+    shortDescription: 'Technical facilities, workshops and shared spaces',
+    description:
+      'Find out about the technical facilities, workshops and shared spaces available across your college.',
+    contacts: [
+      {
+        type: 'online',
+        label: 'Online',
+        value: 'Student facilities',
+        href: 'https://www.arts.ac.uk/students',
+      },
+    ],
+    ctaLabel: 'Explore facilities',
+    ctaHref: 'https://www.arts.ac.uk/students',
+  },
+  {
+    id: 'getting-around-college',
+    section: 'studying',
+    title: 'Getting around college',
+    shortDescription: 'Building information and how to get to college',
+    description: 'Building information, floor plans and how to find your way around your college.',
+    contacts: [
+      {
+        type: 'online',
+        label: 'UAL website',
+        value: 'Find your college',
+        href: 'https://www.arts.ac.uk/colleges',
+      },
+    ],
+    ctaLabel: 'Find your college',
+    ctaHref: 'https://www.arts.ac.uk/colleges',
+  },
 
-  // ─── Money & housing ───────────────────────────────────────────────
+  // ─── Money and housing ─────────────────────────────────────────────
   {
     id: 'finance',
     section: 'money-housing',
-    title: 'Finance queries',
+    title: 'Fees and funding',
     shortDescription: 'Fees, student loans, bursaries, payments',
     description:
       'The Finance team can help with tuition fee queries, student loan issues, bursary applications, and payment plans.',
@@ -430,6 +418,42 @@ export const HELP_CATEGORIES = [
     ],
     ctaLabel: 'Visit Finance help page',
     ctaHref: 'https://www.arts.ac.uk/students/student-services/fees-and-funding',
+  },
+  {
+    id: 'scholarships',
+    section: 'money-housing',
+    title: 'Scholarships',
+    shortDescription: 'Scholarships, bursaries and awards to help fund your course',
+    description:
+      'Help fund your course with scholarships, bursaries, awards and other financial support.',
+    contacts: [
+      {
+        type: 'online',
+        label: 'Online',
+        value: 'Scholarships search',
+        href: 'https://www.arts.ac.uk/study-at-ual/fees-and-funding/scholarships-search',
+      },
+    ],
+    ctaLabel: 'Search scholarships',
+    ctaHref: 'https://www.arts.ac.uk/study-at-ual/fees-and-funding/scholarships-search',
+  },
+  {
+    id: 'earn-while-you-study',
+    section: 'money-housing',
+    title: 'Earn while you study',
+    shortDescription: 'Paid work and opportunities for students',
+    description:
+      "Arts Temps connects UAL's creatives with paid roles — from temporary to permanent — so you can earn while you study.",
+    contacts: [
+      {
+        type: 'online',
+        label: 'Online',
+        value: 'Arts Temps',
+        href: 'https://www.arts.ac.uk/students/careers-and-employability/arts-temps',
+      },
+    ],
+    ctaLabel: 'Visit Arts Temps',
+    ctaHref: 'https://www.arts.ac.uk/students/careers-and-employability/arts-temps',
   },
   {
     id: 'accommodation',
@@ -460,7 +484,7 @@ export const HELP_CATEGORIES = [
   {
     id: 'college-contacts',
     section: 'more-support',
-    title: 'College-specific contacts',
+    title: 'College specific contacts',
     shortDescription: 'Your college admin team and course office',
     description:
       'Each UAL college has its own admin team and course office. Find the right contact for your college below.',
