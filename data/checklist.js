@@ -628,8 +628,7 @@ export const OTHER_TASKS = [
           {
             id: 'module',
             label: 'Complete the sexual consent training module',
-            // TODO(UAL): replace with the canonical consent-module URL.
-            href: 'https://www.arts.ac.uk/students',
+            href: 'https://academicsupportonline.arts.ac.uk/user/login?destination=/learning-materials/20187',
           },
         ],
       },
