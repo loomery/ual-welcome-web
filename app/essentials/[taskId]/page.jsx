@@ -2,7 +2,7 @@ import { notFound } from 'next/navigation';
 import { TASKS, OTHER_TASKS } from '../../../data/checklist';
 import { TaskDetailScreen } from '../../../screens/Checklist/TaskDetailScreen';
 
-/** All tasks that own a detail page (MFA keeps its bespoke /checklist/mfa). */
+/** All tasks that own a detail page (MFA keeps its bespoke /essentials/mfa). */
 const DETAIL_TASKS = [...TASKS, ...OTHER_TASKS.map((t) => ({ ...t, title: t.label }))].filter(
   (t) => t.detail,
 );

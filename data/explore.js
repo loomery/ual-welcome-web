@@ -58,7 +58,7 @@ export const EXPLORE_LANDING = [
         id: 'uk-banking',
         label: 'UK banking',
         body: 'Save on potential overseas bank charges on your bills and everyday things.',
-        href: '/checklist/uk-bank',
+        href: '/essentials/uk-bank',
       },
     ],
     link: { label: 'View more services', href: '/explore/moving-to-the-uk' },
@@ -188,7 +188,7 @@ export const EXPLORE_TOPICS = [
             id: 'uk-banking',
             label: 'UK banking',
             body: 'Save on potential overseas bank charges on your bills and everyday things.',
-            href: '/checklist/uk-bank',
+            href: '/essentials/uk-bank',
           },
           {
             id: 'register-doctor',

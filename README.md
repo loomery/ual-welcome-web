@@ -78,19 +78,19 @@ redirected by mistake.
 
 ### Routes
 
-| Path             | Page                                               |
-| ---------------- | -------------------------------------------------- |
-| `/`              | Dashboard, or redirect to onboarding if not set up |
-| `/onboarding`    | First-run profile setup                            |
-| `/checklist`     | Induction checklist (progress saved)               |
-| `/checklist/mfa` | Multi-factor authentication guide                  |
-| `/events`        | Events list (filter + save favourites)             |
-| `/events/[id]`   | Event detail (with calendar export)                |
-| `/help`          | Help & support categories                          |
-| `/help/[id]`     | Help category detail                               |
-| `/info/[slug]`   | Info pages built from content blocks               |
-| `/map`           | Per-college floor plans, address & travel info     |
-| `/dashboard`     | Redirects to `/`                                   |
+| Path              | Page                                               |
+| ----------------- | -------------------------------------------------- |
+| `/`               | Dashboard, or redirect to onboarding if not set up |
+| `/onboarding`     | First-run profile setup                            |
+| `/essentials`     | Induction checklist (progress saved)               |
+| `/essentials/mfa` | Multi-factor authentication guide                  |
+| `/events`         | Events list (filter + save favourites)             |
+| `/events/[id]`    | Event detail (with calendar export)                |
+| `/help`           | Help & support categories                          |
+| `/help/[id]`      | Help category detail                               |
+| `/info/[slug]`    | Info pages built from content blocks               |
+| `/map`            | Per-college floor plans, address & travel info     |
+| `/dashboard`      | Redirects to `/`                                   |
 
 ## Adding a page
 

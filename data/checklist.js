@@ -1,10 +1,10 @@
 /**
  * Essential setup tasks for new UAL students.
  *
- * The "Essentials" page (/checklist) lists these inside a "To do list" card:
+ * The "Essentials" page (/essentials) lists these inside a "To do list" card:
  * each row has a completion checkbox, a title, a short description, an optional
  * availability `note`, and a chevron that links to the task destination (`cta`
- * — the MFA task links to its own /checklist/mfa detail page, the rest to
+ * — the MFA task links to its own /essentials/mfa detail page, the rest to
  * external UAL pages).
  *
  * Progress is tracked separately in localStorage:
@@ -33,7 +33,7 @@
  * @property {Array<'new'|'returning'>} [statuses]  Which cohorts see this task
  *   (defaults to both new and returning students).
  * @property {TaskDetail} [detail]  Content for the task's own detail page
- *   (/checklist/{id}); when set, the checklist row links here instead of `cta`.
+ *   (/essentials/{id}); when set, the checklist row links here instead of `cta`.
  *
  * Detail-page copy supports inline links written as [label](url) — rendered
  * by the RichText component.
@@ -239,7 +239,7 @@ export const TASKS = [
     statuses: ['new'],
     shortDescription:
       'Multi-Factor Authentication (MFA) adds an extra layer of protection to your identity, your data and our systems.',
-    cta: { label: 'Get started', href: '/checklist/mfa' },
+    cta: { label: 'Get started', href: '/essentials/mfa' },
   },
   {
     id: 'enrol',
@@ -529,7 +529,7 @@ export const TASKS = [
  * @property {string} label
  * @property {string} href
  * @property {boolean} [internationalOnly]  If true, only shown to international students.
- * @property {TaskDetail} [detail]  Detail page (/checklist/{id}); when set, the
+ * @property {TaskDetail} [detail]  Detail page (/essentials/{id}); when set, the
  *   link goes there instead of `href`.
  *
  * @type {OtherTask[]}
