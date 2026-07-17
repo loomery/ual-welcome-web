@@ -14,13 +14,12 @@ import { isFocusedRoute } from '../../utils/isFocusedRoute';
  *    column that scrolls away (the sticky nav below it pins under the top
  *    bar). No width/size animation.
  *
- * The college name is the page `<h1>` on the home route; a `<p>` elsewhere.
- * Hidden on focused routes (onboarding).
+ * The college name is greeting text (a `<p>`); the page `<h1>` lives in the
+ * screen body. Hidden on focused routes (onboarding).
  */
 export function AppHero() {
   const pathname = usePathname();
   const isFocused = isFocusedRoute(pathname);
-  const isHome = pathname === '/';
   const { profile, hydrated } = useOnboardingProfile();
 
   const college = useMemo(
@@ -32,7 +31,6 @@ export function AppHero() {
 
   if (isFocused) return null;
 
-  const Title = isHome ? 'h1' : 'p';
   return (
     <section
       className="bg-ual-dark text-ual-light md:h-44 md:overflow-hidden"
@@ -40,12 +38,12 @@ export function AppHero() {
     >
       <div className="flex h-full flex-col justify-center gap-1 px-(--grid-gutter) py-8 md:py-6 md:pl-6">
         <p className="m-0 text-step-0 text-ual-dark-90">{greeting}</p>
-        <Title
+        <p
           id="app-hero-title"
           className="m-0 max-w-[20ch] text-step-4/ual-single font-ual-bold tracking-ual-tight text-ual-light md:max-w-none md:text-step-2/ual-single"
         >
           {collegeName}
-        </Title>
+        </p>
       </div>
     </section>
   );
