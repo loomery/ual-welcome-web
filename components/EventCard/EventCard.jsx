@@ -32,7 +32,10 @@ export function EventCard({ event, compact }) {
   const end = new Date(event.endsAt);
   const timeRange = `${TIME_FMT.format(start)}–${TIME_FMT.format(end)}`;
 
-  const className = ['group flex h-full flex-col bg-ual-light', compact && 'w-72 max-w-[85vw]']
+  const className = [
+    'group relative flex h-full flex-col bg-ual-light',
+    compact && 'w-72 max-w-[85vw]',
+  ]
     .filter(Boolean)
     .join(' ');
 
