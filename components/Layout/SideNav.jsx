@@ -22,6 +22,8 @@ export function SideNav() {
 
   return (
     <nav
+      id="primary-nav"
+      tabIndex={-1}
       className={
         isOnboarding
           ? 'hidden'

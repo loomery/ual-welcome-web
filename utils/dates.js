@@ -16,9 +16,6 @@ export const DAY_FMT = new Intl.DateTimeFormat('en-GB', { day: 'numeric' });
 /** "Sep" — abbreviated month, used for the event-card date stamp. */
 export const MONTH_FMT = new Intl.DateTimeFormat('en-GB', { month: 'short' });
 
-/** "Mon" — abbreviated weekday, used for the event-card meta line. */
-export const WEEKDAY_FMT = new Intl.DateTimeFormat('en-GB', { weekday: 'short' });
-
 /**
  * Whether two dates fall on the same calendar day (local time).
  *
