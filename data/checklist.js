@@ -314,7 +314,7 @@ export const TASKS = [
         items: [
           {
             id: 'student-portal',
-            label: 'Student portal',
+            label: 'UAL Portal',
             description:
               'Get the latest UAL news, timetable and access available online resources.',
             href: 'https://ualportal.arts.ac.uk/urd/sits.urd/run/siw_lgn',

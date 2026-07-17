@@ -99,10 +99,14 @@ export const STUDENT_STATUS_OPTIONS = [
 export const STUDENT_TYPE_OPTIONS = [
   {
     id: 'domestic',
-    label: 'UK / Domestic',
-    hint: 'Already living in the UK before studying at UAL',
+    label: 'UK home student',
+    hint: 'Paying home student tuition fees',
   },
-  { id: 'international', label: 'International', hint: 'Moving to the UK to study at UAL' },
+  {
+    id: 'international',
+    label: 'International student',
+    hint: 'Paying international student fees',
+  },
 ];
 
 /**
