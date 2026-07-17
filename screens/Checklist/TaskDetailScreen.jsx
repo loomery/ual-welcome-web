@@ -184,6 +184,7 @@ export function TaskDetailScreen({ taskId }) {
 
       {detail.help && (
         <GetHelpSection
+          title={detail.help.title}
           intro={fill(detail.help.intro)}
           channels={detail.help.channels}
           groups={detail.help.groups}

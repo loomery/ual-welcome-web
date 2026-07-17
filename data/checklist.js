@@ -69,6 +69,7 @@
  * @property {SubTaskItem[]} items Completion is persisted per item.
  *
  * @typedef {Object} HelpBlock
+ * @property {string} [title]  Section heading (defaults to 'Get help').
  * @property {string} [intro]
  * @property {HelpChannel[]} [channels]  Flat list of contact cards.
  * @property {{ heading: string, channels: HelpChannel[] }[]} [groups]  Contact
@@ -578,6 +579,23 @@ export const OTHER_TASKS = [
       readMore: {
         label: 'Read more about health at UAL',
         href: 'https://www.arts.ac.uk/students/student-services/counselling-health-advice-and-chaplaincy/health-advice',
+      },
+      help: {
+        title: 'Contact the wellbeing team',
+        channels: [
+          {
+            id: 'email',
+            label: 'Email us',
+            value: 'studenthealth@arts.ac.uk',
+            href: 'mailto:studenthealth@arts.ac.uk',
+          },
+          {
+            id: 'call',
+            label: 'Call us',
+            value: '+44 (0)20 7514 6251',
+            href: 'tel:+442075146251',
+          },
+        ],
       },
     },
   },
